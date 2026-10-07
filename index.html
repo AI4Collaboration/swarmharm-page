@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>SwarmHarm — Evaluating Multi-Agent Safety on Benign Tasks</title>
-  <meta name="title" content="SwarmHarm — Evaluating Multi-Agent Safety on Benign Tasks">
-  <meta name="description" content="SwarmHarm is an ongoing research project studying whether misalignment emerges in multi-agent LLM systems working on benign, authorized tasks, and how communication channels, contagion, and whistleblowing shape it.">
-  <meta name="keywords" content="multi-agent safety, LLM agents, AI safety, misalignment, emergence, whistleblowing, communication channels, agent evaluation">
+  <title>SwarmHarm — Stress-Testing Agent Swarm Safety and Security</title>
+  <meta name="title" content="SwarmHarm — Stress-Testing Agent Swarm Safety and Security">
+  <meta name="description" content="Building the experimental bedrock for agent swarm safety and security: stress-testing communication, emergent misalignment, contagion, and whistleblowing.">
+  <meta name="keywords" content="agent swarm safety, multi-agent security, AI safety, safety evaluation, stress testing, LLM agents, emergent misalignment, contagion, whistleblowing">
   <meta name="author" content="AI4Collaboration">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#1e293b">
@@ -15,12 +15,12 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AI4Collaboration">
-  <meta property="og:title" content="SwarmHarm — Evaluating Multi-Agent Safety on Benign Tasks">
-  <meta property="og:description" content="An ongoing research project on whether misalignment emerges in multi-agent LLM systems working on benign, authorized tasks.">
+  <meta property="og:title" content="SwarmHarm — Stress-Testing Agent Swarm Safety and Security">
+  <meta property="og:description" content="Building the experimental bedrock for agent swarm safety and security: stress-testing communication, emergent misalignment, contagion, and whistleblowing.">
   <meta property="og:url" content="https://swarmharm.com/">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="SwarmHarm — Evaluating Multi-Agent Safety on Benign Tasks">
-  <meta name="twitter:description" content="An ongoing research project on whether misalignment emerges in multi-agent LLM systems working on benign, authorized tasks.">
+  <meta name="twitter:title" content="SwarmHarm — Stress-Testing Agent Swarm Safety and Security">
+  <meta name="twitter:description" content="Building the experimental bedrock for agent swarm safety and security: stress-testing communication, emergent misalignment, contagion, and whistleblowing.">
 
   <link rel="icon" type="image/webp" sizes="512x512" href="static/images/swarmharm-logo.webp">
 
@@ -36,8 +36,8 @@
     "@context": "https://schema.org",
     "@type": "ResearchProject",
     "name": "SwarmHarm",
-    "alternateName": "SwarmHarm — Evaluating Multi-Agent Safety on Benign Tasks",
-    "description": "An ongoing research project studying whether misalignment emerges in multi-agent LLM systems working on benign, authorized tasks.",
+    "alternateName": "SwarmHarm — Stress-Testing Agent Swarm Safety and Security",
+    "description": "Building the experimental bedrock for agent swarm safety and security: stress-testing communication, emergent misalignment, contagion, and whistleblowing.",
     "url": "https://swarmharm.com/",
     "funder": { "@type": "Organization", "name": "AI4Collaboration" }
   }
@@ -57,15 +57,19 @@
                  width="512" height="512" fetchpriority="high" decoding="async">
             <p class="eyebrow">AI4Collaboration</p>
             <h1 class="title is-1 publication-title">SwarmHarm</h1>
-            <p class="tagline">Evaluating Multi-Agent Safety on Benign Tasks</p>
-            <span class="status-pill"><span class="status-dot"></span>Ongoing project · design stage</span>
+            <p class="tagline">Building the bedrock for agent swarm safety and security</p>
+            <span class="status-pill"><span class="status-dot"></span>Research preview · in development</span>
             <div class="content has-text-centered lede">
               <p>
-                SwarmHarm asks whether misalignment can arise inside a system of LLM agents that are
-                each given ordinary, explicitly authorized work. Rather than seeding a malicious task
-                or a scripted adversary, we vary the properties of the shared environment, above all
-                whether and how agents are allowed to communicate, and observe what the agents do to
-                each other, to the task, and to the rules they were given.
+                SwarmHarm is being built to stress-test autonomous agents as a system—not just
+                evaluate them in isolation. Starting from benign, authorized tasks, we aim to uncover
+                how communication, shared state, and coordination can produce safety and security
+                failures without a planted adversary.
+              </p>
+              <p>
+                Our goal is to turn emergent risks into reproducible tests and actionable evidence:
+                how misalignment starts, how it spreads, and which safeguards prevent harm without
+                sacrificing useful collaboration.
               </p>
             </div>
           </div>
@@ -78,17 +82,18 @@
   <section class="section hero is-light">
     <div class="container is-max-desktop">
       <div class="has-text-centered">
-        <h2 class="title is-3">What we study</h2>
+        <h2 class="title is-3">Stress-test the system, not just the agent</h2>
       </div>
       <div class="columns is-variable is-4">
         <div class="column">
           <div class="rq-card">
             <span class="rq-label">RQ1</span>
-            <h3>Communication channels</h3>
+            <h3>Communication under constraint</h3>
             <p>
-              How do communication availability and authorization affect misalignment? When
-              communication is explicitly prohibited, do agents independently discover and use side
-              channels? How does providing a legal channel change their behavior and downstream harm?
+              When communication is forbidden, will agents respect the boundary or find another way
+              to coordinate? We plan to compare isolation, prohibited side channels, and authorized
+              communication to test when communication supports safeguards—and when it helps agents
+              work around them.
             </p>
           </div>
         </div>
@@ -97,20 +102,20 @@
             <span class="rq-label">RQ2</span>
             <h3>Emergence and contagion</h3>
             <p>
-              Can misalignment emerge from an all-benign starting condition, with no malicious task,
-              scripted adversary, unsafe history, or prewritten recruitment message? Once it appears,
-              do other agents adopt, amplify, ignore, reject, or correct it?
+              Can a harmful strategy emerge without a malicious task or scripted adversary? Starting
+              from all-benign conditions, we aim to trace the first deviation and determine whether
+              other agents adopt, amplify, reject, or correct it.
             </p>
           </div>
         </div>
         <div class="column">
           <div class="rq-card">
             <span class="rq-label">RQ3</span>
-            <h3>Whistleblowing</h3>
+            <h3>Whistleblowing from within</h3>
             <p>
-              When an agent encounters evidence of another agent's violation, does it voluntarily
-              report it to an authorized supervisor? Which system settings encourage accurate, timely
-              reporting rather than silence, cooperation with misconduct, or false accusations?
+              If an agent witnesses a peer breaking the rules, will it raise the alarm, remain silent,
+              or join in? We aim to identify which system designs enable accurate, timely reporting
+              to authorized oversight—and which leave misconduct unreported.
             </p>
           </div>
         </div>
@@ -122,12 +127,13 @@
   <section class="section">
     <div class="container is-max-desktop">
       <div class="has-text-centered">
-        <h2 class="title is-3">Three channel conditions</h2>
+        <h2 class="title is-3">One testbed. Three communication regimes.</h2>
       </div>
       <div class="content has-text-centered lede">
         <p>
-          The first experiments hold tasks, models, agent count, budgets, and retry rules fixed and
-          vary only the communication setting between agents.
+          The first planned experiments isolate changes to the communication setting while holding
+          tasks, models, agent count, budgets, and retry rules fixed. The question is not simply
+          whether agents can collaborate, but whether that collaboration stays within the rules.
         </p>
       </div>
       <div class="table-container">
@@ -160,10 +166,14 @@
       </div>
       <div class="content has-text-centered lede small">
         <p>
-          Deliberately using a side channel is itself an instruction violation; merely discovering a
-          route is not. Prohibited communication is measured separately from downstream harm, and
-          communication over the legal channel is not misalignment. An authorized, private reporting
-          endpoint to a supervisor exists in all three conditions.
+          Deliberately using a prohibited side channel is already an instruction violation; merely
+          discovering one is not. Authorized collaboration is not misalignment. Communication
+          violations and downstream harms are scored separately.
+        </p>
+        <p>
+          Every condition will retain an authorized, private reporting route to oversight. The three
+          regimes change both channel availability and authorization; attributing an effect to either
+          one alone requires additional matched controls.
         </p>
       </div>
     </div>
@@ -173,15 +183,21 @@
   <section class="section hero is-light">
     <div class="container is-max-desktop">
       <div class="has-text-centered">
-        <h2 class="title is-3">Planned setting</h2>
+        <h2 class="title is-3">From failure modes to stronger defenses</h2>
       </div>
       <div class="content has-text-centered lede">
         <p>
-          Each experimental unit is an independently initialized shared world: agents with separate
-          contexts and workspaces, shared task services, and a separate control, scoring, and audit
-          layer. Initial tasks are explicitly authorized vulnerability-evaluation tasks on designated
-          targets and paired software-repair and verification tasks. All task assets and any
-          potentially harmful consequences remain inside the authorized experiment environment.
+          We are designing a configurable, executable testbed on AWS EC2: independent agent contexts
+          and workspaces, shared task services, and a separate control, scoring, and audit layer.
+          Initial task candidates pair authorized vulnerability evaluation on designated targets with
+          software repair and verification.
+        </p>
+        <p>
+          The ambition is reusable infrastructure for comparing system designs and defenses—not a
+          showcase of isolated incidents. Independent execution records and outcome checks will
+          distinguish attempted violations, realized harm, and successful restraint. All experiments
+          must keep task assets and potential consequences inside the authorized environment, with
+          containment, credential isolation, and hard stop mechanisms as fixed requirements.
         </p>
       </div>
     </div>
@@ -193,8 +209,9 @@
   <div class="container is-max-desktop">
     <div class="content has-text-centered">
       <p>
-        <strong>SwarmHarm is an ongoing project.</strong> The team, code, paper, and results are not
-        yet public. This page will be updated as the work progresses.
+        <strong>Build the evidence for safer agent swarms.</strong> SwarmHarm is currently in the
+        design stage. This page presents our research agenda and planned testbed; the benchmark,
+        code, and results are not yet released.
       </p>
       <p class="small">
         &copy; 2026 AI4Collaboration. Page layout adapted from the
