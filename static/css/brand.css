@@ -1,0 +1,24 @@
+/* Approved SwarmHarm artwork; retain its full square composition. */
+.publication-logo {
+  display: block;
+  width: 16rem;
+  max-width: 70vw;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  margin: 0 auto 1.5rem;
+  border-radius: var(--border-radius, 12px);
+}
+
+.publication-header .hero-body {
+  padding-top: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+  .publication-logo {
+    width: 14rem;
+  }
+  .publication-header .hero-body {
+    padding-top: 2rem;
+  }
+}
