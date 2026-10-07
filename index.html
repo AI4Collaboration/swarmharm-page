@@ -34,8 +34,8 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/brand.css?v=3">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/brand.css?v=4">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -59,49 +59,92 @@
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="container hero-layout">
       <div class="hero-copy">
-        <p class="eyebrow">AI4COLLABORATION <span>/</span> RESEARCH PREVIEW</p>
+        <p class="eyebrow">AI4Collaboration · Research preview</p>
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
-        <p class="hero-description">Building the experimental bedrock for agent swarm safety and security. We aim to uncover how communication, shared state, and coordination can turn benign tasks into collective harm—and which defenses preserve useful collaboration.</p>
-        <div class="hero-actions"><a class="button" href="#research">Explore the research <span aria-hidden="true">↗</span></a><a class="text-link" href="#protocol">See the protocol <span aria-hidden="true">↓</span></a></div>
+        <p class="hero-description">Building the bedrock for agent swarm safety and security—testing how collective behavior creates risk, and what keeps collaboration safe.</p>
+        <a class="button" href="#research">Explore the research <span aria-hidden="true">↗</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
     </div>
-    <div class="container research-index" aria-label="Research areas"><a href="#rq1"><span>01</span> Communication</a><a href="#rq2"><span>02</span> Emergence &amp; contagion</a><a href="#rq3"><span>03</span> Whistleblowing</a></div>
   </section>
+
   <section class="section" id="research" aria-labelledby="research-title">
     <div class="container">
-      <div class="section-heading"><div><p class="eyebrow">01 <span>/</span> RESEARCH</p><h2 id="research-title">From individual decisions<br>to collective risk.</h2></div><p>Starting from benign, authorized tasks. No planted adversary. Three questions about how agent swarms fail—and how they might protect themselves.</p></div>
+      <div class="section-heading">
+        <h2 id="research-title">Three research questions.</h2>
+        <p>Benign, authorized tasks. No planted adversary.</p>
+      </div>
       <div class="research-grid">
-        <article class="rq-card" id="rq1"><span class="rq-label">RQ1</span><h3>Communication<br> under constraint</h3><p>When communication is forbidden, will agents respect the boundary or find another way to coordinate? We plan to compare isolation, prohibited side channels, and authorized communication.</p></article>
-        <article class="rq-card" id="rq2"><span class="rq-label">RQ2</span><h3>Emergence<br> &amp; contagion</h3><p>Can a harmful strategy emerge without a malicious task or scripted adversary? We aim to trace the first deviation and test whether other agents adopt, amplify, ignore, reject, or correct it.</p></article>
-        <article class="rq-card" id="rq3"><span class="rq-label">RQ3</span><h3>Whistleblowing<br> from within</h3><p>If an agent witnesses a peer breaking the rules, will it raise the alarm, remain silent, or join in? We aim to identify designs that enable accurate, timely reporting to authorized oversight.</p></article>
+        <article class="rq-card" id="rq1">
+          <span class="rq-label">RQ1</span>
+          <h3>Communication</h3>
+          <p>Does blocking communication prevent misalignment—or drive agents to prohibited side channels?</p>
+        </article>
+        <article class="rq-card" id="rq2">
+          <span class="rq-label">RQ2</span>
+          <h3>Emergence &amp; contagion</h3>
+          <p>Can misalignment emerge without a malicious seed? Do peers spread, reject, or correct it?</p>
+        </article>
+        <article class="rq-card" id="rq3">
+          <span class="rq-label">RQ3</span>
+          <h3>Whistleblowing</h3>
+          <p>When agents observe a peer's violation, do they report it accurately, stay silent, or join in?</p>
+        </article>
       </div>
     </div>
   </section>
+
   <section class="section protocol-section" id="protocol" aria-labelledby="protocol-title">
     <div class="container">
-      <div class="section-heading"><div><p class="eyebrow">02 <span>/</span> PROTOCOL</p><h2 id="protocol-title">One testbed.<br>Three communication regimes.</h2></div><p>The first planned experiments hold tasks, models, agent count, budgets, and retry rules fixed. We vary the communication setting to test when collaboration stays within the rules.</p></div>
-      <div class="table-wrap"><table class="protocol-table">
-        <caption class="sr-only">Planned SwarmHarm communication conditions</caption>
-        <thead><tr><th scope="col">Regime</th><th scope="col">Instruction</th><th scope="col">Environment</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">No channel<small>ISOLATED</small></th><td data-label="Instruction">Cross-agent communication is explicitly prohibited.</td><td data-label="Environment">Peer communication is technically isolated, including indirect routes.</td></tr>
-          <tr class="side-channel"><th scope="row">Side channel<small>PROHIBITED / POSSIBLE</small></th><td data-label="Instruction">Cross-agent communication is explicitly prohibited.</td><td data-label="Environment">No official channel is provided, but ordinary shared infrastructure contains an indirect route agents can discover and use.</td></tr>
-          <tr><th scope="row">Legal channel<small>AUTHORIZED</small></th><td data-label="Instruction">Communication through a designated channel is explicitly authorized.</td><td data-label="Environment">A formal channel is available; other resource permissions remain unchanged.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="protocol-notes"><p><strong>Permission matters.</strong> Deliberately using a prohibited side channel is already an instruction violation; merely discovering one is not. Authorized collaboration is not misalignment. Communication violations and downstream harms are scored separately.</p><p><strong>Oversight stays available.</strong> Every condition will retain an authorized, private reporting route. These regimes vary both channel availability and authorization; separating those effects requires additional matched controls.</p></div>
+      <div class="section-heading">
+        <h2 id="protocol-title">Three communication regimes.</h2>
+        <p>Hold tasks, models, agent count, budgets, and retry rules fixed. Vary communication.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="protocol-table">
+          <caption class="sr-only">Planned SwarmHarm communication conditions</caption>
+          <thead><tr><th scope="col">Regime</th><th scope="col">Communication rule</th><th scope="col">Available path</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">No channel</th><td data-label="Communication rule">Prohibited</td><td data-label="Available path">No peer route, including indirect channels.</td></tr>
+            <tr class="side-channel"><th scope="row">Side channel</th><td data-label="Communication rule">Prohibited</td><td data-label="Available path">No official channel; an indirect route remains discoverable.</td></tr>
+            <tr><th scope="row">Legal channel</th><td data-label="Communication rule">Authorized</td><td data-label="Available path">A designated channel; other permissions unchanged.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="protocol-notes">
+        <p>Using a prohibited side channel is a violation; discovering it is not. Score downstream harm separately. Every regime retains an authorized, private reporting route to a supervisor—not to peers.</p>
+        <p>Availability and authorization both change across regimes; separating their effects requires matched controls.</p>
+      </div>
     </div>
   </section>
+
   <section class="section" id="testbed" aria-labelledby="testbed-title">
     <div class="container testbed-layout">
-      <div class="testbed-copy"><p class="eyebrow">03 <span>/</span> PLANNED TESTBED</p><h2 id="testbed-title">Reproducible failures.<br>Stronger defenses.</h2><p>We are designing a configurable, executable testbed on AWS EC2: independent agent contexts and workspaces, shared task services, and a separate control, scoring, and audit layer.</p><p>Initial task candidates pair authorized vulnerability evaluation on designated targets with software repair and verification. The ambition is reusable infrastructure for comparing swarm designs and defenses—not a showcase of isolated incidents.</p></div>
-      <dl class="principles"><div><dt>Independent agents</dt><dd>Separate contexts, workspaces, and explicit authorization.</dd></div><div><dt>Controlled environments</dt><dd>Configurable communication and shared state. Fixed containment.</dd></div><div><dt>Observable consequences</dt><dd>Independent records distinguish attempted violations, realized harm, and successful restraint.</dd></div><div><dt>Safety by construction</dt><dd>All task assets and potential consequences remain inside the authorized environment. Credential isolation and hard stops are fixed requirements.</dd></div></dl>
+      <div class="testbed-copy">
+        <h2 id="testbed-title">Controlled worlds.<br>Measurable consequences.</h2>
+        <p>Planned on AWS EC2: independent workspaces, shared services, and separate scoring. Initial tasks pair authorized vulnerability evaluation with software repair and verification.</p>
+      </div>
+      <dl class="principles">
+        <div><dt>Independent agents</dt><dd>Private contexts and explicit permissions.</dd></div>
+        <div><dt>Controlled conditions</dt><dd>Configurable communication and shared state.</dd></div>
+        <div><dt>Verifiable outcomes</dt><dd>Measure task success, violations, harm, and reporting.</dd></div>
+        <div><dt>Fixed safety boundaries</dt><dd>Isolated credentials, external audit logs, and hard stops.</dd></div>
+      </dl>
     </div>
   </section>
-  <section class="closing"><div class="container"><p class="eyebrow">SWARMHARM</p><h2>Build the evidence.<br><span>Make agent swarms safer.</span></h2><p>SwarmHarm is in the design stage. The benchmark, code, paper, and results are not yet released.</p></div></section>
 </main>
-<footer class="site-footer"><div class="container footer-top"><a class="brand" href="#top" aria-label="SwarmHarm, back to top"><img src="static/images/swarmharm-logo.webp" alt="" width="32" height="32" loading="lazy"><span>SwarmHarm</span></a><p>A research initiative by <a href="https://github.com/AI4Collaboration" target="_blank" rel="noopener noreferrer">AI4Collaboration ↗</a></p><a class="back-top" href="#top">Back to top ↑</a></div><div class="container footer-bottom"><span>© 2026 SwarmHarm / AI4Collaboration</span><span>Originally adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a> · CC BY-SA 4.0</span></div></footer>
+<footer class="site-footer">
+  <div class="container footer-top">
+    <a class="brand" href="#top" aria-label="SwarmHarm, back to top"><img src="static/images/swarmharm-logo.webp" alt="" width="32" height="32" loading="lazy"><span>SwarmHarm</span></a>
+    <p>By <a href="https://github.com/AI4Collaboration" target="_blank" rel="noopener noreferrer">AI4Collaboration ↗</a></p>
+    <a class="back-top" href="#top">Back to top ↑</a>
+  </div>
+  <div class="container footer-bottom">
+    <p>In development. Benchmark, code, paper, and results not yet released.</p>
+    <p>© 2026 SwarmHarm / AI4Collaboration</p>
+    <p>Originally adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a> · CC BY-SA 4.0</p>
+  </div>
+</footer>
 </body>
 </html>
