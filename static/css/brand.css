@@ -66,6 +66,24 @@ img { display: block; max-width: 100%; height: auto; }
 .section-heading { margin-bottom: 32px; }
 .section-heading > p { max-width: 68ch; margin-top: 14px; color: var(--muted); }
 
+/* Small section markers in the same type family, not terminal-style labels. */
+.section-heading > .section-index, .testbed-copy > .section-index {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.section-index > span:first-child {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
 /* Open research rows, not a set of sales or dashboard cards. */
 .research-grid { border-top: 1px solid var(--line); }
 .rq-card { display: grid; grid-template-columns: 56px minmax(220px, 0.9fr) minmax(0, 1.2fr); gap: 28px; align-items: start; padding: 28px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 110px; }
@@ -90,9 +108,9 @@ img { display: block; max-width: 100%; height: auto; }
 .protocol-notes p + p { margin-top: 12px; }
 
 /* Planned infrastructure */
-.testbed-layout { display: grid; grid-template-columns: 1.15fr 1fr; gap: 80px; align-items: start; }
+.testbed-layout { display: grid; grid-template-columns: 1.12fr 1fr; gap: 56px; align-items: start; }
 .testbed-copy p { max-width: 54ch; margin-top: 24px; color: var(--muted); }
-.principles { border-top: 1px solid var(--line); }
+.principles { margin-top: 37px; border-top: 1px solid var(--line); }
 .principles > div { padding: 18px 0; border-bottom: 1px solid var(--line); }
 .principles dt { font-size: 17px; font-weight: 600; }
 .principles dd { margin-top: 5px; color: var(--muted); }
@@ -114,7 +132,7 @@ img { display: block; max-width: 100%; height: auto; }
   .hero-layout { gap: 32px; }
   .status { display: none; }
   .rq-card { grid-template-columns: 48px minmax(205px, 0.9fr) minmax(0, 1.2fr); gap: 24px; }
-  .testbed-layout { gap: 48px; }
+  .testbed-layout { gap: 32px; }
 }
 @media (max-width: 800px) {
   .container { width: calc(100% - 40px); }
@@ -129,6 +147,7 @@ img { display: block; max-width: 100%; height: auto; }
   .rq-card { grid-template-columns: 48px minmax(0, 1fr); gap: 12px 22px; padding-block: 26px; }
   .rq-card p { grid-column: 2; }
   .testbed-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+  .principles { margin-top: 0; }
   .footer-top { flex-wrap: wrap; }
 }
 @media (max-width: 600px) {
@@ -141,6 +160,7 @@ img { display: block; max-width: 100%; height: auto; }
   .eyebrow { margin-bottom: 20px; }
   .section { padding-block: 44px; }
   .section-heading { margin-bottom: 24px; }
+  .section-heading > .section-index, .testbed-copy > .section-index { margin-bottom: 12px; }
   .rq-card { grid-template-columns: minmax(0, 1fr); gap: 10px; scroll-margin-top: 132px; }
   .rq-label { padding: 0; }
   .rq-card p { grid-column: 1; }
