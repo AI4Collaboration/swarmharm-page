@@ -1,8 +1,8 @@
-/* SwarmHarm: one type family, readable sizes, restrained visual hierarchy. */
+/* SwarmHarm: dark artwork-led opening, warm editorial research sections.
+   One font family; no animated effects or product-dashboard styling. */
 :root {
   color-scheme: dark;
   --bg: #09090b;
-  --panel: #101013;
   --text: #f4f4f2;
   --muted: #b9b9c1;
   --line: #303037;
@@ -14,7 +14,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 17px; line-height: 1.65; }
 h1, h2, h3, p, figure, dl, dd { margin: 0; }
 h1, h2, h3 { font-weight: 600; line-height: 1.18; letter-spacing: -0.025em; }
-h2 { font-size: clamp(30px, 3.3vw, 40px); text-wrap: balance; }
+h2 { font-size: clamp(30px, 3.1vw, 38px); text-wrap: balance; }
 h3 { font-size: 24px; line-height: 1.3; }
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--accent); }
@@ -39,39 +39,53 @@ img { display: block; max-width: 100%; height: auto; }
 .status { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
 .status > span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
-/* Hero: the approved artwork remains unchanged and uncropped. */
-.hero-layout { display: grid; grid-template-columns: 1.12fr 1fr; gap: 56px; align-items: center; padding-block: 68px; }
+/* The approved swarm artwork is the visual signature, not a product card. */
+.hero-layout { display: grid; grid-template-columns: 1.12fr 1fr; gap: 56px; align-items: center; padding-block: 60px; }
 .hero-copy, .hero-art { min-width: 0; }
 .hero-copy h1 { font-size: clamp(56px, 6.5vw, 88px); letter-spacing: -0.04em; line-height: 1.1; }
 .hero-tagline { font-size: clamp(30px, 3vw, 40px); font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; margin-top: 22px; }
 .hero-tagline span { color: var(--accent); }
 .hero-description { max-width: 49ch; color: var(--muted); margin-top: 24px; }
-.button { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; margin-top: 28px; padding: 12px 18px; font-size: 15px; font-weight: 600; line-height: 1.5; background: var(--text); color: var(--bg); border: 1px solid var(--text); border-radius: 3px; }
-.button:hover { background: #dededc; color: var(--bg); }
-.hero-art img { width: 100%; aspect-ratio: 1; object-fit: contain; border: 1px solid var(--line); border-radius: 6px; }
+.button { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; margin-top: 24px; padding: 8px 0; font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text); border-bottom: 1px solid var(--accent); }
+.button:hover { color: var(--accent); }
+.hero-art img { width: 100%; aspect-ratio: 1; object-fit: contain; }
 
-/* Three research questions */
-.section { padding-block: 72px; border-top: 1px solid var(--line); }
+/* An editorial surface distinguishes the testbed from a security product page. */
+.section {
+  color-scheme: light;
+  --bg: #f5f3ee;
+  --text: #24262b;
+  --muted: #555b63;
+  --line: #d1cec7;
+  --accent: #a33d2c;
+  padding-block: 64px;
+  background: var(--bg);
+  color: var(--text);
+  border-top: 1px solid var(--line);
+}
 .section-heading { margin-bottom: 32px; }
 .section-heading > p { max-width: 68ch; margin-top: 14px; color: var(--muted); }
-.research-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
-.rq-card { min-width: 0; padding: 28px; background: var(--panel); scroll-margin-top: 110px; }
-.rq-card + .rq-card { border-left: 1px solid var(--line); }
-.rq-label { display: block; color: var(--accent); margin-bottom: 18px; }
-.rq-card p { margin-top: 18px; color: var(--muted); }
 
-/* Channel comparisons */
-.protocol-section { background: #0c0c0f; }
-.table-wrap { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+/* Open research rows, not a set of sales or dashboard cards. */
+.research-grid { border-top: 1px solid var(--line); }
+.rq-card { display: grid; grid-template-columns: 56px minmax(220px, 0.9fr) minmax(0, 1.2fr); gap: 28px; align-items: start; padding: 28px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 110px; }
+.rq-card > * { min-width: 0; }
+.rq-label { color: var(--accent); padding-top: 5px; font-weight: 600; }
+.rq-card p { color: var(--muted); max-width: 62ch; }
+
+/* Plain, high-contrast comparison table. */
+.table-wrap { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; }
 .protocol-table { width: 100%; border-collapse: collapse; table-layout: fixed; text-align: left; }
 .protocol-table th:nth-child(1) { width: 23%; }
 .protocol-table th:nth-child(2) { width: 28%; }
 .protocol-table th:nth-child(3) { width: 49%; }
-.protocol-table thead th { padding: 16px 22px; font-size: 15px; font-weight: 500; line-height: 1.5; color: var(--muted); background: var(--panel); }
-.protocol-table td, .protocol-table tbody th { padding: 22px; vertical-align: top; border-top: 1px solid var(--line); }
+.protocol-table thead th { padding: 16px 20px; font-size: 15px; font-weight: 500; line-height: 1.5; color: var(--muted); }
+.protocol-table td, .protocol-table tbody th { padding: 22px 20px; vertical-align: top; border-top: 1px solid var(--line); }
 .protocol-table tbody th { font-size: 17px; font-weight: 600; }
+.protocol-table tr > :first-child { padding-left: 0; }
+.protocol-table tr > :last-child { padding-right: 0; }
 .protocol-table td { color: var(--muted); }
-.side-channel > th { box-shadow: inset 2px 0 var(--accent); }
+.side-channel > th { color: var(--accent); }
 .protocol-notes { max-width: 80ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.7; }
 .protocol-notes p + p { margin-top: 12px; }
 
@@ -83,7 +97,7 @@ img { display: block; max-width: 100%; height: auto; }
 .principles dt { font-size: 17px; font-weight: 600; }
 .principles dd { margin-top: 5px; color: var(--muted); }
 
-/* Footer: status once, without another promotional block. */
+/* Quiet footer, retaining project status and attribution. */
 .site-footer { padding-block: 30px; border-top: 1px solid var(--line); }
 .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .footer-top .brand { font-size: 22px; }
@@ -99,7 +113,7 @@ img { display: block; max-width: 100%; height: auto; }
   .container { width: calc(100% - 64px); }
   .hero-layout { gap: 32px; }
   .status { display: none; }
-  .rq-card { padding: 24px; }
+  .rq-card { grid-template-columns: 48px minmax(205px, 0.9fr) minmax(0, 1.2fr); gap: 24px; }
   .testbed-layout { gap: 48px; }
 }
 @media (max-width: 800px) {
@@ -107,16 +121,13 @@ img { display: block; max-width: 100%; height: auto; }
   .nav-inner { min-height: 72px; gap: 20px; }
   .nav-inner nav { gap: 20px; }
   .brand { font-size: 21px; }
-  .hero-layout { grid-template-columns: minmax(0, 1fr); padding-block: 44px; gap: 36px; }
+  .hero-layout { grid-template-columns: minmax(0, 1fr); padding-block: 44px; gap: 28px; }
   .hero-copy h1 { font-size: clamp(52px, 10vw, 78px); }
   .hero-tagline { font-size: 34px; }
-  .hero-art { width: 100%; max-width: 430px; justify-self: center; }
+  .hero-art { width: 100%; max-width: 410px; justify-self: center; }
   .section { padding-block: 52px; }
-  .research-grid { grid-template-columns: minmax(0, 1fr); }
-  .rq-card + .rq-card { border-left: 0; border-top: 1px solid var(--line); }
-  .rq-card { padding: 24px; }
-  .rq-card p { margin-top: 14px; max-width: 62ch; }
-  .rq-label { margin-bottom: 14px; }
+  .rq-card { grid-template-columns: 48px minmax(0, 1fr); gap: 12px 22px; padding-block: 26px; }
+  .rq-card p { grid-column: 2; }
   .testbed-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
   .footer-top { flex-wrap: wrap; }
 }
@@ -125,22 +136,22 @@ img { display: block; max-width: 100%; height: auto; }
   .nav-inner { flex-wrap: wrap; gap: 0; padding-top: 10px; padding-bottom: 2px; }
   .nav-inner > .brand { min-height: 40px; }
   .nav-inner nav { justify-content: space-between; width: 100%; margin-left: 0; gap: 20px; }
-  .hero-layout { padding-block: 36px; gap: 30px; }
+  .hero-layout { padding-block: 36px; gap: 24px; }
   .hero-tagline { font-size: 30px; }
   .eyebrow { margin-bottom: 20px; }
   .section { padding-block: 44px; }
   .section-heading { margin-bottom: 24px; }
-  .rq-card { scroll-margin-top: 132px; }
+  .rq-card { grid-template-columns: minmax(0, 1fr); gap: 10px; scroll-margin-top: 132px; }
+  .rq-label { padding: 0; }
+  .rq-card p { grid-column: 1; }
   .table-wrap { overflow-x: auto; }
   .protocol-table, .protocol-table tbody, .protocol-table tr, .protocol-table td, .protocol-table tbody th { display: block; width: 100%; }
   .protocol-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
-  .protocol-table tbody th:nth-child(1) { width: 100%; padding: 20px 20px 12px; border-top: 0; }
-  .protocol-table td { padding: 0 20px 16px; border-top: 0; }
+  .protocol-table tbody th:nth-child(1) { width: 100%; padding: 20px 0 12px; border-top: 0; }
+  .protocol-table td { padding: 0 0 16px; border-top: 0; }
   .protocol-table td:last-child { padding-bottom: 22px; }
   .protocol-table tr + tr { border-top: 1px solid var(--line); }
   .protocol-table td::before { content: attr(data-label); display: block; margin-bottom: 4px; font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--text); }
-  .side-channel { box-shadow: inset 2px 0 var(--accent); }
-  .side-channel > th { box-shadow: none; }
   .footer-top { gap: 14px; }
   .footer-top > p { order: 3; width: 100%; }
   .footer-bottom { flex-direction: column; gap: 10px; }
@@ -149,18 +160,16 @@ img { display: block; max-width: 100%; height: auto; }
   .container { width: calc(100% - 32px); }
   .hero-copy h1 { font-size: 50px; }
   .hero-tagline { font-size: 28px; }
-  .rq-card { padding: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
 @media print {
-  :root { color-scheme: light; --bg: #fff; --panel: #fff; --text: #111; --muted: #444; --line: #bbb; --accent: #a7341b; }
+  :root, .section { color-scheme: light; --bg: #fff; --text: #111; --muted: #444; --line: #bbb; --accent: #a7341b; }
   .site-header { position: static; }
   .nav-inner nav, .status, .button, .back-top { display: none; }
   .container { width: 100%; }
   .hero-layout { padding-block: 20px; }
   .section { padding-block: 26px; }
-  .protocol-section { background: #fff; }
   .rq-card, .principles > div, tr { break-inside: avoid; }
 }
