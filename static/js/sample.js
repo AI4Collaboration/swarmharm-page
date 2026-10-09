@@ -3,9 +3,10 @@
     if (!hash || hash === '#') return;
     let id;
     try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
-    // Preserve links shared before the public section was renamed to Sample.
+    // Preserve shared links when sections are renamed or consolidated.
     const original = id;
-    if (id === 'testbed') id = 'protocol';
+    if (id === 'incident-goal-drift') id = 'sample-result';
+    else if (id === 'testbed') id = 'protocol';
     else if (id === 'case-study') id = 'sample';
     else if (id.startsWith('case-')) id = id.replace('case-', 'sample-');
     const target = document.getElementById(id);
