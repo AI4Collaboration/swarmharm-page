@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="communication" viewBox="0 0 220 134">
+    <g fill="none" stroke="#a33d2c" stroke-width="2">
+      <path d="M43 67H81M130 58Q158 32 178 32M130 76Q155 102 178 102"/>
+      <path d="m73 62 8 5-8 5m97-45 8 5-8 5m0 60 8 5-8 5"/>
+      <path d="M88 48h36a6 6 0 0 1 6 6v23a6 6 0 0 1-6 6h-18l-10 8v-8h-8a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6Z" fill="#f1ddd6"/>
+      <path d="M93 60h25m-25 11h18"/>
+    </g>
+    <g fill="#f7f5f0" stroke="#555b63" stroke-width="2"><circle cx="28" cy="67" r="15"/><circle cx="194" cy="32" r="15"/><circle cx="194" cy="102" r="15"/></g>
+    <g fill="#555b63"><circle cx="28" cy="67" r="4"/><circle cx="194" cy="32" r="4"/><circle cx="194" cy="102" r="4"/></g>
+  </symbol>
+  <symbol id="hacking" viewBox="0 0 220 134">
+    <path d="M8 14h112v106H8Z" fill="#e8e4db"/>
+    <path d="M120 7v120" fill="none" stroke="#8a877f" stroke-width="2" stroke-dasharray="5 5"/>
+    <circle cx="34" cy="67" r="15" fill="#f7f5f0" stroke="#555b63" stroke-width="2"/><circle cx="34" cy="67" r="4" fill="#555b63"/>
+    <path d="M52 67h130m-8-6 9 6-9 6" fill="none" stroke="#a33d2c" stroke-width="2"/>
+    <g fill="none" stroke="#a33d2c" stroke-width="2"><circle cx="80" cy="37" r="7"/><path d="M87 37h19m-6 0v6m6-6v6"/><rect x="185" y="51" width="25" height="32" rx="3"/></g>
+    <g fill="#6d6c67" font-family="Arial, sans-serif" font-size="11"><text x="16" y="108">inside</text><text x="157" y="108">beyond limit</text></g>
+  </symbol>
+  <symbol id="persistence" viewBox="0 0 220 134">
+    <g fill="none" stroke-width="2"><path d="M43 76h52m30 0h52m-89-5 7 5-7 5m82-10 7 5-7 5" stroke="#a33d2c"/><path d="M192 47C170 4 50 4 28 47m-3-11 3 11 10-5" stroke="#a33d2c"/></g>
+    <g fill="#f7f5f0" stroke="#8a877f" stroke-width="2"><circle cx="28" cy="76" r="15"/><circle cx="110" cy="76" r="15"/></g>
+    <circle cx="192" cy="76" r="15" fill="#f1ddd6" stroke="#a33d2c" stroke-width="2"/>
+    <g fill="#555b63" font-family="Arial, sans-serif" font-size="13" text-anchor="middle"><text x="28" y="81">1</text><text x="110" y="81">2</text><text x="192" y="81">3</text><text x="110" y="121" font-size="11">another attempt</text></g>
+  </symbol>
+  <symbol id="coordination" viewBox="0 0 220 134">
+    <g fill="none" stroke="#a33d2c" stroke-width="2"><path d="M44 67h22V32h22m-7-5 7 5-7 5M66 67v35h22m-7-5 7 5-7 5M142 32h20v35h18m-7-5 7 5-7 5M142 102h20V67"/></g>
+    <g fill="#f7f5f0" stroke="#555b63" stroke-width="2"><circle cx="28" cy="67" r="15"/><rect x="90" y="17" width="50" height="30" rx="4"/><rect x="90" y="87" width="50" height="30" rx="4"/></g>
+    <circle cx="196" cy="67" r="15" fill="#f1ddd6" stroke="#a33d2c" stroke-width="2"/>
+    <g fill="none" stroke="#555b63" stroke-width="2"><path d="M101 28h28m-28 8h18m-18 62h28m-28 8h18"/></g><path d="m190 67 4 4 8-9" fill="none" stroke="#a33d2c" stroke-width="2"/>
+  </symbol>
+  <symbol id="goal-drift" viewBox="0 0 220 134">
+    <path d="M44 63Q101 27 170 27m-7-5 7 5-7 5" fill="none" stroke="#8a877f" stroke-width="2" stroke-dasharray="4 4"/>
+    <path d="M44 72Q94 108 170 108m-7-5 7 5-7 5" fill="none" stroke="#a33d2c" stroke-width="2"/>
+    <circle cx="28" cy="67" r="15" fill="#f7f5f0" stroke="#555b63" stroke-width="2"/><circle cx="28" cy="67" r="4" fill="#555b63"/>
+    <g fill="none" stroke="#8a877f" stroke-width="2"><circle cx="191" cy="27" r="16"/><circle cx="191" cy="27" r="8"/></g>
+    <g fill="none" stroke="#a33d2c" stroke-width="2"><circle cx="191" cy="108" r="16"/><circle cx="191" cy="108" r="8"/></g>
+    <g font-family="Arial, sans-serif" font-size="11" text-anchor="middle"><text x="115" y="16" fill="#6d6c67">assigned goal</text><text x="115" y="127" fill="#a33d2c">new goal</text></g>
+  </symbol>
+</svg>
