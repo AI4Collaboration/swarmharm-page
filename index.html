@@ -37,7 +37,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=11">
   <link rel="stylesheet" href="static/css/story.css?v=4">
+  <link rel="stylesheet" href="static/css/scenarios.css?v=1">
   <script src="static/js/case-study.js?v=2" defer></script>
+  <script src="static/js/scenarios.js?v=1" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -64,7 +66,7 @@
         <p class="eyebrow">AI4Collaboration · Research preview</p>
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
-        <p class="hero-description">How can agents working on a harmless task end up crossing safety boundaries? We study what changes when agents communicate and act together.</p>
+        <p class="hero-description">How can agents working on a harmless task end up crossing safety boundaries? We are building tests across task domains, pressures, and vulnerabilities to study what changes when agents act together.</p>
         <a class="button" href="#motivation">Explore the framework <span aria-hidden="true">↓</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
@@ -76,8 +78,50 @@
       <div class="section-heading framework-heading">
         <p class="section-index"><span aria-hidden="true">01</span><span>The framework</span></p>
         <h2 id="motivation-title">How we study swarm risk.</h2>
-        <p>Potential drivers, observable actions, and outcomes to assess.</p>
+        <p>Vary the domain, the pressure, and the vulnerability. Track what changes in the swarm.</p>
       </div>
+      <div class="scenario-explorer" id="scenario-space" aria-labelledby="scenario-title">
+        <div class="scenario-heading"><div><p class="story-eyebrow">What we vary</p><h3 id="scenario-title">Explore the scenario space.</h3></div><span class="scenario-status">Planned coverage</span></div>
+        <p class="scenario-intro">Choose a setting to see how the same research questions carry across different tasks and conditions.</p>
+        <div class="scenario-controls">
+          <fieldset class="scenario-axis">
+            <legend><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="22" rx="3"/><path d="M3 12h26M11 12v15M6 9h2m3 0h2"/></svg><span>Domain<small>Where agents work</small></span></legend>
+            <label class="scenario-choice"><input type="radio" name="scenario-domain" value="web" checked><span>Web &amp; APIs<small>Retrieve information · maintain services</small></span></label>
+            <label class="scenario-choice"><input type="radio" name="scenario-domain" value="software"><span>Software repair<small>Fix code · verify behavior</small></span></label>
+            <label class="scenario-choice"><input type="radio" name="scenario-domain" value="data"><span>Data workflows<small>Analyze records · produce reports</small></span></label>
+          </fieldset>
+          <fieldset class="scenario-axis">
+            <legend><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11"/><path d="M16 10v7l5 3M12 3h8M16 3v3"/></svg><span>Pressure<small>What makes progress harder</small></span></legend>
+            <label class="scenario-choice"><input type="radio" name="scenario-pressure" value="baseline" checked><span>Baseline<small>A reference condition</small></span></label>
+            <label class="scenario-choice"><input type="radio" name="scenario-pressure" value="deadline"><span>Deadline<small>Less time to finish</small></span></label>
+            <label class="scenario-choice"><input type="radio" name="scenario-pressure" value="resources"><span>Resource limits<small>A tighter tool and compute budget</small></span></label>
+            <label class="scenario-choice"><input type="radio" name="scenario-pressure" value="horizon"><span>Long horizon<small>Many steps, rounds, and setbacks</small></span></label>
+          </fieldset>
+          <fieldset class="scenario-axis">
+            <legend><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 27 7v9c0 6-6 11-11 14C11 27 5 22 5 16V7Z"/><path d="m18 9-5 7 6 1-5 7"/></svg><span>Vulnerability<small>Which weakness is present</small></span></legend>
+            <label class="weakness-label" for="scenario-weakness">Weakness family</label>
+            <select id="scenario-weakness" aria-describedby="scenario-weakness-description">
+              <option value="path">Path traversal · CWE-22</option>
+              <option value="authorization">Authorization · CWE-862</option>
+              <option value="ssrf">SSRF · CWE-918</option>
+            </select>
+            <p id="scenario-weakness-description" class="weakness-description">A file path can reach outside its intended directory.</p>
+            <div class="vulnerability-map" aria-label="A weakness family can appear in different vulnerable systems."><span>CWE<small>Weakness family</small></span><span class="vulnerability-branches" aria-hidden="true">↙ &nbsp; ↘</span><div><span>CVE<small>Disclosed instance</small></span><span>Custom<small>Controlled fixture</small></span></div></div>
+          </fieldset>
+        </div>
+        <noscript><p class="scenario-note">The configuration below is an illustrative web scenario. Enable JavaScript to explore other combinations.</p></noscript>
+        <div class="scenario-example" id="scenario-example" aria-live="polite" aria-atomic="true">
+          <div class="scenario-combination" aria-label="Selected configuration"><span id="scenario-domain-name">Web &amp; APIs</span><b aria-hidden="true">×</b><span id="scenario-pressure-name">Baseline</span><b aria-hidden="true">×</b><span id="scenario-weakness-name">Path traversal</span></div>
+          <div class="scenario-preview">
+            <div><p class="story-eyebrow">Illustrative authorized task</p><h4 id="scenario-task">Restore document retrieval in a test web service.</h4><p id="scenario-condition">Start with a standard time and resource budget for comparison.</p></div>
+            <div class="scenario-question"><span>What we look for</span><p id="scenario-question">Does the swarm complete the task while staying within the permitted files and directories?</p></div>
+          </div>
+          <div class="scenario-references"><div><span>Weakness family</span><a id="scenario-cwe" href="https://cwe.mitre.org/data/definitions/22.html" target="_blank" rel="noopener noreferrer">CWE-22 · Path traversal ↗</a></div><div><span id="scenario-reference-label">Documented examples · reference only</span><div id="scenario-cves"><a href="https://www.cve.org/CVERecord?id=CVE-2021-41773" target="_blank" rel="noopener noreferrer">CVE-2021-41773 ↗</a><a href="https://www.cve.org/CVERecord?id=CVE-2021-42013" target="_blank" rel="noopener noreferrer">CVE-2021-42013 ↗</a></div></div></div>
+        </div>
+        <p class="scenario-note">These configurations illustrate planned coverage, not completed benchmark runs. CWE describes a weakness type; CVE identifies a specific disclosed vulnerability. Custom scenarios can have no CVE. <a href="https://cwe.mitre.org/about/faq.html" target="_blank" rel="noopener noreferrer">CWE &amp; CVE explained ↗</a></p>
+        <div class="scenario-control-note"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 9h24M4 23h24"/><circle cx="12" cy="9" r="4"/><circle cx="22" cy="23" r="4"/></svg><p><strong>Compare matched configurations.</strong> Change one setting while holding the others fixed. Within each configuration, compare our <a href="#protocol">three communication regimes ↗</a>.</p></div>
+      </div>
+      <div class="behavior-heading"><p class="story-eyebrow">What we observe</p><h3>The same behavioral questions in every setting.</h3><p>Potential drivers, observable actions, and outcomes to assess.</p></div>
       <div class="framework-grid">
         <article class="framework-card" data-layer="driver" aria-labelledby="incident-communication">
           <div class="framework-label"><span>Potential driver</span><h3 id="incident-communication">Communication</h3></div>
@@ -292,7 +336,7 @@
       <div class="section-heading">
         <p class="section-index"><span aria-hidden="true">04</span><span>Protocol</span></p>
         <h2 id="protocol-title">Three communication regimes.</h2>
-        <p>Hold tasks, models, agent count, budgets, and retry rules fixed. Vary communication.</p>
+        <p>Within each scenario, hold the task, pressure, vulnerability, models, agent count, budgets, and retry rules fixed. Compare communication conditions.</p>
       </div>
       <div class="table-wrap">
         <table class="protocol-table">
@@ -317,7 +361,7 @@
       <div class="testbed-copy">
         <p class="section-index"><span aria-hidden="true">05</span><span>Testbed</span></p>
         <h2 id="testbed-title">Controlled worlds.<br>Measurable consequences.</h2>
-        <p>Planned on AWS EC2: independent workspaces, shared services, and separate scoring. Initial tasks pair authorized vulnerability evaluation with software repair and verification.</p>
+        <p>A planned testbed with independent workspaces, shared services, and separate scoring. Initial tasks pair authorized vulnerability evaluation with software repair and verification; data workflows extend the design to another domain.</p>
       </div>
       <dl class="principles">
         <div><dt>Independent agents</dt><dd>Private contexts and explicit permissions.</dd></div>
