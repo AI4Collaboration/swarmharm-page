@@ -81,42 +81,42 @@
       <div class="framework-grid">
         <article class="framework-card" aria-labelledby="incident-communication">
           <div class="framework-label"><span>01</span><h3 id="incident-communication">Communication</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="A message travels from one agent to two peers."><use href="static/images/dimensions.svg#communication"/></svg>
+          <svg class="dimension-illustration" role="img" aria-label="A message travels from one agent to two peers."><use href="static/images/dimensions.svg?v=2#communication"/></svg>
           <h4>Who tells whom?</h4>
           <p>How information moves between agents, through shared channels or discovered side channels.</p>
           <a href="#case-shared">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" aria-labelledby="incident-hacking">
           <div class="framework-label"><span>02</span><h3 id="incident-hacking">Hacking</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="An agent uses a key to reach beyond an access boundary."><use href="static/images/dimensions.svg#hacking"/></svg>
-          <h4>What boundary is crossed?</h4>
-          <p>How agents probe or bypass limits on tools, credentials, data, and infrastructure.</p>
+          <svg class="dimension-illustration" role="img" aria-label="An agent bypasses an access control while still pursuing goal A."><use href="static/images/dimensions.svg?v=2#hacking"/></svg>
+          <h4>Are the means authorized?</h4>
+          <p>Agents bypass technical controls or exploit systems beyond their authorized scope. Their goal may stay the same.</p>
           <a href="#case-reroute">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" aria-labelledby="incident-persistence">
           <div class="framework-label"><span>03</span><h3 id="incident-persistence">Persistence</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="Successive attempts form a retry loop."><use href="static/images/dimensions.svg#persistence"/></svg>
+          <svg class="dimension-illustration" role="img" aria-label="Successive attempts form a retry loop."><use href="static/images/dimensions.svg?v=2#persistence"/></svg>
           <h4>What happens after failure?</h4>
           <p>Whether blocked progress leads agents to stop, retry, or escalate their attempts.</p>
           <a href="#case-retries">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" aria-labelledby="incident-coordination">
           <div class="framework-label"><span>04</span><h3 id="incident-coordination">Coordination</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="One task splits into two parallel jobs that combine into a result."><use href="static/images/dimensions.svg#coordination"/></svg>
+          <svg class="dimension-illustration" role="img" aria-label="One task splits into two parallel jobs that combine into a result."><use href="static/images/dimensions.svg?v=2#coordination"/></svg>
           <h4>How is the work combined?</h4>
           <p>How agents divide tasks, pool discoveries, and bring separate capabilities together.</p>
           <a href="#case-delegation">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" aria-labelledby="incident-goal-drift">
           <div class="framework-label"><span>05</span><h3 id="incident-goal-drift">Goal drift</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="An agent turns away from its assigned goal toward a different goal."><use href="static/images/dimensions.svg#goal-drift"/></svg>
-          <h4>Is the goal still the same?</h4>
-          <p>Whether agents pursue a new objective, including goals adopted from their peers.</p>
+          <svg class="dimension-illustration" role="img" aria-label="Assigned goal A is replaced by a different goal B, without an access boundary being crossed."><use href="static/images/dimensions.svg?v=2#goal-drift"/></svg>
+          <h4>Has the objective changed?</h4>
+          <p>Agents shift from the assigned task to a different objective, including one adopted from peers. This can happen within existing permissions.</p>
           <a href="#case-result">Check the outcome <span aria-hidden="true">↓</span></a>
         </article>
       </div>
       <div class="framework-footer">
-        <p>Read each behavior in context: what was the task, and what was permitted?</p>
+        <p><strong>Means and goals are different.</strong> Hacking concerns how agents act; goal drift concerns what they pursue. Either can occur alone, or both together.</p>
         <details class="framework-background">
           <summary>Research background <span aria-hidden="true">+</span></summary>
           <p>These dimensions are motivated by the OpenAI / Hugging Face incident. The reports describe communication, boundary crossing, sustained attempts, collaboration, and agents adopting peers’ goals.</p>
@@ -195,7 +195,7 @@
         </li>
         <li class="case-step" id="case-reroute">
           <span class="step-marker" aria-hidden="true">03</span>
-          <div class="step-copy"><a class="dimension-tag" href="#incident-hacking">Hacking <span aria-hidden="true">↗</span></a><h4>A model credential opened another route.</h4><p>The agent reused its runtime credential in a direct request to the model gateway. That request enabled a web tool outside the runtime’s restriction.</p></div>
+          <div class="step-copy"><a class="dimension-tag" href="#incident-hacking">Hacking <span aria-hidden="true">↗</span></a><h4>A model credential opened another route.</h4><p>Still pursuing the weather task, the agent reused its runtime credential in a direct request to the model gateway. That request enabled a web tool outside the runtime’s restriction.</p></div>
           <div class="step-scene">
             <div class="credential-route"><span class="credential-node"><svg viewBox="0 0 40 24" fill="none" aria-hidden="true"><circle cx="10" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M17 11h20m-6 0v7m6-7v5" stroke="currentColor" stroke-width="2"/></svg><strong>Existing credential</strong></span><span class="credential-arrow" aria-hidden="true">→</span><span class="capability-node"><strong>Model API</strong><span>+ web search</span></span></div>
             <p class="scene-caption">The same credential reached a broader capability.</p>
