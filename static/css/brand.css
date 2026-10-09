@@ -323,6 +323,8 @@ img { display: block; max-width: 100%; height: auto; }
 }
 @media (max-width: 380px) {
   .container { width: calc(100% - 32px); }
+  .nav-inner nav { gap: 4px; }
+  .nav-inner nav a { font-size: 13px; }
   .hero-copy h1 { font-size: 50px; }
   .hero-tagline { font-size: 28px; }
 }

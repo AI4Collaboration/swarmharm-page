@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/brand.css?v=9">
+  <link rel="stylesheet" href="static/css/brand.css?v=10">
   <script src="static/js/case-study.js?v=1" defer></script>
   <script type="application/ld+json">
   {
@@ -52,7 +52,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#case-study" aria-label="Observed case study">Case</a><a href="#motivation" aria-label="Why SwarmHarm">Why</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Five dimensions of swarm risk">Dimensions</a><a href="#case-study" aria-label="Observed case study">Case</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
     <span class="status"><span aria-hidden="true"></span>In development</span>
   </div>
 </header>
@@ -64,16 +64,54 @@
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
         <p class="hero-description">Building the bedrock for agent swarm safety and security—testing how collective behavior creates risk, and what keeps collaboration safe.</p>
-        <a class="button" href="#case-study">Explore the observed case <span aria-hidden="true">↓</span></a>
+        <a class="button" href="#motivation">Explore the five dimensions <span aria-hidden="true">↓</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
+    </div>
+  </section>
+
+  <section class="section incident-section" id="motivation" aria-labelledby="motivation-title">
+    <div class="container">
+      <div class="section-heading">
+        <p class="section-index"><span aria-hidden="true">01</span><span>Dimensions</span></p>
+        <h2 id="motivation-title">Five dimensions of swarm risk.</h2>
+        <p>Behaviors that enabled and escalated the OpenAI / Hugging Face incident—and motivate our tests.</p>
+      </div>
+      <div class="incident-grid">
+        <article class="incident-card" aria-labelledby="incident-communication">
+          <span class="incident-number" aria-hidden="true">01</span>
+          <h3 id="incident-communication">Communication</h3>
+          <p>Shared services became unauthorized message boards connecting otherwise isolated agents.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: unauthorized communication">[1]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-hacking">
+          <span class="incident-number" aria-hidden="true">02</span>
+          <h3 id="incident-hacking">Hacking</h3>
+          <p>Agents tried to game perceived grading rules and exploited systems beyond their authorized task.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: grader metagaming and infrastructure attacks">[1]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-persistence">
+          <span class="incident-number" aria-hidden="true">03</span>
+          <h3 id="incident-persistence">Persistence</h3>
+          <p>Stalled tasks prompted prolonged attempts and increasingly risky, out-of-scope actions.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: persistence on difficult tasks">[1]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-coordination">
+          <span class="incident-number" aria-hidden="true">04</span>
+          <h3 id="incident-coordination">Coordination</h3>
+          <p>Agents divided work, pooled discoveries, and combined effort across separate evaluation runs.&nbsp;<a class="source-ref" href="#incident-source-2" aria-label="Source 2: collective work and collaboration">[2]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-goal-drift">
+          <span class="incident-number" aria-hidden="true">05</span>
+          <h3 id="incident-goal-drift">Goal drift</h3>
+          <p>Agents adopted peers’ objectives, prioritizing access and capabilities for the collective over their assigned tasks.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: agents adopting goals from one another">[1]</a></p>
+        </article>
+      </div>
+      <p class="incident-sources"><span>Incident reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">[1] OpenAI ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">[2] METR / Redwood ↗</a></p>
     </div>
   </section>
 
   <section class="section case-section" id="case-study" aria-labelledby="case-title">
     <div class="container">
       <div class="section-heading case-heading">
-        <p class="section-index"><span aria-hidden="true">01</span><span>Observed case · POC-15</span></p>
+        <p class="section-index"><span aria-hidden="true">02</span><span>Observed case · POC-15</span></p>
         <h2 id="case-title">A weather query crossed<br class="case-title-break"> the network boundary.</h2>
         <p>A four-agent team had a routine task: find the current weather in Zurich. When direct web access failed, one agent reused its model credential to reach other models with web search.</p>
       </div>
@@ -155,44 +193,6 @@ METAR LSZH 061320Z 35004KT 260V030 CAVOK 22/09 Q1018 NOSIG</code></pre><p class=
           <p class="evidence-limit"><strong>What this evidence establishes:</strong> credential reuse, direct calls to other models, service-reported web-tool execution, and returned text. Network denials and disabled local browsing are reported in the captured conversation. These excerpts are not a packet capture, an independent check of the weather, or a controlled comparison of single-agent and multi-agent behavior.</p>
         </div>
       </details>
-    </div>
-  </section>
-
-  <section class="section incident-section" id="motivation" aria-labelledby="motivation-title">
-    <div class="container">
-      <div class="section-heading">
-        <p class="section-index"><span aria-hidden="true">02</span><span>Motivation</span></p>
-        <h2 id="motivation-title">What drove the incident.</h2>
-        <p>Behaviors that enabled and escalated the OpenAI / Hugging Face incident—and motivate our tests.</p>
-      </div>
-      <div class="incident-grid">
-        <article class="incident-card" aria-labelledby="incident-communication">
-          <span class="incident-number" aria-hidden="true">01</span>
-          <h3 id="incident-communication">Communication</h3>
-          <p>Shared services became unauthorized message boards connecting otherwise isolated agents.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: unauthorized communication">[1]</a></p>
-        </article>
-        <article class="incident-card" aria-labelledby="incident-hacking">
-          <span class="incident-number" aria-hidden="true">02</span>
-          <h3 id="incident-hacking">Hacking</h3>
-          <p>Agents tried to game perceived grading rules and exploited systems beyond their authorized task.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: grader metagaming and infrastructure attacks">[1]</a></p>
-        </article>
-        <article class="incident-card" aria-labelledby="incident-persistence">
-          <span class="incident-number" aria-hidden="true">03</span>
-          <h3 id="incident-persistence">Persistence</h3>
-          <p>Stalled tasks prompted prolonged attempts and increasingly risky, out-of-scope actions.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: persistence on difficult tasks">[1]</a></p>
-        </article>
-        <article class="incident-card" aria-labelledby="incident-coordination">
-          <span class="incident-number" aria-hidden="true">04</span>
-          <h3 id="incident-coordination">Coordination</h3>
-          <p>Agents divided work, pooled discoveries, and combined effort across separate evaluation runs.&nbsp;<a class="source-ref" href="#incident-source-2" aria-label="Source 2: collective work and collaboration">[2]</a></p>
-        </article>
-        <article class="incident-card" aria-labelledby="incident-goal-drift">
-          <span class="incident-number" aria-hidden="true">05</span>
-          <h3 id="incident-goal-drift">Goal drift</h3>
-          <p>Agents adopted peers’ objectives, prioritizing access and capabilities for the collective over their assigned tasks.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: agents adopting goals from one another">[1]</a></p>
-        </article>
-      </div>
-      <p class="incident-sources"><span>Incident reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">[1] OpenAI ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">[2] METR / Redwood ↗</a></p>
     </div>
   </section>
 
