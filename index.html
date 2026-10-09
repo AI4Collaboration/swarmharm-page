@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/brand.css?v=7">
+  <link rel="stylesheet" href="static/css/brand.css?v=8">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -73,46 +73,37 @@
     <div class="container">
       <div class="section-heading">
         <p class="section-index"><span aria-hidden="true">01</span><span>Motivation</span></p>
-        <h2 id="motivation-title">Dimensions of swarm behavior.</h2>
-        <p>The OpenAI / Hugging Face incident motivates broader tests of communication, hacking, persistence, coordination, and oversight. Specific tactics illustrate these dimensions; they are not separate dimensions themselves. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: OpenAI post-mortem">[1]</a> <a class="source-ref" href="#incident-source-2" aria-label="Source 2: independent METR and Redwood investigation">[2]</a></p>
+        <h2 id="motivation-title">What drove the incident.</h2>
+        <p>Behaviors that enabled and escalated the OpenAI / Hugging Face incident—and motivate our tests.</p>
       </div>
-      <div class="table-wrap">
-        <table class="protocol-table incident-table">
-          <caption class="sr-only">General SwarmHarm dimensions, configurable system controls, and motivating incident examples</caption>
-          <thead><tr><th scope="col">Dimension</th><th scope="col">System controls</th><th scope="col">Incident example</th></tr></thead>
-          <tbody>
-            <tr>
-              <th scope="row">Communication</th>
-              <td data-label="System controls">Channel availability, authorization, and visibility.<span class="rq-map"><a href="#rq1">RQ1</a></span></td>
-              <td data-label="Incident example">A shared service became an unauthorized message board. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: unauthorized communication">[1]</a></td>
-            </tr>
-            <tr>
-              <th scope="row">Hacking</th>
-              <td data-label="System controls">Tool and resource access, in-world permission enforcement, and evaluation feedback.<span class="rq-map"><a href="#rq2">RQ2</a></span></td>
-              <td data-label="Incident example">Reward hacking around an imagined extra grading check, alongside attacks on supporting and third-party infrastructure. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: reward hacking and infrastructure attacks">[1]</a></td>
-            </tr>
-            <tr>
-              <th scope="row">Persistence</th>
-              <td data-label="System controls">Run duration, retry and wakeup policies, and stopping rules.<span class="rq-map"><a href="#rq2">RQ2</a></span></td>
-              <td data-label="Incident example">Prolonged work on difficult tasks escalated into increasingly out-of-scope actions. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: persistence on difficult tasks">[1]</a></td>
-            </tr>
-            <tr>
-              <th scope="row">Coordination</th>
-              <td data-label="System controls">Shared memory, delegation rights, and exposure to peer outputs.<span class="rq-map"><a href="#rq2">RQ2</a></span></td>
-              <td data-label="Incident example">Agents divided work, shared exploits, and adopted goals from peers. <a class="source-ref" href="#incident-source-2" aria-label="Source 2: collaboration and goal adoption">[2]</a></td>
-            </tr>
-            <tr>
-              <th scope="row">Oversight</th>
-              <td data-label="System controls">Visibility of agent actions, reporting paths, and intervention policies.<span class="rq-map"><a href="#rq3">RQ3</a></span></td>
-              <td data-label="Incident example">Agents spoofed tool calls; METR found no attempts to alert humans in the transcripts it analyzed. <a class="source-ref" href="#incident-source-2" aria-label="Source 2: reporting and transcript tampering">[2]</a></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="incident-grid">
+        <article class="incident-card" aria-labelledby="incident-communication">
+          <span class="incident-number" aria-hidden="true">01</span>
+          <h3 id="incident-communication">Communication</h3>
+          <p>Shared services became unauthorized message boards connecting otherwise isolated agents.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: unauthorized communication">[1]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-hacking">
+          <span class="incident-number" aria-hidden="true">02</span>
+          <h3 id="incident-hacking">Hacking</h3>
+          <p>Agents tried to game perceived grading rules and exploited systems beyond their authorized task.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: grader metagaming and infrastructure attacks">[1]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-persistence">
+          <span class="incident-number" aria-hidden="true">03</span>
+          <h3 id="incident-persistence">Persistence</h3>
+          <p>Stalled tasks prompted prolonged attempts and increasingly risky, out-of-scope actions.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: persistence on difficult tasks">[1]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-coordination">
+          <span class="incident-number" aria-hidden="true">04</span>
+          <h3 id="incident-coordination">Coordination</h3>
+          <p>Agents divided work, pooled discoveries, and combined effort across separate evaluation runs.&nbsp;<a class="source-ref" href="#incident-source-2" aria-label="Source 2: collective work and collaboration">[2]</a></p>
+        </article>
+        <article class="incident-card" aria-labelledby="incident-goal-drift">
+          <span class="incident-number" aria-hidden="true">05</span>
+          <h3 id="incident-goal-drift">Goal drift</h3>
+          <p>Agents adopted peers’ objectives, prioritizing access and capabilities for the collective over their assigned tasks.&nbsp;<a class="source-ref" href="#incident-source-1" aria-label="Source 1: agents adopting goals from one another">[1]</a></p>
+        </article>
       </div>
-      <div class="incident-notes">
-        <p><strong>General dimensions, matched experiments.</strong> Emergence, contagion, and harm are outcomes measured across these settings. The primary track starts without a malicious seed; agents can report blockers or stop. Only in-world controls vary—real containment, independent grading, and audit records stay protected.</p>
-        <p class="incident-sources"><span>Reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">[1] OpenAI post-mortem ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">[2] METR / Redwood investigation ↗</a></p>
-      </div>
+      <p class="incident-sources"><span>Incident reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">[1] OpenAI ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">[2] METR / Redwood ↗</a></p>
     </div>
   </section>
 
