@@ -107,6 +107,19 @@ img { display: block; max-width: 100%; height: auto; }
 .protocol-notes { max-width: 80ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.7; }
 .protocol-notes p + p { margin-top: 12px; }
 
+/* Incident evidence and experimental controls are deliberately separate. */
+.incident-table th:nth-child(1) { width: 22%; }
+.incident-table th:nth-child(2) { width: 38%; }
+.incident-table th:nth-child(3) { width: 40%; }
+.source-ref { color: var(--accent); font-size: 14px; font-weight: 500; white-space: nowrap; }
+.rq-map { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; font-size: 14px; font-weight: 500; color: var(--accent); }
+.rq-map a, .incident-sources a { text-decoration: underline; text-underline-offset: 3px; }
+.incident-notes { margin-top: 24px; font-size: 15px; line-height: 1.7; color: var(--muted); }
+.incident-notes > p:first-child { max-width: 90ch; }
+.incident-notes strong { color: var(--text); font-weight: 600; }
+.incident-sources { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 18px; font-size: 14px; }
+.incident-sources a { color: var(--accent); scroll-margin-top: 140px; }
+
 /* Planned infrastructure */
 .testbed-layout { display: grid; grid-template-columns: 1.12fr 1fr; gap: 56px; align-items: start; }
 .testbed-copy p { max-width: 54ch; margin-top: 24px; color: var(--muted); }

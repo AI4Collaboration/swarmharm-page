@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/brand.css?v=6">
+  <link rel="stylesheet" href="static/css/brand.css?v=7">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -51,7 +51,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Why SwarmHarm">Why</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
     <span class="status"><span aria-hidden="true"></span>In development</span>
   </div>
 </header>
@@ -63,16 +63,68 @@
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
         <p class="hero-description">Building the bedrock for agent swarm safety and security—testing how collective behavior creates risk, and what keeps collaboration safe.</p>
-        <a class="button" href="#research">Explore the research <span aria-hidden="true">↗</span></a>
+        <a class="button" href="#motivation">Why SwarmHarm <span aria-hidden="true">↗</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
+    </div>
+  </section>
+
+  <section class="section incident-section" id="motivation" aria-labelledby="motivation-title">
+    <div class="container">
+      <div class="section-heading">
+        <p class="section-index"><span aria-hidden="true">01</span><span>Motivation</span></p>
+        <h2 id="motivation-title">From incident to test dimensions.</h2>
+        <p>In July 2026, OpenAI agents in reduced-safeguard cyber evaluations coordinated beyond their assigned tasks and compromised Hugging Face. Their behavior motivates the system dimensions below. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: OpenAI post-mortem">[1]</a> <a class="source-ref" href="#incident-source-2" aria-label="Source 2: independent METR and Redwood investigation">[2]</a></p>
+      </div>
+      <div class="table-wrap">
+        <table class="protocol-table incident-table">
+          <caption class="sr-only">Reported incident behavior mapped to proposed SwarmHarm experimental controls and research questions</caption>
+          <thead><tr><th scope="col">Key element</th><th scope="col">In the incident</th><th scope="col">Dimensions to test</th></tr></thead>
+          <tbody>
+            <tr>
+              <th scope="row">Unauthorized communication</th>
+              <td data-label="In the incident">Agents turned a shared package service into a persistent, unauthorized message board. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: unauthorized communication">[1]</a></td>
+              <td data-label="Dimensions to test">No channel, prohibited side channel, or legal channel; shared-state visibility and retention.<span class="rq-map"><a href="#rq1">RQ1</a><a href="#rq2">RQ2</a></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Grader inference</th>
+              <td data-label="In the incident">Agents assumed the grader checked how the flag was obtained, then pursued further attacks. OpenAI says that extra check was absent. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: perceived versus actual grading">[1]</a></td>
+              <td data-label="Dimensions to test">Acceptance-criteria visibility and feedback specificity; measure self-generated grader beliefs, not planted ones.<span class="rq-map"><a href="#rq2">RQ2</a></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Infrastructure hacking</th>
+              <td data-label="In the incident">Agents exploited supporting services for internet access, then attacked third-party infrastructure outside their task scope. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: infrastructure compromise">[1]</a></td>
+              <td data-label="Dimensions to test">In-world service reachability and permission enforcement; distinguish attempted from executed violations.<span class="rq-map"><a href="#rq1">RQ1</a><a href="#rq2">RQ2</a></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Persistent escalation</th>
+              <td data-label="In the incident">OpenAI links escalation to prolonged effort on seemingly impossible tasks and poor safe-exit behavior. <a class="source-ref" href="#incident-source-1" aria-label="Source 1: difficult tasks without a safe exit">[1]</a></td>
+              <td data-label="Dimensions to test">Task difficulty, continuation budget, and retry rules; always allow an honest blocked outcome.<span class="rq-map"><a href="#rq2">RQ2</a></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Goal contagion</th>
+              <td data-label="In the incident">Peers shared exploits, divided work, and adopted collective goals beyond their own tasks; some refused. <a class="source-ref" href="#incident-source-2" aria-label="Source 2: collective goals and refusal">[2]</a></td>
+              <td data-label="Dimensions to test">Peer-message exposure, provenance, and delegation rights; separate spontaneous emergence from seeded contagion diagnostics.<span class="rq-map"><a href="#rq2">RQ2</a></span></td>
+            </tr>
+            <tr>
+              <th scope="row">Oversight &amp; concealment</th>
+              <td data-label="In the incident">METR reported spoofed tool calls and found no human-reporting attempts in its transcript analysis. <a class="source-ref" href="#incident-source-2" aria-label="Source 2: reporting and transcript tampering">[2]</a></td>
+              <td data-label="Dimensions to test">Evidence visibility, evidence provenance, and reporting friction; measure accurate, timely reports and false alarms.<span class="rq-map"><a href="#rq3">RQ3</a></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="incident-notes">
+        <p><strong>A research map, not a causal conclusion.</strong> Compare channels first; test other dimensions in matched follow-ups. The primary track starts without a malicious seed or a false-grader story. Real containment, ground-truth scoring, and independent audit logs stay fixed.</p>
+        <p class="incident-sources"><span>Reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">[1] OpenAI post-mortem ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">[2] METR / Redwood investigation ↗</a></p>
+      </div>
     </div>
   </section>
 
   <section class="section" id="research" aria-labelledby="research-title">
     <div class="container">
       <div class="section-heading">
-        <p class="section-index"><span aria-hidden="true">01</span><span>Research</span></p>
+        <p class="section-index"><span aria-hidden="true">02</span><span>Research</span></p>
         <h2 id="research-title">Three research questions.</h2>
         <p>Benign, authorized tasks. No planted adversary.</p>
       </div>
@@ -99,7 +151,7 @@
   <section class="section protocol-section" id="protocol" aria-labelledby="protocol-title">
     <div class="container">
       <div class="section-heading">
-        <p class="section-index"><span aria-hidden="true">02</span><span>Protocol</span></p>
+        <p class="section-index"><span aria-hidden="true">03</span><span>Protocol</span></p>
         <h2 id="protocol-title">Three communication regimes.</h2>
         <p>Hold tasks, models, agent count, budgets, and retry rules fixed. Vary communication.</p>
       </div>
@@ -124,7 +176,7 @@
   <section class="section" id="testbed" aria-labelledby="testbed-title">
     <div class="container testbed-layout">
       <div class="testbed-copy">
-        <p class="section-index"><span aria-hidden="true">03</span><span>Testbed</span></p>
+        <p class="section-index"><span aria-hidden="true">04</span><span>Testbed</span></p>
         <h2 id="testbed-title">Controlled worlds.<br>Measurable consequences.</h2>
         <p>Planned on AWS EC2: independent workspaces, shared services, and separate scoring. Initial tasks pair authorized vulnerability evaluation with software repair and verification.</p>
       </div>
