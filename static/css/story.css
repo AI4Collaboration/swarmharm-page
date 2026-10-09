@@ -119,11 +119,13 @@
 .scene-quote { margin: 20px 0 0; padding-left: 14px; border-left: 2px solid #ac6852; font-size: 15px; line-height: 1.65; }
 .scene-quote cite { display: block; margin-top: 8px; color: var(--muted); font-size: 11px; font-style: normal; }
 .scene-caption { margin-top: 18px; color: var(--muted); font-size: 12px; }
-.retry-loop { display: flex; align-items: center; gap: 20px; padding-block: 10px; }
-.retry-arrow { flex: none; color: var(--accent); font-size: 56px; line-height: 1; }
-.retry-loop strong { font-size: 15px; font-weight: 500; }
-.retry-loop p { margin-top: 10px; color: var(--muted); font-size: 12px; line-height: 2.1; }
-.retry-loop p > span { color: var(--accent); margin-inline: 4px; }
+.effort-timeline { padding-block: 10px; }
+.effort-timeline > strong { font-size: 15px; font-weight: 500; }
+.effort-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 24px; }
+.effort-stages > span { position: relative; padding: 20px 12px 0 0; border-top: 1px solid #ac6852; font-size: 12px; color: var(--muted); }
+.effort-stages > span::before { content: ""; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border: 1px solid #ac6852; border-radius: 50%; background: #f7f5f0; }
+.effort-stages > span:last-child::before { background: #ac6852; }
+.effort-timeline > p { margin-top: 16px; color: var(--muted); font-size: 11px; }
 .credential-route { display: grid; grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr); align-items: center; gap: 12px; padding-block: 10px; }
 .credential-node { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .credential-node > svg { width: 48px; height: 30px; color: var(--accent); }
@@ -299,9 +301,11 @@ summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
   .shared-findings > span:last-child strong { font-size: 10px; }
   .shared-issue { font-size: 11px; }
   .scene-quote { font-size: 14px; padding-left: 11px; }
-  .retry-loop { gap: 12px; }
-  .retry-arrow { font-size: 42px; }
-  .retry-loop strong { font-size: 14px; }
+  .effort-timeline > strong { font-size: 14px; }
+  .effort-stages { grid-template-columns: minmax(0, 1fr); margin: 20px 0 0 4px; }
+  .effort-stages > span { padding: 0 0 20px 18px; border-top: 0; border-left: 1px solid #ac6852; }
+  .effort-stages > span::before { top: 5px; left: -5px; }
+  .effort-stages > span:last-child { padding-bottom: 4px; }
   .credential-route { gap: 5px; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr); }
   .credential-node strong { font-size: 11px; }
   .capability-node { padding: 13px 7px; }

@@ -21,10 +21,10 @@
     <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle"><text x="182" y="43" fill="#555b63">same goal</text><text x="110" y="125" fill="#a33d2c">unauthorized route</text></g>
   </symbol>
   <symbol id="persistence" viewBox="0 0 220 134">
-    <g fill="none" stroke-width="2"><path d="M43 76h52m30 0h52m-89-5 7 5-7 5m82-10 7 5-7 5" stroke="#a33d2c"/><path d="M192 47C170 4 50 4 28 47m-3-11 3 11 10-5" stroke="#a33d2c"/></g>
-    <g fill="#f7f5f0" stroke="#8a877f" stroke-width="2"><circle cx="28" cy="76" r="15"/><circle cx="110" cy="76" r="15"/></g>
-    <circle cx="192" cy="76" r="15" fill="#f1ddd6" stroke="#a33d2c" stroke-width="2"/>
-    <g fill="#555b63" font-family="Arial, sans-serif" font-size="13" text-anchor="middle"><text x="28" y="81">1</text><text x="110" y="81">2</text><text x="192" y="81">3</text><text x="110" y="121" font-size="11">another attempt</text></g>
+    <g fill="none" stroke="#a33d2c" stroke-width="2"><circle cx="53" cy="27" r="9"/><path d="M53 21v6l5 3M16 68h100m57 0h35m-7-5 7 5-7 5"/><path d="M116 68h57" stroke-dasharray="3 5"/></g>
+    <g fill="#f7f5f0" stroke="#8a877f" stroke-width="2"><circle cx="28" cy="68" r="9"/><circle cx="69" cy="68" r="9"/><circle cx="110" cy="68" r="9"/></g>
+    <circle cx="183" cy="68" r="12" fill="#f1ddd6" stroke="#a33d2c" stroke-width="2"/>
+    <g fill="#555b63" font-family="Arial, sans-serif"><text x="70" y="32" font-size="13">Long horizon</text><text x="28" y="99" text-anchor="middle" font-size="11">Start</text><text x="181" y="99" text-anchor="middle" font-size="11">Much later</text><text x="110" y="123" text-anchor="middle" font-size="11">many steps · same objective</text></g>
   </symbol>
   <symbol id="coordination" viewBox="0 0 220 134">
     <g fill="none" stroke="#a33d2c" stroke-width="2"><path d="M44 67h22V32h22m-7-5 7 5-7 5M66 67v35h22m-7-5 7 5-7 5M142 32h20v35h18m-7-5 7 5-7 5M142 102h20V67"/></g>

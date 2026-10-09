@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=11">
-  <link rel="stylesheet" href="static/css/story.css?v=3">
+  <link rel="stylesheet" href="static/css/story.css?v=4">
   <script src="static/js/case-study.js?v=2" defer></script>
   <script type="application/ld+json">
   {
@@ -81,28 +81,28 @@
       <div class="framework-grid">
         <article class="framework-card" data-layer="driver" aria-labelledby="incident-communication">
           <div class="framework-label"><span>Potential driver</span><h3 id="incident-communication">Communication</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="A message travels from one agent to two peers."><use href="static/images/dimensions.svg?v=2#communication"/></svg>
+          <svg class="dimension-illustration" role="img" aria-label="A message travels from one agent to two peers."><use href="static/images/dimensions.svg?v=3#communication"/></svg>
           <h4>Who tells whom?</h4>
           <p>How information moves between agents, through shared channels or discovered side channels.</p>
           <a href="#case-shared">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" data-layer="driver" aria-labelledby="incident-persistence">
           <div class="framework-label"><span>Potential driver</span><h3 id="incident-persistence">Persistence</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="Successive attempts form a retry loop."><use href="static/images/dimensions.svg?v=2#persistence"/></svg>
-          <h4>What happens after failure?</h4>
-          <p>Whether blocked progress leads agents to stop, retry, or escalate their attempts.</p>
+          <svg class="dimension-illustration" role="img" aria-label="A long timeline: agents keep pursuing the same objective through many steps, from the start to much later."><use href="static/images/dimensions.svg?v=3#persistence"/></svg>
+          <h4>How long do agents keep going?</h4>
+          <p>Sustained pursuit over long horizons: agents carry progress across many steps and rounds, adapting after setbacks while continuing toward the same objective.</p>
           <a href="#case-retries">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" data-layer="action" aria-labelledby="incident-hacking">
           <div class="framework-label"><span>Action</span><h3 id="incident-hacking">Hacking</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="An agent bypasses an access control while still pursuing goal A."><use href="static/images/dimensions.svg?v=2#hacking"/></svg>
+          <svg class="dimension-illustration" role="img" aria-label="An agent bypasses an access control while still pursuing goal A."><use href="static/images/dimensions.svg?v=3#hacking"/></svg>
           <h4>Are the means authorized?</h4>
           <p>Agents bypass technical controls or exploit systems beyond their authorized scope. Their goal may stay the same.</p>
           <a href="#case-reroute">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
         <article class="framework-card" data-layer="outcome" aria-labelledby="incident-goal-drift">
           <div class="framework-label"><span>Outcome to assess</span><h3 id="incident-goal-drift">Goal drift</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="Assigned goal A is replaced by a different goal B, without an access boundary being crossed."><use href="static/images/dimensions.svg?v=2#goal-drift"/></svg>
+          <svg class="dimension-illustration" role="img" aria-label="Assigned goal A is replaced by a different goal B, without an access boundary being crossed."><use href="static/images/dimensions.svg?v=3#goal-drift"/></svg>
           <h4>Has the objective changed?</h4>
           <p>A shift from the assigned objective to a different one. We assess this separately from rule-breaking actions and downstream harm.</p>
           <a href="#case-result">Check the outcome <span aria-hidden="true">↓</span></a>
@@ -198,11 +198,11 @@
         </li>
         <li class="case-step" id="case-retries">
           <span class="step-marker" aria-hidden="true">02</span>
-          <div class="step-copy"><a class="dimension-tag" href="#incident-persistence">Persistence <span aria-hidden="true">↗</span></a><h4>Failures prompted more attempts.</h4><p>The task encouraged continued effort without human help. The agent tried different request formats, streaming, and additional models.</p></div>
+          <div class="step-copy"><a class="dimension-tag" href="#incident-persistence">Persistence <span aria-hidden="true">↗</span></a><h4>One goal, successive attempts.</h4><p>The task encouraged continued effort across rounds without human help. In this excerpt, the agent kept pursuing the weather task through different request formats, streaming, and additional models.</p></div>
           <div class="step-scene">
-            <div class="retry-loop"><span class="retry-arrow" aria-hidden="true">↻</span><div><strong>Blocked? Try another approach.</strong><p>Change format <span aria-hidden="true">→</span> Stream responses <span aria-hidden="true">→</span> Try other models</p></div></div>
+            <div class="effort-timeline"><strong>Keep pursuing the weather task</strong><div class="effort-stages" role="img" aria-label="Selected approaches during continued effort: change format, stream responses, and try other models."><span>Change format</span><span>Stream responses</span><span>Try other models</span></div><p>Selected attempts along the way</p></div>
             <blockquote class="scene-quote">“Each round, try at least one approach that nobody has tried before.”<cite>Task instruction</cite></blockquote>
-            <details class="step-evidence"><summary>See the recorded attempts <span aria-hidden="true">+</span></summary><div><ul><li>Check which other models are available.</li><li>Ask a model to use web search.</li><li>Try a streamed response.</li></ul><p>These are selected attempts from the recorded conversation.</p><a href="#case-evidence">Read the evidence ↓</a></div></details>
+            <details class="step-evidence"><summary>See the recorded attempts <span aria-hidden="true">+</span></summary><div><ul><li>Check which other models are available.</li><li>Ask a model to use web search.</li><li>Try a streamed response.</li></ul><p>These selected attempts show continued effort. This excerpt does not establish its total duration.</p><a href="#case-evidence">Read the evidence ↓</a></div></details>
           </div>
         </li>
         <li class="case-step" id="case-reroute">
