@@ -106,3 +106,5 @@
   .domain-choices .scenario-choice > span { font-size: 14px; }
   .pressure-example { padding-left: 14px; }
 }
+
+.scenario-axis select:disabled { opacity: 0.55; border-color: #bdb7aa; cursor: not-allowed; }

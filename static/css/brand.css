@@ -67,7 +67,7 @@ img { display: block; max-width: 100%; height: auto; }
 .section-heading > p { max-width: 68ch; margin-top: 14px; color: var(--muted); }
 
 /* Small section markers in the same type family, not terminal-style labels. */
-.section-heading > .section-index, .testbed-copy > .section-index {
+.section-heading > .section-index {
   display: flex;
   align-items: baseline;
   gap: 12px;
@@ -107,16 +107,6 @@ img { display: block; max-width: 100%; height: auto; }
 .protocol-notes { max-width: 80ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.7; }
 .protocol-notes p + p { margin-top: 12px; }
 
-/* Planned infrastructure, available on demand. */
-.testbed-details { margin-top: 28px; border-block: 1px solid var(--line); }
-.testbed-details summary { display: flex; align-items: center; justify-content: space-between; min-height: 60px; list-style: none; cursor: pointer; font-size: 16px; font-weight: 500; }
-.testbed-details summary span { color: var(--accent); font-size: 22px; }
-.testbed-details[open] summary span { transform: rotate(45deg); }
-.testbed-details > p { max-width: 76ch; font-size: 14px; color: var(--muted); }
-.principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; padding-block: 22px; }
-.principles dt { font-size: 15px; font-weight: 600; }
-.principles dd { margin-top: 4px; font-size: 14px; color: var(--muted); }
-
 /* Quiet footer, retaining project status and attribution. */
 .site-footer { padding-block: 30px; border-top: 1px solid var(--line); }
 .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
@@ -147,7 +137,6 @@ img { display: block; max-width: 100%; height: auto; }
   .section { padding-block: 52px; }
   .rq-card { grid-template-columns: 48px minmax(0, 1fr); gap: 12px 22px; padding-block: 26px; }
   .rq-card p { grid-column: 2; }
-  .principles { margin-top: 0; }
   .footer-top { flex-wrap: wrap; }
 }
 @media (max-width: 600px) {
@@ -161,7 +150,7 @@ img { display: block; max-width: 100%; height: auto; }
   .eyebrow { margin-bottom: 20px; }
   .section { padding-block: 44px; }
   .section-heading { margin-bottom: 24px; }
-  .section-heading > .section-index, .testbed-copy > .section-index { margin-bottom: 12px; }
+  .section-heading > .section-index { margin-bottom: 12px; }
   .rq-card { grid-template-columns: minmax(0, 1fr); gap: 10px; scroll-margin-top: 132px; }
   .rq-label { padding: 0; }
   .rq-card p { grid-column: 1; }
@@ -173,7 +162,6 @@ img { display: block; max-width: 100%; height: auto; }
   .protocol-table td:last-child { padding-bottom: 22px; }
   .protocol-table tr + tr { border-top: 1px solid var(--line); }
   .protocol-table td::before { content: attr(data-label); display: block; margin-bottom: 4px; font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--text); }
-  .principles { grid-template-columns: minmax(0, 1fr); }
   .footer-top { gap: 14px; }
   .footer-top > p { order: 3; width: 100%; }
   .footer-bottom { flex-direction: column; gap: 10px; }
@@ -195,5 +183,5 @@ img { display: block; max-width: 100%; height: auto; }
   .container { width: 100%; }
   .hero-layout { padding-block: 20px; }
   .section { padding-block: 26px; }
-  .rq-card, .principles > div, tr { break-inside: avoid; }
+  .rq-card, tr { break-inside: avoid; }
 }

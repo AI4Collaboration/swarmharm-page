@@ -5,7 +5,8 @@
     try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
     // Preserve links shared before the public section was renamed to Sample.
     const original = id;
-    if (id === 'case-study') id = 'sample';
+    if (id === 'testbed') id = 'protocol';
+    else if (id === 'case-study') id = 'sample';
     else if (id.startsWith('case-')) id = id.replace('case-', 'sample-');
     const target = document.getElementById(id);
     if (!target) return;
