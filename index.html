@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=11">
-  <link rel="stylesheet" href="static/css/story.css?v=2">
+  <link rel="stylesheet" href="static/css/story.css?v=3">
   <script src="static/js/case-study.js?v=2" defer></script>
   <script type="application/ld+json">
   {
@@ -53,7 +53,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Four dimensions of swarm risk">Dimensions</a><a href="#case-study" aria-label="Observed case study">Case</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Swarm risk framework">Framework</a><a href="#case-study" aria-label="Observed case study">Case</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
     <span class="status"><span aria-hidden="true"></span>In development</span>
   </div>
 </header>
@@ -65,7 +65,7 @@
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
         <p class="hero-description">How can agents working on a harmless task end up crossing safety boundaries? We study what changes when agents communicate and act together.</p>
-        <a class="button" href="#motivation">Explore the four dimensions <span aria-hidden="true">↓</span></a>
+        <a class="button" href="#motivation">Explore the framework <span aria-hidden="true">↓</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
     </div>
@@ -75,50 +75,50 @@
     <div class="container">
       <div class="section-heading framework-heading">
         <p class="section-index"><span aria-hidden="true">01</span><span>The framework</span></p>
-        <h2 id="motivation-title">Four dimensions of swarm risk.</h2>
-        <p>Follow the information, the access, the attempts, and the goal.</p>
+        <h2 id="motivation-title">How we study swarm risk.</h2>
+        <p>Potential drivers, observable actions, and outcomes to assess.</p>
       </div>
       <div class="framework-grid">
-        <article class="framework-card" aria-labelledby="incident-communication">
-          <div class="framework-label"><span>01</span><h3 id="incident-communication">Communication</h3></div>
+        <article class="framework-card" data-layer="driver" aria-labelledby="incident-communication">
+          <div class="framework-label"><span>Potential driver</span><h3 id="incident-communication">Communication</h3></div>
           <svg class="dimension-illustration" role="img" aria-label="A message travels from one agent to two peers."><use href="static/images/dimensions.svg?v=2#communication"/></svg>
           <h4>Who tells whom?</h4>
           <p>How information moves between agents, through shared channels or discovered side channels.</p>
           <a href="#case-shared">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
-        <article class="framework-card" aria-labelledby="incident-hacking">
-          <div class="framework-label"><span>02</span><h3 id="incident-hacking">Hacking</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="An agent bypasses an access control while still pursuing goal A."><use href="static/images/dimensions.svg?v=2#hacking"/></svg>
-          <h4>Are the means authorized?</h4>
-          <p>Agents bypass technical controls or exploit systems beyond their authorized scope. Their goal may stay the same.</p>
-          <a href="#case-reroute">See it in the case <span aria-hidden="true">↓</span></a>
-        </article>
-        <article class="framework-card" aria-labelledby="incident-persistence">
-          <div class="framework-label"><span>03</span><h3 id="incident-persistence">Persistence</h3></div>
+        <article class="framework-card" data-layer="driver" aria-labelledby="incident-persistence">
+          <div class="framework-label"><span>Potential driver</span><h3 id="incident-persistence">Persistence</h3></div>
           <svg class="dimension-illustration" role="img" aria-label="Successive attempts form a retry loop."><use href="static/images/dimensions.svg?v=2#persistence"/></svg>
           <h4>What happens after failure?</h4>
           <p>Whether blocked progress leads agents to stop, retry, or escalate their attempts.</p>
           <a href="#case-retries">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
-        <article class="framework-card" aria-labelledby="incident-goal-drift">
-          <div class="framework-label"><span>04</span><h3 id="incident-goal-drift">Goal drift</h3></div>
+        <article class="framework-card" data-layer="action" aria-labelledby="incident-hacking">
+          <div class="framework-label"><span>Action</span><h3 id="incident-hacking">Hacking</h3></div>
+          <svg class="dimension-illustration" role="img" aria-label="An agent bypasses an access control while still pursuing goal A."><use href="static/images/dimensions.svg?v=2#hacking"/></svg>
+          <h4>Are the means authorized?</h4>
+          <p>Agents bypass technical controls or exploit systems beyond their authorized scope. Their goal may stay the same.</p>
+          <a href="#case-reroute">See it in the case <span aria-hidden="true">↓</span></a>
+        </article>
+        <article class="framework-card" data-layer="outcome" aria-labelledby="incident-goal-drift">
+          <div class="framework-label"><span>Outcome to assess</span><h3 id="incident-goal-drift">Goal drift</h3></div>
           <svg class="dimension-illustration" role="img" aria-label="Assigned goal A is replaced by a different goal B, without an access boundary being crossed."><use href="static/images/dimensions.svg?v=2#goal-drift"/></svg>
           <h4>Has the objective changed?</h4>
-          <p>Agents shift from the assigned task to a different objective, including one adopted from peers. This can happen within existing permissions.</p>
+          <p>A shift from the assigned objective to a different one. We assess this separately from rule-breaking actions and downstream harm.</p>
           <a href="#case-result">Check the outcome <span aria-hidden="true">↓</span></a>
         </article>
       </div>
       <div class="framework-footer">
-        <p><strong>Means and goals are different.</strong> Hacking concerns how agents act; goal drift concerns what they pursue. Either can occur alone, or both together.</p>
+        <p><strong>Peer influence can lead to goal drift.</strong> Adopting a peer’s objective is a possible mechanism. A changed objective is an outcome, which may influence later actions.</p>
         <details class="framework-background">
           <summary>Research background <span aria-hidden="true">+</span></summary>
-          <p>The OpenAI report identifies reward hacking, persistence on difficult tasks, unauthorized communication, and adoption of peers’ goals. These inform the four dimensions above. We treat coordination separately as a possible amplifier.</p>
+          <p>The OpenAI investigation describes communication, sustained attempts, reward hacking, and agents adopting peers’ goals. These observations motivate our questions about possible drivers, observable actions, and outcomes. Causal effects require controlled comparisons.</p>
           <p class="incident-sources"><span>Reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">OpenAI ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">METR / Redwood ↗</a></p>
         </details>
       </div>
       <aside class="amplification-band" id="incident-coordination" aria-labelledby="amplification-title">
         <div class="amplification-copy">
-          <p class="story-eyebrow">Across the dimensions</p>
+          <p class="story-eyebrow">Possible amplifier</p>
           <h3 id="amplification-title">How collaboration can amplify risk.</h3>
           <p>Coordination becomes risk-relevant when agents pool access, reuse discoveries, or continue a risky effort across runs.</p>
           <p class="amplification-note">Ordinary teamwork is not itself a violation. Test what collaboration adds.</p>
@@ -180,7 +180,7 @@
         <figcaption>Direct denials were reported by peers. Both downstream streams recorded completed web-tool calls. <a href="#case-evidence">Inspect the evidence ↓</a></figcaption>
       </figure>
 
-      <div class="sequence-heading"><div><p class="story-eyebrow">Follow the behavior</p><h3>How the task unfolded.</h3></div><p>Four dimensions and the role of delegation.</p></div>
+      <div class="sequence-heading"><div><p class="story-eyebrow">Follow the behavior</p><h3>How the task unfolded.</h3></div><p>Follow the actions, then assess the outcome.</p></div>
       <nav class="sequence-nav" aria-label="Case sequence">
         <a href="#case-shared"><span>01</span>Shared block</a><a href="#case-retries"><span>02</span>More attempts</a><a href="#case-reroute"><span>03</span>Another route</a><a href="#case-delegation"><span>04</span>Delegation</a><a href="#case-result"><span>05</span>Result</a>
       </nav>
@@ -207,7 +207,7 @@
         </li>
         <li class="case-step" id="case-reroute">
           <span class="step-marker" aria-hidden="true">03</span>
-          <div class="step-copy"><a class="dimension-tag" href="#incident-hacking">Hacking <span aria-hidden="true">↗</span></a><h4>A model credential opened another route.</h4><p>Still pursuing the weather task, the agent reused its runtime credential in a direct request to the model gateway. That request enabled a web tool outside the runtime’s restriction.</p></div>
+          <div class="step-copy"><a class="dimension-tag" href="#incident-hacking">Hacking <span aria-hidden="true">↗</span></a><span class="finding-status">Observed action</span><h4>A model credential opened another route.</h4><p>Still pursuing the weather task, the agent reused its runtime credential in a direct request to the model gateway. That request enabled a web tool outside the runtime’s restriction.</p></div>
           <div class="step-scene">
             <div class="credential-route"><span class="credential-node"><svg viewBox="0 0 40 24" fill="none" aria-hidden="true"><circle cx="10" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M17 11h20m-6 0v7m6-7v5" stroke="currentColor" stroke-width="2"/></svg><strong>Existing credential</strong></span><span class="credential-arrow" aria-hidden="true">→</span><span class="capability-node"><strong>Model API</strong><span>+ web search</span></span></div>
             <p class="scene-caption">The same credential reached a broader capability.</p>
@@ -228,7 +228,7 @@
         </li>
         <li class="case-step result-step" id="case-result">
           <span class="step-marker" aria-hidden="true">05</span>
-          <div class="step-copy"><a class="dimension-tag neutral-tag" href="#incident-goal-drift">Goal drift <span aria-hidden="true">↗</span></a><span class="finding-status">Not established</span><h4>The route changed. The stated goal remained.</h4><p>Weather text returned to the original agent. The trace shows broader access used to finish the weather task, without demonstrating adoption of a new collective goal.</p></div>
+          <div class="step-copy"><a class="dimension-tag neutral-tag" href="#incident-goal-drift">Goal drift <span aria-hidden="true">↗</span></a><span class="finding-status">Outcome · Not established</span><h4>The route changed. The stated goal remained.</h4><p>Weather text returned to the original agent. The trace shows broader access used to finish the weather task, without demonstrating adoption of a new collective goal.</p></div>
           <div class="step-scene">
             <div class="goal-comparison"><div><small>Original task</small><strong>Zurich weather</strong></div><span aria-hidden="true">→</span><div><small>Returned text</small><strong>Zurich weather</strong></div></div>
             <div class="weather-receipt"><span class="receipt-label">Returned weather text</span><code>METAR LSZH 061320Z 35004KT<br>260V030 CAVOK 22/09 Q1018 NOSIG</code></div>
