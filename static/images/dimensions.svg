@@ -17,8 +17,8 @@
     <path d="M47 80h108m-8-6 9 6-9 6" fill="none" stroke="#a33d2c" stroke-width="2"/>
     <g fill="none" stroke="#a33d2c" stroke-width="2"><circle cx="67" cy="59" r="6"/><path d="M73 59h18m-6 0v6m6-6v5"/></g>
     <circle cx="182" cy="80" r="23" fill="#f7f5f0" stroke="#555b63" stroke-width="2"/>
-    <text x="182" y="87" text-anchor="middle" fill="#555b63" font-family="Arial, sans-serif" font-size="22">A</text>
-    <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle"><text x="182" y="43" fill="#555b63">same goal</text><text x="110" y="125" fill="#a33d2c">unauthorized route</text></g>
+    <text x="182" y="85" text-anchor="middle" fill="#555b63" font-family="Arial, sans-serif" font-size="14">A / B</text>
+    <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle"><text x="182" y="43" fill="#555b63">either goal</text><text x="110" y="125" fill="#a33d2c">unauthorized route</text></g>
   </symbol>
   <symbol id="persistence" viewBox="0 0 220 134">
     <g fill="none" stroke="#a33d2c" stroke-width="2"><circle cx="53" cy="27" r="9"/><path d="M53 21v6l5 3M16 68h100m57 0h35m-7-5 7 5-7 5"/><path d="M116 68h57" stroke-dasharray="3 5"/></g>
