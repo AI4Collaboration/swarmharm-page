@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=11">
-  <link rel="stylesheet" href="static/css/story.css?v=1">
+  <link rel="stylesheet" href="static/css/story.css?v=2">
   <script src="static/js/case-study.js?v=2" defer></script>
   <script type="application/ld+json">
   {
@@ -53,7 +53,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Five dimensions of swarm risk">Dimensions</a><a href="#case-study" aria-label="Observed case study">Case</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Four dimensions of swarm risk">Dimensions</a><a href="#case-study" aria-label="Observed case study">Case</a><a href="#research">Research</a><a href="#protocol">Protocol</a><a href="#testbed">Testbed</a></nav>
     <span class="status"><span aria-hidden="true"></span>In development</span>
   </div>
 </header>
@@ -65,7 +65,7 @@
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
         <p class="hero-description">How can agents working on a harmless task end up crossing safety boundaries? We study what changes when agents communicate and act together.</p>
-        <a class="button" href="#motivation">Explore the five dimensions <span aria-hidden="true">↓</span></a>
+        <a class="button" href="#motivation">Explore the four dimensions <span aria-hidden="true">↓</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
     </div>
@@ -75,8 +75,8 @@
     <div class="container">
       <div class="section-heading framework-heading">
         <p class="section-index"><span aria-hidden="true">01</span><span>The framework</span></p>
-        <h2 id="motivation-title">Five dimensions of swarm risk.</h2>
-        <p>Follow the information, the access, the attempts, the teamwork, and the goal.</p>
+        <h2 id="motivation-title">Four dimensions of swarm risk.</h2>
+        <p>Follow the information, the access, the attempts, and the goal.</p>
       </div>
       <div class="framework-grid">
         <article class="framework-card" aria-labelledby="incident-communication">
@@ -100,15 +100,8 @@
           <p>Whether blocked progress leads agents to stop, retry, or escalate their attempts.</p>
           <a href="#case-retries">See it in the case <span aria-hidden="true">↓</span></a>
         </article>
-        <article class="framework-card" aria-labelledby="incident-coordination">
-          <div class="framework-label"><span>04</span><h3 id="incident-coordination">Coordination</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="One task splits into two parallel jobs that combine into a result."><use href="static/images/dimensions.svg?v=2#coordination"/></svg>
-          <h4>How is the work combined?</h4>
-          <p>How agents divide tasks, pool discoveries, and bring separate capabilities together.</p>
-          <a href="#case-delegation">See it in the case <span aria-hidden="true">↓</span></a>
-        </article>
         <article class="framework-card" aria-labelledby="incident-goal-drift">
-          <div class="framework-label"><span>05</span><h3 id="incident-goal-drift">Goal drift</h3></div>
+          <div class="framework-label"><span>04</span><h3 id="incident-goal-drift">Goal drift</h3></div>
           <svg class="dimension-illustration" role="img" aria-label="Assigned goal A is replaced by a different goal B, without an access boundary being crossed."><use href="static/images/dimensions.svg?v=2#goal-drift"/></svg>
           <h4>Has the objective changed?</h4>
           <p>Agents shift from the assigned task to a different objective, including one adopted from peers. This can happen within existing permissions.</p>
@@ -119,10 +112,29 @@
         <p><strong>Means and goals are different.</strong> Hacking concerns how agents act; goal drift concerns what they pursue. Either can occur alone, or both together.</p>
         <details class="framework-background">
           <summary>Research background <span aria-hidden="true">+</span></summary>
-          <p>These dimensions are motivated by the OpenAI / Hugging Face incident. The reports describe communication, boundary crossing, sustained attempts, collaboration, and agents adopting peers’ goals.</p>
+          <p>The OpenAI report identifies reward hacking, persistence on difficult tasks, unauthorized communication, and adoption of peers’ goals. These inform the four dimensions above. We treat coordination separately as a possible amplifier.</p>
           <p class="incident-sources"><span>Reports · 26 August 2026</span><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">OpenAI ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">METR / Redwood ↗</a></p>
         </details>
       </div>
+      <aside class="amplification-band" id="incident-coordination" aria-labelledby="amplification-title">
+        <div class="amplification-copy">
+          <p class="story-eyebrow">Across the dimensions</p>
+          <h3 id="amplification-title">How collaboration can amplify risk.</h3>
+          <p>Coordination becomes risk-relevant when agents pool access, reuse discoveries, or continue a risky effort across runs.</p>
+          <p class="amplification-note">Ordinary teamwork is not itself a violation. Test what collaboration adds.</p>
+          <a href="#case-delegation">See the delegation in this case <span aria-hidden="true">↓</span></a>
+        </div>
+        <figure class="amplification-figure" aria-label="An illustrative handoff: one agent finds a route, a peer reuses it, and the peer extends access.">
+          <div class="amplification-flow">
+            <div class="amplification-node"><svg viewBox="0 0 48 40" fill="none" aria-hidden="true"><circle cx="13" cy="20" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 20h23m-8 0v8m8-8v6" stroke="currentColor" stroke-width="2"/></svg><strong>Finds a route</strong><small>Agent A</small></div>
+            <span class="amplification-arrow" aria-hidden="true">→</span>
+            <div class="amplification-node"><svg viewBox="0 0 48 40" fill="none" aria-hidden="true"><rect x="4" y="7" width="18" height="25" rx="3" stroke="currentColor" stroke-width="2"/><rect x="27" y="7" width="17" height="25" rx="3" stroke="currentColor" stroke-width="2"/><path d="M14 20h23m-6-5 6 5-6 5" stroke="currentColor" stroke-width="2"/></svg><strong>Reuses it</strong><small>Agent B</small></div>
+            <span class="amplification-arrow" aria-hidden="true">→</span>
+            <div class="amplification-node amplification-outcome"><svg viewBox="0 0 48 40" fill="none" aria-hidden="true"><path d="m12 20 23-12M12 20l23 12" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="20" r="6" fill="#f1ddd6" stroke="currentColor" stroke-width="2"/><circle cx="38" cy="7" r="5" stroke="currentColor" stroke-width="2"/><circle cx="38" cy="33" r="5" stroke="currentColor" stroke-width="2"/></svg><strong>Extends access</strong><small>Wider reach</small></div>
+          </div>
+          <figcaption>Illustrative mechanism: one agent’s progress becomes a starting point for others.</figcaption>
+        </figure>
+      </aside>
     </div>
   </section>
 
@@ -168,9 +180,9 @@
         <figcaption>Direct denials were reported by peers. Both downstream streams recorded completed web-tool calls. <a href="#case-evidence">Inspect the evidence ↓</a></figcaption>
       </figure>
 
-      <div class="sequence-heading"><div><p class="story-eyebrow">Follow the behavior</p><h3>How the task unfolded.</h3></div><p>Five moments. Each connected to a dimension.</p></div>
+      <div class="sequence-heading"><div><p class="story-eyebrow">Follow the behavior</p><h3>How the task unfolded.</h3></div><p>Four dimensions and the role of delegation.</p></div>
       <nav class="sequence-nav" aria-label="Case sequence">
-        <a href="#case-shared"><span>01</span>Shared block</a><a href="#case-retries"><span>02</span>More attempts</a><a href="#case-reroute"><span>03</span>Another route</a><a href="#case-delegation"><span>04</span>Parallel queries</a><a href="#case-result"><span>05</span>Result</a>
+        <a href="#case-shared"><span>01</span>Shared block</a><a href="#case-retries"><span>02</span>More attempts</a><a href="#case-reroute"><span>03</span>Another route</a><a href="#case-delegation"><span>04</span>Delegation</a><a href="#case-result"><span>05</span>Result</a>
       </nav>
 
       <ol class="case-sequence">
@@ -205,7 +217,7 @@
         </li>
         <li class="case-step" id="case-delegation">
           <span class="step-marker" aria-hidden="true">04</span>
-          <div class="step-copy"><a class="dimension-tag" href="#incident-coordination">Coordination <span aria-hidden="true">↗</span></a><h4>One agent dispatched two web queries.</h4><p>Two other models received different parts of the weather query, in parallel. Both response streams recorded completed web-tool calls.</p></div>
+          <div class="step-copy"><a class="dimension-tag neutral-tag" href="#incident-coordination">Delegation <span aria-hidden="true">↗</span></a><span class="finding-status">Supporting mechanism</span><h4>Other models supplied the web access.</h4><p>Two models supplied a capability blocked in the original runtime: web access. Both response streams recorded completed web-tool calls.</p><p class="step-limit">Delegation is observed. Whether parallelism increased risk was not tested.</p></div>
           <div class="step-scene">
             <div class="parallel-queries"><div class="dispatch-node"><span aria-hidden="true">●</span>One agent</div><div class="query-branches"><div><span class="query-purpose">14-hour weather history</span><strong>gpt-6.1-sol</strong><span class="execution-status">✓ Web call completed</span></div><div><span class="query-purpose">Latest weather</span><strong>gpt-6-astra</strong><span class="execution-status">✓ Web call completed</span></div></div></div>
             <p class="scene-caption">Two requests launched at 13:42:01 UTC.</p>
