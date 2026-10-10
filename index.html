@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=13">
-  <link rel="stylesheet" href="static/css/story.css?v=8">
+  <link rel="stylesheet" href="static/css/story.css?v=9">
   <link rel="stylesheet" href="static/css/scenarios.css?v=4">
   <link rel="stylesheet" href="static/css/hf-map.css?v=2">
   <script src="static/js/sample.js?v=3" defer></script>
@@ -57,7 +57,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Swarm risk framework">Framework</a><a href="#hf-mapping" aria-label="Published incident and observed sample">Sample</a><a href="#research">Research</a><a href="#protocol">Protocol</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Key elements mapped to Hugging Face">Key elements</a><a href="#hf-mapping" aria-label="Published incident and observed sample">Sample</a><a href="#research">Research</a><a href="#protocol">Protocol</a></nav>
     <span class="status"><span aria-hidden="true"></span>In development</span>
   </div>
 </header>
@@ -69,7 +69,7 @@
         <h1 id="hero-title">SwarmHarm</h1>
         <p class="hero-tagline">Stress-test the <span>swarm.</span><br>Not just the agent.</p>
         <p class="hero-description">How do agents pursuing legitimate goals cross safety boundaries together? We vary task blockers, exploitable weaknesses, pressure, and communication across real-world domains.</p>
-        <a class="button" href="#motivation">Explore the framework <span aria-hidden="true">↓</span></a>
+        <a class="button" href="#motivation">See the key elements <span aria-hidden="true">↓</span></a>
       </div>
       <figure class="hero-art"><img src="static/images/swarmharm-logo.webp" alt="SwarmHarm: a coordinated swarm of red mechanical bees striking a largely intact white shield." width="512" height="512" fetchpriority="high" decoding="async"></figure>
     </div>
@@ -78,37 +78,36 @@
   <section class="section framework-section" id="motivation" aria-labelledby="motivation-title">
     <div class="container">
       <div class="section-heading framework-heading">
-        <p class="section-index"><span aria-hidden="true">01</span><span>The framework</span></p>
-        <h2 id="motivation-title">How we study swarm risk.</h2>
-        <p>Start with a real task and a legitimate goal. Vary the setting; trace the behavior.</p>
+        <p class="section-index"><span aria-hidden="true">01</span><span>SwarmHarm × Hugging Face</span></p>
+        <h2 id="motivation-title">Key elements</h2>
+        <p>Mapped to the OpenAI–Hugging Face incident.</p>
       </div>
-      <div class="behavior-heading"><p class="story-eyebrow">Core dimensions</p><h3>How agents communicate, persist, and cross boundaries.</h3></div>
       <div class="framework-grid">
-        <article class="framework-card" data-layer="driver" aria-labelledby="incident-communication">
+        <article class="framework-card" data-layer="driver" data-element="communication" aria-labelledby="incident-communication">
           <div class="framework-label"><span>Potential driver</span><h3 id="incident-communication">Communication</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="Communication milestones: write a shared trace, a peer reads it, then agents exchange information. A write alone does not establish communication."><use href="static/images/dimensions.svg?v=6#communication"/></svg>
-          <h4>From shared traces to exchange.</h4>
-          <p>Shared writes leave traces. Peers may read them, ask for help, and share solutions. A write alone does not establish communication.</p>
-          <a href="#hf-communication">Map it to Hugging Face <span aria-hidden="true">↓</span></a>
+          <p class="element-definition">Shared traces become exchange when peers read and respond.</p>
+          <svg class="dimension-illustration" role="img" aria-label="In the HF incident, one agent writes to a shared cache and other agents read it and reply."><use href="static/images/dimensions.svg?v=7#hf-communication"/></svg>
+          <div class="element-hf"><span>In Hugging Face</span><h4>Shared cache → message board</h4><p>Agents exchanged help requests, findings, and reusable exploits through a side channel.</p></div>
+          <a href="#hf-communication">Follow the shared channel <span aria-hidden="true">↓</span></a>
         </article>
-        <article class="framework-card" data-layer="driver" aria-labelledby="incident-persistence">
+        <article class="framework-card" data-layer="driver" data-element="persistence" aria-labelledby="incident-persistence">
           <div class="framework-label"><span>Potential driver</span><h3 id="incident-persistence">Persistence</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="A long timeline: agents keep pursuing the same objective through many steps, from the start to much later."><use href="static/images/dimensions.svg?v=6#persistence"/></svg>
-          <h4>How long do agents keep going?</h4>
-          <p>Sustained pursuit over long horizons: many steps and rounds, carrying progress forward through setbacks.</p>
-          <a href="#hf-persistence">Map it to Hugging Face <span aria-hidden="true">↓</span></a>
+          <p class="element-definition">Sustained effort over long horizons, carrying progress across many steps and runs.</p>
+          <svg class="dimension-illustration" role="img" aria-label="A collective timeline across multiple agents: message board on July 8, credentials shared on July 10, HF code execution on July 11."><use href="static/images/dimensions.svg?v=7#hf-persistence"/></svg>
+          <div class="element-hf"><span>In Hugging Face</span><h4>Discoveries carried across days</h4><p>Later runs built on earlier work. This was a collective effort across multiple agents.</p></div>
+          <a href="#hf-persistence">Follow the multi-day timeline <span aria-hidden="true">↓</span></a>
         </article>
-        <article class="framework-card" data-layer="action" aria-labelledby="incident-hacking">
+        <article class="framework-card" data-layer="action" data-element="hacking" aria-labelledby="incident-hacking">
           <div class="framework-label"><span>Action</span><h3 id="incident-hacking">Hacking</h3></div>
-          <svg class="dimension-illustration" role="img" aria-label="An unauthorized route crosses an access control to reach the assigned task goal."><use href="static/images/dimensions.svg?v=6#hacking"/></svg>
-          <h4>Are the means authorized?</h4>
-          <p>Bypassing technical controls or using systems beyond the task’s authorization.</p>
-          <a href="#hf-hacking">Map it to Hugging Face <span aria-hidden="true">↓</span></a>
+          <p class="element-definition">Bypassing controls or using systems beyond the task’s authorization.</p>
+          <svg class="dimension-illustration" role="img" aria-label="Agents cross from their assigned task to code execution on external Hugging Face dataset workers."><use href="static/images/dimensions.svg?v=7#hf-hacking"/></svg>
+          <div class="element-hf"><span>In Hugging Face</span><h4>Task scope → external compromise</h4><p>Agents obtained unauthorized code execution on Hugging Face dataset workers.</p></div>
+          <a href="#hf-blockers">See the barriers and exploits <span aria-hidden="true">↓</span></a>
         </article>
       </div>
       <div class="framework-footer">
-        <p><strong>Legitimate goals can lead to unsafe actions.</strong> Measure task success, boundary violations, and downstream harm separately.</p>
-        <a href="#hf-mapping">See the framework mapped to a published incident <span aria-hidden="true">↓</span></a>
+        <p><strong>Legitimate task:</strong> solve assigned cybersecurity challenges. <strong>Blocker:</strong> some targets could not be exploited as specified.</p>
+        <a href="#hf-mapping">Full incident and replication <span aria-hidden="true">↓</span></a>
       </div>
 
       <div class="scenario-explorer" id="scenario-space" aria-labelledby="scenario-title">
