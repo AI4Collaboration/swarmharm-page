@@ -167,6 +167,16 @@ body { background: #030406; }
 .evidence-output { background: #101820; color: #d9e3ef; }
 .rq-card h3 { font-family: var(--display); font-size: 32px; text-transform: uppercase; letter-spacing: .02em; }
 .rq-label { color: #a6b0bf; }
+.research-methods { margin-top: 34px; border-top: 1px solid #30353c; }
+.research-detail { border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
+.research-detail > summary { display: flex; justify-content: space-between; align-items: center; gap: 18px; min-height: 62px; padding-block: 14px; list-style: none; cursor: pointer; font-family: var(--display); font-size: 22px; text-transform: uppercase; letter-spacing: .03em; }
+.research-detail > summary::-webkit-details-marker { display: none; }
+.research-detail > summary > span:last-child { color: #a7adb5; font-family: Inter, Arial, sans-serif; font-size: 22px; }
+.research-detail > summary:hover { color: #fff; }
+.research-detail > summary:focus-visible { outline: 1px solid #bbcbdc; outline-offset: 4px; }
+.research-detail[open] > summary { border-bottom: 1px solid #30353c; }
+.research-detail[open] > summary > span:last-child { transform: rotate(45deg); }
+.research-detail > .hf-integrated, .research-detail > .scenario-explorer { margin-block: 22px; }
 .site-footer { background: #030406; }
 
 @media (max-width: 1119px) {
