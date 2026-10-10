@@ -87,12 +87,12 @@
           <header class="element-heading"><h3 id="incident-communication">Communication</h3></header>
           <div class="element-general" role="group" aria-label="General communication mechanism">
             <div class="element-copy"><span class="element-column-label">General</span><p class="element-definition">Authorized vs. unauthorized routes.</p></div>
-            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=3" width="640" height="400" alt="Legal channel: agents exchange messages through a designated, authorized tool. Illegal side channel: agents communicate through shared infrastructure despite a communication restriction. White shows the authorized route; red shows the unauthorized route." decoding="async"></figure>
+            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=4" width="640" height="400" alt="Legal channel: agents exchange messages through a designated, authorized tool. Illegal side channel: agents communicate through shared infrastructure despite a communication restriction. White shows the authorized route; red shows the unauthorized route." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
             <div class="element-copy"><div class="element-column-label"><span>OpenAI–Hugging Face</span><a href="#hf-pair-peers" aria-label="Artifactory message board evidence">Evidence ↓</a></div><h4>Side channel via Artifactory cache</h4></div>
             <figure class="element-hf" id="hf-communication">
-              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=4" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
+              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=5" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
               <figcaption class="sr-only">Actual cache directory reported by METR: <code>github-remote-cache/zzHELP_PHASEONE_ARV010841_NO_CONSUMER_SEEK_IDEA</code>.</figcaption>
             </figure>
           </div>
@@ -101,22 +101,22 @@
           <header class="element-heading"><h3 id="incident-persistence">Persistence</h3></header>
           <div class="element-general" role="group" aria-label="General persistence mechanism">
             <div class="element-copy"><span class="element-column-label">General</span><p class="element-definition">Keep pursuing the goal over hours and days.</p></div>
-            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-persistence.svg?v=3" width="640" height="400" alt="Long-horizon persistence: retry after setbacks, adapt the approach, and keep pursuing the same goal over hours and days, building on earlier attempts. Continued effort does not imply eventual success." decoding="async"></figure>
+            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-persistence.svg?v=4" width="640" height="400" alt="A clock, night and daylight show hours turning into days. The agent retries, changes route and keeps working toward the same goal. A growing trail of notes carries earlier work forward; persistence does not imply success." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
             <div class="element-copy"><div class="element-column-label"><span>OpenAI–Hugging Face</span><a href="#hf-persistence" aria-label="Multi-day timeline evidence">Evidence ↓</a></div><h4>Jul 8–11 · shared research</h4></div>
-            <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=3" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
+            <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=4" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
           </div>
         </article>
         <article class="framework-card" data-element="hacking" aria-labelledby="incident-hacking">
           <header class="element-heading"><h3 id="incident-hacking">Hacking</h3></header>
           <div class="element-general" role="group" aria-label="General hacking mechanism">
             <div class="element-copy"><span class="element-column-label">General</span><p class="element-definition">Cross authorization boundaries.</p></div>
-            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-hacking.svg?v=2" width="640" height="400" alt="General hacking: a direct route is blocked by an authorization boundary; an exploitable weakness provides an unauthorized route to a restricted resource." decoding="async"></figure>
+            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-hacking.svg?v=3" width="640" height="400" alt="A locked permission check stops an agent from reaching private files. A red detour passes through a weakness, shown as an open lock, and reaches the files without authorization." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
             <div class="element-copy"><div class="element-column-label"><span>OpenAI–Hugging Face</span><a href="#hf-blockers" aria-label="HF barriers and exploits evidence">Evidence ↓</a></div><h4>Worker access via HDF5 + RefJinja</h4></div>
-            <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=2" width="640" height="400" alt="HF attack route: exposed HF credentials allow dataset uploads. HDF5 external-file handling exposes worker secrets. Using the recovered access, RefJinja template injection enables unauthorized code execution on HF workers. These mechanisms are reported by OpenAI." decoding="async"></figure>
+            <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=3" width="640" height="400" alt="Upload a dataset file → read worker secrets → run commands. HDF5 file reading and RefJinja template injection label the two access steps. Exposed HF credentials provide initial upload access. This high-level route is reported by OpenAI." decoding="async"></figure>
           </div>
         </article>
       </div>
