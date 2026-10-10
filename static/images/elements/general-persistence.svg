@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<defs>
+  <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
+  <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
+  <linearGradient id="face" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#1d242c"/><stop offset="1" stop-color="#090c11"/></linearGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080b10"/><stop offset="1" stop-color="#3a424c"/></linearGradient>
+  <linearGradient id="wall"><stop stop-color="#a7b5c4" stop-opacity=".03"/><stop offset=".8" stop-color="#c4ceda" stop-opacity=".15"/><stop offset="1" stop-color="#f3f6fc" stop-opacity=".36"/></linearGradient>
+  <pattern id="floor" width="64" height="32" patternUnits="userSpaceOnUse"><path d="M0 0 64 32M64 0 0 32" fill="none" stroke="#6f7c8e" stroke-width=".65" opacity=".16"/></pattern>
+  <symbol id="unit" viewBox="-66 -51 132 130">
+    <ellipse cx="0" cy="51" rx="65" ry="24" fill="url(#ambient)"/>
+    <g stroke="#8c98a7" stroke-width=".85" stroke-linejoin="round">
+      <path d="m-43-9 43-25 43 25L0 16Z" fill="url(#top)"/>
+      <path d="M-43-9 0 16v46l-43-25Z" fill="url(#face)"/>
+      <path d="M0 16 43-9v46L0 62Z" fill="url(#edge)"/>
+      <path d="m-28-9 28-16 28 16L0 7Z" fill="#10151b" stroke="#c3cbd6"/>
+      <path d="m-12-9 12-7 12 7L0-2Z" fill="#e3e8ee" stroke="#fff"/>
+      <path d="m-35 8 27 16m-27-7 27 16m-27-7 27 16m17-18 26-15m-26 24 26-15m-26 24 26-15" fill="none" stroke="#657282"/>
+    </g>
+    <path d="m-36 34 9 5m3 2 6 3" stroke="#edf5ff" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="deck" viewBox="-100 -54 200 113">
+    <g stroke="#8d99a9" stroke-width=".9" stroke-linejoin="round"><path d="m-83-2 83-47 83 47L0 45Z" fill="url(#top)"/><path d="m-83-2 83 47v13l-83-47Z" fill="url(#face)"/><path d="m0 45 83-47v13L0 58Z" fill="url(#edge)"/><path d="m-65-2 65-36 65 36L0 34Z" fill="#0d1219" stroke="#677586"/><path d="m-46-1 46-26 46 26L0 25Z" fill="none" stroke="#cdd6e2"/><path d="m-67 16 16 9m5 3 8 4" stroke="#f2f6fc"/></g>
+  </symbol>
+</defs>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
+.muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
+</style>
+<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
+<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
+
+<g class="line" opacity=".55"><path d="M35 285C126 275 152 194 247 199S379 112 464 115 550 55 611 54M35 305C132 295 158 215 247 218S383 132 468 135 553 77 611 75"/><path d="M58 89v217M178 65v227M299 52v230M420 48v210M543 44v176" stroke-dasharray="3 8"/></g>
+<path class="trace draw" pathLength="1" d="M42 267C126 257 150 174 242 178S371 93 463 96 548 39 605 39"/>
+<path class="line" d="M157 225c-58-38-34-71 3-65 37 6 46 52 4 56M287 168c-27-47 13-72 41-47 28 25 17 49-22 42"/>
+<use href="#deck" x="30.0" y="238.64" width="68.0" height="38.42"/><use href="#unit" x="172.01999999999998" y="151.97" width="69.96000000000001" height="68.9"/><use href="#unit" x="360.72" y="73.42" width="76.55999999999999" height="75.39999999999999"/><use href="#unit" x="515.44" y="4.339999999999996" width="87.12" height="85.8"/>
+<path class="trace" d="m592 31 13 8-14 8"/>
+<text x="48" y="335">START</text><text x="565" y="162" text-anchor="middle">MUCH LATER</text><path class="line" d="M559 143V99"/>
+<text x="167" y="124" class="muted">RETRY</text><text x="368" y="58" class="muted">ADAPT</text>
+<path class="line" d="M165 306h305m-305-5v10m305-10v10"/><text x="320" y="335" text-anchor="middle" class="muted">LONG HORIZON</text>
+
+</svg>

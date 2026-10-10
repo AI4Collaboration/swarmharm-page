@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<defs>
+  <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
+  <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
+  <linearGradient id="face" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#1d242c"/><stop offset="1" stop-color="#090c11"/></linearGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080b10"/><stop offset="1" stop-color="#3a424c"/></linearGradient>
+  <linearGradient id="wall"><stop stop-color="#a7b5c4" stop-opacity=".03"/><stop offset=".8" stop-color="#c4ceda" stop-opacity=".15"/><stop offset="1" stop-color="#f3f6fc" stop-opacity=".36"/></linearGradient>
+  <pattern id="floor" width="64" height="32" patternUnits="userSpaceOnUse"><path d="M0 0 64 32M64 0 0 32" fill="none" stroke="#6f7c8e" stroke-width=".65" opacity=".16"/></pattern>
+  <symbol id="unit" viewBox="-66 -51 132 130">
+    <ellipse cx="0" cy="51" rx="65" ry="24" fill="url(#ambient)"/>
+    <g stroke="#8c98a7" stroke-width=".85" stroke-linejoin="round">
+      <path d="m-43-9 43-25 43 25L0 16Z" fill="url(#top)"/>
+      <path d="M-43-9 0 16v46l-43-25Z" fill="url(#face)"/>
+      <path d="M0 16 43-9v46L0 62Z" fill="url(#edge)"/>
+      <path d="m-28-9 28-16 28 16L0 7Z" fill="#10151b" stroke="#c3cbd6"/>
+      <path d="m-12-9 12-7 12 7L0-2Z" fill="#e3e8ee" stroke="#fff"/>
+      <path d="m-35 8 27 16m-27-7 27 16m-27-7 27 16m17-18 26-15m-26 24 26-15m-26 24 26-15" fill="none" stroke="#657282"/>
+    </g>
+    <path d="m-36 34 9 5m3 2 6 3" stroke="#edf5ff" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="deck" viewBox="-100 -54 200 113">
+    <g stroke="#8d99a9" stroke-width=".9" stroke-linejoin="round"><path d="m-83-2 83-47 83 47L0 45Z" fill="url(#top)"/><path d="m-83-2 83 47v13l-83-47Z" fill="url(#face)"/><path d="m0 45 83-47v13L0 58Z" fill="url(#edge)"/><path d="m-65-2 65-36 65 36L0 34Z" fill="#0d1219" stroke="#677586"/><path d="m-46-1 46-26 46 26L0 25Z" fill="none" stroke="#cdd6e2"/><path d="m-67 16 16 9m5 3 8 4" stroke="#f2f6fc"/></g>
+  </symbol>
+</defs>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
+.muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
+</style>
+<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
+<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
+
+<path d="m43 124 125-72 133 77-125 72Z" fill="#111820" fill-opacity=".45" stroke="#414d5d"/>
+<g stroke="#8c99aa" stroke-width=".8"><path d="m317 38 34 20v205l-34-20Z" fill="url(#wall)"/><path d="m351 58 15-8v205l-15 8Z" fill="#1c2733" fill-opacity=".55"/><path d="m317 38 15-8 34 20-15 8Z" fill="#b5c8de" fill-opacity=".2"/></g>
+<g class="line" opacity=".4"><path d="m322 62 23 14m-23 8 23 14m-23 8 23 14m-23 8 23 14m-23 8 23 14m-23 8 23 14m-23 8 23 14m-23 8 23 14"/></g>
+<path class="line" d="M155 172h142m69 0h95" stroke-dasharray="5 6"/>
+<path class="trace risk" d="m302 162 18 20m0-20-18 20"/>
+<path class="trace risk draw" pathLength="1" d="M124 213c39 97 150 69 211 27s121-16 178-58"/>
+<path class="trace risk" d="m501 183 12-1-4 13"/>
+<use href="#unit" x="54.92" y="124.12" width="116.16" height="114.4"/><use href="#unit" x="449.34000000000003" y="94.49000000000001" width="133.32" height="131.3"/>
+<path class="line" d="M190 55v43l63 36M381 316l-34-51"/>
+<text x="38" y="43" class="muted">DIRECT ROUTE BLOCKED</text><text x="439" y="52" class="muted">RESTRICTED</text><path class="line" d="M501 64v42"/>
+<text x="384" y="331" class="risk-label">EXPLOIT</text>
+<text x="45" y="319" class="muted">AUTHORIZATION BOUNDARY</text><path class="line" d="M284 312l33-49"/>
+
+</svg>

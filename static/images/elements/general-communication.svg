@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<defs>
+  <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
+  <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
+  <linearGradient id="face" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#1d242c"/><stop offset="1" stop-color="#090c11"/></linearGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080b10"/><stop offset="1" stop-color="#3a424c"/></linearGradient>
+  <linearGradient id="wall"><stop stop-color="#a7b5c4" stop-opacity=".03"/><stop offset=".8" stop-color="#c4ceda" stop-opacity=".15"/><stop offset="1" stop-color="#f3f6fc" stop-opacity=".36"/></linearGradient>
+  <pattern id="floor" width="64" height="32" patternUnits="userSpaceOnUse"><path d="M0 0 64 32M64 0 0 32" fill="none" stroke="#6f7c8e" stroke-width=".65" opacity=".16"/></pattern>
+  <symbol id="unit" viewBox="-66 -51 132 130">
+    <ellipse cx="0" cy="51" rx="65" ry="24" fill="url(#ambient)"/>
+    <g stroke="#8c98a7" stroke-width=".85" stroke-linejoin="round">
+      <path d="m-43-9 43-25 43 25L0 16Z" fill="url(#top)"/>
+      <path d="M-43-9 0 16v46l-43-25Z" fill="url(#face)"/>
+      <path d="M0 16 43-9v46L0 62Z" fill="url(#edge)"/>
+      <path d="m-28-9 28-16 28 16L0 7Z" fill="#10151b" stroke="#c3cbd6"/>
+      <path d="m-12-9 12-7 12 7L0-2Z" fill="#e3e8ee" stroke="#fff"/>
+      <path d="m-35 8 27 16m-27-7 27 16m-27-7 27 16m17-18 26-15m-26 24 26-15m-26 24 26-15" fill="none" stroke="#657282"/>
+    </g>
+    <path d="m-36 34 9 5m3 2 6 3" stroke="#edf5ff" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="deck" viewBox="-100 -54 200 113">
+    <g stroke="#8d99a9" stroke-width=".9" stroke-linejoin="round"><path d="m-83-2 83-47 83 47L0 45Z" fill="url(#top)"/><path d="m-83-2 83 47v13l-83-47Z" fill="url(#face)"/><path d="m0 45 83-47v13L0 58Z" fill="url(#edge)"/><path d="m-65-2 65-36 65 36L0 34Z" fill="#0d1219" stroke="#677586"/><path d="m-46-1 46-26 46 26L0 25Z" fill="none" stroke="#cdd6e2"/><path d="m-67 16 16 9m5 3 8 4" stroke="#f2f6fc"/></g>
+  </symbol>
+</defs>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
+.muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
+</style>
+<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
+<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
+
+<g class="line" opacity=".6"><ellipse cx="320" cy="181" rx="251" ry="104"/><ellipse cx="320" cy="181" rx="225" ry="80"/><path d="M320 62v245M72 181h497" stroke-dasharray="3 7"/></g>
+<path class="trace draw" pathLength="1" d="M128 171Q180 50 320 88Q483 78 518 173Q444 302 320 271Q171 288 128 171Z"/>
+<path class="line" d="m137 170 180 4 193 0M320 94v160M144 182l167 78m23-1 171-73"/>
+<g fill="#f1f5fa"><circle cx="200" cy="106" r="3"/><circle cx="437" cy="109" r="3"/><circle cx="444" cy="253" r="3"/><circle cx="206" cy="258" r="3"/></g>
+<use href="#unit" x="79.16" y="113.25999999999999" width="97.67999999999999" height="96.2"/><use href="#unit" x="276.44" y="35.339999999999996" width="87.12" height="85.8"/><use href="#unit" x="467.16" y="113.25999999999999" width="97.67999999999999" height="96.2"/><use href="#unit" x="271.16" y="209.26" width="97.67999999999999" height="96.2"/>
+<path d="m274 171 46-26 46 26-46 26Z" fill="#171e27" stroke="#ced9e7"/><path d="m293 169 27-15 27 15-27 15Z" fill="url(#top)" stroke="#f1f6fe"/>
+<path class="line" d="M76 68h72l24 38M454 311h-55l-36-39"/><circle cx="172" cy="106" r="2" fill="#fff"/>
+<text x="74" y="53">AGENTS</text><text x="457" y="318" text-anchor="end">EXCHANGE &amp; REUSE</text>
+
+</svg>

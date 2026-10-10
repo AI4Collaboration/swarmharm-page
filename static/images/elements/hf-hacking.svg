@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<defs>
+  <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
+  <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
+  <linearGradient id="face" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#1d242c"/><stop offset="1" stop-color="#090c11"/></linearGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080b10"/><stop offset="1" stop-color="#3a424c"/></linearGradient>
+  <linearGradient id="wall"><stop stop-color="#a7b5c4" stop-opacity=".03"/><stop offset=".8" stop-color="#c4ceda" stop-opacity=".15"/><stop offset="1" stop-color="#f3f6fc" stop-opacity=".36"/></linearGradient>
+  <pattern id="floor" width="64" height="32" patternUnits="userSpaceOnUse"><path d="M0 0 64 32M64 0 0 32" fill="none" stroke="#6f7c8e" stroke-width=".65" opacity=".16"/></pattern>
+  <symbol id="unit" viewBox="-66 -51 132 130">
+    <ellipse cx="0" cy="51" rx="65" ry="24" fill="url(#ambient)"/>
+    <g stroke="#8c98a7" stroke-width=".85" stroke-linejoin="round">
+      <path d="m-43-9 43-25 43 25L0 16Z" fill="url(#top)"/>
+      <path d="M-43-9 0 16v46l-43-25Z" fill="url(#face)"/>
+      <path d="M0 16 43-9v46L0 62Z" fill="url(#edge)"/>
+      <path d="m-28-9 28-16 28 16L0 7Z" fill="#10151b" stroke="#c3cbd6"/>
+      <path d="m-12-9 12-7 12 7L0-2Z" fill="#e3e8ee" stroke="#fff"/>
+      <path d="m-35 8 27 16m-27-7 27 16m-27-7 27 16m17-18 26-15m-26 24 26-15m-26 24 26-15" fill="none" stroke="#657282"/>
+    </g>
+    <path d="m-36 34 9 5m3 2 6 3" stroke="#edf5ff" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="deck" viewBox="-100 -54 200 113">
+    <g stroke="#8d99a9" stroke-width=".9" stroke-linejoin="round"><path d="m-83-2 83-47 83 47L0 45Z" fill="url(#top)"/><path d="m-83-2 83 47v13l-83-47Z" fill="url(#face)"/><path d="m0 45 83-47v13L0 58Z" fill="url(#edge)"/><path d="m-65-2 65-36 65 36L0 34Z" fill="#0d1219" stroke="#677586"/><path d="m-46-1 46-26 46 26L0 25Z" fill="none" stroke="#cdd6e2"/><path d="m-67 16 16 9m5 3 8 4" stroke="#f2f6fc"/></g>
+  </symbol>
+</defs>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
+.muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
+</style>
+<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
+<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
+
+<g fill="none" stroke="#697787" stroke-width="1"><path d="m39 103 125-68 117 66v132l-126 71-116-67Z"/><path d="m39 103 116 67 126-69M155 170v134"/><path d="M164 35v124" stroke-dasharray="4 6"/></g>
+<path d="m281 70 23 13v158l-23-14Z" fill="url(#wall)" stroke="#7e8d9e" stroke-width=".8"/>
+<use href="#unit" x="87.64" y="126.03999999999999" width="126.72" height="124.8"/><use href="#unit" x="404.9" y="92.65" width="112.2" height="110.5"/><use href="#unit" x="486.9" y="158.65" width="112.2" height="110.5"/>
+<path class="trace risk draw" pathLength="1" d="M196 190h63l61-38 95 2M320 152l102 80h75"/>
+<path class="trace risk" d="m404 146 11 8-11 7m82 63 11 8-11 7"/>
+<g class="trace"><path d="m450 120-7 7 7 7m15-14 7 7-7 7m58 55-7 7 7 7m15-14 7 7-7 7"/></g>
+<text x="155" y="339" text-anchor="middle">ASSIGNED TASK</text><text x="499" y="339" text-anchor="middle">HF WORKERS</text>
+<path class="line" d="M442 74h-70l-35 60"/><text x="362" y="53" class="muted">OUTSIDE TASK SCOPE</text>
+<text x="361" y="285" class="risk-label small">CODE EXECUTION</text>
+
+</svg>
