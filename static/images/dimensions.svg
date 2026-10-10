@@ -4,12 +4,11 @@
       <circle cx="34" cy="63" r="19" fill="#f9fbfd"/><circle cx="34" cy="58" r="5"/><path d="M25 74v-3a9 9 0 0 1 18 0v3"/>
       <path d="M59 63h36m-6-5 6 5-6 5M201 63h37m-6-5 6 5-6 5"/>
       <rect x="104" y="36" width="89" height="56" rx="4" fill="#f9fbfd"/>
-      <path d="M116 49h64m-64 14h64m-64 14h43" opacity=".6"/>
       <circle cx="266" cy="63" r="19" fill="#f9fbfd"/><circle cx="266" cy="58" r="5"/><path d="M257 74v-3a9 9 0 0 1 18 0v3"/>
       <path d="M266 88v34H34V88" stroke-dasharray="3 5" opacity=".55"/>
       <path d="m29 94 5-6 5 6" opacity=".55"/>
     </g>
-    <g font-family="Arial, sans-serif" text-anchor="middle" fill="#40587b"><text x="77" y="46" font-size="11">write</text><text x="219" y="46" font-size="11">read</text><text x="34" y="107" font-size="12">Agent</text><text x="149" y="107" font-size="12">Shared cache</text><text x="266" y="107" font-size="12">Peers</text></g>
+    <g font-family="Arial, sans-serif" text-anchor="middle" fill="#40587b"><text x="77" y="46" font-size="11">write</text><text x="219" y="46" font-size="11">read</text><text x="149" y="51" font-size="11">Help requests</text><text x="149" y="67" font-size="11">Findings</text><text x="149" y="83" font-size="11">Exploits</text><text x="34" y="107" font-size="12">Agent</text><text x="149" y="107" font-size="12">Shared cache</text><text x="266" y="107" font-size="12">Peers</text></g>
     <rect x="125" y="114" width="49" height="16" fill="#edf1f6"/><text x="149" y="126" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#40587b">reply</text>
   </symbol>
   <symbol id="hf-persistence" viewBox="0 0 300 140">
@@ -20,7 +19,7 @@
       <circle cx="145" cy="62" r="5"/><path d="M150 62h11m-4 0v5"/>
       <path d="m255 56-5 6 5 6m10-12 5 6-5 6"/>
     </g>
-    <g font-family="Arial, sans-serif" text-anchor="middle" fill="#79592b"><g font-size="12" font-weight="bold"><text x="40" y="28">Jul 8</text><text x="150" y="28">Jul 10</text><text x="260" y="28">Jul 11</text></g><g font-size="11"><text x="40" y="101">Board</text><text x="150" y="101">Credentials</text><text x="260" y="101">HF execution</text><text x="150" y="127">Days of shared progress</text></g></g>
+    <g font-family="Arial, sans-serif" text-anchor="middle" fill="#79592b"><g font-size="12" font-weight="bold"><text x="40" y="28">Jul 8</text><text x="150" y="28">Jul 10</text><text x="260" y="28">Jul 11</text></g><g font-size="11"><text x="40" y="101">Board</text><text x="150" y="101">Credentials</text><text x="260" y="101">HF execution</text><text x="150" y="127">Across agents · across days</text></g></g>
   </symbol>
   <symbol id="hf-hacking" viewBox="0 0 300 140">
     <rect x="12" y="18" width="114" height="89" rx="4" fill="#eae7de"/>

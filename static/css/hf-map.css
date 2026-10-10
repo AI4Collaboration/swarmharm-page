@@ -3,7 +3,6 @@
 .hf-heading { display: flex; justify-content: space-between; gap: 36px; align-items: end; }
 .hf-heading h2 { max-width: 30ch; font-size: clamp(28px, 3vw, 38px); }
 .hf-heading > p { max-width: 32ch; font-size: 15px; margin: 0 0 3px; }
-.hf-heading .section-index { display: flex; gap: 12px; margin-bottom: 10px; color: var(--muted); font-size: 13px; }
 .hf-heading { margin-bottom: 20px; }
 .hf-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
 .hf-tabs button { position: relative; appearance: none; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; padding: 10px 22px 12px; }
@@ -149,7 +148,6 @@
 .hf-replication-limits[open] summary > span { transform: rotate(45deg); }
 .hf-replication-limits > p { font-size: 12px; color: var(--muted); max-width: 95ch; padding-bottom: 10px; }
 .hf-replication-limits a { text-decoration: underline; text-underline-offset: 3px; }
-.framework-footer > a { justify-self: end; align-self: start; padding-block: 6px; color: var(--accent); font-weight: 500; }
 @media (max-width: 1000px) {
   .hf-pairs { padding: 18px; }
   .hf-pairs-layout { grid-template-columns: minmax(270px, .9fr) minmax(0, 1.1fr); gap: 14px; }
@@ -205,7 +203,6 @@
   .hf-rep-step:last-child .hf-mobile-element { color: var(--accent); border-color: #d2a494; }
   .hf-replication-intro { display: block; }
   .hf-replication-intro p { margin-top: 8px; max-width: 65ch; }
-  .framework-footer > a { justify-self: start; }
 }
 @media (max-width: 480px) {
   .hf-tabs button { padding-inline: 12px; font-size: 13px; }
