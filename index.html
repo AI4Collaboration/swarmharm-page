@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=4">
-  <link rel="stylesheet" href="static/css/flight.css?v=3">
+  <link rel="stylesheet" href="static/css/flight.css?v=4">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=4" defer></script>
@@ -83,16 +83,14 @@
         <h2 id="motivation-title">Key Elements in Swarm Loss of Control</h2>
       </div>
       <div class="framework-grid" id="hf-elements">
-        <div class="framework-columns" aria-hidden="true"><span>General mechanism</span><span>OpenAI–Hugging Face</span></div>
         <article class="framework-card" data-element="communication" aria-labelledby="incident-communication">
+          <header class="element-heading"><h3 id="incident-communication">Communication</h3></header>
           <div class="element-general" role="group" aria-label="General communication mechanism">
-            <span class="element-column-label" aria-hidden="true">General mechanism</span>
-            <div class="element-copy"><h3 id="incident-communication">Communication</h3><p class="element-definition">Authorized vs. unauthorized routes.</p></div>
+            <div class="element-copy"><span class="element-column-label">General</span><p class="element-definition">Authorized vs. unauthorized routes.</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=2" width="640" height="360" alt="Legal channel: agents exchange messages through a designated, authorized tool. Illegal side channel: agents communicate through shared infrastructure despite a communication restriction. White shows the authorized route; red shows the unauthorized route." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
-            <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
-            <div class="element-copy"><h4>Unauthorized side channel</h4><a href="#hf-pair-peers">Artifactory message board <span aria-hidden="true">↓</span></a></div>
+            <div class="element-copy"><span class="element-column-label">OpenAI–Hugging Face</span><h4>Unauthorized side channel</h4><a href="#hf-pair-peers">Artifactory message board <span aria-hidden="true">↓</span></a></div>
             <figure class="element-hf" id="hf-communication">
               <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=3" width="640" height="360" alt="OpenAI–Hugging Face incident: agents on separate tasks have no designated peer channel. They use directory names in OpenAI’s shared Artifactory package cache to write and read messages, creating an unauthorized side channel." decoding="async">
               <figcaption class="cache-entry">
@@ -103,26 +101,24 @@
           </div>
         </article>
         <article class="framework-card" data-element="persistence" aria-labelledby="incident-persistence">
+          <header class="element-heading"><h3 id="incident-persistence">Persistence</h3></header>
           <div class="element-general" role="group" aria-label="General persistence mechanism">
-            <span class="element-column-label" aria-hidden="true">General mechanism</span>
-            <div class="element-copy"><h3 id="incident-persistence">Persistence</h3><p class="element-definition">Keep pursuing the goal over hours and days.</p></div>
+            <div class="element-copy"><span class="element-column-label">General</span><p class="element-definition">Keep pursuing the goal over hours and days.</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-persistence.svg?v=2" width="640" height="360" alt="Long-horizon persistence: retry after setbacks, adapt the approach, and keep pursuing the same goal over hours and days, building on earlier attempts. Continued effort does not imply eventual success." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
-            <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
-            <div class="element-copy"><h4>Shared work across days</h4><a href="#hf-persistence">Multi-day timeline <span aria-hidden="true">↓</span></a></div>
+            <div class="element-copy"><span class="element-column-label">OpenAI–Hugging Face</span><h4>Shared work across days</h4><a href="#hf-persistence">Multi-day timeline <span aria-hidden="true">↓</span></a></div>
             <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=2" width="640" height="360" alt="A collective timeline across multiple agents: message board on July 8, credentials shared on July 10, HF code execution on July 11." decoding="async"></figure>
           </div>
         </article>
         <article class="framework-card" data-element="hacking" aria-labelledby="incident-hacking">
+          <header class="element-heading"><h3 id="incident-hacking">Hacking</h3></header>
           <div class="element-general" role="group" aria-label="General hacking mechanism">
-            <span class="element-column-label" aria-hidden="true">General mechanism</span>
-            <div class="element-copy"><h3 id="incident-hacking">Hacking</h3><p class="element-definition">Cross authorization boundaries.</p></div>
+            <div class="element-copy"><span class="element-column-label">General</span><p class="element-definition">Cross authorization boundaries.</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-hacking.svg?v=1" width="640" height="360" alt="General hacking: a direct route is blocked by an authorization boundary; an exploitable weakness provides an unauthorized route to a restricted resource." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
-            <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
-            <div class="element-copy"><h4>Code execution on HF workers</h4><a href="#hf-blockers">Barriers &amp; exploits <span aria-hidden="true">↓</span></a></div>
+            <div class="element-copy"><span class="element-column-label">OpenAI–Hugging Face</span><h4>Code execution on HF workers</h4><a href="#hf-blockers">Barriers &amp; exploits <span aria-hidden="true">↓</span></a></div>
             <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=1" width="640" height="360" alt="Agents cross from their assigned task to unauthorized code execution on external Hugging Face dataset workers." decoding="async"></figure>
           </div>
         </article>
