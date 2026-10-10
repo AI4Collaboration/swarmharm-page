@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=15">
-  <link rel="stylesheet" href="static/css/story.css?v=11">
+  <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=4">
   <script src="static/js/sample.js?v=3" defer></script>
@@ -82,23 +82,42 @@
         <h2 id="motivation-title">Key Elements in Swarm Loss of Control <span class="heading-continuation">(Example in OpenAI-HuggingFace)</span></h2>
       </div>
       <div class="framework-grid" id="hf-elements">
+        <div class="framework-columns" aria-hidden="true"><span>General mechanism</span><span>OpenAI–Hugging Face</span></div>
         <article class="framework-card" data-element="communication" aria-labelledby="incident-communication">
-          <h3 id="incident-communication">Communication</h3>
-          <p class="element-definition">Exchange and reuse discoveries.</p>
-          <figure class="element-hf" id="hf-communication"><figcaption>Hugging Face</figcaption><svg class="dimension-illustration" role="img" aria-label="Hugging Face incident: agents write help requests, findings, and exploits into a shared cache. Peers read and reply, turning the cache into a message board."><use href="static/images/dimensions.svg?v=8#hf-communication"/></svg></figure>
-          <a href="#hf-pair-peers">Shared channel <span aria-hidden="true">↓</span></a>
+          <div class="element-general" role="group" aria-label="General communication mechanism">
+            <span class="element-column-label" aria-hidden="true">General mechanism</span>
+            <div class="element-copy"><h3 id="incident-communication">Communication</h3><p class="element-definition">Exchange and reuse discoveries.</p></div>
+            <figure class="element-general-visual"><svg class="dimension-illustration" role="img" aria-label="General communication: agents share findings and build on each other’s replies."><use href="static/images/dimensions.svg?v=9#general-communication"/></svg></figure>
+          </div>
+          <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
+            <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
+            <div class="element-copy"><h4>Shared cache → message board</h4><a href="#hf-pair-peers">Shared channel <span aria-hidden="true">↓</span></a></div>
+            <figure class="element-hf" id="hf-communication"><svg class="dimension-illustration" role="img" aria-label="Hugging Face incident: agents write help requests, findings, and exploits into a shared cache. Peers read and reply, turning the cache into a message board."><use href="static/images/dimensions.svg?v=9#hf-communication"/></svg></figure>
+          </div>
         </article>
         <article class="framework-card" data-element="persistence" aria-labelledby="incident-persistence">
-          <h3 id="incident-persistence">Persistence</h3>
-          <p class="element-definition">Long-horizon, sustained effort.</p>
-          <figure class="element-hf"><figcaption>Hugging Face</figcaption><svg class="dimension-illustration" role="img" aria-label="A collective timeline across multiple agents: message board on July 8, credentials shared on July 10, HF code execution on July 11."><use href="static/images/dimensions.svg?v=8#hf-persistence"/></svg></figure>
-          <a href="#hf-persistence">Multi-day timeline <span aria-hidden="true">↓</span></a>
+          <div class="element-general" role="group" aria-label="General persistence mechanism">
+            <span class="element-column-label" aria-hidden="true">General mechanism</span>
+            <div class="element-copy"><h3 id="incident-persistence">Persistence</h3><p class="element-definition">Long-horizon, sustained effort.</p></div>
+            <figure class="element-general-visual"><svg class="dimension-illustration" role="img" aria-label="General persistence: start, retry, adapt, and continue over a long horizon, building on accumulated progress."><use href="static/images/dimensions.svg?v=9#general-persistence"/></svg></figure>
+          </div>
+          <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
+            <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
+            <div class="element-copy"><h4>Shared work across days</h4><a href="#hf-persistence">Multi-day timeline <span aria-hidden="true">↓</span></a></div>
+            <figure class="element-hf"><svg class="dimension-illustration" role="img" aria-label="A collective timeline across multiple agents: message board on July 8, credentials shared on July 10, HF code execution on July 11."><use href="static/images/dimensions.svg?v=9#hf-persistence"/></svg></figure>
+          </div>
         </article>
         <article class="framework-card" data-element="hacking" aria-labelledby="incident-hacking">
-          <h3 id="incident-hacking">Hacking</h3>
-          <p class="element-definition">Cross authorization boundaries.</p>
-          <figure class="element-hf" id="hf-hacking"><figcaption>Hugging Face</figcaption><svg class="dimension-illustration" role="img" aria-label="Agents cross from their assigned task to unauthorized code execution on external Hugging Face dataset workers."><use href="static/images/dimensions.svg?v=8#hf-hacking"/></svg></figure>
-          <a href="#hf-blockers">Barriers &amp; exploits <span aria-hidden="true">↓</span></a>
+          <div class="element-general" role="group" aria-label="General hacking mechanism">
+            <span class="element-column-label" aria-hidden="true">General mechanism</span>
+            <div class="element-copy"><h3 id="incident-hacking">Hacking</h3><p class="element-definition">Cross authorization boundaries.</p></div>
+            <figure class="element-general-visual"><svg class="dimension-illustration" role="img" aria-label="General hacking: a direct route is blocked by an authorization boundary; an exploitable weakness provides an unauthorized route to a restricted resource."><use href="static/images/dimensions.svg?v=9#general-hacking"/></svg></figure>
+          </div>
+          <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
+            <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
+            <div class="element-copy"><h4>Code execution on HF workers</h4><a href="#hf-blockers">Barriers &amp; exploits <span aria-hidden="true">↓</span></a></div>
+            <figure class="element-hf" id="hf-hacking"><svg class="dimension-illustration" role="img" aria-label="Agents cross from their assigned task to unauthorized code execution on external Hugging Face dataset workers."><use href="static/images/dimensions.svg?v=9#hf-hacking"/></svg></figure>
+          </div>
         </article>
       </div>
       <div class="element-context" aria-label="The HF setup: a legitimate cybersecurity task with some infeasible targets.">

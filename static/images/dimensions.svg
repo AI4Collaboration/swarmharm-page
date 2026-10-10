@@ -1,4 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="general-communication" viewBox="0 0 300 140">
+    <g fill="none" stroke="#40587b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="38" cy="65" r="19" fill="#f9fbfd"/><circle cx="38" cy="60" r="5"/><path d="M29 76v-3a9 9 0 0 1 18 0v3"/>
+      <circle cx="262" cy="65" r="19" fill="#f9fbfd"/><circle cx="262" cy="60" r="5"/><path d="M253 76v-3a9 9 0 0 1 18 0v3"/>
+      <path d="M67 52h44m-6-5 6 5-6 5M188 52h44m-6-5 6 5-6 5"/>
+      <path d="M232 84h-44m6-5-6 5 6 5M111 84H67m6-5-6 5 6 5"/>
+      <path d="M122 39h55v23h-34l-7 6v-6h-14Z" fill="#edf1f6"/><path d="M130 47h39m-39 7h26"/>
+      <path d="M122 74h55v23h-14l-7 6v-6h-34Z" fill="#edf1f6"/><path d="M130 82h39m-39 7h26"/>
+    </g>
+    <g fill="#40587b" text-anchor="middle" font-family="Arial, sans-serif"><text x="150" y="22" font-size="12">Share findings</text><text x="38" y="106" font-size="12">Agent A</text><text x="262" y="106" font-size="12">Agent B</text><text x="150" y="127" font-size="11">Build on replies</text></g>
+  </symbol>
+  <symbol id="general-persistence" viewBox="0 0 300 140">
+    <g fill="none" stroke="#997440" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="102" cy="23" r="9"/><path d="M102 17v6l5 3"/>
+      <path d="M28 65h149m67 0h34m-6-5 6 5-6 5"/><path d="M177 65h67" stroke-dasharray="3 6"/>
+      <circle cx="28" cy="65" r="11" fill="#fffdf8"/><circle cx="94" cy="65" r="11" fill="#fffdf8"/><circle cx="160" cy="65" r="11" fill="#fffdf8"/><circle cx="269" cy="65" r="13" fill="#f3eddf"/>
+      <path d="m24 65 3 3 5-6M99 60a7 7 0 1 0 1 9M100 58v5h-5m60 3 5-5 5 5m-5-5v10m106-10 5 4-5 4"/>
+    </g>
+    <g fill="#79592b" font-family="Arial, sans-serif"><text x="119" y="27" font-size="12">Long horizon</text><g text-anchor="middle" font-size="11"><text x="28" y="101">Start</text><text x="94" y="101">Retry</text><text x="160" y="101">Adapt</text><text x="269" y="101">Continue</text><text x="150" y="127">Many steps · accumulated progress</text></g></g>
+  </symbol>
+  <symbol id="general-hacking" viewBox="0 0 300 140">
+    <rect x="10" y="14" width="132" height="88" rx="4" fill="#eae7de"/>
+    <path d="M151 13v92m0 25v7" stroke="#a97867" stroke-width="1.7" stroke-dasharray="4 5"/>
+    <g fill="none" stroke="#68645f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="38" cy="70" r="17" fill="#fffdf8"/><circle cx="38" cy="65" r="4"/><path d="M30 80v-2a8 8 0 0 1 16 0v2"/>
+      <path d="M64 70h75m23 0h64" stroke-dasharray="3 4"/>
+      <rect x="143" y="26" width="16" height="13" rx="2" fill="#f5f3ee"/><path d="M147 26v-4a4 4 0 0 1 8 0v4"/>
+      <path d="M238 53h15l5 6h25v29h-45Z" fill="#fffdf8"/>
+    </g>
+    <g fill="none" stroke="#a33d2c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m145 64 12 12m0-12-12 12M38 91v29h222V97m-5 6 5-6 5 6"/></g>
+    <rect x="124" y="111" width="55" height="18" rx="3" fill="#f6e8e1"/>
+    <g font-family="Arial, sans-serif" text-anchor="middle"><text x="71" y="32" font-size="11" fill="#68645f">Authorized</text><text x="247" y="32" font-size="11" fill="#a33d2c">Restricted</text><text x="151" y="123" font-size="11" fill="#a33d2c">Exploit</text></g>
+  </symbol>
   <symbol id="hf-communication" viewBox="0 0 300 140">
     <g fill="none" stroke="#40587b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="34" cy="63" r="19" fill="#f9fbfd"/><circle cx="34" cy="58" r="5"/><path d="M25 74v-3a9 9 0 0 1 18 0v3"/>
