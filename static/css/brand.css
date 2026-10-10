@@ -65,6 +65,10 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .section-heading { margin-bottom: 32px; }
 .section-heading > p { max-width: 68ch; margin-top: 14px; color: var(--muted); }
+.numbered-heading { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 0 15px; align-items: start; }
+.section-number { color: var(--accent); font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; padding-top: 7px; }
+.numbered-heading > p { grid-column: 2; }
+.heading-continuation { display: block; margin-top: 9px; color: var(--muted); font-size: clamp(17px, 2vw, 22px); line-height: 1.4; font-weight: 400; letter-spacing: -.01em; }
 
 /* Open research rows, not a set of sales or dashboard cards. */
 .research-grid { border-top: 1px solid var(--line); }
@@ -132,6 +136,7 @@ img { display: block; max-width: 100%; height: auto; }
   .eyebrow { margin-bottom: 20px; }
   .section { padding-block: 44px; }
   .section-heading { margin-bottom: 24px; }
+  .numbered-heading { grid-template-columns: 22px minmax(0, 1fr); gap: 0 10px; }
   .rq-card { grid-template-columns: minmax(0, 1fr); gap: 10px; scroll-margin-top: 132px; }
   .rq-label { padding: 0; }
   .rq-card p { grid-column: 1; }

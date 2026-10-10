@@ -129,16 +129,27 @@
   }
   pairButtons.forEach(button => button.addEventListener('click', () => selectPair(button)));
 
-  // Deep links to a dimension must reveal its panel even after switching views.
+  // Reveal integrated evidence even when its tab or disclosure is closed.
   const revealHash = () => {
     const target = document.getElementById(location.hash.slice(1));
+    if (!target) return;
     const panel = target?.closest('[data-hf-panel]');
     const tab = tabs.find((item) => item.getAttribute('aria-controls') === panel?.id);
-    if (tab) {
-      activate(tab);
+    if (tab) activate(tab);
+    let ancestor = target.parentElement;
+    while (ancestor) {
+      if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+      ancestor = ancestor.parentElement;
+    }
+    if (tab || target.closest('details')) {
       target.scrollIntoView({ block: 'start' });
     }
+    if (target.matches('[data-hf-pair]')) selectPair(target);
   };
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (link && link.hash === location.hash) revealHash();
+  });
   window.addEventListener('hashchange', revealHash);
   revealHash();
 })();

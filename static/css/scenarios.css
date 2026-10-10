@@ -3,6 +3,21 @@
 .scenario-heading h3 { font-size: 28px; }
 .scenario-status { flex: none; padding: 4px 10px; border: 1px solid #bdb7aa; color: var(--muted); font-size: 11px; }
 .scenario-intro { margin-top: 14px; color: var(--muted); font-size: 14px; }
+.protocol-inline { margin-top: 24px; padding-top: 22px; border-top: 1px solid #c8c0b4; scroll-margin-top: 115px; }
+.protocol-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 15px; }
+.protocol-heading h4 { font-size: 20px; font-weight: 600; margin: 0; }
+.protocol-heading p { color: var(--muted); font-size: 12px; }
+.protocol-inline .channel-grid { gap: 16px; }
+.protocol-inline .channel-card { padding: 15px; border: 1px solid #c8c0b4; background: #f7f5f0; }
+.protocol-inline .channel-card h5 { font-size: 17px; }
+.protocol-inline .channel-card > svg { margin-block: 12px; height: 85px; background: transparent; }
+.protocol-inline .channel-card > p { font-size: 12px; margin-top: 8px; }
+.channel-hf-tag { display: inline-block; vertical-align: middle; border: 1px solid #879ab4; padding: 2px 5px; color: #40587b; background: #edf1f6; font-size: 10px; font-weight: 500; margin-left: 5px; }
+.protocol-method { margin-top: 15px; }
+.protocol-method summary { display: flex; justify-content: space-between; align-items: center; gap: 15px; min-height: 44px; border-top: 1px solid #c8c0b4; font-size: 12px; color: var(--muted); cursor: pointer; list-style: none; }
+.protocol-method summary > span { font-size: 18px; color: var(--accent); }
+.protocol-method[open] summary > span { transform: rotate(45deg); }
+.protocol-inline .protocol-notes { margin: 0; max-width: 100ch; font-size: 12px; }
 .scenario-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-top: 24px; padding-top: 24px; border-top: 1px solid #d0c9bd; }
 .scenario-axis { min-width: 0; margin: 0; padding: 0; border: 0; }
 .scenario-axis legend { display: flex; align-items: center; gap: 12px; width: 100%; margin: 0 0 16px; padding: 0; font-size: 19px; font-weight: 600; }

@@ -1,5 +1,13 @@
 /* One evidence map, with separate views for the incident and its reproduction. */
 .hf-section { --hf-blue: #40587b; --hf-blue-bg: #edf1f6; --hf-gold: #79592b; --hf-gold-bg: #f3eddf; --hf-red-bg: #f6e8e1; padding-block: 38px; }
+.hf-section.hf-integrated { margin-top: 28px; padding: 0; scroll-margin-top: 115px; }
+.hf-integrated .hf-tabs { margin-bottom: 18px; }
+.hf-incident-evidence { margin-top: 16px; }
+.hf-incident-evidence > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; padding: 10px 0; border-block: 1px solid var(--line); list-style: none; color: var(--muted); font-size: 12px; cursor: pointer; }
+.hf-incident-evidence > summary > span { color: var(--accent); font-size: 18px; }
+.hf-incident-evidence[open] > summary { margin-bottom: 16px; }
+.hf-incident-evidence[open] > summary > span { transform: rotate(45deg); }
+.hf-incident-evidence .hf-persistence { margin-top: 0; }
 .hf-heading { display: flex; justify-content: space-between; gap: 36px; align-items: end; }
 .hf-heading h2 { max-width: 30ch; font-size: clamp(28px, 3vw, 38px); }
 .hf-heading > p { max-width: 32ch; font-size: 15px; margin: 0 0 3px; }
