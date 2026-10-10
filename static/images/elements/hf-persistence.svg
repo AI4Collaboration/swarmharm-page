@@ -1,42 +1,74 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<title>Collective progress over multiple days</title><desc>Multiple agents build on shared work across days: a message board on July 8, credentials shared on July 10, and unauthorized execution on Hugging Face workers on July 11. This is a collective timeline, not one continuous agent run.</desc>
 <defs>
-  <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
-  <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
-  <linearGradient id="face" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#1d242c"/><stop offset="1" stop-color="#090c11"/></linearGradient>
-  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080b10"/><stop offset="1" stop-color="#3a424c"/></linearGradient>
-  <linearGradient id="wall"><stop stop-color="#a7b5c4" stop-opacity=".03"/><stop offset=".8" stop-color="#c4ceda" stop-opacity=".15"/><stop offset="1" stop-color="#f3f6fc" stop-opacity=".36"/></linearGradient>
-  <pattern id="floor" width="64" height="32" patternUnits="userSpaceOnUse"><path d="M0 0 64 32M64 0 0 32" fill="none" stroke="#6f7c8e" stroke-width=".65" opacity=".16"/></pattern>
-  <symbol id="unit" viewBox="-66 -51 132 130">
-    <ellipse cx="0" cy="51" rx="65" ry="24" fill="url(#ambient)"/>
-    <g stroke="#8c98a7" stroke-width=".85" stroke-linejoin="round">
-      <path d="m-43-9 43-25 43 25L0 16Z" fill="url(#top)"/>
-      <path d="M-43-9 0 16v46l-43-25Z" fill="url(#face)"/>
-      <path d="M0 16 43-9v46L0 62Z" fill="url(#edge)"/>
-      <path d="m-28-9 28-16 28 16L0 7Z" fill="#10151b" stroke="#c3cbd6"/>
-      <path d="m-12-9 12-7 12 7L0-2Z" fill="#e3e8ee" stroke="#fff"/>
-      <path d="m-35 8 27 16m-27-7 27 16m-27-7 27 16m17-18 26-15m-26 24 26-15m-26 24 26-15" fill="none" stroke="#657282"/>
-    </g>
-    <path d="m-36 34 9 5m3 2 6 3" stroke="#edf5ff" stroke-width="1.5"/>
+  <radialGradient id="atmosphere"><stop stop-color="#264354" stop-opacity=".44"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#28333f" stop-opacity=".9"/><stop offset=".4" stop-color="#101820" stop-opacity=".85"/><stop offset="1" stop-color="#070b10"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9bbc9"/><stop offset=".3" stop-color="#344250"/><stop offset="1" stop-color="#111923"/></linearGradient>
+  <linearGradient id="beam"><stop stop-color="#d3efff" stop-opacity=".05"/><stop offset=".5" stop-color="#d3efff" stop-opacity=".2"/><stop offset="1" stop-color="#d3efff" stop-opacity=".05"/></linearGradient>
+  <filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+  <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="#506878" stroke-width=".5" opacity=".22"/></pattern>
+  <symbol id="station" viewBox="-82 -83 164 188">
+    <path d="M-66-80H62l17 17V72L62 90H-62l-17-17V-67Z" fill="url(#glass)" stroke="#627a8c" stroke-width=".8"/>
+    <path d="M-79-43V-67l13-13h28m76 0h24l17 17v19M-79 46v27l17 17h24m76 0h24l17-18V45" fill="none" stroke="#b5cedf" stroke-width="1.5"/>
+    <path d="M-69-58H69M-69 56H69" stroke="#425563" stroke-width=".7"/>
+    <path d="m-20-74 40 0" stroke="#d6edfa" stroke-width="2"/>
+    <path d="M-60 105h120" stroke="#688292" stroke-width=".6"/>
   </symbol>
-  <symbol id="deck" viewBox="-100 -54 200 113">
-    <g stroke="#8d99a9" stroke-width=".9" stroke-linejoin="round"><path d="m-83-2 83-47 83 47L0 45Z" fill="url(#top)"/><path d="m-83-2 83 47v13l-83-47Z" fill="url(#face)"/><path d="m0 45 83-47v13L0 58Z" fill="url(#edge)"/><path d="m-65-2 65-36 65 36L0 34Z" fill="#0d1219" stroke="#677586"/><path d="m-46-1 46-26 46 26L0 25Z" fill="none" stroke="#cdd6e2"/><path d="m-67 16 16 9m5 3 8 4" stroke="#f2f6fc"/></g>
-  </symbol>
+  <symbol id="agent" viewBox="-11 -11 22 22"><path d="m0-9 9 5v9L0 10-9 5v-9Z" fill="#101b25" stroke="#8da5b6"/><path d="m-5-2 5-3 5 3-5 3Z" fill="#e5f5ff"/><path d="M0 1v6m-6-8v4m12-4v4" stroke="#8da5b6" stroke-width=".7"/></symbol>
 </defs>
 <style>
-text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
-.muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
+text{font-family:Arial,Helvetica,sans-serif;fill:#edf5fb;font-size:21px;letter-spacing:1px}
+.muted{fill:#a8bfce;font-size:17px;letter-spacing:.7px}.small{font-size:16px}.stage-label{font-size:18px;letter-spacing:.7px}.large{font-size:25px;letter-spacing:1.4px}
+.wire{fill:none;stroke:#7a94a6;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.lit{fill:none;stroke:#d9f2ff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.risk{stroke:#ff8c79}.risk-label{fill:#ff9a86}.halo{fill:none;stroke:#b0e2ff;stroke-width:7;opacity:.2;filter:url(#glow)}
+.route{stroke-dasharray:1;animation:trace 3.2s ease-out both}@keyframes trace{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.route{animation:none}}
 </style>
-<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
-<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
+<ellipse cx="320" cy="200" rx="315" ry="157" fill="url(#atmosphere)"/>
+<path d="M15 62h610v268H15Z" fill="url(#grid)"/>
 
-<g class="line" opacity=".55"><path d="M35 85h570M35 215h570M35 232h570M35 249h570"/><path d="M50 79v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12m22-12v12"/></g>
-<path class="trace draw" pathLength="1" d="M102 216h438"/>
-<use href="#deck" x="39.0" y="146.52" width="124.0" height="70.06"/><use href="#deck" x="258.0" y="146.52" width="124.0" height="70.06"/><use href="#deck" x="477.0" y="146.52" width="124.0" height="70.06"/>
-<g fill="#070a0e" stroke="#c9d3df" stroke-width="1.2"><circle cx="101" cy="151" r="32"/><circle cx="320" cy="151" r="32"/><circle cx="539" cy="151" r="32"/></g>
-<g class="trace"><path d="M85 140h32v20H99l-9 8v-8h-5Z"/><circle cx="313" cy="150" r="8"/><path d="M321 150h20m-6 0v8m-7-8v5m204-11-9 8 9 8m14-16 9 8-9 8"/></g>
-<text x="101" y="56" text-anchor="middle">JUL 8</text><text x="320" y="56" text-anchor="middle">JUL 10</text><text x="539" y="56" text-anchor="middle">JUL 11</text>
-<path class="line" d="M101 67v52M320 67v52M539 67v52"/>
-<text x="101" y="282" text-anchor="middle" class="muted">MESSAGE BOARD</text><text x="320" y="282" text-anchor="middle" class="muted">CREDENTIALS</text><text x="539" y="282" text-anchor="middle" class="muted">HF EXECUTION</text>
-<text x="320" y="335" text-anchor="middle" class="muted">ACROSS AGENTS · ACROSS DAYS</text>
+<!-- Dated milestones in a collective effort, not one uninterrupted agent run. -->
+<path class="wire" d="M25 54h590"/>
+<path class="wire" d="M26 50v8" opacity=".55"/><path class="wire" d="M41 50v8" opacity=".55"/><path class="wire" d="M56 50v8" opacity=".55"/><path class="wire" d="M71 50v8" opacity=".55"/><path class="wire" d="M86 50v8" opacity=".55"/><path class="wire" d="M101 50v8" opacity=".55"/><path class="wire" d="M116 50v8" opacity=".55"/><path class="wire" d="M131 50v8" opacity=".55"/><path class="wire" d="M146 50v8" opacity=".55"/><path class="wire" d="M161 50v8" opacity=".55"/><path class="wire" d="M176 50v8" opacity=".55"/><path class="wire" d="M191 50v8" opacity=".55"/><path class="wire" d="M206 50v8" opacity=".55"/><path class="wire" d="M221 50v8" opacity=".55"/><path class="wire" d="M236 50v8" opacity=".55"/><path class="wire" d="M251 50v8" opacity=".55"/><path class="wire" d="M266 50v8" opacity=".55"/><path class="wire" d="M281 50v8" opacity=".55"/><path class="wire" d="M296 50v8" opacity=".55"/><path class="wire" d="M311 50v8" opacity=".55"/><path class="wire" d="M326 50v8" opacity=".55"/><path class="wire" d="M341 50v8" opacity=".55"/><path class="wire" d="M356 50v8" opacity=".55"/><path class="wire" d="M371 50v8" opacity=".55"/><path class="wire" d="M386 50v8" opacity=".55"/><path class="wire" d="M401 50v8" opacity=".55"/><path class="wire" d="M416 50v8" opacity=".55"/><path class="wire" d="M431 50v8" opacity=".55"/><path class="wire" d="M446 50v8" opacity=".55"/><path class="wire" d="M461 50v8" opacity=".55"/><path class="wire" d="M476 50v8" opacity=".55"/><path class="wire" d="M491 50v8" opacity=".55"/><path class="wire" d="M506 50v8" opacity=".55"/><path class="wire" d="M521 50v8" opacity=".55"/><path class="wire" d="M536 50v8" opacity=".55"/><path class="wire" d="M551 50v8" opacity=".55"/><path class="wire" d="M566 50v8" opacity=".55"/><path class="wire" d="M581 50v8" opacity=".55"/><path class="wire" d="M596 50v8" opacity=".55"/><path class="wire" d="M611 50v8" opacity=".55"/>
+<text x="110" y="31" text-anchor="middle">JUL 8</text>
+<text x="320" y="31" text-anchor="middle">JUL 10</text>
+<text x="530" y="31" text-anchor="middle">JUL 11</text>
+<path class="lit" d="M110 43v25m210-25v25m210-25v25"/>
+<path class="halo" d="M20 177H620"/>
+<path class="lit route" pathLength="1" d="M20 177H620"/>
+<use href="#station" x="28" y="78" width="164" height="188"/><use href="#station" x="238" y="78" width="164" height="188"/><use href="#station" x="448" y="78" width="164" height="188"/>
+<!-- A visible stack of messages, rather than an abstract marker. -->
+<path d="M68 133h72v50H68Z" fill="#111a24" stroke="#6f8799"/>
+<path d="M80 122h72v50H80Z" fill="url(#metal)" stroke="#b4cadb"/>
+<path d="M91 138h64v47h-35l-15 14v-14H91Z" fill="#111c27" stroke="#d4edff" stroke-width="1.5"/>
+<path class="lit" d="M101 151h43m-43 10h33m-33 10h21"/>
+<use href="#agent" x="49" y="194" width="22" height="22"/><use href="#agent" x="153" y="195" width="22" height="22"/>
+<path class="wire" d="M62 191v-26h12m91 28v-33h-7"/>
+<text x="110" y="243" text-anchor="middle" class="stage-label">MESSAGE BOARD</text>
+<!-- A key shared to multiple peers. -->
+<circle cx="313" cy="148" r="31" fill="#131f2b" stroke="#7b9daf"/>
+<circle cx="313" cy="148" r="39" fill="none" stroke="#91b4c8" stroke-dasharray="2 7"/>
+<circle cx="304" cy="147" r="9" class="lit"/>
+<path class="lit" d="M313 147h26m-5 0v9m-7-9v6"/>
+<path class="wire" d="M313 182v17h-36m36 0h43m-43 0v8"/>
+<use href="#agent" x="260" y="192" width="22" height="22"/><use href="#agent" x="302" y="200" width="22" height="22"/><use href="#agent" x="350" y="192" width="22" height="22"/>
+<text x="320" y="243" text-anchor="middle" class="stage-label">CREDENTIALS</text>
+<!-- An external worker terminal marks the unauthorized execution milestone. -->
+<path d="M479 130h91l11 11v67h-91l-11-11Z" fill="url(#metal)" stroke="#9aafbf"/>
+<path d="M480 124h98v69h-98Z" fill="#080d13" stroke="#b7cddb"/>
+<path class="wire" d="M480 137h98m-93-7h3m4 0h3m4 0h3"/>
+<path class="lit risk" d="m514 147-10 10 10 10m29-20 10 10-10 10m-9-23-10 27"/>
+<path class="lit" d="M491 181h19m8 0h8"/>
+<path class="wire" d="M509 209h45m-23-15v14"/>
+<text x="530" y="243" text-anchor="middle" class="risk-label stage-label">HF EXECUTION</text>
+<g class="lit"><path d="m209 171 7 6-7 6m210-12 7 6-7 6M610 171l10 6-10 6"/></g>
+<!-- Multiple agent lanes persist over the same multi-day span. -->
+<path class="wire" d="M47 282h140l27 14h169l27-14h183M47 296h546M47 310h249l28-14h119l28 14h122"/>
+<path class="lit route" pathLength="1" d="M47 282h140l27 14h169l27-14h183"/>
+<use href="#agent" x="26" y="271" width="22" height="22"/><use href="#agent" x="26" y="298" width="22" height="22"/>
+<g fill="#dcefff"><circle cx="186" cy="282" r="3"/><circle cx="323" cy="296" r="3"/><circle cx="471" cy="310" r="3"/></g>
+<path class="wire" d="M110 266v11m210-11v23m210-23v11"/>
+<text x="320" y="342" text-anchor="middle" class="muted">DIFFERENT AGENTS · SHARED PROGRESS</text>
 
 </svg>

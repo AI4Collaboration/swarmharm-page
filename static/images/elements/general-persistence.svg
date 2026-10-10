@@ -1,41 +1,67 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<title>Long-horizon persistence</title><desc>The same goal remains active over hours and days. Agents retry after setbacks, adapt their approach, and keep working while building on earlier attempts. The trajectory stays open-ended; persistence does not guarantee success.</desc>
 <defs>
-  <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
-  <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
-  <linearGradient id="face" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#1d242c"/><stop offset="1" stop-color="#090c11"/></linearGradient>
-  <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#080b10"/><stop offset="1" stop-color="#3a424c"/></linearGradient>
-  <linearGradient id="wall"><stop stop-color="#a7b5c4" stop-opacity=".03"/><stop offset=".8" stop-color="#c4ceda" stop-opacity=".15"/><stop offset="1" stop-color="#f3f6fc" stop-opacity=".36"/></linearGradient>
-  <pattern id="floor" width="64" height="32" patternUnits="userSpaceOnUse"><path d="M0 0 64 32M64 0 0 32" fill="none" stroke="#6f7c8e" stroke-width=".65" opacity=".16"/></pattern>
-  <symbol id="unit" viewBox="-66 -51 132 130">
-    <ellipse cx="0" cy="51" rx="65" ry="24" fill="url(#ambient)"/>
-    <g stroke="#8c98a7" stroke-width=".85" stroke-linejoin="round">
-      <path d="m-43-9 43-25 43 25L0 16Z" fill="url(#top)"/>
-      <path d="M-43-9 0 16v46l-43-25Z" fill="url(#face)"/>
-      <path d="M0 16 43-9v46L0 62Z" fill="url(#edge)"/>
-      <path d="m-28-9 28-16 28 16L0 7Z" fill="#10151b" stroke="#c3cbd6"/>
-      <path d="m-12-9 12-7 12 7L0-2Z" fill="#e3e8ee" stroke="#fff"/>
-      <path d="m-35 8 27 16m-27-7 27 16m-27-7 27 16m17-18 26-15m-26 24 26-15m-26 24 26-15" fill="none" stroke="#657282"/>
-    </g>
-    <path d="m-36 34 9 5m3 2 6 3" stroke="#edf5ff" stroke-width="1.5"/>
+  <radialGradient id="atmosphere"><stop stop-color="#264354" stop-opacity=".44"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#28333f" stop-opacity=".9"/><stop offset=".4" stop-color="#101820" stop-opacity=".85"/><stop offset="1" stop-color="#070b10"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a9bbc9"/><stop offset=".3" stop-color="#344250"/><stop offset="1" stop-color="#111923"/></linearGradient>
+  <linearGradient id="beam"><stop stop-color="#d3efff" stop-opacity=".05"/><stop offset=".5" stop-color="#d3efff" stop-opacity=".2"/><stop offset="1" stop-color="#d3efff" stop-opacity=".05"/></linearGradient>
+  <filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+  <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="#506878" stroke-width=".5" opacity=".22"/></pattern>
+  <symbol id="station" viewBox="-82 -83 164 188">
+    <path d="M-66-80H62l17 17V72L62 90H-62l-17-17V-67Z" fill="url(#glass)" stroke="#627a8c" stroke-width=".8"/>
+    <path d="M-79-43V-67l13-13h28m76 0h24l17 17v19M-79 46v27l17 17h24m76 0h24l17-18V45" fill="none" stroke="#b5cedf" stroke-width="1.5"/>
+    <path d="M-69-58H69M-69 56H69" stroke="#425563" stroke-width=".7"/>
+    <path d="m-20-74 40 0" stroke="#d6edfa" stroke-width="2"/>
+    <path d="M-60 105h120" stroke="#688292" stroke-width=".6"/>
   </symbol>
-  <symbol id="deck" viewBox="-100 -54 200 113">
-    <g stroke="#8d99a9" stroke-width=".9" stroke-linejoin="round"><path d="m-83-2 83-47 83 47L0 45Z" fill="url(#top)"/><path d="m-83-2 83 47v13l-83-47Z" fill="url(#face)"/><path d="m0 45 83-47v13L0 58Z" fill="url(#edge)"/><path d="m-65-2 65-36 65 36L0 34Z" fill="#0d1219" stroke="#677586"/><path d="m-46-1 46-26 46 26L0 25Z" fill="none" stroke="#cdd6e2"/><path d="m-67 16 16 9m5 3 8 4" stroke="#f2f6fc"/></g>
-  </symbol>
+  <symbol id="agent" viewBox="-11 -11 22 22"><path d="m0-9 9 5v9L0 10-9 5v-9Z" fill="#101b25" stroke="#8da5b6"/><path d="m-5-2 5-3 5 3-5 3Z" fill="#e5f5ff"/><path d="M0 1v6m-6-8v4m12-4v4" stroke="#8da5b6" stroke-width=".7"/></symbol>
 </defs>
 <style>
-text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
-.muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
+text{font-family:Arial,Helvetica,sans-serif;fill:#edf5fb;font-size:21px;letter-spacing:1px}
+.muted{fill:#a8bfce;font-size:17px;letter-spacing:.7px}.small{font-size:16px}.stage-label{font-size:18px;letter-spacing:.7px}.large{font-size:25px;letter-spacing:1.4px}
+.wire{fill:none;stroke:#7a94a6;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.lit{fill:none;stroke:#d9f2ff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.risk{stroke:#ff8c79}.risk-label{fill:#ff9a86}.halo{fill:none;stroke:#b0e2ff;stroke-width:7;opacity:.2;filter:url(#glow)}
+.route{stroke-dasharray:1;animation:trace 3.2s ease-out both}@keyframes trace{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.route{animation:none}}
 </style>
-<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
-<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
+<ellipse cx="320" cy="200" rx="315" ry="157" fill="url(#atmosphere)"/>
+<path d="M15 62h610v268H15Z" fill="url(#grid)"/>
 
-<g class="line" opacity=".55"><path d="M35 285C126 275 152 194 247 199S379 112 464 115 550 55 611 54M35 305C132 295 158 215 247 218S383 132 468 135 553 77 611 75"/><path d="M58 89v217M178 65v227M299 52v230M420 48v210M543 44v176" stroke-dasharray="3 8"/></g>
-<path class="trace draw" pathLength="1" d="M42 267C126 257 150 174 242 178S371 93 463 96 548 39 605 39"/>
-<path class="line" d="M157 225c-58-38-34-71 3-65 37 6 46 52 4 56M287 168c-27-47 13-72 41-47 28 25 17 49-22 42"/>
-<use href="#deck" x="30.0" y="238.64" width="68.0" height="38.42"/><use href="#unit" x="172.01999999999998" y="151.97" width="69.96000000000001" height="68.9"/><use href="#unit" x="360.72" y="73.42" width="76.55999999999999" height="75.39999999999999"/><use href="#unit" x="515.44" y="4.339999999999996" width="87.12" height="85.8"/>
-<path class="trace" d="m592 31 13 8-14 8"/>
-<text x="48" y="335">START</text><text x="565" y="162" text-anchor="middle">MUCH LATER</text><path class="line" d="M559 143V99"/>
-<text x="167" y="124" class="muted">RETRY</text><text x="368" y="58" class="muted">ADAPT</text>
-<path class="line" d="M165 306h305m-305-5v10m305-10v10"/><text x="320" y="335" text-anchor="middle" class="muted">LONG HORIZON</text>
+<!-- A long elapsed-time rail, not a rising capability or success curve. -->
+<g class="wire"><circle cx="42" cy="33" r="16"/><path d="M42 22v12l8 5M36 12h12m-6-5v5"/></g>
+<text x="70" y="41" class="large">HOURS → DAYS</text>
+<g class="wire"><circle cx="473" cy="32" r="10"/><circle cx="473" cy="32" r="4"/><path d="M473 18v5m0 18v5m-14-14h5m18 0h5"/></g>
+<text x="500" y="39" class="muted">SAME GOAL</text>
+<path class="wire" d="M24 59h592" opacity=".5"/>
+<path class="halo" d="M20 177H620"/>
+<path class="lit route" pathLength="1" d="M20 177H620"/>
+<use href="#station" x="28" y="78" width="164" height="188"/><use href="#station" x="238" y="78" width="164" height="188"/><use href="#station" x="448" y="78" width="164" height="188"/>
+<!-- Repeated failed attempts and a return arrow. -->
+<g class="wire"><path d="M58 135h87m-87 30h72m-72 30h87"/><circle cx="58" cy="135" r="3"/><circle cx="58" cy="165" r="3"/><circle cx="58" cy="195" r="3"/></g>
+<g class="lit risk"><path d="m143 130 10 10m-10 0 10-10m-25 30 10 10m-10 0 10-10m15 30 10 10m-10 0 10-10"/></g>
+<path class="lit" d="M166 195v12a12 12 0 0 1-12 12H72a14 14 0 0 1-14-14m-5 7 5-7 5 7"/>
+<text x="110" y="243" text-anchor="middle" class="stage-label">RETRY</text>
+<!-- A new route branches away from the failed approach. -->
+<path class="wire" d="M266 186h108" stroke-dasharray="4 5"/>
+<path class="wire" d="M368 181l10 10m-10 0 10-10"/>
+<path class="halo" d="M266 186h15q13 0 13-13v-26q0-13 13-13h67"/>
+<path class="lit" d="M266 186h15q13 0 13-13v-26q0-13 13-13h67m-9-7 9 7-9 7"/>
+<circle cx="266" cy="186" r="4" fill="#e9f7ff"/>
+<text x="320" y="243" text-anchor="middle" class="stage-label">ADAPT</text>
+<!-- Open-ended trajectory: persistence does not imply eventual success. -->
+<g class="wire"><circle cx="530" cy="166" r="39"/><circle cx="530" cy="166" r="48" stroke-dasharray="2 8"/><path d="M486 166h-9m97 0h9M530 113v9m0 88v9"/></g>
+<path class="lit" d="M494 190a43 43 0 0 1 5-53m62 1a43 43 0 0 1 4 53"/>
+<path class="halo" d="m515 151 15 15-15 15m19-30 15 15-15 15"/>
+<path class="lit" d="m515 151 15 15-15 15m19-30 15 15-15 15"/>
+<text x="530" y="243" text-anchor="middle" class="stage-label">KEEP GOING</text>
+<g class="lit"><path d="m209 171 7 6-7 6m210-12 7 6-7 6M610 171l10 6-10 6"/></g>
+<!-- The retained-progress trace survives every attempt. -->
+<path d="M34 284h572v23H34Z" fill="url(#beam)"/>
+<path class="wire" d="M34 284h572M34 307h572"/>
+<path class="lit route" pathLength="1" d="M37 296h564m-9-5 9 5-9 5"/>
+<g fill="#dcefff"><circle cx="110" cy="296" r="3"/><circle cx="320" cy="296" r="3"/><circle cx="530" cy="296" r="3"/></g>
+<path class="wire" d="M110 269v12m210-12v12m210-12v12"/>
+<text x="320" y="342" text-anchor="middle" class="muted">BUILD ON EARLIER ATTEMPTS</text>
 
 </svg>
