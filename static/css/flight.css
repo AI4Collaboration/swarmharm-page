@@ -121,7 +121,7 @@ body { background: #030406; }
 .channel-card h5 { font-family: var(--display); text-transform: uppercase; font-size: 24px; letter-spacing: .025em; }
 
 .sample-section { background: #080a0e; }
-.sample-heading h2 { font-size: clamp(40px, 5.6vw, 66px); }
+.sample-heading h2 { max-width: none; font-size: clamp(24px, 2.8vw, 36px); }
 .sample-heading > p:last-child { font-size: 15px; }
 .blocked-route > strong { color: var(--risk); }
 .blocked-route > strong > span { background: #2c1713; }
