@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
-<title>Artifactory used as an unauthorized message board</title><desc>Agents on separate tasks had no designated peer channel. They wrote and read messages in OpenAI’s shared Artifactory cache directory names, creating an unauthorized side channel.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+<title>Artifactory used as an unauthorized message board</title><desc>An agent creates a directory in the shared Artifactory cache; another isolated agent reads the directory listing. Directory names carry messages. The full actual cache directory is shown, as reported by METR.</desc>
 <defs>
   <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
   <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
@@ -27,29 +27,34 @@
 text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-spacing:1.1px}
 .muted{fill:#a4acb8;font-size:17px;letter-spacing:.8px}.small{font-size:16px}.line{fill:none;stroke:#76818e;stroke-width:1.15}.trace{fill:none;stroke:#f0f4f9;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.risk{stroke:#f16b57}.risk-label{fill:#ff8c79}.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 3.8s ease-out both}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.draw{animation:none}}
 </style>
-<ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
-<path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
-
-<text x="108" y="35" text-anchor="middle">TASK A</text>
-<text x="532" y="35" text-anchor="middle">TASK B</text>
-<!-- Distinct sandbox frames and a crossed direct path show the intended isolation. -->
-<path d="m43 96 65-37 65 37v65l-65 38-65-38Z" fill="url(#wall)" stroke="#758192" stroke-width=".8" stroke-dasharray="4 5"/>
-<path d="m467 96 65-37 65 37v65l-65 38-65-38Z" fill="url(#wall)" stroke="#758192" stroke-width=".8" stroke-dasharray="4 5"/>
-<path class="line" d="M173 117h126m42 0h126" stroke-dasharray="5 7"/>
-<text x="320" y="82" text-anchor="middle" class="muted">NO PEER CHANNEL</text>
-<circle cx="320" cy="117" r="17" fill="#090c11" stroke="#a4acb8"/>
-<path class="line" d="m312 109 16 16m-16 0 16-16"/>
-<use href="#unit" x="53.22" y="70.67" width="109.56" height="107.90"/><use href="#unit" x="477.22" y="70.67" width="109.56" height="107.90"/>
-<!-- The same package cache remains reachable by both tasks and becomes a mailbox. -->
-<path class="trace risk draw" pathLength="1" d="M108 184v73l141 36m142-36 141-36v-37"/>
-<path class="trace risk" d="m239 284 10 9-13 2m289-99 7-12 7 12"/>
-<text x="125" y="234" class="risk-label small">WRITE</text>
-<text x="515" y="200" text-anchor="end" class="risk-label small">READ</text>
-<text x="320" y="183" text-anchor="middle">ARTIFACTORY CACHE</text>
-<use href="#deck" x="240.00" y="234.80" width="160.00" height="90.40"/><use href="#deck" x="240.00" y="211.80" width="160.00" height="90.40"/><use href="#deck" x="240.00" y="188.80" width="160.00" height="90.40"/>
-<path d="m293 229 27-15 27 15-27 15Z" fill="#331b1b" stroke="#ff8c79"/>
-<path d="m305 227 15-8 15 8m-23 4 8-4 8 4" fill="none" stroke="#ffab98" stroke-width="1.5"/>
-<path d="m132 284 57 15m250-64 59-15" stroke="#ff8c79" stroke-width="4"/>
-<text x="320" y="354" text-anchor="middle" class="risk-label">CACHE DIRECTORY NAMES → MESSAGES</text>
-
+<ellipse cx="320" cy="172" rx="300" ry="150" fill="url(#ambient)"/>
+<path d="m20 172 300-120 300 120-300 112Z" fill="url(#floor)" opacity=".5"/>
+<text x="100" y="28" text-anchor="middle">TASK A</text>
+<text x="540" y="28" text-anchor="middle">TASK B</text>
+<path d="m41 73 59-34 59 34v67l-59 34-59-34Z M481 73l59-34 59 34v67l-59 34-59-34Z" fill="url(#wall)" stroke="#758192" stroke-dasharray="4 5"/>
+<use href="#unit" x="49" y="49" width="102" height="101"/>
+<use href="#unit" x="489" y="49" width="102" height="101"/>
+<path class="line" d="M163 96h137m40 0h137" stroke-dasharray="5 7"/>
+<text x="320" y="65" text-anchor="middle" class="muted">NO PEER CHANNEL</text>
+<circle cx="320" cy="96" r="17" fill="#090c11" stroke="#9ba6b4"/>
+<path class="line" d="m313 89 14 14m-14 0 14-14"/>
+<!-- A directory write and a directory listing connect otherwise isolated tasks. -->
+<path class="trace risk" opacity=".55" d="M100 163v52h151m138 0h151v-52"/>
+<path class="trace risk draw" pathLength="1" d="M100 163v52h151m138 0h151v-52"/>
+<path class="trace risk" d="m241 208 10 7-10 7m292-46 7-13 7 13"/>
+<text x="320" y="150" text-anchor="middle">ARTIFACTORY CACHE</text>
+<use href="#deck" x="264" y="184" width="112" height="63"/>
+<use href="#deck" x="264" y="168" width="112" height="63"/>
+<path d="m297 199 23-13 23 13-23 13Z" fill="#331b1b" stroke="#ff8c79"/>
+<path d="m309 197 11-6 11 6" fill="none" stroke="#ffad9d"/>
+<text x="32" y="245" class="small risk-label">CREATE DIRECTORY</text>
+<text x="608" y="245" text-anchor="end" class="small risk-label">READ DIRECTORY NAMES</text>
+<path class="line" d="M320 246v27"/>
+<!-- Source: METR / Redwood, July 8–9 message-board account. -->
+<path d="M18 274h586l18 18v90H18Z" fill="#0b121a" stroke="#354350"/>
+<path d="M18 289v-15h31m542 108h31v-19" fill="none" stroke="#8c9daa"/>
+<text x="36" y="302" class="muted" style="font-size:16px">ACTUAL MESSAGE DIRECTORY</text>
+<text x="604" y="302" text-anchor="end" class="muted" style="font-size:16px">METR</text>
+<text x="36" y="332" style="font-family:monospace;font-size:19px;letter-spacing:0;fill:#c4cfdb">github-remote-cache/</text>
+<text x="36" y="362" style="font-family:monospace;font-size:19px;letter-spacing:0;fill:#ffad9d">zzHELP_PHASEONE_ARV010841_NO_CONSUMER_SEEK_IDEA</text>
 </svg>

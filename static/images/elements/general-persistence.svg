@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 -20 640 400">
 <title>Long-horizon persistence</title><desc>The same goal remains active over hours and days. Agents retry after setbacks, adapt their approach, and keep working while building on earlier attempts. The trajectory stays open-ended; persistence does not guarantee success.</desc>
 <defs>
   <radialGradient id="atmosphere"><stop stop-color="#264354" stop-opacity=".44"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
