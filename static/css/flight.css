@@ -50,6 +50,11 @@ body { background: #030406; }
 .element-general-visual::before, .element-hf::before { content: ""; position: absolute; top: 0; left: 0; width: 16px; height: 16px; border: solid #525b68; border-width: 1px 0 0 1px; }
 .element-general-visual::after, .element-hf::after { content: ""; position: absolute; bottom: 0; right: 0; width: 16px; height: 16px; border: solid #525b68; border-width: 0 1px 1px 0; }
 .dimension-illustration { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.cache-entry { margin-top: 12px; padding: 12px 14px; border-top: 1px solid #30353c; background: #0b1016; }
+.cache-entry > div { display: flex; justify-content: space-between; gap: 12px; color: #a7adb5; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.cache-entry a { color: #b4bdc9; text-decoration: underline; text-underline-offset: 3px; }
+.cache-entry code { display: grid; margin-top: 7px; color: #ffad9d; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; line-height: 1.65; white-space: normal; overflow-wrap: anywhere; }
+.cache-entry .cache-namespace { color: #bbc5d0; }
 .element-context { padding-block: 22px; margin-top: 0; }
 .element-context svg { stroke: #9ba6b5; }
 .element-context-arrow { color: #8793a4; }

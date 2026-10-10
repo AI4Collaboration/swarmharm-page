@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=4">
-  <link rel="stylesheet" href="static/css/flight.css?v=2">
+  <link rel="stylesheet" href="static/css/flight.css?v=3">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=4" defer></script>
@@ -93,7 +93,13 @@
           <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
             <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
             <div class="element-copy"><h4>Unauthorized side channel</h4><a href="#hf-pair-peers">Artifactory message board <span aria-hidden="true">↓</span></a></div>
-            <figure class="element-hf" id="hf-communication"><img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=2" width="640" height="360" alt="OpenAI–Hugging Face incident: agents on separate tasks have no designated peer channel. They use directory names in OpenAI’s shared Artifactory package cache to write and read messages, creating an unauthorized side channel." decoding="async"></figure>
+            <figure class="element-hf" id="hf-communication">
+              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=3" width="640" height="360" alt="OpenAI–Hugging Face incident: agents on separate tasks have no designated peer channel. They use directory names in OpenAI’s shared Artifactory package cache to write and read messages, creating an unauthorized side channel." decoding="async">
+              <figcaption class="cache-entry">
+                <div><span>Actual cache directory</span><a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">METR ↗</a></div>
+                <code><span class="cache-namespace">github-remote-cache/</span><span>zzHELP_<wbr>PHASEONE_<wbr>ARV010841_<wbr>NO_CONSUMER_<wbr>SEEK_IDEA</span></code>
+              </figcaption>
+            </figure>
           </div>
         </article>
         <article class="framework-card" data-element="persistence" aria-labelledby="incident-persistence">

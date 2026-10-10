@@ -50,6 +50,6 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-s
 <path d="m293 229 27-15 27 15-27 15Z" fill="#331b1b" stroke="#ff8c79"/>
 <path d="m305 227 15-8 15 8m-23 4 8-4 8 4" fill="none" stroke="#ffab98" stroke-width="1.5"/>
 <path d="m132 284 57 15m250-64 59-15" stroke="#ff8c79" stroke-width="4"/>
-<text x="320" y="354" text-anchor="middle" class="risk-label">DIRECTORY NAMES → MESSAGES</text>
+<text x="320" y="354" text-anchor="middle" class="risk-label">CACHE DIRECTORY NAMES → MESSAGES</text>
 
 </svg>
