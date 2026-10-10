@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
-<title>Authorized chat and unauthorized side channel</title><desc>The top row shows two agents exchanging messages through an approved chat tool. The bottom row blocks direct messages, but agents send a message through shared files. The red detour is unauthorized.</desc>
+<title>Two communication routes between the same agents</title><desc>One Agent A and one Agent B share two possible communication routes. The upper white route uses an approved chat tool. The lower red route carries messages through shared files, an unauthorized side channel. Both routes connect the same pair of agents.</desc>
 <defs>
   <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#283746"/><stop offset=".45" stop-color="#101b27"/><stop offset="1" stop-color="#080e16"/></linearGradient>
   <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#34495a"/><stop offset="1" stop-color="#111d29"/></linearGradient>
@@ -31,5 +31,31 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#eef4fa;font-size:24px;letter-s
 .risk-route{fill:none;stroke:#ff947f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#red-arrow)}
 </style>
 <ellipse cx="320" cy="202" rx="308" ry="186" fill="url(#light)"/>
-<text x="24" y="28" text-anchor="start" class="" >LEGAL CHANNEL</text><text x="615" y="28" text-anchor="end" class="micro muted" >AUTHORIZED</text><path class="route" d="M143 106H263"/><path class="route" d="M375 106H494"/><use href="#agent" x="54" y="57" width="92" height="92" class="ink"/><text x="100" y="136.57999999999998" text-anchor="middle" class="micro" style="font-weight:700">A</text><use href="#agent" x="494" y="57" width="92" height="92" class="ink"/><text x="540" y="136.57999999999998" text-anchor="middle" class="micro" style="font-weight:700">B</text><use href="#chat" x="268" y="62" width="104" height="84" class="ink"/><circle cx="374" cy="69" r="17" fill="#14212a" stroke="#dce8f3" stroke-width="2"/><path d="m367 69 5 5 10-11" fill="none" stroke="#edf7ff" stroke-width="3"/><text x="320" y="169" text-anchor="middle" class="small" >Approved chat tool</text><path class="line" d="M24 192h592" opacity=".6"/><text x="24" y="223" text-anchor="start" class="red" >ILLEGAL SIDE CHANNEL</text><text x="615" y="223" text-anchor="end" class="micro muted" >UNAUTHORIZED</text><path class="line" d="M147 284h145m57 0h144" stroke-dasharray="6 8"/><circle cx="320" cy="284" r="20" fill="#130e10" stroke="#ff947f" stroke-width="1.8"/><path d="m314.0 278.0 12 12m0 -12 -12 12" fill="none" stroke="#ff947f" stroke-width="3" stroke-linecap="round"/><use href="#agent" x="57" y="243" width="86" height="86" class="ink"/><text x="100" y="317.39" text-anchor="middle" class="micro" style="font-weight:700">A</text><use href="#agent" x="497" y="243" width="86" height="86" class="ink"/><text x="540" y="317.39" text-anchor="middle" class="micro" style="font-weight:700">B</text><path class="risk-route" d="M102 334v21h163"/><path class="risk-route" d="M374 355h164v-22"/><use href="#folder" x="271" y="302" width="98" height="82" class="ink"/><use href="#chat" x="297" y="319.5" width="46" height="37" class="risk"/><text x="320" y="390" text-anchor="middle" class="small" >Messages via shared files</text>
+
+<!-- The same two agents anchor both routes. -->
+<text x="95" y="143" text-anchor="middle" class="small">Agent A</text>
+<text x="545" y="143" text-anchor="middle" class="small">Agent B</text>
+<use href="#agent" x="40" y="158" width="110" height="110" class="ink"/>
+<use href="#agent" x="490" y="158" width="110" height="110" class="ink"/>
+<text x="95" y="253" text-anchor="middle" class="micro" style="font-weight:700">A</text>
+<text x="545" y="253" text-anchor="middle" class="micro" style="font-weight:700">B</text>
+
+<!-- Approved route: up through the designated chat tool. -->
+<text x="320" y="30" text-anchor="middle">Legal channel</text>
+<path class="route" d="M137 193h27q16 0 16-16v-59q0-16 16-16h68"/>
+<path class="route" d="M376 102h68q16 0 16 16v59q0 16 16 16h27"/>
+<use href="#chat" x="268" y="63" width="104" height="83" class="ink"/>
+<circle cx="373" cy="68" r="17" fill="#14212a" stroke="#dce8f3" stroke-width="2"/>
+<path d="m366 68 5 5 10-11" fill="none" stroke="#edf7ff" stroke-width="3"/>
+<text x="320" y="167" text-anchor="middle" class="small">Approved chat</text>
+
+<!-- Unauthorized route: down through shared files, with the same endpoints. -->
+<path class="risk-route" d="M137 239h27q16 0 16 16v52q0 16 16 16h68"/>
+<path class="risk-route" d="M376 323h68q16 0 16-16v-52q0-16 16-16h27"/>
+<text x="320" y="266" text-anchor="middle" class="small">Shared files</text>
+<use href="#folder" x="264" y="276" width="112" height="94" class="ink"/>
+<use href="#chat" x="292" y="303" width="56" height="45" class="risk"/>
+<circle cx="373" cy="285" r="17" fill="#130e10" stroke="#ff947f" stroke-width="2"/>
+<path d="m367 279 12 12m0-12-12 12" fill="none" stroke="#ff947f" stroke-width="2.5" stroke-linecap="round"/>
+<text x="320" y="391" text-anchor="middle" class="red">Illegal side channel</text>
 </svg>
