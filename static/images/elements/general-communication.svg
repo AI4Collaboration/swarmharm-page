@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<title>Authorized communication and unauthorized side communication</title><desc>White routes connect agents through a designated collaboration tool. Red routes use a shared resource to communicate when no peer channel is authorized.</desc>
 <defs>
   <radialGradient id="ambient"><stop stop-color="#333a45" stop-opacity=".48"/><stop offset="1" stop-color="#030406" stop-opacity="0"/></radialGradient>
   <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#727b86"/><stop offset=".35" stop-color="#323942"/><stop offset="1" stop-color="#10151c"/></linearGradient>
@@ -29,13 +30,31 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#ecf0f4;font-size:21px;letter-s
 <ellipse cx="320" cy="196" rx="307" ry="165" fill="url(#ambient)"/>
 <path d="m20 226 300-164 300 164-300 118Z" fill="url(#floor)" opacity=".6"/>
 
-<g class="line" opacity=".6"><ellipse cx="320" cy="181" rx="251" ry="104"/><ellipse cx="320" cy="181" rx="225" ry="80"/><path d="M320 62v245M72 181h497" stroke-dasharray="3 7"/></g>
-<path class="trace draw" pathLength="1" d="M128 171Q180 50 320 88Q483 78 518 173Q444 302 320 271Q171 288 128 171Z"/>
-<path class="line" d="m137 170 180 4 193 0M320 94v160M144 182l167 78m23-1 171-73"/>
-<g fill="#f1f5fa"><circle cx="200" cy="106" r="3"/><circle cx="437" cy="109" r="3"/><circle cx="444" cy="253" r="3"/><circle cx="206" cy="258" r="3"/></g>
-<use href="#unit" x="79.16" y="113.25999999999999" width="97.67999999999999" height="96.2"/><use href="#unit" x="276.44" y="35.339999999999996" width="87.12" height="85.8"/><use href="#unit" x="467.16" y="113.25999999999999" width="97.67999999999999" height="96.2"/><use href="#unit" x="271.16" y="209.26" width="97.67999999999999" height="96.2"/>
-<path d="m274 171 46-26 46 26-46 26Z" fill="#171e27" stroke="#ced9e7"/><path d="m293 169 27-15 27 15-27 15Z" fill="url(#top)" stroke="#f1f6fe"/>
-<path class="line" d="M76 68h72l24 38M454 311h-55l-36-39"/><circle cx="172" cy="106" r="2" fill="#fff"/>
-<text x="74" y="53">AGENTS</text><text x="457" y="318" text-anchor="end">EXCHANGE &amp; REUSE</text>
+<!-- White: the designated route carries authorized collaboration. -->
+<text x="24" y="30">LEGAL CHANNEL</text>
+<text x="616" y="30" text-anchor="end" class="muted">AUTHORIZED</text>
+<path class="line" d="M24 44h592" opacity=".4"/>
+<path class="trace draw" pathLength="1" d="M143 105h111m133 0h110"/>
+<path class="trace" d="m246 99 8 6-8 6m-95-12-8 6 8 6m338-12 8 6-8 6m-94-12-8 6 8 6"/>
+<use href="#unit" x="60.80" y="53.30" width="92.40" height="91.00"/><use href="#unit" x="486.80" y="53.30" width="92.40" height="91.00"/><use href="#deck" x="251.00" y="62.74" width="138.00" height="77.97"/>
+<path d="M291 75h54v31h-25l-10 10v-10h-19Z" fill="#18212b" stroke="#eef3f9" stroke-width="1.6"/>
+<path d="M300 85h35m-35 10h25" stroke="#d0d9e4" stroke-width="1.5"/>
+<circle cx="362" cy="80" r="12" fill="#0b1016" stroke="#dce5ef"/>
+<path class="trace" d="m357 80 4 4 7-8"/>
+<text x="320" y="161" text-anchor="middle" class="muted">DESIGNATED TOOL</text>
+<path class="line" d="M24 180h592" opacity=".6"/>
+<!-- Red: an indirect route carries messages despite the communication restriction. -->
+<text x="24" y="210" class="risk-label">ILLEGAL SIDE CHANNEL</text>
+<text x="616" y="210" text-anchor="end" class="muted">UNAUTHORIZED</text>
+<path class="line" d="M144 253h151m51 0h150" stroke-dasharray="4 6" opacity=".8"/>
+<circle cx="320" cy="253" r="13" fill="#090c11" stroke="#a4acb8"/>
+<path class="line" d="m314 247 12 12m-12 0 12-12"/>
+<text x="320" y="234" text-anchor="middle" class="muted">NO PEER CHANNEL</text>
+<path class="trace risk draw" pathLength="1" d="M129 274 182 308h78m121 0h77l51-34"/>
+<path class="trace risk" d="m250 302 10 6-10 6m254-28 5-12-13 1"/>
+<use href="#unit" x="60.80" y="206.30" width="92.40" height="91.00"/><use href="#unit" x="486.80" y="206.30" width="92.40" height="91.00"/><use href="#deck" x="253.00" y="265.82" width="134.00" height="75.71"/>
+<path d="m293 298 27-15 27 15-27 15Z" fill="#331b1b" stroke="#ff8c79"/>
+<path d="m308 295 12-7 12 7m-17 4 5-3 5 3" fill="none" stroke="#ffab98" stroke-width="1.4"/>
+<text x="320" y="353" text-anchor="middle" class="muted">SHARED RESOURCE</text>
 
 </svg>

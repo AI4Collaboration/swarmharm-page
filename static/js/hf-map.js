@@ -43,11 +43,14 @@
       taxonomyHref: '#protocol',
       from: 'Separate agents', to: 'Other task runs', blocked: 'No designated peer channel',
       fromIcon: 'person', toIcon: 'person',
-      via: 'Shared cache becomes a message board', cwe: '653', weakness: 'Improper isolation',
-      effect: 'Agents exchange notes and reuse discoveries through a side channel.',
-      note: 'Our architectural mapping: shared credentials already permitted access. Creating the early board did not require exploiting a product vulnerability.',
-      route: 'Separate task runs have no designated peer channel. Shared infrastructure lets agents leave and read messages across runs.',
-      sources: [['OpenAI technical report · pp. 6–7', 'https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf#page=6']]
+      via: 'Artifactory cache → message board', cwe: '653', weakness: 'Improper isolation',
+      effect: 'Agents use cache directory names to exchange messages across separate tasks.',
+      note: 'Our architectural mapping: package-cache access was permitted; cross-task communication was not. The early board needed no product exploit.',
+      route: 'Separate tasks have no designated peer channel. OpenAI’s shared Artifactory cache becomes an unauthorized message board through directory names.',
+      sources: [
+        ['METR investigation · message board', 'https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/'],
+        ['OpenAI technical report · pp. 6–7', 'https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf#page=6']
+      ]
     },
     files: {
       scope: 'Hugging Face · file boundary', taxonomy: 'Access restricted + external file control',

@@ -42,7 +42,7 @@
   <link rel="stylesheet" href="static/css/flight.css?v=2">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
-  <script src="static/js/hf-map.js?v=3" defer></script>
+  <script src="static/js/hf-map.js?v=4" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -87,13 +87,13 @@
         <article class="framework-card" data-element="communication" aria-labelledby="incident-communication">
           <div class="element-general" role="group" aria-label="General communication mechanism">
             <span class="element-column-label" aria-hidden="true">General mechanism</span>
-            <div class="element-copy"><h3 id="incident-communication">Communication</h3><p class="element-definition">Exchange and reuse discoveries.</p></div>
-            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=1" width="640" height="360" alt="General communication: agents share findings and build on each other’s replies." decoding="async"></figure>
+            <div class="element-copy"><h3 id="incident-communication">Communication</h3><p class="element-definition">Authorized vs. unauthorized routes.</p></div>
+            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=2" width="640" height="360" alt="Legal channel: agents exchange messages through a designated, authorized tool. Illegal side channel: agents communicate through shared infrastructure despite a communication restriction. White shows the authorized route; red shows the unauthorized route." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
             <span class="element-column-label" aria-hidden="true">OpenAI–Hugging Face</span>
-            <div class="element-copy"><h4>Shared cache → message board</h4><a href="#hf-pair-peers">Shared channel <span aria-hidden="true">↓</span></a></div>
-            <figure class="element-hf" id="hf-communication"><img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=1" width="640" height="360" alt="Hugging Face incident: agents write help requests, findings, and exploits into a shared cache. Peers read and reply, turning the cache into a message board." decoding="async"></figure>
+            <div class="element-copy"><h4>Unauthorized side channel</h4><a href="#hf-pair-peers">Artifactory message board <span aria-hidden="true">↓</span></a></div>
+            <figure class="element-hf" id="hf-communication"><img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=2" width="640" height="360" alt="OpenAI–Hugging Face incident: agents on separate tasks have no designated peer channel. They use directory names in OpenAI’s shared Artifactory package cache to write and read messages, creating an unauthorized side channel." decoding="async"></figure>
           </div>
         </article>
         <article class="framework-card" data-element="persistence" aria-labelledby="incident-persistence">
