@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=4">
-  <link rel="stylesheet" href="static/css/flight.css?v=9">
+  <link rel="stylesheet" href="static/css/flight.css?v=10">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=4" defer></script>
@@ -86,40 +86,48 @@
         <article class="framework-card" data-element="communication" aria-labelledby="incident-communication">
           <header class="element-heading"><h3 id="incident-communication">Communication</h3></header>
           <div class="element-general" role="group" aria-label="General communication mechanism">
-            <div class="element-copy"><p class="element-definition"><span class="element-inline-label">General:</span> Approved vs. prohibited routes</p></div>
+            <div class="element-copy"><p class="element-definition">Approved vs. prohibited routes</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=6" width="640" height="400" alt="The same Agent A and Agent B have two possible communication routes: the upper white path carries a benign conversation through approved chat; the lower red path sends messages through shared files, an unauthorized side channel." decoding="async"></figure>
-          </div>
-          <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
-            <div class="element-copy"><div class="element-column-label"><span>OpenAI–Hugging Face</span><a href="#hf-pair-peers" aria-label="Artifactory message board evidence">Evidence ↓</a></div><h4>Side channel via Artifactory cache</h4></div>
-            <figure class="element-hf" id="hf-communication">
-              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=5" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
-              <figcaption class="sr-only">Actual cache directory reported by METR: <code>github-remote-cache/zzHELP_PHASEONE_ARV010841_NO_CONSUMER_SEEK_IDEA</code>.</figcaption>
-            </figure>
           </div>
         </article>
         <article class="framework-card" data-element="persistence" aria-labelledby="incident-persistence">
           <header class="element-heading"><h3 id="incident-persistence">Persistence</h3></header>
           <div class="element-general" role="group" aria-label="General persistence mechanism">
-            <div class="element-copy"><p class="element-definition"><span class="element-inline-label">General:</span> One goal, across hours and days</p></div>
+            <div class="element-copy"><p class="element-definition">One goal, across hours and days</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-persistence.svg?v=4" width="640" height="400" alt="A clock, night and daylight show hours turning into days. The agent retries, changes route and keeps working toward the same goal. A growing trail of notes carries earlier work forward; persistence does not imply success." decoding="async"></figure>
-          </div>
-          <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
-            <div class="element-copy"><div class="element-column-label"><span>OpenAI–Hugging Face</span><a href="#hf-persistence" aria-label="Multi-day timeline evidence">Evidence ↓</a></div><h4>Jul 8–11 · shared research</h4></div>
-            <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=4" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
           </div>
         </article>
         <article class="framework-card" data-element="hacking" aria-labelledby="incident-hacking">
           <header class="element-heading"><h3 id="incident-hacking">Hacking</h3></header>
           <div class="element-general" role="group" aria-label="General hacking mechanism">
-            <div class="element-copy"><p class="element-definition"><span class="element-inline-label">General:</span> Exploit a weakness to gain access</p></div>
+            <div class="element-copy"><p class="element-definition">Exploit a weakness to gain access</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-hacking.svg?v=3" width="640" height="400" alt="A locked permission check stops an agent from reaching private files. A red detour passes through a weakness, shown as an open lock, and reaches the files without authorization." decoding="async"></figure>
-          </div>
-          <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
-            <div class="element-copy"><div class="element-column-label"><span>OpenAI–Hugging Face</span><a href="#hf-blockers" aria-label="HF barriers and exploits evidence">Evidence ↓</a></div><h4>Worker access via HDF5 + RefJinja</h4></div>
-            <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=3" width="640" height="400" alt="Upload a dataset file → read worker secrets → run commands. HDF5 file reading and RefJinja template injection label the two access steps. Exposed HF credentials provide initial upload access. This high-level route is reported by OpenAI." decoding="async"></figure>
           </div>
         </article>
       </div>
+      <section class="framework-incident" aria-labelledby="framework-incident-title">
+        <div class="element-incident-heading">
+          <h3 id="framework-incident-title">What happened in OpenAI–Hugging Face</h3>
+          <a href="#hf-mapping">Evidence <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="element-incident-grid">
+          <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
+            <div class="element-copy"><h4>Side channel via Artifactory cache</h4></div>
+            <figure class="element-hf" id="hf-communication">
+              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=5" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
+              <figcaption class="sr-only">Actual cache directory reported by METR: <code>github-remote-cache/zzHELP_PHASEONE_ARV010841_NO_CONSUMER_SEEK_IDEA</code>.</figcaption>
+            </figure>
+          </div>
+          <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
+            <div class="element-copy"><h4>Jul 8–11 · shared research</h4></div>
+            <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=4" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
+          </div>
+          <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
+            <div class="element-copy"><h4>Worker access via HDF5 + RefJinja</h4></div>
+            <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=3" width="640" height="400" alt="Upload a dataset file → read worker secrets → run commands. HDF5 file reading and RefJinja template injection label the two access steps. Exposed HF credentials provide initial upload access. This high-level route is reported by OpenAI." decoding="async"></figure>
+          </div>
+        </div>
+      </section>
       <div class="element-context" aria-label="The HF setup: a legitimate cybersecurity task with some infeasible targets.">
         <div><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 28V4m0 1h18l-4 6 4 6H7"/></svg><span>Legitimate task<strong>Capture the assigned target’s flag</strong></span></div>
         <span class="element-context-arrow" aria-hidden="true">→</span>
