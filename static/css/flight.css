@@ -184,8 +184,10 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 .scene-quote cite { display: inline; margin: 0 0 0 8px; }
 #research > .container > .section-heading { grid-template-columns: 30px auto minmax(0, 1fr); align-items: baseline; }
 #research .section-heading > p { grid-column: auto; justify-self: end; margin: 0; font-size: 13px; }
-.rq-card h3 { font-family: var(--display); font-size: 22px; font-weight: 500; letter-spacing: -.035em; }
-.rq-label { color: #a6b0bf; }
+.rq-card { grid-template-columns: 32px 225px minmax(0, 1fr); gap: 20px; align-items: baseline; padding-block: 18px; }
+.rq-card h3 { font-family: var(--display); font-size: 20px; font-weight: 500; letter-spacing: -.035em; }
+.rq-card p { grid-column: auto; max-width: none; font-size: 14px; line-height: 1.5; }
+.rq-label { color: #a6b0bf; padding-top: 0; font-size: 12px; }
 .research-methods { margin-top: 34px; border-top: 1px solid #30353c; }
 .research-detail { border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
 .research-detail > summary { display: flex; justify-content: space-between; align-items: center; gap: 18px; min-height: 62px; padding-block: 14px; list-style: none; cursor: pointer; font-size: 15px; font-weight: 500; }
@@ -211,6 +213,8 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .hero-art { max-width: 380px; }
   #research > .container > .section-heading { grid-template-columns: 30px minmax(0, 1fr); gap: 8px 15px; }
   #research .section-heading > p { grid-column: 2; justify-self: start; }
+  .rq-card { grid-template-columns: 32px minmax(0, 1fr); gap: 6px 12px; }
+  .rq-card p { grid-column: 2; }
 }
 @media (max-width: 640px) {
   .section { padding-block: 42px; }
@@ -234,7 +238,7 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .step-heading h4 { font-size: 16px; }
   .rq-card { grid-template-columns: 32px minmax(0, 1fr); gap: 8px 12px; }
   .rq-card h3 { font-size: 19px; }
-  .rq-label { padding-top: 4px; font-size: 11px; }
+  .rq-label { font-size: 11px; }
   .rq-card p { grid-column: 1 / -1; }
   .hf-tabs button { font-size: 11px; letter-spacing: .01em; }
 }
