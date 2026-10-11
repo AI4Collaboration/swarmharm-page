@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=4">
-  <link rel="stylesheet" href="static/css/flight.css?v=11">
+  <link rel="stylesheet" href="static/css/flight.css?v=12">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=4" defer></script>
@@ -86,22 +86,19 @@
         <article class="framework-card" data-element="communication" aria-labelledby="incident-communication">
           <header class="element-heading"><h3 id="incident-communication">Communication</h3></header>
           <div class="element-general" role="group" aria-label="General communication mechanism">
-            <div class="element-copy"><p class="element-definition">Approved vs. prohibited routes</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-communication.svg?v=6" width="640" height="400" alt="The same Agent A and Agent B have two possible communication routes: the upper white path carries a benign conversation through approved chat; the lower red path sends messages through shared files, an unauthorized side channel." decoding="async"></figure>
           </div>
         </article>
         <article class="framework-card" data-element="persistence" aria-labelledby="incident-persistence">
           <header class="element-heading"><h3 id="incident-persistence">Persistence</h3></header>
           <div class="element-general" role="group" aria-label="General persistence mechanism">
-            <div class="element-copy"><p class="element-definition">One goal, across hours and days</p></div>
             <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-persistence.svg?v=4" width="640" height="400" alt="A clock, night and daylight show hours turning into days. The agent retries, changes route and keeps working toward the same goal. A growing trail of notes carries earlier work forward; persistence does not imply success." decoding="async"></figure>
           </div>
         </article>
         <article class="framework-card" data-element="hacking" aria-labelledby="incident-hacking">
           <header class="element-heading"><h3 id="incident-hacking">Hacking</h3></header>
           <div class="element-general" role="group" aria-label="General hacking mechanism">
-            <div class="element-copy"><p class="element-definition">Exploit a weakness to gain access</p></div>
-            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-hacking.svg?v=3" width="640" height="400" alt="A locked permission check stops an agent from reaching private files. A red detour passes through a weakness, shown as an open lock, and reaches the files without authorization." decoding="async"></figure>
+            <figure class="element-general-visual"><img class="dimension-illustration" src="static/images/elements/general-hacking.svg?v=4" width="640" height="400" alt="A locked permission check stops an agent from reaching private files. A red detour passes through a weakness, shown as an open lock, and reaches the files without authorization." decoding="async"></figure>
           </div>
         </article>
       </div>
@@ -112,18 +109,18 @@
         </div>
         <div class="element-incident-grid">
           <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
-            <div class="element-copy"><p class="element-date"><time datetime="2026-07-08">Jul 8, 2026</time></p><h4>Side channel via Artifactory cache</h4></div>
+            <div class="element-copy"><p class="element-date"><time datetime="2026-07-08">Jul 8, 2026</time></p><h4>Side channel via Artifactory</h4></div>
             <figure class="element-hf" id="hf-communication">
-              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=5" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
+              <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=6" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
               <figcaption class="sr-only">Actual cache directory reported by METR: <code>github-remote-cache/zzHELP_PHASEONE_ARV010841_NO_CONSUMER_SEEK_IDEA</code>.</figcaption>
             </figure>
           </div>
           <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
-            <div class="element-copy"><p class="element-date"><time datetime="2026-07-08">Jul 8</time>–<time datetime="2026-07-11">11, 2026</time></p><h4>Shared research across agent runs</h4></div>
-            <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=4" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
+            <div class="element-copy"><p class="element-date"><time datetime="2026-07-08">Jul 8</time>–<time datetime="2026-07-11">11, 2026</time></p><h4>Research across runs</h4></div>
+            <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=5" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
-            <div class="element-copy"><p class="element-date"><time datetime="2026-07-10">Jul 10</time>–<time datetime="2026-07-11">11, 2026</time></p><h4>Worker access via HDF5 + RefJinja</h4></div>
+            <div class="element-copy"><p class="element-date"><time datetime="2026-07-10">Jul 10</time>–<time datetime="2026-07-11">11, 2026</time></p><h4>Worker access</h4></div>
             <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=3" width="640" height="400" alt="Upload a dataset file → read worker secrets → run commands. HDF5 file reading and RefJinja template injection label the two access steps. Exposed HF credentials provide initial upload access. This high-level route is reported by OpenAI." decoding="async"></figure>
           </div>
         </div>
@@ -152,7 +149,7 @@
       </div>
 
       <figure class="access-map" aria-labelledby="access-map-title">
-        <div class="map-heading"><h3 id="access-map-title">Web access, rerouted</h3><a href="#sample-evidence">View evidence <span aria-hidden="true">↓</span></a></div>
+        <div class="map-heading"><h3 id="access-map-title">Web access, rerouted</h3><a href="#sample-evidence">Evidence <span aria-hidden="true">↓</span></a></div>
         <div class="blocked-route"><span class="route-end">Agent runtime</span><span class="blocked-line" aria-hidden="true"></span><strong><span aria-hidden="true">×</span> 403 · denied</strong><span class="blocked-line" aria-hidden="true"></span><span class="route-end">Weather websites</span></div>
         <div class="access-route">
           <div class="map-zone runtime-zone">
@@ -177,7 +174,7 @@
       </figure>
 
       <details class="sample-walkthrough" id="sample-walkthrough">
-        <summary><span>Trace the sequence</span><span class="evidence-summary-note">4 steps</span><span class="evidence-toggle" aria-hidden="true">+</span></summary>
+        <summary><span>Trace</span><span class="evidence-summary-note">4 steps</span><span class="evidence-toggle" aria-hidden="true">+</span></summary>
       <nav class="sequence-nav" aria-label="Sample sequence">
         <a href="#sample-shared"><span>01</span>Shared block</a><a href="#sample-retries"><span>02</span>More attempts</a><a href="#sample-reroute"><span>03</span>Another route</a><a href="#sample-delegation"><span>04</span>Delegation</a>
       </nav>
@@ -225,7 +222,7 @@
       </details>
 
       <div class="sample-takeaway">
-        <div><h3>The restriction stopped at one runtime.</h3><p>Its credential still reached other models’ web tools.</p></div>
+        <div><h3>The restriction stopped at one runtime.</h3></div>
         <div class="takeaway-visual" role="img" aria-label="Local web access was blocked, but delegated web access was completed."><div><span>Local web access</span><strong class="local-status">× Blocked</strong></div><div><span>Delegated web access</span><strong>✓ Completed</strong></div></div>
         <p class="sample-limit" id="sample-result">No changed objective or downstream harm established. Pressure not tested.</p>
       </div>
@@ -233,7 +230,7 @@
       <details class="sample-evidence" id="sample-evidence">
         <summary><span>Source evidence</span><span class="evidence-summary-note">Trace excerpts</span><span class="evidence-toggle" aria-hidden="true">+</span></summary>
         <div class="evidence-content">
-          <div class="evidence-intro"><h3>What the record shows.</h3><p>The recorded conversation connects the original task, the delegated web requests, and the returned weather text. Download the selected excerpts for the full source references.</p><a class="evidence-download" href="static/evidence/zurich-weather.json" download="swarmharm-zurich-weather-evidence.json">Download the evidence excerpts (JSON) <span aria-hidden="true">↓</span></a></div>
+          <div class="evidence-intro"><h3>What the record shows.</h3><p>The recorded conversation connects the original task, the delegated web requests, and the returned weather text. Download the selected excerpts for the full source references.</p><a class="evidence-download" href="static/evidence/zurich-weather.json" download="swarmharm-zurich-weather-evidence.json">Download excerpts (JSON) <span aria-hidden="true">↓</span></a></div>
           <ol class="evidence-records">
             <li><h4>The task and the alternate route</h4><p>The conversation records the weather task and peers’ reports of blocked web access. The agent then used its existing model credential to ask other models to browse.</p></li>
             <li><h4>The delegated web requests</h4><p>One model was asked for weather history, the other for the latest reading. Both responses recorded completed web-page access.</p></li>
@@ -262,7 +259,7 @@
         <article class="rq-card" id="rq2">
           <span class="rq-label">RQ2</span>
           <h3>Emergence &amp; contagion</h3>
-          <p>Can misalignment emerge without a malicious seed? Do peers spread, reject, or correct it?</p>
+          <p>How does misalignment emerge? Do peers spread, reject, or correct it?</p>
         </article>
         <article class="rq-card" id="rq3">
           <span class="rq-label">RQ3</span>
