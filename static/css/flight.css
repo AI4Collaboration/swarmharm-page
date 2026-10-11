@@ -52,6 +52,7 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 .element-copy { min-height: 23px; margin-bottom: 12px; }
 .element-general .element-copy { min-height: 0; margin-bottom: 16px; }
 .element-copy h4 { font-family: var(--display); font-size: 16px; line-height: 1.4; letter-spacing: -.025em; font-weight: 500; }
+.element-date { margin: 0 0 7px; color: #aebdcd; font-size: 11px; line-height: 1.4; font-variant-numeric: tabular-nums; }
 .element-definition { margin-top: 0; font-size: 13px; white-space: nowrap; }
 .element-general-visual, .element-hf { position: relative; padding: 0; aspect-ratio: 8 / 5; background: #030406; border: 0; }
 .element-general-visual::before, .element-hf::before { content: ""; position: absolute; top: 0; left: 0; width: 16px; height: 16px; border: solid #525b68; border-width: 1px 0 0 1px; }

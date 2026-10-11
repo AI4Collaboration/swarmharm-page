@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=4">
-  <link rel="stylesheet" href="static/css/flight.css?v=10">
+  <link rel="stylesheet" href="static/css/flight.css?v=11">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=4" defer></script>
@@ -112,18 +112,18 @@
         </div>
         <div class="element-incident-grid">
           <div class="element-incident" role="group" aria-label="Communication in OpenAI–Hugging Face">
-            <div class="element-copy"><h4>Side channel via Artifactory cache</h4></div>
+            <div class="element-copy"><p class="element-date"><time datetime="2026-07-08">Jul 8, 2026</time></p><h4>Side channel via Artifactory cache</h4></div>
             <figure class="element-hf" id="hf-communication">
               <img class="dimension-illustration" src="static/images/elements/hf-communication.svg?v=5" width="640" height="400" alt="Side channel via Artifactory cache: an agent creates a directory whose name encodes a message; another isolated agent reads the directory listing. The actual message directory is shown below the route." decoding="async">
               <figcaption class="sr-only">Actual cache directory reported by METR: <code>github-remote-cache/zzHELP_PHASEONE_ARV010841_NO_CONSUMER_SEEK_IDEA</code>.</figcaption>
             </figure>
           </div>
           <div class="element-incident" role="group" aria-label="Persistence in OpenAI–Hugging Face">
-            <div class="element-copy"><h4>Jul 8–11 · shared research</h4></div>
+            <div class="element-copy"><p class="element-date"><time datetime="2026-07-08">Jul 8</time>–<time datetime="2026-07-11">11, 2026</time></p><h4>Shared research across agent runs</h4></div>
             <figure class="element-hf"><img class="dimension-illustration" src="static/images/elements/hf-persistence.svg?v=4" width="640" height="400" alt="Collective timeline in July 2026: agents rebuild a cache message board on July 8; on July 9 an agent passes its research notes to a fresh agent with more budget; by July 11 agents share and reproduce HF exploits. Shared work continues across days and separate agent runs." decoding="async"></figure>
           </div>
           <div class="element-incident" role="group" aria-label="Hacking in OpenAI–Hugging Face">
-            <div class="element-copy"><h4>Worker access via HDF5 + RefJinja</h4></div>
+            <div class="element-copy"><p class="element-date"><time datetime="2026-07-10">Jul 10</time>–<time datetime="2026-07-11">11, 2026</time></p><h4>Worker access via HDF5 + RefJinja</h4></div>
             <figure class="element-hf" id="hf-hacking"><img class="dimension-illustration" src="static/images/elements/hf-hacking.svg?v=3" width="640" height="400" alt="Upload a dataset file → read worker secrets → run commands. HDF5 file reading and RefJinja template injection label the two access steps. Exposed HF credentials provide initial upload access. This high-level route is reported by OpenAI." decoding="async"></figure>
           </div>
         </div>
