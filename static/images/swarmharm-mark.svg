@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 128 128">
+<title>SwarmHarm</title><desc>A white dot formation with one coral node moving beyond the group.</desc>
+<g fill="#eef1f5"><circle cx="22" cy="47" r="11"/><circle cx="55" cy="47" r="11"/><circle cx="22" cy="80" r="11"/><circle cx="55" cy="80" r="11"/><circle cx="88" cy="80" r="11"/><circle cx="22" cy="113" r="11"/><circle cx="55" cy="113" r="11"/></g>
+<circle cx="88" cy="113" r="11" fill="#97a3b3"/>
+<circle cx="112" cy="15" r="11" fill="#ff8c79"/>
+</svg>
