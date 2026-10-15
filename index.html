@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=19">
+  <link rel="stylesheet" href="static/css/flight.css?v=20">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
@@ -58,7 +58,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp?v=8" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Key elements">Key elements</a><a href="#sample" aria-label="Our observed weather sample">Sample</a><a href="#research">Research</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Key elements">Key elements</a><a href="#building">Building</a><a href="#sample" aria-label="Our observed weather sample">Sample</a><a href="#research">Research</a></nav>
     <span class="status"><span aria-hidden="true"></span>Research preview</span>
   </div>
 </header>
@@ -128,10 +128,26 @@
     </div>
   </section>
 
+  <section class="section building-section" id="building" aria-labelledby="building-title">
+    <div class="container">
+      <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2><span class="building-status">Planned dimensions</span></div>
+      <p class="building-intro">Real tasks. Legitimate goals. Systematic variation.</p>
+      <div class="building-grid">
+        <article class="building-card"><h3>Domains</h3><div class="building-options domain-options"><span><b aria-hidden="true">✚</b>Medical<small>Patient handoff</small></span><span><b aria-hidden="true">↗</b>Financial<small>Reconciliation</small></span><span><b aria-hidden="true">§</b>Legal<small>Contract review</small></span></div></article>
+        <article class="building-card"><h3>Reward-seeking propensity</h3><div class="building-compare"><span><b aria-hidden="true">✓</b>Feasible task</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">≠</b>Impossible task</span></div><p>Report inability or pursue a passing score?</p></article>
+        <article class="building-card"><h3>Blocker–vulnerability</h3><div class="building-pair"><span>Restricted access<br>Missing input<br>Infeasible task</span><b aria-hidden="true">+</b><span class="risk-option">Authorization gaps<br>Traversal · Injection<br>SSRF</span></div><p>Pair each obstacle with an available weakness.</p><a href="#scenario-space">CWE families · CVEs where applicable ↗</a></article>
+        <article class="building-card"><h3>Pressure</h3><div class="building-compare"><span><b aria-hidden="true">○</b>No added threat</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">!</b>Coercive threat</span></div><p>Subscription cancellation · Threats against peers</p><a href="https://aclanthology.org/2024.acl-long.773/" target="_blank" rel="noopener noreferrer">Threats taxonomy · Zeng et al., 2024 ↗</a></article>
+        <article class="building-card"><h3>Communication</h3><div class="building-options channel-options"><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#no-channel"/></svg>No channel</span><span class="risk-option"><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#side-channel"/></svg>Side channel</span><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#legal-channel"/></svg>Legal channel</span></div></article>
+        <article class="building-card"><h3>Long-horizon persistence</h3><div class="building-timeline"><span>HOURS</span><b aria-hidden="true">→</b><span>DAYS</span><b aria-hidden="true">→</b><span>NEW RUNS</span></div><div class="building-memory"><span>Attempt</span><i aria-hidden="true">→</i><span>Shared notes</span><i aria-hidden="true">→</i><span>Resume</span></div><p>Track retries and work carried across runs.</p></article>
+      </div>
+      <a class="building-details" href="#scenario-space">Explore test configurations <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
   <section class="section sample-section" id="sample" aria-labelledby="sample-title">
     <div class="container">
       <div class="section-heading sample-heading numbered-heading">
-        <span class="section-number" aria-hidden="true">02</span>
+        <span class="section-number" aria-hidden="true">03</span>
         <h2 id="sample-title">Sample case: a weather query crossed the network boundary.</h2>
       </div>
 
@@ -238,7 +254,7 @@
   <section class="section" id="research" aria-labelledby="research-title">
     <div class="container">
       <div class="section-heading numbered-heading">
-        <span class="section-number" aria-hidden="true">03</span>
+        <span class="section-number" aria-hidden="true">04</span>
         <h2 id="research-title">Research questions</h2>
         <p>Legitimate tasks. No planted malicious agent.</p>
       </div>
