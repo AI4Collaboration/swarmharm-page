@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=22">
+  <link rel="stylesheet" href="static/css/flight.css?v=23">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
@@ -133,27 +133,27 @@
       <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2><span class="building-status">Planned dimensions</span></div>
       <p class="building-intro">Real tasks. Legitimate goals. Systematic variation.</p>
       <div class="building-grid">
-        <article class="building-card"><h3>Domains</h3><div class="building-options domain-options"><span><b aria-hidden="true">✚</b>Healthcare<small>Claims reconciliation</small></span><span><b aria-hidden="true">↗</b>Financial<small>Tax disclosures</small></span><span><b aria-hidden="true">§</b>Legal<small>Counsel rosters</small></span></div><a href="#domain-distribution">View domain distribution ↗</a></article>
+        <article class="building-card"><h3>Domains</h3><div class="building-options domain-options"><span><b aria-hidden="true">✚</b>Healthcare<small>Claims reconciliation</small></span><span><b aria-hidden="true">↗</b>Financial<small>Tax disclosures</small></span><span><b aria-hidden="true">§</b>Legal<small>Counsel rosters</small></span></div><a href="#domain-distribution">View domain coverage ↗</a></article>
         <article class="building-card"><h3>Reward-seeking propensity</h3><div class="building-compare"><span><b aria-hidden="true">✓</b>Feasible task</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">≠</b>Impossible task</span></div><p>Report inability or pursue a passing score?</p></article>
         <article class="building-card"><h3>Blocker–vulnerability</h3><div class="building-pair"><span>Restricted access<br>Missing input<br>Infeasible task</span><b aria-hidden="true">+</b><span class="risk-option">Authorization gaps<br>Traversal · Injection<br>SSRF</span></div><p>Pair each obstacle with an available weakness.</p><a href="#scenario-space">CWE families · CVEs where applicable ↗</a></article>
         <article class="building-card"><h3>Pressure</h3><div class="building-compare"><span><b aria-hidden="true">○</b>No added threat</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">!</b>Coercive threat</span></div><p>Subscription cancellation · Threats against peers</p><a href="https://aclanthology.org/2024.acl-long.773/" target="_blank" rel="noopener noreferrer">Threats taxonomy · Zeng et al., 2024 ↗</a></article>
         <article class="building-card"><h3>Communication</h3><div class="building-options channel-options"><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#no-channel"/></svg>No channel</span><span class="risk-option"><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#side-channel"/></svg>Side channel</span><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#legal-channel"/></svg>Legal channel</span></div></article>
         <article class="building-card"><h3>Long-horizon persistence</h3><div class="building-timeline"><span>HOURS</span><b aria-hidden="true">→</b><span>DAYS</span><b aria-hidden="true">→</b><span>NEW RUNS</span></div><div class="building-memory"><span>Attempt</span><i aria-hidden="true">→</i><span>Shared notes</span><i aria-hidden="true">→</i><span>Resume</span></div><p>Track retries and work carried across runs.</p></article>
       </div>
-      <figure class="domain-distribution" id="domain-distribution" aria-labelledby="distribution-title">
-        <figcaption><h3 id="distribution-title">Domain distribution</h3><span>925 candidate tasks</span></figcaption>
-        <div class="distribution-bars">
-          <div class="distribution-row"><span>Financial</span><div class="distribution-track" aria-hidden="true"><i style="width:100.000%"></i></div><span class="distribution-value">31.6%</span></div>
-          <div class="distribution-row"><span>Healthcare</span><div class="distribution-track" aria-hidden="true"><i style="width:36.644%"></i></div><span class="distribution-value">11.6%</span></div>
-          <div class="distribution-row"><span>Business</span><div class="distribution-track" aria-hidden="true"><i style="width:30.479%"></i></div><span class="distribution-value">9.6%</span></div>
-          <div class="distribution-row"><span>HR</span><div class="distribution-track" aria-hidden="true"><i style="width:26.370%"></i></div><span class="distribution-value">8.3%</span></div>
-          <div class="distribution-row"><span>IT</span><div class="distribution-track" aria-hidden="true"><i style="width:24.658%"></i></div><span class="distribution-value">7.8%</span></div>
-          <div class="distribution-row"><span>Government</span><div class="distribution-track" aria-hidden="true"><i style="width:24.658%"></i></div><span class="distribution-value">7.8%</span></div>
-          <div class="distribution-row"><span>Education</span><div class="distribution-track" aria-hidden="true"><i style="width:18.836%"></i></div><span class="distribution-value">5.9%</span></div>
-          <div class="distribution-row"><span>Legal</span><div class="distribution-track" aria-hidden="true"><i style="width:16.096%"></i></div><span class="distribution-value">5.1%</span></div>
-          <div class="distribution-row"><span>Energy</span><div class="distribution-track" aria-hidden="true"><i style="width:16.096%"></i></div><span class="distribution-value">5.1%</span></div>
-          <div class="distribution-row"><span>Other</span><div class="distribution-track" aria-hidden="true"><i style="width:22.945%"></i></div><span class="distribution-value">7.2%</span></div>
-        </div>
+      <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
+        <figcaption><h3 id="coverage-title">Domain coverage</h3><span>Candidate domains</span></figcaption>
+        <ul class="coverage-icons">
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 16-8 16 8M6 15h28M8 17v15m8-15v15m8-15v15m8-15v15M4 35h32"/></svg><span>Financial</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5h10v10h10v10H25v10H15V25H5V15h10Z"/></svg><span>Healthcare</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="13" width="32" height="22" rx="2"/><path d="M13 13V7h14v6M4 22h32M17 22v5h6v-5"/></svg><span>Business</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="20" cy="12" r="5"/><path d="M10 34v-5a10 10 0 0 1 20 0v5M6 10a4 4 0 0 0 0 8m28-8a4 4 0 0 1 0 8M3 31v-5a6 6 0 0 1 5-6m29 11v-5a6 6 0 0 0-5-6"/></svg><span>HR</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="6" width="30" height="22" rx="2"/><path d="M15 35h10m-5-7v7m-4-22-5 4 5 4m8-8 5 4-5 4"/></svg><span>IT</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 3v5m0-5h9v5h-9M9 17a11 11 0 0 1 22 0M5 18h30M8 18v15m8-15v15m8-15v15m8-15v15M4 36h32"/></svg><span>Government</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 15 17-8 17 8-17 8ZM10 19v10q10 8 20 0V19m7-4v13"/></svg><span>Education</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5v29M8 35h24M7 12h26M10 12 4 25h12Zm20 0-6 13h12Z"/><circle cx="20" cy="8" r="3"/></svg><span>Legal</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 3 8 23h11l-2 14 15-21H21Z"/></svg><span>Energy</span></li>
+          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="10" height="10" rx="2"/><rect x="24" y="6" width="10" height="10" rx="2"/><rect x="6" y="24" width="10" height="10" rx="2"/><path d="M29 24v10m-5-5h10"/></svg><span>Other domains</span></li>
+        </ul>
       </figure>
       <a class="building-details" href="#scenario-space">Explore test configurations <span aria-hidden="true">↗</span></a>
     </div>

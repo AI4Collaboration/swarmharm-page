@@ -271,14 +271,13 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .nav-inner nav { gap: 16px; }
 }
 
-/* Candidate task distribution; source analysis lives in private notes. */
-.domain-distribution { margin: 22px 0 8px; padding: 22px 0; border-top: 1px solid #30353c; border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
-.domain-distribution figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
-.domain-distribution h3 { font-size: 17px; font-weight: 500; margin: 0; }
-.domain-distribution figcaption > span { color: #929ca9; font-size: 11px; }
-.distribution-bars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: column; grid-template-rows: repeat(5, auto); gap: 14px 48px; }
-.distribution-row { display: grid; grid-template-columns: 80px minmax(0, 1fr) 42px; gap: 14px; align-items: center; font-size: 12px; }
-.distribution-track { height: 6px; background: #1b232d; }
-.distribution-track i { display: block; height: 100%; background: #93adc9; }
-.distribution-value { text-align: right; font-variant-numeric: tabular-nums; color: #a7adb5; font-size: 11px; }
-@media (max-width: 640px) { .distribution-bars { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; gap: 14px; } }
+/* Equal-weight domain icons communicate coverage, not sample proportions. */
+.domain-coverage { margin: 22px 0 8px; padding: 22px 0; border-top: 1px solid #30353c; border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
+.domain-coverage figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.domain-coverage h3 { font-size: 17px; font-weight: 500; margin: 0; }
+.domain-coverage figcaption > span { color: #929ca9; font-size: 11px; }
+.coverage-icons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 26px 20px; padding: 4px 0 10px; margin: 0; list-style: none; }
+.coverage-icons li { display: flex; flex-direction: column; align-items: center; gap: 12px; color: #c6d4e6; font-size: 12px; text-align: center; }
+.coverage-icons svg { width: 36px; height: 36px; color: #93adc9; }
+@media (max-width: 640px) { .coverage-icons { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 12px; } }
+@media (max-width: 360px) { .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
