@@ -24,7 +24,8 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 .hero-description { max-width: 40ch; font-size: 15px; line-height: 1.7; }
 .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 11px; }
 .hero-art { position: relative; }
-.hero-art img { position: relative; max-width: 300px; }
+.hero-art::before { content: ""; position: absolute; inset: -12% 0; background: radial-gradient(ellipse, #33201d55, transparent 65%); pointer-events: none; }
+.hero-art img { position: relative; max-width: 480px; }
 .button { border: 1px solid #9a9fa6; padding: 14px 22px; text-transform: uppercase; letter-spacing: .07em; font-size: 11px; transition: background .2s, color .2s; }
 .button:hover { background: #fff; color: #030406; }
 .section { padding-block: 64px; }
