@@ -57,16 +57,6 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 .element-general-visual::before, .element-hf::before { content: ""; position: absolute; top: 0; left: 0; width: 16px; height: 16px; border: solid #525b68; border-width: 1px 0 0 1px; }
 .element-general-visual::after, .element-hf::after { content: ""; position: absolute; bottom: 0; right: 0; width: 16px; height: 16px; border: solid #525b68; border-width: 0 1px 1px 0; }
 .dimension-illustration { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: contain; }
-/* Outcomes sit downstream of the three core elements. */
-.framework-outcome { padding-top: 24px; }
-.outcome-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
-.outcome-heading h3 { display: flex; align-items: baseline; gap: 14px; font-family: var(--display); font-size: 20px; font-weight: 500; color: var(--risk); }
-.outcome-heading h3 > span { color: #a7adb5; font-family: Inter, Arial, sans-serif; font-size: 11px; font-weight: 400; letter-spacing: 0; }
-.outcome-heading > a { flex: none; color: #b4bdc9; font-size: 11px; }
-.outcome-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
-.outcome-visual { min-width: 0; }
-.outcome-visual figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; color: #bcc5d0; font-size: 13px; }
-.outcome-visual img { width: 100%; height: auto; aspect-ratio: 16 / 5; object-fit: contain; }
 .outcome-tag { display: inline-flex; align-items: center; gap: 12px; padding-bottom: 3px; border-bottom: 1px solid #b46e60; color: var(--risk); font-size: 12px; font-weight: 500; }
 .outcome-tag > span { font-size: 13px; }
 
@@ -201,8 +191,6 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 @media (max-width: 1119px) {
   .framework-grid, .element-incident-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .framework-grid, .framework-incident { max-width: 480px; margin-inline: auto; }
-  .framework-outcome { max-width: 480px; margin-inline: auto; }
-  .outcome-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .framework-card { padding-block: 28px 36px; }
   .framework-card + .framework-card { border-top: 1px solid #30353c; }
   .element-incident + .element-incident { margin-top: 28px; padding-top: 28px; border-top: 1px solid #30353c; }
@@ -228,8 +216,6 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .element-incident-heading { flex-wrap: wrap; gap: 8px 16px; }
   .element-incident-heading h3 { padding: 8px 10px; font-size: 16px; }
   .element-general-visual, .element-hf { padding: 0; }
-  .outcome-heading { flex-wrap: wrap; gap: 10px 16px; }
-  .outcome-visual figcaption { font-size: 12px; }
   .task-brief { flex-wrap: nowrap; gap: 8px; }
   .task-brief > svg { width: 24px; height: 24px; }
   .task-question strong { font-size: 14px; }
