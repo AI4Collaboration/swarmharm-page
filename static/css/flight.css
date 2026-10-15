@@ -284,3 +284,23 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 
 .coverage-taxonomy { display: inline-block; margin-top: 14px; color: #929ca9; font-size: 11px; }
 .coverage-taxonomy:hover { color: #c6d4e6; text-decoration: underline; text-underline-offset: 4px; }
+
+/* Interaction surfaces are distinct from the dimensions varied in each task. */
+.agent-interactions { display: grid; grid-template-columns: 120px 56px minmax(0, 1fr); align-items: center; gap: 16px; margin: 0 0 30px; padding: 22px 24px; background: #080c11; border: 1px solid #303b48; }
+.interaction-agent, .interaction-target { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; min-width: 0; }
+.interaction-agent svg, .interaction-target svg { width: 36px; height: 36px; color: #93adc9; }
+.interaction-agent strong, .interaction-target strong { font-size: 13px; font-weight: 500; }
+.interaction-agent { color: #d7e3f1; }
+.interaction-arrow { font-size: 24px; color: #93adc9; text-align: center; }
+.interaction-targets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; border-left: 1px solid #445364; padding-left: 24px; }
+.interaction-target span { color: #a7adb5; font-size: 11px; }
+@media (max-width: 640px) {
+  .agent-interactions { grid-template-columns: 1fr; gap: 12px; padding: 18px 10px; }
+  .interaction-agent { flex-direction: row; justify-content: center; }
+  .interaction-arrow { transform: rotate(90deg); font-size: 20px; line-height: 1; }
+  .interaction-targets { border-left: 0; border-top: 1px solid #445364; padding: 18px 0 0; gap: 8px; }
+  .interaction-target strong { font-size: 12px; }
+  .interaction-target span { font-size: 10px; }
+}
+
+.judge-label { white-space: nowrap; }

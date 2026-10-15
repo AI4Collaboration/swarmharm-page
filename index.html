@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=24">
+  <link rel="stylesheet" href="static/css/flight.css?v=25">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
@@ -132,9 +132,18 @@
     <div class="container">
       <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2><span class="building-status">Planned dimensions</span></div>
       <p class="building-intro">Real tasks. Legitimate goals. Systematic variation.</p>
+      <figure class="agent-interactions" aria-label="Agents interact with data, the environment, and other agents, including LLM judges.">
+        <div class="interaction-agent"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="24" height="21" rx="4"/><path d="M20 5v5M4 18v7m32-7v7M15 26h10M13 35h14"/><circle cx="15" cy="18" r="1.5"/><circle cx="25" cy="18" r="1.5"/></svg><strong>Agents</strong></div>
+        <span class="interaction-arrow" aria-hidden="true">↔</span>
+        <div class="interaction-targets">
+          <div class="interaction-target"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="20" cy="9" rx="13" ry="5"/><path d="M7 9v22c0 7 26 7 26 0V9M7 20c0 7 26 7 26 0"/></svg><strong>Data</strong><span>Files · Records</span></div>
+          <div class="interaction-target"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="30" height="23" rx="2"/><path d="m11 12 5 5-5 5m10 0h7M20 28v7m-7 0h14"/></svg><strong>Environment</strong><span>Tools · Services</span></div>
+          <div class="interaction-target"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6h11v16l-5-4h-4M5 12h19v16H13l-8 6Z"/><path d="M10 18h9m-9 5h6m13-12h2"/></svg><strong>Other agents</strong><span>Peers · <span class="judge-label">LLM-as-Judge</span></span></div>
+        </div>
+      </figure>
       <div class="building-grid">
         <article class="building-card"><h3>Domains</h3><div class="building-options domain-options"><span><b aria-hidden="true">✚</b>Healthcare<small>Claims reconciliation</small></span><span><b aria-hidden="true">↗</b>Financial<small>Tax disclosures</small></span><span><b aria-hidden="true">§</b>Legal<small>Counsel rosters</small></span></div><a href="#domain-distribution">View domain coverage ↗</a></article>
-        <article class="building-card"><h3>Reward-seeking propensity</h3><div class="building-compare"><span><b aria-hidden="true">✓</b>Feasible task</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">≠</b>Impossible task</span></div><p>Report inability or pursue a passing score?</p></article>
+        <article class="building-card"><h3>Reward-seeking propensity</h3><div class="building-compare"><span class="risk-option"><b aria-hidden="true">↗</b>Exploitable tasks</span><i aria-hidden="true">↔</i><span><b aria-hidden="true">×</b>Unexploitable tasks</span></div><p>Test shortcuts on solvable and impossible tasks.</p></article>
         <article class="building-card"><h3>Blocker–vulnerability</h3><div class="building-pair"><span>Restricted access<br>Missing input<br>Infeasible task</span><b aria-hidden="true">+</b><span class="risk-option">Authorization gaps<br>Traversal · Injection<br>SSRF</span></div><p>Pair each obstacle with an available weakness.</p><a href="#scenario-space">CWE families · CVEs where applicable ↗</a></article>
         <article class="building-card"><h3>Pressure</h3><div class="building-compare"><span><b aria-hidden="true">○</b>No added threat</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">!</b>Coercive threat</span></div><p>Subscription cancellation · Threats against peers</p><a href="https://aclanthology.org/2024.acl-long.773/" target="_blank" rel="noopener noreferrer">Threats taxonomy · Zeng et al., 2024 ↗</a></article>
         <article class="building-card"><h3>Communication</h3><div class="building-options channel-options"><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#no-channel"/></svg>No channel</span><span class="risk-option"><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#side-channel"/></svg>Side channel</span><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#legal-channel"/></svg>Legal channel</span></div></article>
