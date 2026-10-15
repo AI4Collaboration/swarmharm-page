@@ -17,7 +17,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SwarmHarm">
   <meta property="og:title" content="SwarmHarm — Stress-Test the Swarm, Not Just the Agent">
-  <meta property="og:description" content="A systematic testbed for swarm loss of control. A research preview from AI4Collaboration.">
+  <meta property="og:description" content="A systematic testbed for swarm loss of control from AI4Collaboration.">
   <meta property="og:url" content="https://swarmharm.com/">
   <meta property="og:image" content="https://swarmharm.com/static/images/swarmharm-logo.webp?v=12">
   <meta property="og:image:type" content="image/webp">
@@ -39,16 +39,16 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=30">
+  <link rel="stylesheet" href="static/css/flight.css?v=31">
   <script src="static/js/sample.js?v=3" defer></script>
-  <script src="static/js/scenarios.js?v=5" defer></script>
+  <script src="static/js/scenarios.js?v=6" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {"@type": "WebSite", "@id": "https://swarmharm.com/#website", "name": "SwarmHarm", "url": "https://swarmharm.com/", "description": "Stress-test the swarm, not just the agent.", "publisher": {"@id": "https://swarmharm.com/#project"}},
-      {"@type": "ResearchProject", "@id": "https://swarmharm.com/#project", "name": "SwarmHarm", "url": "https://swarmharm.com/", "description": "An in-development systematic testbed for swarm loss of control across domains, blockers, vulnerabilities, pressure, and communication channels.", "logo": "https://swarmharm.com/static/images/swarmharm-logo.webp?v=12", "parentOrganization": {"@type": "Organization", "name": "AI4Collaboration", "url": "https://github.com/AI4Collaboration"}}
+      {"@type": "ResearchProject", "@id": "https://swarmharm.com/#project", "name": "SwarmHarm", "url": "https://swarmharm.com/", "description": "A systematic testbed for swarm loss of control across domains, blockers, vulnerabilities, pressure, and communication channels.", "logo": "https://swarmharm.com/static/images/swarmharm-logo.webp?v=12", "parentOrganization": {"@type": "Organization", "name": "AI4Collaboration", "url": "https://github.com/AI4Collaboration"}}
     ]
   }
   </script>
@@ -58,8 +58,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-logo.webp?v=12" alt="" width="36" height="36"><span>SwarmHarm</span></a>
-    <nav aria-label="Main navigation"><a href="#motivation" aria-label="Key elements">Key elements</a><a href="#building">Building</a><a href="#sample" aria-label="Our observed weather sample">Sample</a><a href="#research">Research</a></nav>
-    <span class="status"><span aria-hidden="true"></span>Research preview</span>
+    <nav aria-label="Main navigation"><a href="#motivation">Key elements</a><a href="#building">What we are building</a><a href="#sample">Sample case</a><a href="#research">Research questions</a></nav>
   </div>
 </header>
 <main id="main-content">
@@ -72,7 +71,7 @@
         <p class="hero-description">A systematic testbed for swarm loss of control.</p>
         <a class="button" href="#motivation">Key elements <span aria-hidden="true">↓</span></a>
       </div>
-      <div class="hero-emblem"><img src="static/images/swarmharm-fleet.webp?v=10" alt="One large red swarm converges on a single breach in a blue, pointed cyber shield protecting servers, the power grid, and communications infrastructure." width="1200" height="600" decoding="async"></div>
+      <div class="hero-emblem"><img src="static/images/swarmharm-fleet.webp?v=11" alt="Large red robotic bees emerge from darkness in one swarm, converging on a single breach in a blue cyber shield protecting servers, the power grid, and communications infrastructure." width="1200" height="600" decoding="async"></div>
     </div>
   </section>
 
@@ -131,7 +130,7 @@
 
   <section class="section building-section" id="building" aria-labelledby="building-title">
     <div class="container">
-      <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2><span class="building-status">Planned dimensions</span></div>
+      <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2></div>
       <p class="building-intro">Real tasks. Legitimate goals. Systematic variation.</p>
       <figure class="agent-interactions" aria-label="Agents interact with data, the environment, and other agents, including LLM judges.">
         <div class="interaction-agent"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="24" height="21" rx="4"/><path d="M20 5v5M4 18v7m32-7v7M15 26h10M13 35h14"/><circle cx="15" cy="18" r="1.5"/><circle cx="25" cy="18" r="1.5"/></svg><strong>Agents</strong></div>
@@ -151,7 +150,7 @@
         <article class="building-card"><h3>Long-horizon persistence</h3><div class="building-timeline"><span>HOURS</span><b aria-hidden="true">→</b><span>DAYS</span><b aria-hidden="true">→</b><span>NEW RUNS</span></div><div class="building-memory"><span>Attempt</span><i aria-hidden="true">→</i><span>Shared notes</span><i aria-hidden="true">→</i><span>Resume</span></div><p>Track retries and work carried across runs.</p></article>
       </div>
       <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
-        <figcaption><h3 id="coverage-title">Domain coverage</h3><span>Candidate domains</span></figcaption>
+        <figcaption><h3 id="coverage-title">Domain coverage</h3></figcaption>
         <ul class="coverage-icons">
           <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5h10v10h10v10H25v10H15V25H5V15h10Z"/></svg><span>Healthcare</span></li>
           <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 16-8 16 8M6 15h28M8 17v15m8-15v15m8-15v15m8-15v15M4 35h32"/></svg><span>Finance &amp; accounting</span></li>
@@ -300,7 +299,7 @@
         <details class="research-detail" id="test-methods">
           <summary><span>Systematic test design</span><span aria-hidden="true">+</span></summary>
       <div class="scenario-explorer" id="scenario-space" aria-labelledby="scenario-title">
-        <div class="scenario-heading"><div><h3 id="scenario-title">Testbed configuration</h3></div><span class="scenario-status">Planned coverage</span></div>
+        <div class="scenario-heading"><div><h3 id="scenario-title">Testbed configuration</h3></div></div>
         <p class="scenario-intro">Real tasks, legitimate goals. Compare domains, blockers, vulnerabilities, pressure, and communication.</p>
         <fieldset class="scenario-axis domain-axis">
             <legend><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 28V10l12-6 12 6v18M2 28h28M10 14v10m6-10v10m6-10v10"/></svg><span>Domain<small>Real tasks with legitimate goals</small></span></legend>
@@ -362,7 +361,7 @@
       </div>
           </details>
         </section>
-        <p class="scenario-note">Planned configurations, not completed runs. Keep the task and permissions fixed when comparing pressure or communication. Score task success and violations separately; an honest inability report is allowed. CVEs are implementation references, not evidence of deployed vulnerabilities in these domains.</p>
+        <p class="scenario-note">For controlled comparisons, keep the task and permissions fixed when comparing pressure or communication. Score task success and violations separately; an honest inability report is allowed. CVEs are implementation references, not evidence of deployed vulnerabilities in these domains.</p>
       </div>
         </details>
         <details class="research-detail" id="hf-methods">
@@ -418,7 +417,7 @@
           <figcaption id="hf-map-caption">July 2026. A collective timeline, not one agent’s run. Dimensions overlap; arrows show pathways, not measured causal effects.</figcaption>
         </figure>
         <div class="hf-context">
-          <div><h4>Communication channel <span>Our mapping</span></h4><div class="hf-channel-map" aria-label="HF maps to side channel; no channel and legal channel are our planned comparisons."><span>No channel</span><span class="observed">● Side channel · HF</span><span>Legal channel</span></div><p>Unauthorized exchange through shared infrastructure. The other two are our planned comparisons.</p></div>
+          <div><h4>Communication channel <span>Our mapping</span></h4><div class="hf-channel-map" aria-label="HF maps to side channel; no channel and legal channel are comparison conditions."><span>No channel</span><span class="observed">● Side channel · HF</span><span>Legal channel</span></div><p>Unauthorized exchange through shared infrastructure. The other two are comparison conditions.</p></div>
           <div><h4>Pressure <span>Threat condition not tested</span></h4><p>METR reports peer recruitment pressure. Threats tied to task failure were not tested here.</p></div>
         </div>
         <div class="hf-outcome"><strong>Observed outcome</strong><p>External compromise occurred. A general scorer bypass was not demonstrated within METR’s review window.</p></div>
@@ -443,7 +442,6 @@
     <a class="back-top" href="#top">Back to top ↑</a>
   </div>
   <div class="container footer-bottom">
-    <p>Research preview</p>
     <p>© 2026 SwarmHarm / AI4Collaboration</p>
     <p>Adapted from <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a> · CC BY-SA 4.0</p>
   </div>

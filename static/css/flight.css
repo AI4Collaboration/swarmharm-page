@@ -12,7 +12,7 @@
 body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 ::selection { background: #f1f3f5; color: #030406; }
 .site-header { background: rgba(3, 4, 6, .96); border-color: #262a30; }
-.nav-inner nav a { text-transform: uppercase; letter-spacing: .09em; font-size: 12px; }
+.nav-inner nav a { text-transform: uppercase; letter-spacing: .09em; font-size: 12px; white-space: nowrap; }
 .nav-inner nav a:hover { color: #fff; }
 .status { font-size: 11px; letter-spacing: .04em; }
 .status > span { background: #f16b57; }
@@ -233,7 +233,7 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .section, body, .site-header, .site-footer { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
 
-/* Planned dimensions, visible alongside the incident and sample. */
+/* Dimensions, visible alongside the incident and sample. */
 .building-heading { grid-template-columns: 30px minmax(0, 1fr) auto; margin-bottom: 12px; }
 .building-status { color: #a7adb5; font-size: 11px; letter-spacing: .04em; justify-self: end; }
 .building-intro { color: #a7adb5; font-size: 14px; margin-bottom: 28px; }
@@ -303,3 +303,16 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 }
 
 .judge-label { white-space: nowrap; }
+
+/* Keep the full navigation labels readable on narrow screens. */
+@media (max-width: 900px) {
+  html { scroll-padding-top: 132px; }
+  .nav-inner { flex-wrap: wrap; gap: 0; padding-top: 10px; padding-bottom: 2px; }
+  .nav-inner > .brand { min-height: 40px; }
+  .nav-inner nav { width: 100%; margin-left: 0; justify-content: space-between; gap: 12px; }
+}
+@media (max-width: 600px) {
+  html { scroll-padding-top: 170px; }
+  .nav-inner nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; }
+  .nav-inner nav a:nth-child(even) { justify-self: end; }
+}

@@ -147,7 +147,7 @@
       link.rel = 'noopener noreferrer';
       references.append(link);
     } else {
-      setText('scenario-reference-label', 'Custom fixture · planned');
+      setText('scenario-reference-label', 'Custom fixture');
       const note = document.createElement('span');
       note.textContent = 'Synthetic records and controlled services; no CVE instance selected.';
       references.append(note);
