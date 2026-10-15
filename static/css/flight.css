@@ -270,3 +270,19 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .building-card h3 { font-size: 19px; }
   .nav-inner nav { gap: 16px; }
 }
+
+/* Data provenance stays available without expanding the main narrative. */
+.task-sources { margin-top: 18px; border-top: 1px solid #30353c; }
+.task-sources:target { scroll-margin-top: 100px; }
+.source-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 28px; padding-block: 24px; }
+.source-grid article { min-width: 0; }
+.source-grid h3 { font-size: 15px; font-weight: 500; margin-bottom: 16px; }
+.source-grid h3 > span { color: #929ca9; font-size: 11px; margin-left: 6px; white-space: nowrap; }
+.source-grid p, .source-caveat { color: #a7adb5; font-size: 12px; line-height: 1.6; }
+.source-grid a, .source-methods a, .source-caveat a { color: #d29a90; font-size: 11px; }
+.source-domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+.source-domains span { font-size: 10px; color: #a7adb5; }
+.source-domains strong { display: block; color: #c6d4e6; font-size: 24px; font-weight: 400; margin-bottom: 5px; }
+.source-methods { display: flex; flex-wrap: wrap; gap: 10px 24px; border-top: 1px solid #30353c; padding-top: 18px; font-size: 12px; }
+.source-caveat { margin-block: 12px 22px; }
+@media (max-width: 800px) { .source-grid { grid-template-columns: 1fr; gap: 24px; } }
