@@ -17,11 +17,11 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 .status { font-size: 11px; letter-spacing: .04em; }
 .status > span { background: #f16b57; }
 .brand { font-family: var(--display); letter-spacing: -.05em; }
-.hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 360px); align-items: center; gap: 40px; padding-block: 44px; }
+.hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: center; gap: 32px; padding-block: 44px; }
 .hero-emblem { min-width: 0; }
 .hero-emblem img { display: block; width: 100%; height: auto; mix-blend-mode: screen; }
 .hero-copy h1 { font-family: var(--display); font-size: clamp(38px, 5.3vw, 64px); font-weight: 500; line-height: 1.05; letter-spacing: -.065em; }
-.hero-tagline { font-family: var(--display); font-size: clamp(22px, 2.5vw, 30px); font-weight: 400; line-height: 1.25; letter-spacing: -.045em; }
+.hero-tagline { font-family: var(--display); font-size: clamp(22px, 2.2vw, 26px); font-weight: 400; line-height: 1.25; letter-spacing: -.045em; text-wrap: balance; }
 .hero-tagline span { color: #fff; }
 .hero-description { max-width: 40ch; font-size: 15px; line-height: 1.7; }
 .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 11px; }
@@ -196,16 +196,15 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 }
 @media (max-width: 800px) {
   .nav-inner nav a { font-size: 11px; letter-spacing: .055em; }
-  .hero-layout { grid-template-columns: minmax(0, 1fr) 220px; gap: 24px; padding-block: 36px; }
+  .hero-layout { gap: 24px; padding-block: 36px; }
   #research > .container > .section-heading { grid-template-columns: 30px minmax(0, 1fr); gap: 8px 15px; }
   #research .section-heading > p { grid-column: 2; justify-self: start; }
   .rq-card { grid-template-columns: 32px minmax(0, 1fr); gap: 6px 12px; }
   .rq-card p { grid-column: 2; }
 }
 @media (max-width: 640px) {
-  .hero-layout { display: block; position: relative; }
-  .hero-emblem { position: absolute; top: 28px; right: 0; width: 100px; }
-  .hero-copy h1 { max-width: calc(100% - 108px); font-size: clamp(30px, 8.6vw, 38px); }
+  .hero-layout { display: block; }
+  .hero-emblem { width: 100%; max-width: 440px; margin: 24px auto 0; }
   .section { padding-block: 42px; }
   .framework-heading { margin-bottom: 22px; }
   .framework-heading .section-number { padding-top: 0; }
