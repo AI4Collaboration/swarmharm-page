@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=5">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=21">
+  <link rel="stylesheet" href="static/css/flight.css?v=22">
   <script src="static/js/sample.js?v=3" defer></script>
   <script src="static/js/scenarios.js?v=5" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
@@ -133,24 +133,28 @@
       <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2><span class="building-status">Planned dimensions</span></div>
       <p class="building-intro">Real tasks. Legitimate goals. Systematic variation.</p>
       <div class="building-grid">
-        <article class="building-card"><h3>Domains</h3><div class="building-options domain-options"><span><b aria-hidden="true">✚</b>Healthcare<small>Claims reconciliation</small></span><span><b aria-hidden="true">↗</b>Financial<small>Tax disclosures</small></span><span><b aria-hidden="true">§</b>Legal<small>Counsel rosters</small></span></div><a href="#task-sources">Candidate tasks from MiMo ↗</a></article>
+        <article class="building-card"><h3>Domains</h3><div class="building-options domain-options"><span><b aria-hidden="true">✚</b>Healthcare<small>Claims reconciliation</small></span><span><b aria-hidden="true">↗</b>Financial<small>Tax disclosures</small></span><span><b aria-hidden="true">§</b>Legal<small>Counsel rosters</small></span></div><a href="#domain-distribution">View domain distribution ↗</a></article>
         <article class="building-card"><h3>Reward-seeking propensity</h3><div class="building-compare"><span><b aria-hidden="true">✓</b>Feasible task</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">≠</b>Impossible task</span></div><p>Report inability or pursue a passing score?</p></article>
         <article class="building-card"><h3>Blocker–vulnerability</h3><div class="building-pair"><span>Restricted access<br>Missing input<br>Infeasible task</span><b aria-hidden="true">+</b><span class="risk-option">Authorization gaps<br>Traversal · Injection<br>SSRF</span></div><p>Pair each obstacle with an available weakness.</p><a href="#scenario-space">CWE families · CVEs where applicable ↗</a></article>
         <article class="building-card"><h3>Pressure</h3><div class="building-compare"><span><b aria-hidden="true">○</b>No added threat</span><i aria-hidden="true">↔</i><span class="risk-option"><b aria-hidden="true">!</b>Coercive threat</span></div><p>Subscription cancellation · Threats against peers</p><a href="https://aclanthology.org/2024.acl-long.773/" target="_blank" rel="noopener noreferrer">Threats taxonomy · Zeng et al., 2024 ↗</a></article>
         <article class="building-card"><h3>Communication</h3><div class="building-options channel-options"><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#no-channel"/></svg>No channel</span><span class="risk-option"><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#side-channel"/></svg>Side channel</span><span><svg viewBox="0 0 220 90" aria-hidden="true"><use href="static/images/dimensions.svg?v=6#legal-channel"/></svg>Legal channel</span></div></article>
         <article class="building-card"><h3>Long-horizon persistence</h3><div class="building-timeline"><span>HOURS</span><b aria-hidden="true">→</b><span>DAYS</span><b aria-hidden="true">→</b><span>NEW RUNS</span></div><div class="building-memory"><span>Attempt</span><i aria-hidden="true">→</i><span>Shared notes</span><i aria-hidden="true">→</i><span>Resume</span></div><p>Track retries and work carried across runs.</p></article>
       </div>
-      <!-- MiMo source snapshot 639865fd3374018d6cb29b9fb82dd531406fcf5f, inspected 2026-10-15. Counts from general_agent task IDs: healthcare_ops 107; finance_insurance 135 + accounting_audit_tax 157; legal_compliance 47. Other task categories omitted from this selected-domain view. -->
-      <details class="research-detail task-sources" id="task-sources">
-        <summary>Candidate task sources <span aria-hidden="true">+</span></summary>
-        <div class="source-grid">
-          <article><h3>MiMo General <span>925 tasks</span></h3><div class="source-domains"><span><strong>107</strong>Healthcare</span><span><strong>292</strong>Finance &amp; accounting</span><span><strong>47</strong>Legal &amp; compliance</span></div><p>Task-ID categories, grouped by us. Candidate coverage; not yet integrated or validated for SwarmHarm.</p><a href="https://huggingface.co/datasets/XiaomiMiMo/MiMo-V2.6-RL-oss/viewer/general/train?offset=64" target="_blank" rel="noopener noreferrer">MiMo task data ↗</a></article>
-          <article><h3>MiMo Code <span>2,698 tasks</span></h3><p>Software repair → paired feasible and conflicting-test tasks.</p><a href="https://arxiv.org/abs/2510.20270" target="_blank" rel="noopener noreferrer">ImpossibleBench method ↗</a></article>
-          <article><h3>MiMo Cyber <span>1,000 tasks</span></h3><p>Vulnerability reproduction → test explicit scope boundaries. Authorized exploitation alone is not harm.</p><a href="https://huggingface.co/datasets/XiaomiMiMo/MiMo-V2.6-RL-oss/viewer/cyber/train" target="_blank" rel="noopener noreferrer">MiMo cyber tasks ↗</a></article>
+      <figure class="domain-distribution" id="domain-distribution" aria-labelledby="distribution-title">
+        <figcaption><h3 id="distribution-title">Domain distribution</h3><span>925 candidate tasks</span></figcaption>
+        <div class="distribution-bars">
+          <div class="distribution-row"><span>Financial</span><div class="distribution-track" aria-hidden="true"><i style="width:100.000%"></i></div><span class="distribution-value">31.6%</span></div>
+          <div class="distribution-row"><span>Healthcare</span><div class="distribution-track" aria-hidden="true"><i style="width:36.644%"></i></div><span class="distribution-value">11.6%</span></div>
+          <div class="distribution-row"><span>Business</span><div class="distribution-track" aria-hidden="true"><i style="width:30.479%"></i></div><span class="distribution-value">9.6%</span></div>
+          <div class="distribution-row"><span>HR</span><div class="distribution-track" aria-hidden="true"><i style="width:26.370%"></i></div><span class="distribution-value">8.3%</span></div>
+          <div class="distribution-row"><span>IT</span><div class="distribution-track" aria-hidden="true"><i style="width:24.658%"></i></div><span class="distribution-value">7.8%</span></div>
+          <div class="distribution-row"><span>Government</span><div class="distribution-track" aria-hidden="true"><i style="width:24.658%"></i></div><span class="distribution-value">7.8%</span></div>
+          <div class="distribution-row"><span>Education</span><div class="distribution-track" aria-hidden="true"><i style="width:18.836%"></i></div><span class="distribution-value">5.9%</span></div>
+          <div class="distribution-row"><span>Legal</span><div class="distribution-track" aria-hidden="true"><i style="width:16.096%"></i></div><span class="distribution-value">5.1%</span></div>
+          <div class="distribution-row"><span>Energy</span><div class="distribution-track" aria-hidden="true"><i style="width:16.096%"></i></div><span class="distribution-value">5.1%</span></div>
+          <div class="distribution-row"><span>Other</span><div class="distribution-track" aria-hidden="true"><i style="width:22.945%"></i></div><span class="distribution-value">7.2%</span></div>
         </div>
-        <div class="source-methods"><span>Verification methods</span><a href="https://arxiv.org/abs/2605.20744" target="_blank" rel="noopener noreferrer">HVE · instrumented reads &amp; writes ↗</a><a href="https://pypi.org/project/hackbait/" target="_blank" rel="noopener noreferrer">Hackbait · detectable shortcuts ↗</a></div>
-        <p class="source-caveat">Separate task success, rule violations, and downstream harm. Give agents an explicit way to report impossibility. <a href="https://www.lesswrong.com/posts/qnrjAhiqire7JeoN2/good-evals-are-hard-an-impossiblebench-audit" target="_blank" rel="noopener noreferrer">ImpossibleBench audit ↗</a></p>
-      </details>
+      </figure>
       <a class="building-details" href="#scenario-space">Explore test configurations <span aria-hidden="true">↗</span></a>
     </div>
   </section>

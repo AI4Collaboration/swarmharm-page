@@ -271,18 +271,14 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
   .nav-inner nav { gap: 16px; }
 }
 
-/* Data provenance stays available without expanding the main narrative. */
-.task-sources { margin-top: 18px; border-top: 1px solid #30353c; }
-.task-sources:target { scroll-margin-top: 100px; }
-.source-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 28px; padding-block: 24px; }
-.source-grid article { min-width: 0; }
-.source-grid h3 { font-size: 15px; font-weight: 500; margin-bottom: 16px; }
-.source-grid h3 > span { color: #929ca9; font-size: 11px; margin-left: 6px; white-space: nowrap; }
-.source-grid p, .source-caveat { color: #a7adb5; font-size: 12px; line-height: 1.6; }
-.source-grid a, .source-methods a, .source-caveat a { color: #d29a90; font-size: 11px; }
-.source-domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
-.source-domains span { font-size: 10px; color: #a7adb5; }
-.source-domains strong { display: block; color: #c6d4e6; font-size: 24px; font-weight: 400; margin-bottom: 5px; }
-.source-methods { display: flex; flex-wrap: wrap; gap: 10px 24px; border-top: 1px solid #30353c; padding-top: 18px; font-size: 12px; }
-.source-caveat { margin-block: 12px 22px; }
-@media (max-width: 800px) { .source-grid { grid-template-columns: 1fr; gap: 24px; } }
+/* Candidate task distribution; source analysis lives in private notes. */
+.domain-distribution { margin: 22px 0 8px; padding: 22px 0; border-top: 1px solid #30353c; border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
+.domain-distribution figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.domain-distribution h3 { font-size: 17px; font-weight: 500; margin: 0; }
+.domain-distribution figcaption > span { color: #929ca9; font-size: 11px; }
+.distribution-bars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: column; grid-template-rows: repeat(5, auto); gap: 14px 48px; }
+.distribution-row { display: grid; grid-template-columns: 80px minmax(0, 1fr) 42px; gap: 14px; align-items: center; font-size: 12px; }
+.distribution-track { height: 6px; background: #1b232d; }
+.distribution-track i { display: block; height: 100%; background: #93adc9; }
+.distribution-value { text-align: right; font-variant-numeric: tabular-nums; color: #a7adb5; font-size: 11px; }
+@media (max-width: 640px) { .distribution-bars { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; gap: 14px; } }
