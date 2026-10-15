@@ -281,3 +281,6 @@ body { background: #030406; font-size: 16px; line-height: 1.6; -webkit-font-smoo
 .coverage-icons svg { width: 36px; height: 36px; color: #93adc9; }
 @media (max-width: 640px) { .coverage-icons { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 12px; } }
 @media (max-width: 360px) { .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.coverage-taxonomy { display: inline-block; margin-top: 14px; color: #929ca9; font-size: 11px; }
+.coverage-taxonomy:hover { color: #c6d4e6; text-decoration: underline; text-underline-offset: 4px; }
