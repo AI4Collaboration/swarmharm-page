@@ -1,4 +1,14 @@
 (() => {
+  const header = document.querySelector('.site-header');
+  function updateHeaderOffset() {
+    const height = header && getComputedStyle(header).position === 'sticky'
+      ? header.getBoundingClientRect().height : 0;
+    document.documentElement.style.setProperty('--header-offset', `${height}px`);
+  }
+  if (header && 'ResizeObserver' in window) new ResizeObserver(updateHeaderOffset).observe(header);
+  window.addEventListener('resize', updateHeaderOffset);
+  updateHeaderOffset();
+
   function revealTarget(hash, scroll = false) {
     if (!hash || hash === '#') return;
     let id;
