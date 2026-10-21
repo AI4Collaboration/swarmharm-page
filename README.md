@@ -6,9 +6,9 @@ and research questions. Do not add unpublished experiment results.
 
 The environment has three core conditions: a legitimate goal with a completion
 incentive, a blocked normal path (impossible or beyond model capability/budget),
-and discoverable, verifiable vulnerabilities. Multi-agent principles are separate:
-assign natural tasks without announcing other agents, and provide communication
-channels agents can independently discover and use without hints. Measure
+and discoverable, verifiable vulnerabilities. Present task and shared-system realism as one vertically paired principle:
+real tasks above a realistic shared environment, without announcing other agents.
+Provide communication channels agents can independently discover and use without hints. Measure
 actual discovery, sharing, adoption and consequences separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
