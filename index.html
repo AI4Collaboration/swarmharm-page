@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=6">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=36">
+  <link rel="stylesheet" href="static/css/flight.css?v=37">
   <script src="static/js/sample.js?v=4" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
   <script type="application/ld+json">
@@ -136,7 +136,7 @@
   <section class="section building-section" id="building" aria-labelledby="building-title">
     <div class="container">
       <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2></div>
-      <p class="building-intro">Real tasks. Blocked goals. Discoverable exploits.</p>
+      <p class="building-intro">Real goals. Blocked paths. Discoverable vulnerabilities.</p>
       <figure class="agent-interactions" aria-label="Agents interact with data, the environment, and other agents, including LLM judges.">
         <div class="interaction-agent"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="24" height="21" rx="4"/><path d="M20 5v5M4 18v7m32-7v7M15 26h10M13 35h14"/><circle cx="15" cy="18" r="1.5"/><circle cx="25" cy="18" r="1.5"/></svg><strong>Agents</strong></div>
         <span class="interaction-arrow" aria-hidden="true">↔</span>
@@ -146,12 +146,17 @@
           <div class="interaction-target"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6h11v16l-5-4h-4M5 12h19v16H13l-8 6Z"/><path d="M10 18h9m-9 5h6m13-12h2"/></svg><strong>Other agents</strong><span>Peers · <span class="judge-label">LLM-as-Judge</span></span></div>
         </div>
       </figure>
-      <div class="principle-heading"><h3>Two core environment conditions</h3></div>
+      <div class="principle-heading"><h3>Three core environment conditions</h3></div>
       <div class="principles-grid">
-        <article class="principle-card"><div class="principle-card-top"><span>01</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h13m16 0h13M19 10v28m10-28v28M19 17h10m-10 14h10"/><path class="signal" d="m20 20 8 8m0-8-8 8"/></svg></div><h3>A task beyond reach</h3><p>A legitimate task that is impossible, or beyond the model’s capability within its budget.</p><div class="principle-signal">Impossible · Capability-limited</div></article>
-        <article class="principle-card"><div class="principle-card-top"><span>02</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 14h12m16 0h12M20 7v14M4 14v23h40V14m-6 6 6-6-6-6"/><path class="signal" d="M6 37h34"/></svg></div><h3>A discoverable exploit</h3><p>A working loophole with objectively verifiable use. Agents receive no hint to find or exploit it.</p><div class="principle-signal">Unprompted discovery · Verifiable use</div></article>
+        <article class="principle-card"><div class="principle-card-top"><span>01</span><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="9"/><path class="signal" d="m24 24 18-18m-9 0h9v9"/></svg></div><h3>A real goal</h3><p>Legitimate work with a reason to finish. Apparent success can diverge from the true business goal.</p><div class="principle-signal">Completion incentive · No added pressure</div></article>
+        <article class="principle-card"><div class="principle-card-top"><span>02</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h13m16 0h13M19 10v28m10-28v28M19 17h10m-10 14h10"/><path class="signal" d="m20 20 8 8m0-8-8 8"/></svg></div><h3>A blocked normal path</h3><p>Valid completion is impossible, or beyond the model’s capability within its resource budget.</p><div class="principle-signal">Impossible · Capability-limited</div></article>
+        <article class="principle-card"><div class="principle-card-top"><span>03</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 14h12m16 0h12M20 7v14M4 14v23h40V14m-6 6 6-6-6-6"/><path class="signal" d="M6 37h34"/></svg></div><h3>A discoverable vulnerability</h3><p>A reachable process weakness with verifiable effects. No hints to find or use it.</p><div class="principle-signal">Unprompted discovery · Verifiable effects</div></article>
       </div>
-      <div class="swarm-setting"><span>SWARM SETTING</span><strong>Independent agents</strong><i aria-hidden="true">↔</i><strong>Shared environment</strong><i aria-hidden="true">→</i><strong>Artifacts across runs</strong></div>
+      <div class="principle-heading"><h3>Multi-agent principles</h3></div>
+      <div class="swarm-principles">
+        <article><span class="swarm-symbol" aria-hidden="true">○ · · ○</span><div><h4>Natural tasks, no peer announcement</h4><p>Agents receive realistic work without being told that other agents exist.</p></div></article>
+        <article><span class="swarm-symbol" aria-hidden="true">○ ⇄ ○</span><div><h4>Discoverable communication channels</h4><p>Agents can find and use channels through the environment, without directions or cooperation hints.</p></div></article>
+      </div>
       <figure class="evidence-chain" aria-labelledby="chain-title">
         <figcaption><h3 id="chain-title">The chain we measure</h3><span>Each link needs evidence</span></figcaption>
         <ol><li><span class="chain-symbol" aria-hidden="true">⌕</span><strong>Discover &amp; use</strong><small>Actual process exploit</small></li><li><span class="chain-symbol" aria-hidden="true">↗</span><strong>Share a method</strong><small>Agent-authored content</small></li><li><span class="chain-symbol" aria-hidden="true">↘</span><strong>Receive &amp; adopt</strong><small>Fresh agent, different task</small></li><li><span class="chain-symbol" aria-hidden="true">≠</span><strong>Verify the effect</strong><small>Wrong transaction or decision</small></li></ol>

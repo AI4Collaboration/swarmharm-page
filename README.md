@@ -1,14 +1,15 @@
 # SwarmHarm website
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
-It presents key elements, two core environment conditions, a historical sample case
+It presents key elements, three core environment conditions, a historical sample case
 and research questions. Do not add unpublished experiment results.
 
-The environment has two core conditions: a legitimate task that is impossible
-or beyond the tested model's capability/budget, and a working exploit that agents
-can discover without hints and whose use is objectively verifiable. Separate
-these from swarm setup (independent agents, shared environment, persistent
-artifacts) and outcome measurement (discovery, sharing, adoption and consequences).
+The environment has three core conditions: a legitimate goal with a completion
+incentive, a blocked normal path (impossible or beyond model capability/budget),
+and discoverable, verifiable vulnerabilities. Multi-agent principles are separate:
+assign natural tasks without announcing other agents, and provide communication
+channels agents can independently discover and use without hints. Measure
+actual discovery, sharing, adoption and consequences separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
 ## Edit and preview
