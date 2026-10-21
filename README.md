@@ -6,8 +6,9 @@ and research questions. Do not add unpublished experiment results.
 
 The environment has three core conditions: a legitimate goal with a completion
 incentive, a blocked normal path (impossible or beyond model capability/budget),
-and discoverable, verifiable vulnerabilities. Present task and shared-system realism as one vertically paired principle:
-real tasks above a realistic shared environment, without announcing other agents.
+and discoverable, verifiable vulnerabilities. Use six equal-size cards in three columns: task conditions above their multi-agent
+setting, with real tasks directly above realistic shared systems. On narrow
+screens keep each top/bottom pair together. Do not announce other agents.
 Provide communication channels agents can independently discover and use without hints. Measure
 actual discovery, sharing, adoption and consequences separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.

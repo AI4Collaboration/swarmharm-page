@@ -389,26 +389,29 @@ body [id] { scroll-margin-top: 0; }
  .chain-symbol { position:absolute; left:0; top:0; }
 }
 
-/* Real tasks and shared-system realism form one vertically paired principle. */
-.principles-mapped { align-items:stretch; grid-template-rows:max-content 1fr; }
-.realism-pair { grid-column:1; grid-row:1 / span 2; padding:0; }
-.realism-task, .realism-system { padding:22px; }
-.realism-bridge { display:flex; align-items:center; gap:10px; color:#ff947f; padding:0 22px; }
-.realism-bridge::before, .realism-bridge::after { content:''; height:1px; background:#2e3946; flex:1; }
-.realism-bridge span { font-size:20px; }
-.realism-system h4, .channel-principle h4 { font:500 18px var(--display); color:#e0e8f0; margin:0 0 12px; }
-.realism-system p, .channel-principle p { font-size:13px; line-height:1.6; color:#adb9c7; margin:0; }
-.principle-card .shared-system-map { width:100%; height:auto; margin:4px 0 12px; }
-.shared-system-map .system-labels { stroke:none; fill:#b5c0cd; font:10px var(--sans, sans-serif); text-anchor:middle; }
+/* Equal-size cards map task conditions to their multi-agent setting. */
+.principles-mapped { grid-template-rows:repeat(2,1fr); row-gap:36px; }
+.principles-mapped .principle-card { display:flex; flex-direction:column; }
+.principles-mapped .principle-signal { margin-top:auto; }
+.principles-mapped .principle-card p { padding-bottom:20px; }
+.task-condition { grid-column:1; grid-row:1; }
 .blocked-condition { grid-column:2; grid-row:1; }
 .vulnerability-condition { grid-column:3; grid-row:1; }
-.channel-principle { grid-column:2 / span 2; grid-row:2; display:flex; align-items:center; gap:26px; border:1px solid #2e3946; padding:26px; background:#090d12; }
-.channel-principle svg { width:210px; flex-shrink:0; fill:none; stroke:#bdd8ef; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; }
-.channel-principle svg .signal { stroke:#ff947f; }
-@media(max-width:1000px) { .channel-principle { flex-direction:column; align-items:flex-start; gap:12px; } }
+.system-condition { grid-column:1; grid-row:2; }
+.independence-condition { grid-column:2; grid-row:2; }
+.channel-condition { grid-column:3; grid-row:2; }
+.mapped-lower { position:relative; }
+.mapped-lower::before { content:'↓'; position:absolute; left:50%; top:-31px; transform:translateX(-50%); color:#ff947f; font-size:19px; }
+.system-visual { height:76px; margin-bottom:12px; display:flex; align-items:center; }
+.principle-card .system-visual svg { width:100%; height:76px; }
+.system-labels { stroke:none; fill:#b5c0cd; font:10px sans-serif; text-anchor:middle; }
 @media(max-width:800px) {
- .principles-mapped { grid-template-columns:1fr; grid-template-rows:none; }
- .realism-pair, .blocked-condition, .vulnerability-condition, .channel-principle { grid-column:auto; grid-row:auto; }
- .channel-principle { flex-direction:row; }
+ .principles-mapped { grid-template-columns:1fr; grid-template-rows:none; grid-auto-rows:1fr; row-gap:20px; }
+ .task-condition { grid-column:1; grid-row:1; }
+ .system-condition { grid-column:1; grid-row:2; }
+ .blocked-condition { grid-column:1; grid-row:3; }
+ .independence-condition { grid-column:1; grid-row:4; }
+ .vulnerability-condition { grid-column:1; grid-row:5; }
+ .channel-condition { grid-column:1; grid-row:6; }
+ .mapped-lower::before { top:-22px; font-size:15px; }
 }
-@media(max-width:500px) { .channel-principle { flex-direction:column; padding:18px; } .realism-task, .realism-system { padding:18px; } }
