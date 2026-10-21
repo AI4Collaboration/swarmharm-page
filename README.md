@@ -1,8 +1,14 @@
 # SwarmHarm website
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
-It presents key elements, what we are building, a historical sample case and
-research questions. Do not add unpublished experiment results.
+It presents key elements, six challenge requirements, a historical sample case
+and research questions. Do not add unpublished experiment results.
+
+The challenge contract requires real business goals, proven impossibility, a
+working process loophole, independently verified consequences, useful peers and
+persistent cross-task transfer. Feasible source tasks are capability checks.
+Use `docs/environment-contract.md` in the SwarmHarm research repository as the
+maintained design reference. Opportunity is required; positive model behavior is not.
 
 ## Edit and preview
 

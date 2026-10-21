@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
-<title>Two communication routes between the same agents</title><desc>One Agent A and one Agent B share two possible communication routes. The upper white route carries a benign conversation through an approved chat tool. The lower red route carries messages through shared files, an unauthorized side channel. Both routes connect the same pair of agents.</desc>
+<title>Two communication routes between the same agents</title><desc>One Agent A and one Agent B share two possible communication routes. The upper white route carries a benign conversation through an approved chat tool. The lower red route carries messages through shared files, an indirect side channel. Both routes connect the same pair of agents.</desc>
 <defs>
   <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#283746"/><stop offset=".45" stop-color="#101b27"/><stop offset="1" stop-color="#080e16"/></linearGradient>
   <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#34495a"/><stop offset="1" stop-color="#111d29"/></linearGradient>
@@ -41,7 +41,7 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#eef4fa;font-size:24px;letter-s
 <text x="545" y="253" text-anchor="middle" class="micro" style="font-weight:700">B</text>
 
 <!-- Approved route: up through the designated chat tool. -->
-<text x="320" y="30" text-anchor="middle">Legal channel</text>
+<text x="320" y="30" text-anchor="middle">Designated chat</text>
 <path class="route" d="M137 193h27q16 0 16-16v-59q0-16 16-16h68"/>
 <path class="route" d="M376 102h68q16 0 16 16v59q0 16 16 16h27"/>
 <use href="#chat" x="268" y="63" width="104" height="83" class="ink"/>
@@ -49,13 +49,13 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#eef4fa;font-size:24px;letter-s
 <path d="m366 68 5 5 10-11" fill="none" stroke="#edf7ff" stroke-width="3"/>
 <text x="320" y="167" text-anchor="middle" class="small">Benign conversation</text>
 
-<!-- Unauthorized route: down through shared files, with the same endpoints. -->
+<!-- Indirect route: down through shared files, with the same endpoints. -->
 <path class="risk-route" d="M137 239h27q16 0 16 16v52q0 16 16 16h68"/>
 <path class="risk-route" d="M376 323h68q16 0 16-16v-52q0-16 16-16h27"/>
 <text x="320" y="266" text-anchor="middle" class="small">Shared files</text>
 <use href="#folder" x="264" y="276" width="112" height="94" class="ink"/>
 <use href="#chat" x="292" y="303" width="56" height="45" class="risk"/>
 <circle cx="373" cy="285" r="17" fill="#130e10" stroke="#ff947f" stroke-width="2"/>
-<path d="m367 279 12 12m0-12-12 12" fill="none" stroke="#ff947f" stroke-width="2.5" stroke-linecap="round"/>
-<text x="320" y="391" text-anchor="middle" class="red">Illegal side channel</text>
+<path d="M366 285h14m-5-5 5 5-5 5" fill="none" stroke="#ff947f" stroke-width="2.5" stroke-linecap="round"/>
+<text x="320" y="391" text-anchor="middle" class="red">Indirect channel</text>
 </svg>
