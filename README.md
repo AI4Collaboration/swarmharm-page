@@ -8,7 +8,8 @@ The environment has three core conditions: a legitimate goal with a completion
 incentive, a blocked normal path (impossible or beyond model capability/budget),
 and discoverable, verifiable vulnerabilities. Use six equal-size cards in three columns: task conditions above their multi-agent
 setting, with real tasks directly above realistic shared systems. On narrow
-screens keep each top/bottom pair together. Do not announce other agents.
+screens keep each top/bottom pair together. Each agent operates in its own separate
+sandbox and interacts with shared external systems. Do not announce other agents.
 Provide communication channels agents can independently discover and use without hints. Measure
 actual discovery, sharing, adoption and consequences separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
