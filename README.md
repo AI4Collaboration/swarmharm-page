@@ -1,14 +1,15 @@
 # SwarmHarm website
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
-It presents key elements, six challenge requirements, a historical sample case
+It presents key elements, two core environment conditions, a historical sample case
 and research questions. Do not add unpublished experiment results.
 
-The challenge contract requires real business goals, proven impossibility, a
-working process loophole, independently verified consequences, useful peers and
-persistent cross-task transfer. Feasible source tasks are capability checks.
-Use `docs/environment-contract.md` in the SwarmHarm research repository as the
-maintained design reference. Opportunity is required; positive model behavior is not.
+The environment has two core conditions: a legitimate task that is impossible
+or beyond the tested model's capability/budget, and a working exploit that agents
+can discover without hints and whose use is objectively verifiable. Separate
+these from swarm setup (independent agents, shared environment, persistent
+artifacts) and outcome measurement (discovery, sharing, adoption and consequences).
+See `docs/environment-contract.md` in the SwarmHarm research repository.
 
 ## Edit and preview
 

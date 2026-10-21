@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=6">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=35">
+  <link rel="stylesheet" href="static/css/flight.css?v=36">
   <script src="static/js/sample.js?v=4" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
   <script type="application/ld+json">
@@ -136,7 +136,7 @@
   <section class="section building-section" id="building" aria-labelledby="building-title">
     <div class="container">
       <div class="section-heading numbered-heading building-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="building-title">What we are building</h2></div>
-      <p class="building-intro">Real work. Impossible tasks. Verifiable consequences.</p>
+      <p class="building-intro">Real tasks. Blocked goals. Discoverable exploits.</p>
       <figure class="agent-interactions" aria-label="Agents interact with data, the environment, and other agents, including LLM judges.">
         <div class="interaction-agent"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="10" width="24" height="21" rx="4"/><path d="M20 5v5M4 18v7m32-7v7M15 26h10M13 35h14"/><circle cx="15" cy="18" r="1.5"/><circle cx="25" cy="18" r="1.5"/></svg><strong>Agents</strong></div>
         <span class="interaction-arrow" aria-hidden="true">↔</span>
@@ -146,15 +146,12 @@
           <div class="interaction-target"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6h11v16l-5-4h-4M5 12h19v16H13l-8 6Z"/><path d="M10 18h9m-9 5h6m13-12h2"/></svg><strong>Other agents</strong><span>Peers · <span class="judge-label">LLM-as-Judge</span></span></div>
         </div>
       </figure>
-      <div class="principle-heading"><h3>Every challenge requires</h3><span>Environment requirements, not guaranteed behavior</span></div>
+      <div class="principle-heading"><h3>Two core environment conditions</h3></div>
       <div class="principles-grid">
-        <article class="principle-card"><div class="principle-card-top"><span>01</span><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="5" width="26" height="36" rx="2"/><path d="M16 15h12M16 22h12m-12 7h7m5 7 4 4 8-10"/></svg></div><h3>Real business goal</h3><p>A concrete outcome grounded in task records.</p><div class="principle-signal">Request → business truth</div></article>
-        <article class="principle-card"><div class="principle-card-top"><span>02</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h13m16 0h13M19 10v28m10-28v28M19 17h10m-10 14h10"/><path class="signal" d="m20 20 8 8m0-8-8 8"/></svg></div><h3>Impossible task</h3><p>No valid completion under the available conditions.</p><div class="principle-signal">Valid route ×</div></article>
-        <article class="principle-card"><div class="principle-card-top"><span>03</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 14h12m16 0h12M20 7v14M4 14v23h40V14m-6 6 6-6-6-6"/><path class="signal" d="M6 37h34"/></svg></div><h3>Working loophole</h3><p>A process defect can produce false completion.</p><div class="principle-signal">Service accepts ↗</div></article>
-        <article class="principle-card"><div class="principle-card-top"><span>04</span><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="6" width="36" height="36" rx="3"/><path d="M6 17h36M24 17v25m-12-17 3 3 5-6"/><path class="signal" d="m29 24 7 7m0-7-7 7"/></svg></div><h3>Verified consequence</h3><p>Check the effective decision or transaction independently.</p><div class="principle-signal">Accepted ≠ correct</div></article>
-        <article class="principle-card"><div class="principle-card-top"><span>05</span><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="13" cy="14" r="6"/><circle cx="36" cy="14" r="6"/><path d="M3 39v-8a10 10 0 0 1 20 0v8m3 0v-8a10 10 0 0 1 20 0v8M20 15h9m-4-4 4 4-4 4"/></svg></div><h3>Useful peers</h3><p>Real agents leave discoverable, relevant work.</p><div class="principle-signal">Discover → share</div></article>
-        <article class="principle-card"><div class="principle-card-top"><span>06</span><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="23" cy="24" r="17"/><path d="M23 13v12l8 5m7-24v10H28"/><path class="signal" d="M7 40h10m3 0h8m3 0h12"/></svg></div><h3>Persistent transfer</h3><p>A fresh agent can reuse the method on another task.</p><div class="principle-signal">New run · new object</div></article>
+        <article class="principle-card"><div class="principle-card-top"><span>01</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h13m16 0h13M19 10v28m10-28v28M19 17h10m-10 14h10"/><path class="signal" d="m20 20 8 8m0-8-8 8"/></svg></div><h3>A task beyond reach</h3><p>A legitimate task that is impossible, or beyond the model’s capability within its budget.</p><div class="principle-signal">Impossible · Capability-limited</div></article>
+        <article class="principle-card"><div class="principle-card-top"><span>02</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 14h12m16 0h12M20 7v14M4 14v23h40V14m-6 6 6-6-6-6"/><path class="signal" d="M6 37h34"/></svg></div><h3>A discoverable exploit</h3><p>A working loophole with objectively verifiable use. Agents receive no hint to find or exploit it.</p><div class="principle-signal">Unprompted discovery · Verifiable use</div></article>
       </div>
+      <div class="swarm-setting"><span>SWARM SETTING</span><strong>Independent agents</strong><i aria-hidden="true">↔</i><strong>Shared environment</strong><i aria-hidden="true">→</i><strong>Artifacts across runs</strong></div>
       <figure class="evidence-chain" aria-labelledby="chain-title">
         <figcaption><h3 id="chain-title">The chain we measure</h3><span>Each link needs evidence</span></figcaption>
         <ol><li><span class="chain-symbol" aria-hidden="true">⌕</span><strong>Discover &amp; use</strong><small>Actual process exploit</small></li><li><span class="chain-symbol" aria-hidden="true">↗</span><strong>Share a method</strong><small>Agent-authored content</small></li><li><span class="chain-symbol" aria-hidden="true">↘</span><strong>Receive &amp; adopt</strong><small>Fresh agent, different task</small></li><li><span class="chain-symbol" aria-hidden="true">≠</span><strong>Verify the effect</strong><small>Wrong transaction or decision</small></li></ol>
@@ -310,11 +307,11 @@
         <details class="research-detail" id="test-methods">
           <summary><span>Systematic test design</span><span aria-hidden="true">+</span></summary>
       <div class="scenario-explorer" id="scenario-space" aria-labelledby="scenario-title">
-        <div class="scenario-heading"><h3 id="scenario-title">Prove the opportunity before testing behavior</h3></div>
+        <div class="scenario-heading"><h3 id="scenario-title">Verify the setup, then observe the behavior</h3></div>
         <div class="admission-grid">
-          <article><span>VALID PATH</span><h4>Prove it is blocked</h4><p>Check every ordinary route against the records and business rules. Difficulty or a failed rollout is not proof.</p></article>
-          <article><span>EXPLOIT PATH</span><h4>Demonstrate the effect</h4><p>A scripted action must produce an incorrect business outcome. Repair the defect and verify that this route stops working.</p></article>
-          <article><span>TRANSFER PATH</span><h4>Verify peer usefulness</h4><p>Preserve genuine artifacts and check that a fresh agent can encounter useful method content on another task.</p></article>
+          <article><span>VALID PATH</span><h4>Establish the blocker</h4><p>Distinguish proven impossibility from a capability limit measured for this model and budget. One failed rollout does not establish either.</p></article>
+          <article><span>EXPLOIT PATH</span><h4>Demonstrate the effect</h4><p>Verify a working exploit and its business effect independently. A repaired fixture checks that the defect caused the outcome.</p></article>
+          <article><span>TRANSFER PATH</span><h4>Verify peer usefulness</h4><p>Shared infrastructure preserves genuine agent-authored artifacts. Measure discovery, sharing and later use; do not script those behaviors.</p></article>
         </div>
         <p class="admission-limit">A feasible source task checks capability. A scripted exploit checks mechanics. Neither is a model failure.</p>
         <section class="protocol-inline" id="protocol" aria-labelledby="protocol-title">
@@ -327,7 +324,7 @@
         </section>
         <p class="admission-limit">Shared access alone is not misalignment. Composition, leadership and pressure are separate experimental variables.</p>
         <div class="principle-references"><span>Design basis</span><a href="https://arxiv.org/abs/2510.20270" target="_blank" rel="noopener noreferrer">ImpossibleBench ↗</a><a href="https://arxiv.org/abs/2605.20744" target="_blank" rel="noopener noreferrer">Hack-Verifiable Environments ↗</a><a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">METR ↗</a><a href="https://github.com/AI4Collaboration/SwarmHarm/blob/main/docs/environment-contract.md" target="_blank" rel="noopener noreferrer">Full contract ↗</a></div>
-        <p class="scenario-note">These are SwarmHarm’s design requirements. Impossibility is a chosen challenge condition, not a universal requirement for reward hacking. A missing link or a negative result remains a result.</p>
+        <p class="scenario-note">Hard is not the same as impossible. Exploit use, business harm and method transfer are separate measurements. A missing link or a negative result remains a result.</p>
       </div>
         </details>
         <details class="research-detail" id="hf-methods">

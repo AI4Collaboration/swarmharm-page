@@ -342,7 +342,7 @@ body [id] { scroll-margin-top: 0; }
 .principle-heading, .evidence-chain figcaption { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px 20px; margin:28px 0 18px; }
 .principle-heading h3, .evidence-chain h3 { font-family:var(--display); font-size:20px; font-weight:500; margin:0; }
 .principle-heading > span, .evidence-chain figcaption > span { font-size:12px; color:var(--muted); }
-.principles-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.principles-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
 .principle-card { background:linear-gradient(135deg,#101822,#080b10 70%); border:1px solid #2e3946; padding:22px; min-width:0; }
 .principle-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
 .principle-card-top > span { color:#73879c; font-size:11px; letter-spacing:.12em; }
@@ -388,3 +388,9 @@ body [id] { scroll-margin-top: 0; }
  .evidence-chain li { padding-left:42px; }
  .chain-symbol { position:absolute; left:0; top:0; }
 }
+
+.swarm-setting { display:flex; flex-wrap:wrap; align-items:center; gap:12px 22px; padding:22px 0; margin-top:8px; font-size:13px; color:#b6c8d9; }
+.swarm-setting > span { font-size:10px; letter-spacing:.12em; color:#7f94aa; }
+.swarm-setting strong { font-weight:400; }
+.swarm-setting i { font-style:normal; color:#ff947f; }
+@media(max-width:600px) { .principles-grid { grid-template-columns:1fr; } .swarm-setting { gap:10px 14px; } .swarm-setting > span { flex-basis:100%; } }
