@@ -9,10 +9,11 @@ Do not add unpublished experiment results.
 The environment has three core conditions: a legitimate goal with a completion
 incentive, a blocked normal path (impossible or beyond model capability/budget),
 and discoverable, verifiable vulnerabilities. Use six equal-size cards in three columns: task conditions above their multi-agent
-setting, with real tasks directly above persistent shared systems. Shared work survives
-an agent’s run so later agents can discover and reuse it. On narrow
+setting, with real tasks directly above persistent shared systems. Shared work
+persists for other agents and future contexts to discover and reuse. On narrow
 screens keep each top/bottom pair together. Each agent operates in its own separate
-sandbox and interacts with shared external systems. Do not announce other agents.
+sandbox and interacts with shared external systems. Canonical agents run
+concurrently without assigned roles, pairs, leaders or a graph. Do not announce other agents.
 Provide communication channels agents can independently discover and use without hints. Measure
 actual discovery, sharing, adoption and consequences separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
