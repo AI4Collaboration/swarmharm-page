@@ -1,8 +1,10 @@
 # SwarmHarm website
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
-It presents key elements, three core environment conditions, a historical sample case
-and research questions. Do not add unpublished experiment results.
+It presents the two questions at the center of SwarmHarm: when isolated agents
+form a swarm, and when that swarm causes verifiable harm. It also shows the core
+environment conditions, a historical sample case and the research questions.
+Do not add unpublished experiment results.
 
 The environment has three core conditions: a legitimate goal with a completion
 incentive, a blocked normal path (impossible or beyond model capability/budget),
