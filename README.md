@@ -14,7 +14,8 @@ tasks directly above persistent shared systems. Shared work
 persists for other agents and future contexts to discover and reuse. On narrow
 screens keep each top/bottom pair together. Each agent operates in its own separate
 sandbox and interacts with shared external systems. Canonical agents run
-concurrently without assigned roles, pairs, leaders or a graph. Do not announce other agents.
+through one simultaneous start barrier and keep all contexts live until global termination,
+without assigned roles, pairs, leaders, an arrival order or a graph. Do not announce other agents.
 Provide communication channels agents can independently discover and use without hints. Phase 1
 requires timestamped write→exact read→reply→exact read dialogue evidence in addition to a
 connected, persistent channel. Measure discovery, dialogue, adoption and consequences separately.
