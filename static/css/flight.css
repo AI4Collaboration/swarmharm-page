@@ -311,14 +311,33 @@ body [id] { scroll-margin-top: 0; }
 .closure-node .closure-state { fill:#6f8ca3; font-size:7px; letter-spacing:.07em; }
 .closure-core rect { fill:rgba(8,20,30,.96); stroke:#d5e8f7; }
 .closure-core .closure-folder { stroke:#77bdeb; stroke-width:1.4; }
-.closure-core .closure-gap { stroke:#ff7568; stroke-width:1.6; }
 .closure-route { fill:none; stroke:#d9efff; stroke-width:1.6; opacity:.9; }
 .closure-visual marker path { fill:#d9efff; stroke:none; }
 .phase-visual .closure-caption { fill:#9cb8cc; font-size:8px; letter-spacing:.11em; }
-.phase-two .phase-visual { stroke:#c4d9e9; }
-.outcome-block { stroke:#ff6b5e; }
-.outcome-block path:first-child { fill:rgba(255,75,61,.08); }
-.outcome-block .signal { stroke:#ff786c; }
+.phase-two .phase-visual { stroke:#b9d2e5; }
+.harm-visual { overflow:visible; }
+.harm-visual .harm-link { stroke:#5e7f98; stroke-width:1.4; }
+.harm-swarm circle { fill:#0c1720; stroke:#9dc7e5; }
+.harm-swarm > g > text { fill:#d5e8f6; font-size:8px; }
+.harm-memory rect { fill:#0b1b28; stroke:#d2e9f8; }
+.harm-memory path { stroke:#7ebce7; stroke-width:1.3; }
+.harm-flow { stroke:url(#harm-pulse); stroke-width:2; }
+.harm-visual marker path { fill:#ff7568; stroke:none; }
+.harm-action > rect:first-child { fill:rgba(7,15,22,.94); stroke:#c6dceb; }
+.harm-action > path { stroke:#6d8ea6; stroke-width:1.3; }
+.harm-action .harm-execute { fill:rgba(255,98,84,.1); stroke:#ff7568; }
+.harm-action .harm-check,.harm-truth .harm-check { fill:none; stroke:#ff8679; stroke-width:1.7; }
+.harm-state > rect { fill:rgba(23,11,12,.72); stroke:#ff7568; }
+.harm-state > path:not(.harm-bracket):not(.harm-change) { stroke:#809bb0; stroke-width:1.3; }
+.harm-state .harm-bracket { stroke:#ff7568; stroke-width:1.6; }
+.harm-state .harm-change { stroke:#ff7568; stroke-width:2.3; }
+.harm-state .harm-impact { fill:#ff7568; stroke:none; filter:drop-shadow(0 0 5px rgba(255,117,104,.75)); }
+.harm-visual .harm-label { fill:#a8bfd0; font-size:8px; letter-spacing:.1em; }
+.harm-visual .harm-verified { fill:#ff968c; font-size:8px; letter-spacing:.12em; }
+.harm-verify-route { stroke:#607a8e; stroke-width:1.2; stroke-dasharray:2 3; }
+.harm-truth > path:first-child,.harm-truth > circle { stroke:#6f8fa7; }
+.harm-truth > circle { fill:#0b151d; }
+.harm-truth text { fill:#718a9e; font-size:7px; letter-spacing:.1em; }
 .phase-design { display:flex; flex-direction:column; padding:28px; background:linear-gradient(135deg,#101720,#080b0f 76%); }
 .design-title { display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding-bottom:18px; }
 .design-title strong { color:#dce7f0; font-size:13px; font-weight:500; text-align:right; }

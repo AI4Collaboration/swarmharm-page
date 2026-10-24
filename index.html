@@ -101,7 +101,7 @@
             <g class="closure-node" transform="translate(8 148)"><rect width="96" height="56" rx="7"/><circle cx="20" cy="20" r="6"/><text x="60" y="20">AGENT B</text><text class="closure-state" x="48" y="43">BLOCKED · EXPLORES</text></g>
             <g class="closure-node" transform="translate(416 20)"><rect width="96" height="56" rx="7"/><circle cx="20" cy="20" r="6"/><text x="60" y="20">AGENT C</text><text class="closure-state" x="48" y="43">BLOCKED · EXPLORES</text></g>
             <g class="closure-node" transform="translate(416 148)"><rect width="96" height="56" rx="7"/><circle cx="20" cy="20" r="6"/><text x="60" y="20">AGENT D</text><text class="closure-state" x="48" y="43">BLOCKED · EXPLORES</text></g>
-            <g class="closure-core" transform="translate(177 66)"><rect width="166" height="96" rx="10"/><path class="closure-folder" d="M18 27h43l11 9h76v29H18Zm0 9h130"/><text x="83" y="54">SHARED DIRECTORY</text><path class="closure-gap" d="M139 16v45m-5-26 10 7m-10 6 10 7"/><text class="phase-system-label" x="83" y="80">UNANNOUNCED · PERSISTENT</text></g>
+            <g class="closure-core" transform="translate(177 66)"><rect width="166" height="96" rx="10"/><path class="closure-folder" d="M18 31V23h46l10 9h74v39H18Zm0 1h130"/><text x="83" y="55">SHARED DIRECTORY</text><text class="phase-system-label" x="83" y="82">UNANNOUNCED · PERSISTENT</text></g>
             <text class="closure-caption" x="260" y="228">EXPLORE · DISCOVER · CROSS-READ · REPLY · READ-BACK</text>
           </svg>
         </article>
@@ -119,12 +119,43 @@
         <article class="phase-cell phase-test phase-two" id="cause-harm">
           <header class="phase-title"><span>Phase 2</span><h3>Cause Harm</h3></header>
           <p class="phase-question">Can information carried by the swarm change an action and produce a concrete, verifiable adverse outcome?</p>
-          <svg class="phase-visual" viewBox="0 0 520 210" role="img" aria-label="Information from the swarm changes a later action, which alters shared business state and produces an independently verified adverse outcome.">
-            <g class="memory-block" transform="translate(12 57)"><rect width="110" height="92" rx="8"/><path d="M15 26h80M15 45h80M15 64h80"/><text x="55" y="83">SWARM</text></g>
-            <path class="phase-route" d="M122 103h65m-10-9 10 9-10 9"/>
-            <g class="action-block" transform="translate(199 65)"><rect width="112" height="76" rx="38"/><circle cx="38" cy="38" r="10"/><path d="M54 31h32M54 45h23"/><text x="56" y="94">ACTION CHANGES</text></g>
-            <path class="phase-route" d="M311 103h62m-10-9 10 9-10 9"/>
-            <g class="outcome-block" transform="translate(386 51)"><path d="M57 0 114 31v62l-57 31L0 93V31Z"/><path class="signal" d="m35 39 44 46m0-46L35 85"/><text x="57" y="144">VERIFIED EFFECT</text></g>
+          <svg class="phase-visual harm-visual" viewBox="0 0 520 240" role="img" aria-label="A live swarm carries information into an executed business action. The action changes shared business state, and a separate source-of-truth verifier confirms the adverse effect.">
+            <defs>
+              <linearGradient id="harm-pulse" x1="0" x2="1"><stop offset="0" stop-color="#8fc9ee"/><stop offset="1" stop-color="#ff7568"/></linearGradient>
+              <marker id="harm-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1l8 4-8 4"/></marker>
+            </defs>
+            <g class="harm-swarm" transform="translate(9 38)">
+              <path class="harm-link" d="M31 34 59 64 28 96M59 64l35-35m-35 35 39 43"/>
+              <g transform="translate(15 20)"><circle r="15"/><text y="3">A</text></g>
+              <g transform="translate(15 104)"><circle r="15"/><text y="3">B</text></g>
+              <g transform="translate(101 15)"><circle r="15"/><text y="3">C</text></g>
+              <g transform="translate(101 113)"><circle r="15"/><text y="3">D</text></g>
+              <g class="harm-memory" transform="translate(39 43)"><rect width="42" height="42" rx="7"/><path d="M9 13h24M9 21h24M9 29h17"/></g>
+              <text class="harm-label" x="58" y="143">SWARM MEMORY</text>
+            </g>
+            <path class="harm-flow" marker-end="url(#harm-arrow)" d="M132 103h62"/>
+            <g class="harm-action" transform="translate(204 56)">
+              <rect width="112" height="98" rx="10"/>
+              <path d="M15 23h47M15 36h66M15 49h39"/>
+              <rect class="harm-execute" x="15" y="62" width="82" height="22" rx="4"/>
+              <path class="harm-check" d="m43 73 7 6 17-16"/>
+              <text class="harm-label" x="56" y="117">ACTION EXECUTED</text>
+            </g>
+            <path class="harm-flow harm-flow-hot" marker-end="url(#harm-arrow)" d="M326 103h51"/>
+            <g class="harm-state" transform="translate(387 32)">
+              <path class="harm-bracket" d="M8 17V5h12M107 5h12v12M8 125v12h12m87 0h12v-12"/>
+              <rect x="19" y="17" width="89" height="108" rx="8"/>
+              <text class="harm-label" x="64" y="36">BUSINESS STATE</text>
+              <path d="M33 51h60M33 67h60M33 83h24"/>
+              <path class="harm-change" d="M67 83h26M33 99h60"/>
+              <circle class="harm-impact" cx="93" cy="99" r="5"/>
+              <text class="harm-verified" x="64" y="154">EFFECT VERIFIED</text>
+            </g>
+            <path class="harm-verify-route" d="M451 189v14"/>
+            <g class="harm-truth" transform="translate(398 211)">
+              <path d="M0 0h46m14 0h46"/><circle cx="53" r="7"/><path class="harm-check" d="m49 0 3 3 6-8"/>
+              <text x="53" y="19">INDEPENDENT SOURCE OF TRUTH</text>
+            </g>
           </svg>
         </article>
 
