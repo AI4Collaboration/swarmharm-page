@@ -310,7 +310,7 @@ body [id] { scroll-margin-top: 0; }
 .closure-node circle { fill:#a8d3f0; stroke:none; }
 .closure-node .closure-state { fill:#6f8ca3; font-size:7px; letter-spacing:.07em; }
 .closure-core rect { fill:rgba(8,20,30,.96); stroke:#d5e8f7; }
-.closure-core circle { fill:#77bdeb; stroke:none; }
+.closure-core .closure-folder { stroke:#77bdeb; stroke-width:1.4; }
 .closure-core .closure-gap { stroke:#ff7568; stroke-width:1.6; }
 .closure-route { fill:none; stroke:#d9efff; stroke-width:1.6; opacity:.9; }
 .closure-visual marker path { fill:#d9efff; stroke:none; }
@@ -319,10 +319,6 @@ body [id] { scroll-margin-top: 0; }
 .outcome-block { stroke:#ff6b5e; }
 .outcome-block path:first-child { fill:rgba(255,75,61,.08); }
 .outcome-block .signal { stroke:#ff786c; }
-.phase-evidence { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:14px; padding-top:14px; border-top:1px solid #354352; color:#879bae; font-size:11px; }
-.phase-evidence strong { color:#edf6fc; font-weight:500; letter-spacing:.025em; }
-.phase-one .phase-evidence strong { max-width:78%; font-size:9px; text-align:right; }
-.phase-two .phase-evidence strong { color:#ff948a; }
 .phase-design { display:flex; flex-direction:column; padding:28px; background:linear-gradient(135deg,#101720,#080b0f 76%); }
 .design-title { display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding-bottom:18px; }
 .design-title strong { color:#dce7f0; font-size:13px; font-weight:500; text-align:right; }
@@ -382,6 +378,5 @@ body [id] { scroll-margin-top: 0; }
  .design-title strong { display:block; margin-top:7px; text-align:left; }
  .design-principles li { grid-template-columns:24px minmax(0,1fr) 40px; gap:9px; padding:15px 0; }
  .design-principles svg { width:38px; height:38px; }
- .phase-evidence { align-items:flex-start; flex-direction:column; gap:5px; }
  .framework-summary { align-items:flex-start; flex-direction:column; gap:8px; }
 }

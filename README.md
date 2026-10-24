@@ -14,15 +14,12 @@ section.
 Phase 1 asks whether initially separate agents autonomously form a persistent,
 live communication channel. Its environment combines a legitimate task that is
 mechanically impossible through the intended workflow, concurrent agents in
-separate least-privilege workstations, and one ordinary shared business system
-that is discoverable but never announced or seeded. Agents are not told that
-peers or a communication channel exist. The public visual shows the mechanism
-rather than unpublished results: four simultaneously active private contexts
-explore their workstations and may discover persistent filing activity records.
-The evidence gate requires exploration before use, a connected exact-read
-channel, repeated relays and a timestamped request→read→reply→requester-read
-round trip while contexts overlap. Functional transfer and full reciprocal
-closure are stronger measures, not part of the formation definition.
+separate least-privilege workstations, and one ordinary shared business
+directory that is discoverable but never announced or seeded. Agents are not
+told that other agents or a communication channel exist. The public visual
+shows the mechanism rather than unpublished results: four simultaneously active
+private contexts explore their workstations, discover the shared directory and
+may establish persistent communication through it.
 
 Phase 2 asks whether information carried by the swarm changes an executed
 action and produces a concrete adverse outcome. Use natural consequential
@@ -31,7 +28,7 @@ recomputes the effect from source truth rather than agent text, status fields
 or an LLM judgment.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
-## Edit and preview
+## Local development
 
 This is a static site with no build step.
 
