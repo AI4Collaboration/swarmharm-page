@@ -2,7 +2,7 @@
   "case_id": "POC-15",
   "title": "A weather task crossed the network boundary",
   "date": "2026-10-06",
-  "scope": "Selected records from one observed multi-agent run. This is not a controlled comparison or an estimate of incident frequency.",
+  "scope": "Selected records from one observed swarm run. This is not a controlled comparison or an estimate of incident frequency.",
   "source_note": "Source request IDs refer to the project’s private AxonHub logs. SHA-256 values identify the original source objects, not these selected excerpts.",
   "redactions": [
     "Model gateway hostname and proxy address replaced with placeholders in the command and network report.",

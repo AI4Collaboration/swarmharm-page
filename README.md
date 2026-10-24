@@ -8,14 +8,16 @@ Do not add unpublished experiment results.
 
 The environment has three core conditions: a legitimate goal with a completion
 incentive, a blocked normal path (impossible or beyond model capability/budget),
-and discoverable, verifiable vulnerabilities. Use six equal-size cards in three columns: task conditions above their multi-agent
-setting, with real tasks directly above persistent shared systems. Shared work
+and discoverable, verifiable vulnerabilities. Use six equal-size cards in three
+columns: task conditions above the corresponding swarm conditions, with real
+tasks directly above persistent shared systems. Shared work
 persists for other agents and future contexts to discover and reuse. On narrow
 screens keep each top/bottom pair together. Each agent operates in its own separate
 sandbox and interacts with shared external systems. Canonical agents run
 concurrently without assigned roles, pairs, leaders or a graph. Do not announce other agents.
-Provide communication channels agents can independently discover and use without hints. Measure
-actual discovery, sharing, adoption and consequences separately.
+Provide communication channels agents can independently discover and use without hints. Phase 1
+requires timestamped write→exact read→reply→exact read dialogue evidence in addition to a
+connected, persistent channel. Measure discovery, dialogue, adoption and consequences separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
 ## Edit and preview
@@ -35,8 +37,9 @@ The header and hero both link to all four main sections. Layouts reflow down to
 scrolling header. Keep keyboard access, readable wrapping and working fragment
 links when changing navigation.
 
-New study descriptions omit added pressure. Channel availability is separate
-from source-access boundaries; absence of chat is not a communication ban.
+New study descriptions omit artificial or agent-targeted pressure. Natural task
+facts such as real deadlines and contractual consequences may be stated. Channel
+availability is separate from source-access boundaries; absence of chat is not a communication ban.
 Preserve source evidence and distinguish historical observations from findings
 of a new experiment.
 

@@ -389,7 +389,7 @@ body [id] { scroll-margin-top: 0; }
  .chain-symbol { position:absolute; left:0; top:0; }
 }
 
-/* Equal-size cards map task conditions to their multi-agent setting. */
+/* Equal-size cards map task conditions to their swarm setting. */
 .principles-mapped { grid-template-rows:repeat(2,1fr); row-gap:36px; }
 .principles-mapped .principle-card { display:flex; flex-direction:column; }
 .principles-mapped .principle-signal { margin-top:auto; }
@@ -428,6 +428,7 @@ body [id] { scroll-margin-top: 0; }
 .regime-copy p { grid-column:2; max-width:36ch; margin:0; color:#b2bfcc; font-size:14px; line-height:1.55; }
 .regime-visual { position:relative; width:100%; height:auto; margin:auto 0 14px; overflow:visible; fill:none; stroke:#95b9d7; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; z-index:1; }
 .regime-visual text { fill:#8499ac; stroke:none; font:500 10px var(--display); letter-spacing:.1em; text-anchor:middle; }
+.regime-visual .dialogue-turn { fill:#dbeaf5; font-size:8px; letter-spacing:.08em; }
 .agent-nodes rect,.memory-node rect,.memory-small rect,.action-node rect { fill:rgba(8,14,20,.72); }
 .memory-node rect,.memory-small rect { stroke:#d4e7f7; }
 .memory-node circle { fill:#81b7df; stroke:none; }
@@ -439,7 +440,7 @@ body [id] { scroll-margin-top: 0; }
 .regime-flow strong { color:#e9f0f6; font-weight:500; }
 .harm-regime .regime-flow strong { color:#ff8b80; }
 .regime-link { display:grid; place-items:center; color:#8298aa; font:32px var(--display); }
-.evidence-chain ol { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.evidence-chain ol { grid-template-columns:repeat(3,minmax(0,1fr)); }
 .evidence-chain li:first-child::after { right:-13px; }
 @media(max-width:800px) {
  .framework-heading > p { grid-column:2; }

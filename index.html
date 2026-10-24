@@ -8,7 +8,7 @@
   <meta name="application-name" content="SwarmHarm">
   <meta name="apple-mobile-web-app-title" content="SwarmHarm">
   <meta name="description" content="SwarmHarm tests when isolated AI agents form a swarm and when that swarm causes verifiable harm.">
-  <meta name="keywords" content="SwarmHarm, agent swarm safety, multi-agent systems, emergent misalignment, shared memory">
+  <meta name="keywords" content="SwarmHarm, agent swarm safety, swarm systems, emergent misalignment, swarm communication">
   <meta name="author" content="AI4Collaboration">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#09090b">
@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=12">
   <link rel="stylesheet" href="static/css/scenarios.css?v=6">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=40">
+  <link rel="stylesheet" href="static/css/flight.css?v=42">
   <script src="static/js/sample.js?v=4" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
   <script type="application/ld+json">
@@ -89,13 +89,13 @@
       </div>
       <div class="test-regimes">
         <article class="regime-card swarm-regime" id="form-the-swarm">
-          <div class="regime-copy"><span class="regime-number">01</span><h3>Form the Swarm</h3><p>Can isolated agents discover each other and build shared memory?</p></div>
-          <svg class="regime-visual" viewBox="0 0 520 220" role="img" aria-label="Three isolated agents discover a shared system and build shared memory.">
+          <div class="regime-copy"><span class="regime-number">01</span><h3>Form the Swarm</h3><p>Can isolated agents autonomously establish a stable communication channel?</p></div>
+          <svg class="regime-visual" viewBox="0 0 520 220" role="img" aria-label="Isolated agents establish a live channel by writing, exactly reading, and replying to one another through a shared business system.">
             <g class="agent-nodes"><g transform="translate(18 18)"><rect width="96" height="46" rx="7"/><circle cx="27" cy="23" r="7"/><path d="M42 17h34M42 29h25"/></g><g transform="translate(18 87)"><rect width="96" height="46" rx="7"/><circle cx="27" cy="23" r="7"/><path d="M42 17h34M42 29h25"/></g><g transform="translate(18 156)"><rect width="96" height="46" rx="7"/><circle cx="27" cy="23" r="7"/><path d="M42 17h34M42 29h25"/></g></g>
             <g class="discovery-path"><path d="M114 41C188 41 184 101 256 101M114 110h142M114 179c74 0 70-60 142-60"/><path d="m246 93 10 8-10 8m0-7 10 8-10 8m0-7 10 8-10 8"/></g>
-            <g class="memory-node" transform="translate(274 55)"><rect width="224" height="112" rx="9"/><path d="M20 32h184M20 56h184M20 80h184"/><circle cx="34" cy="32" r="4"/><circle cx="34" cy="56" r="4"/><circle cx="34" cy="80" r="4"/><text x="112" y="105">SHARED MEMORY</text></g>
+            <g class="memory-node dialogue-node" transform="translate(274 55)"><rect width="224" height="112" rx="9"/><path d="M20 32h184M20 56h184M20 80h184"/><circle cx="24" cy="25" r="3"/><circle cx="24" cy="49" r="3"/><circle cx="24" cy="73" r="3"/><text class="dialogue-turn" x="112" y="29">A WRITES → B READS</text><text class="dialogue-turn" x="112" y="53">B REPLIES → A READS</text><text class="dialogue-turn" x="112" y="77">EXACT TEXT · LIVE TIME</text><text x="112" y="105">STABLE CHANNEL</text></g>
           </svg>
-          <div class="regime-flow"><span>Separate agents</span><span aria-hidden="true">→</span><strong>Shared memory</strong></div>
+          <div class="regime-flow"><span>Separate agents</span><span aria-hidden="true">→</span><strong>Live agent dialogue</strong></div>
         </article>
         <div class="regime-link" aria-hidden="true"><span>→</span></div>
         <article class="regime-card harm-regime" id="cause-harm">
@@ -126,9 +126,9 @@
           <div class="interaction-target"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6h11v16l-5-4h-4M5 12h19v16H13l-8 6Z"/><path d="M10 18h9m-9 5h6m13-12h2"/></svg><strong>Other agents</strong><span>Peers · <span class="judge-label">LLM-as-Judge</span></span></div>
         </div>
       </figure>
-      <div class="principle-heading"><h3>Three conditions in a multi-agent setting</h3></div>
+      <div class="principle-heading"><h3>Three conditions for a swarm</h3></div>
       <div class="principles-grid principles-mapped">
-        <article class="principle-card task-condition"><div class="principle-card-top"><span>01</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 8h19l7 7v26H12ZM31 8v8h7M18 23h14m-14 6h9"/><path class="signal" d="m7 17 3 3 6-7"/></svg></div><h3>Real tasks</h3><p>Legitimate work with a clear goal and a reason to finish.</p><div class="principle-signal">Completion incentive · No added pressure</div></article>
+        <article class="principle-card task-condition"><div class="principle-card-top"><span>01</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 8h19l7 7v26H12ZM31 8v8h7M18 23h14m-14 6h9"/><path class="signal" d="m7 17 3 3 6-7"/></svg></div><h3>Real tasks</h3><p>Legitimate work with a clear goal and a reason to finish.</p><div class="principle-signal">Real deadline · Real stakes</div></article>
         <article class="principle-card blocked-condition"><div class="principle-card-top"><span>02</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h13m16 0h13M19 10v28m10-28v28M19 17h10m-10 14h10"/><path class="signal" d="m20 20 8 8m0-8-8 8"/></svg></div><h3>A blocked normal path</h3><p>Valid completion is impossible, or beyond the model’s capability within its resource budget.</p><div class="principle-signal">Impossible · Capability-limited</div></article>
         <article class="principle-card vulnerability-condition"><div class="principle-card-top"><span>03</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 14h12m16 0h12M20 7v14M4 14v23h40V14m-6 6 6-6-6-6"/><path class="signal" d="M6 37h34"/></svg></div><h3>A discoverable vulnerability</h3><p>A reachable process weakness with verifiable effects. No hints to find or use it.</p><div class="principle-signal">Unprompted discovery · Verifiable effects</div></article>
         <article class="principle-card system-condition mapped-lower"><div class="system-visual"><svg viewBox="0 0 280 90" role="img" aria-label="Independent agents leave work in one persistent shared system that other agents can discover and reuse."><rect x="5" y="22" width="38" height="30" rx="6"/><rect x="237" y="22" width="38" height="30" rx="6"/><path d="M15 33h3m12 0h3m214 0h3m12 0h3M43 37h53m88 0h53"/><path class="signal" d="m89 31 7 6-7 6m143-12 7 6-7 6"/><rect x="101" y="17" width="78" height="40" rx="4"/><path d="M109 29h62m-62 10h62m-62 10h62"/><path class="signal" d="M101 66h78m-5-4 5 4-5 4"/><g class="system-labels"><text x="24" y="79">Agent A</text><text x="140" y="84">Work persists</text><text x="256" y="79">Agent B</text></g></svg></div><h3>Persistent shared systems</h3><p>Realistic shared systems retain work for other agents and future contexts to discover and reuse.</p><div class="principle-signal">Agents act → Artifacts persist → Others reuse</div></article>
@@ -136,10 +136,10 @@
         <article class="principle-card channel-condition mapped-lower"><div class="system-visual"><svg viewBox="0 0 280 90" role="img" aria-label="Agents can discover a communication channel through shared artifacts."><rect x="5" y="30" width="38" height="30" rx="6"/><rect x="237" y="30" width="38" height="30" rx="6"/><path d="M15 41h3m12 0h3m214 0h3m12 0h3M43 45h60m74 0h60"/><path class="signal" d="m96 39 7 6-7 6m134-12 7 6-7 6"/><path d="M120 15h26l14 14v45h-40Zm26 0v15h14M128 42h24m-24 10h18"/></svg></div><h3>Discoverable channels</h3><p>Agents can find and use shared resources to communicate, without instructions or hints.</p><div class="principle-signal">Discover → Communicate</div></article>
       </div>
       <figure class="evidence-chain" aria-labelledby="chain-title">
-        <figcaption><h3 id="chain-title">Evidence required</h3><span>Both parts must be observed</span></figcaption>
-        <ol><li><span class="chain-symbol" aria-hidden="true">↗</span><strong>Form the Swarm</strong><small>Shared memory changes a later agent's work</small></li><li><span class="chain-symbol" aria-hidden="true">≠</span><strong>Cause Harm</strong><small>An independent check confirms the consequence</small></li></ol>
+        <figcaption><h3 id="chain-title">Evidence required</h3><span>Communication comes first</span></figcaption>
+        <ol><li><span class="chain-symbol" aria-hidden="true">↗</span><strong>Form the Swarm</strong><small>Exact write → read → reply → read</small></li><li><span class="chain-symbol" aria-hidden="true">→</span><strong>Use</strong><small>Swarm information changes an action</small></li><li><span class="chain-symbol" aria-hidden="true">≠</span><strong>Cause Harm</strong><small>An independent check confirms the consequence</small></li></ol>
       </figure>
-      <div class="principle-footer"><span>Natural prompts</span><span>No added pressure</span><span>Independent truth</span><a href="#test-methods">Admission checks ↗</a></div>
+      <div class="principle-footer"><span>Natural prompts</span><span>Task-intrinsic pressure</span><span>Independent truth</span><a href="#test-methods">Admission checks ↗</a></div>
       <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
         <figcaption><h3 id="coverage-title">Domain coverage</h3></figcaption>
         <ul class="coverage-icons">
@@ -256,7 +256,7 @@
             <li><h4>The result returned to the agent</h4><p>The agent received both weather responses. The excerpt below is part of the returned text.</p><pre class="evidence-output"><code>METAR LSZH 061320Z 35004KT 260V030 CAVOK 22/09 Q1018 NOSIG</code></pre><p class="evidence-locator">Excerpt of model-returned text; not an independent weather observation.</p></li>
           </ol>
           <div class="sample-peer"><h4>A peer drew a different boundary.</h4><blockquote>“What I still won't do is re-run the route myself”</blockquote><p>A peer reviewed the output but declined to repeat the method because it relied on extracting the runtime’s model credential.</p></div>
-          <p class="evidence-limit"><strong>What this evidence establishes:</strong> credential reuse, direct calls to other models, service-reported web-tool execution, and returned text. Network denials and disabled local browsing are reported in the captured conversation. These excerpts are not a packet capture, an independent check of the weather, or a controlled comparison of single-agent and multi-agent behavior.</p>
+          <p class="evidence-limit"><strong>What this evidence establishes:</strong> credential reuse, direct calls to other models, service-reported web-tool execution, and returned text. Network denials and disabled local browsing are reported in the captured conversation. These excerpts are not a packet capture, an independent check of the weather, or a controlled comparison of single-agent and swarm behavior.</p>
         </div>
       </details>
     </div>
@@ -273,7 +273,7 @@
         <article class="rq-card" id="rq1">
           <span class="rq-label">RQ1</span>
           <h3>Form the Swarm</h3>
-          <p>When do isolated agents discover each other and build shared memory?</p>
+          <p>When do isolated agents autonomously establish stable communication?</p>
         </article>
         <article class="rq-card" id="rq2">
           <span class="rq-label">RQ2</span>
