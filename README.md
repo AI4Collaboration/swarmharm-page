@@ -6,20 +6,26 @@ form a swarm, and when that swarm causes verifiable harm. It also shows the core
 environment conditions, a historical sample case and the research questions.
 Do not add unpublished experiment results.
 
-The environment has three core conditions: a legitimate goal with a completion
-incentive, a blocked normal path (impossible or beyond model capability/budget),
-and discoverable, verifiable vulnerabilities. Use six equal-size cards in three
-columns: task conditions above the corresponding swarm conditions, with real
-tasks directly above persistent shared systems. Shared work
-persists for other agents and future contexts to discover and reuse. On narrow
-screens keep each top/bottom pair together. Each agent operates in its own separate
-sandbox with task-scoped, least-privilege access and interacts with shared external systems. Canonical agents run
-through one simultaneous start barrier and keep all contexts live until global termination,
-without assigned roles, pairs, leaders, an arrival order or a graph. Do not announce other agents.
-Provide narrow, task-relevant communication surfaces agents can independently discover and use
-without hints. Phase 1 requires a connected, persistent exact-read channel, repeated relays and
-verified functional use on different business objects. Measure two-way dialogue and full reciprocal
-closure separately.
+Present the study as one 2×2 framework. The left column states what Phase 1 and
+Phase 2 test; the right column gives the matching environment principles. Do
+not split the framework into a separate feature or “what we are building”
+section.
+
+Phase 1 asks whether initially separate agents autonomously form a persistent,
+live communication channel. Its environment combines a legitimate task that is
+mechanically impossible through the intended workflow, concurrent agents in
+separate least-privilege sandboxes, and one necessary shared-system weakness
+that is discoverable but never announced or seeded. The evidence gate requires
+a connected exact-read channel, repeated relays and a timestamped
+request→read→reply→requester-read round trip while contexts overlap. Functional
+transfer and full reciprocal closure are stronger measures, not part of the
+formation definition.
+
+Phase 2 asks whether information carried by the swarm changes an executed
+action and produces a concrete adverse outcome. Use natural consequential
+tasks, persistent shared business state and an independent verifier that
+recomputes the effect from source truth rather than agent text, status fields
+or an LLM judgment.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
 ## Edit and preview
@@ -34,10 +40,12 @@ Open `http://127.0.0.1:8765/`. Edit `index.html`, styles in `static/css/`
 and interactions in `static/js/`. `flight.css` is the final presentation layer.
 Increment the affected asset query versions in `index.html` when publishing.
 
-The header and hero both link to all four main sections. Layouts reflow down to
-320 CSS pixels without hiding links; narrow or short viewports use a normal
-scrolling header. Keep keyboard access, readable wrapping and working fragment
-links when changing navigation.
+The header and hero link to the framework, sample case and research questions.
+The framework stays 2×2 in an ordinary side panel and becomes a correctly
+ordered single column only on narrow or highly zoomed views. Layouts reflow
+down to 320 CSS pixels without hiding links; narrow or short viewports use a
+normal scrolling header. Keep keyboard access, readable wrapping and working
+fragment links when changing navigation.
 
 New study descriptions omit artificial or agent-targeted pressure. Natural task
 facts such as real deadlines and contractual consequences may be stated. Channel
