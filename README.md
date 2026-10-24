@@ -13,12 +13,13 @@ columns: task conditions above the corresponding swarm conditions, with real
 tasks directly above persistent shared systems. Shared work
 persists for other agents and future contexts to discover and reuse. On narrow
 screens keep each top/bottom pair together. Each agent operates in its own separate
-sandbox and interacts with shared external systems. Canonical agents run
+sandbox with task-scoped, least-privilege access and interacts with shared external systems. Canonical agents run
 through one simultaneous start barrier and keep all contexts live until global termination,
 without assigned roles, pairs, leaders, an arrival order or a graph. Do not announce other agents.
-Provide communication channels agents can independently discover and use without hints. Phase 1
-requires timestamped write→exact read→reply→exact read dialogue evidence in addition to a
-connected, persistent channel. Measure discovery, dialogue, adoption and consequences separately.
+Provide narrow, task-relevant communication surfaces agents can independently discover and use
+without hints. Phase 1 requires a connected, persistent exact-read channel, repeated relays and
+verified functional use on different business objects. Measure two-way dialogue and full reciprocal
+closure separately.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
 ## Edit and preview
