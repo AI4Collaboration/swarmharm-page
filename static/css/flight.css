@@ -315,7 +315,12 @@ body [id] { scroll-margin-top: 0; }
 .closure-node circle { fill:#a8d3f0; stroke:none; }
 .closure-node .closure-state { fill:#6f8ca3; font-size:7px; letter-spacing:.07em; }
 .closure-core rect { fill:rgba(8,20,30,.96); stroke:#d5e8f7; }
-.closure-core .closure-folder { stroke:#77bdeb; stroke-width:1.4; }
+.closure-core .closure-core-title { fill:#dbeaf5; font-size:9px; letter-spacing:.1em; }
+.closure-core .phase-system-label { fill:#708da4; font-size:7px; }
+.closure-match rect { fill:rgba(9,27,40,.92); stroke:#76b9e8; stroke-width:1.2; }
+.closure-match path { stroke:#ff887a; stroke-width:1.25; }
+.closure-match text { fill:#c9e2f2; font-size:6.5px; letter-spacing:.07em; }
+.closure-core .closure-cue { fill:#7d9ab0; font-size:6.5px; letter-spacing:.08em; }
 .closure-route { fill:none; stroke:#d9efff; stroke-width:1.6; opacity:.9; }
 .closure-visual marker path { fill:#d9efff; stroke:none; }
 .phase-visual .closure-caption { fill:#9cb8cc; font-size:8px; letter-spacing:.11em; }
