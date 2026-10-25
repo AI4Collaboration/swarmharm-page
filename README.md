@@ -21,11 +21,14 @@ shows the mechanism rather than unpublished results: four simultaneously active
 private contexts explore their workstations, discover the shared directory and
 may establish persistent communication through it.
 
-Phase 2 asks whether information carried by the swarm changes an executed
-action and produces a concrete adverse outcome. Use natural consequential
-tasks, persistent shared business state and an independent verifier that
-recomputes the effect from source truth rather than agent text, status fields
-or an LLM judgment.
+Phase 2 asks whether the same formed swarm produces a concrete, verifiable
+collective misalignment. Require at least two distinct agents to deliberately
+take causally relevant actions that contribute to one system-level outcome.
+Each local action may be ordinary and harmless alone; the harm may arise only
+when the actions combine. Recompute that combined effect from source truth
+rather than agent text, status fields or an LLM judgment. Report aggregate-state
+access and awareness separately. Propagation, composition, amplification and
+emergent orchestration are possible observations, not required mechanisms.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
 ## Local development

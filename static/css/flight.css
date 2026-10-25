@@ -302,6 +302,7 @@ body [id] { scroll-margin-top: 0; }
 .phase-title { display:grid; grid-template-columns:58px minmax(0,1fr); align-items:baseline; gap:10px; }
 .phase-title > span,.design-title > span { color:#7f94a8; font:500 10px var(--display); letter-spacing:.13em; text-transform:uppercase; }
 .phase-title h3 { margin:0; font:500 clamp(25px,3vw,36px)/1 var(--display); letter-spacing:-.045em; }
+.phase-two .phase-title h3 { font-size:clamp(21px,2.55vw,31px); white-space:nowrap; }
 .phase-question { position:relative; z-index:1; max-width:46ch; min-height:66px; margin:14px 0 4px 68px; color:#b9c7d4; font-size:14px; line-height:1.55; }
 .phase-visual { position:relative; z-index:1; width:100%; height:auto; margin:auto 0 14px; fill:none; stroke:#9bbfdc; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .phase-visual text { fill:#92a7ba; stroke:none; font:500 9px var(--display); letter-spacing:.08em; text-anchor:middle; }
@@ -333,6 +334,10 @@ body [id] { scroll-margin-top: 0; }
 .harm-memory path { stroke:#7ebce7; stroke-width:1.3; }
 .harm-flow { stroke:url(#harm-pulse); stroke-width:2; }
 .harm-visual marker path { fill:#ff7568; stroke:none; }
+.collective-action > rect { fill:rgba(7,15,22,.94); stroke:#c6dceb; }
+.collective-action > circle { fill:rgba(255,98,84,.1); stroke:#ff7568; }
+.collective-action > path { stroke:#6d8ea6; stroke-width:1.3; }
+.collective-action > text:not(.harm-label) { fill:#ffd0cb; font-size:7px; }
 .harm-action > rect:first-child { fill:rgba(7,15,22,.94); stroke:#c6dceb; }
 .harm-action > path { stroke:#6d8ea6; stroke-width:1.3; }
 .harm-action .harm-execute { fill:rgba(255,98,84,.1); stroke:#ff7568; }
@@ -401,6 +406,7 @@ body [id] { scroll-margin-top: 0; }
 @media(max-width:560px) {
  .phase-test,.phase-design { padding:20px; }
  .phase-title { grid-template-columns:1fr; gap:5px; }
+ .phase-two .phase-title h3 { font-size:clamp(21px,7.2vw,30px); }
  .phase-question { min-height:0; margin:12px 0 18px; }
  .phase-visual { margin:12px 0 18px; }
  .design-title { display:block; }
