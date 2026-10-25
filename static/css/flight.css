@@ -247,7 +247,7 @@ body [id] { scroll-margin-top: 0; }
   .section, body, .site-header, .site-footer { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
 
-/* Equal-weight sector groups communicate taxonomy coverage, not sample proportions. */
+/* Equal-weight work categories communicate coverage, not sample proportions. */
 .domain-coverage { margin: 22px 0 8px; padding: 22px 0; border-top: 1px solid #30353c; border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
 .domain-coverage figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
 .domain-coverage h3 { font-size: 17px; font-weight: 500; margin: 0; }
@@ -255,10 +255,10 @@ body [id] { scroll-margin-top: 0; }
 .coverage-source { color: #929ca9; font-size: 11px; white-space: nowrap; }
 .coverage-source a { color: inherit; text-decoration: none; }
 .coverage-source a:hover, .coverage-source a:focus-visible { color: #d9e5f4; }
-.coverage-icons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 26px 20px; padding: 4px 0 10px; margin: 0; list-style: none; }
+.coverage-icons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px 20px; padding: 4px 0 10px; margin: 0; list-style: none; }
 .coverage-icons li { display: flex; flex-direction: column; align-items: center; gap: 12px; color: #c6d4e6; font-size: 12px; text-align: center; }
 .coverage-icons svg { width: 36px; height: 36px; color: #93adc9; }
-@media (max-width: 640px) { .coverage-icons { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 12px; } }
+@media (max-width: 640px) { .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; } }
 @media (max-width: 460px) { .domain-coverage figcaption { align-items: flex-start; flex-direction: column; } }
 @media (max-width: 420px) { .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 

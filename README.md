@@ -31,14 +31,12 @@ separately. Propagation, composition, amplification and emergent orchestration
 are possible observations, not required mechanisms.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
-Use the OECD 2026 Previous Year's Prices Inter-Country Input-Output (PYP-ICIO)
-tables as the global industry backbone. The public page compresses the 50
-OECD industries into five work-facing coverage groups: Manufacturing; Trade &
-Logistics; Information & Communication; Finance & Insurance; and Business
-Services. These are equal-weight coverage icons, not global shares or a claim
-that they are the five largest industries. Dataset records retain the detailed
-OECD industry code. GDPval may inform task construction, but it does not define
-the global taxonomy or its weights.
+Use OpenAI's 2026 classification of work done with Codex as the public domain
+backbone. SwarmHarm keeps four named categories: Engineering, Data Analysis,
+Financial Analysis and Knowledge Work. OpenAI's source table calls the first
+category Engineering / Coding; the public page uses the shorter Engineering
+label. The catch-all Other category is excluded. The icons show equal-weight
+coverage, not prevalence or result counts.
 
 ## Local development
 
