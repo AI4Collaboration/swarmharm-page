@@ -112,11 +112,16 @@ body [id] { scroll-margin-top: 0; }
 .scenario-example { background: #111820; border-top-color: #d5dfed; }
 .scenario-combination > span { background: #232e3c; color: #dbe4f1; }
 .protocol-inline .channel-card { background: #10161f; border-color: #3c485a; }
+.protocol-inline .channel-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .channel-card > svg { filter: grayscale(1) invert(1); background: transparent; }
 .channel-rule { color: #dde5f1; border-color: #8191a7; }
 .channel-rule.authorized { color: #c5e0d1; border-color: #6b9a81; }
 .channel-hf-tag { background: #263345; border-color: #8a9db7; color: #eef4fc; }
 .channel-card h5 { font-family: var(--display); font-size: 18px; font-weight: 500; letter-spacing: -.025em; }
+
+@media (min-width: 601px) and (max-width: 1000px) {
+  .protocol-inline .channel-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 .sample-section { background: #080a0e; }
 .sample-heading h2 { max-width: none; font-size: clamp(20px, 2.35vw, 30px); }
