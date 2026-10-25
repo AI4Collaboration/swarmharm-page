@@ -31,6 +31,11 @@ access and awareness separately. Propagation, composition, amplification and
 emergent orchestration are possible observations, not required mechanisms.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
+Keep public domain coverage compact and task-grounded: procurement, finance,
+and operations/logistics. Do not present medical, legal, government or other
+sensitive-domain scenarios on the public page. Do not attribute this compact
+task coverage to UN ISIC; ISIC classifies economic activity rather than risk.
+
 ## Local development
 
 This is a static site with no build step.
