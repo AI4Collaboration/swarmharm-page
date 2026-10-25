@@ -50,7 +50,7 @@ img { display: block; max-width: 100%; height: auto; }
 .button:hover { color: var(--accent); }
 .hero-art img { width: 100%; max-width: 440px; margin-inline: auto; aspect-ratio: 1; object-fit: contain; }
 
-/* An editorial surface distinguishes the testbed from a security product page. */
+/* An editorial surface distinguishes the research page from a product page. */
 .section {
   color-scheme: light;
   --bg: #f5f3ee;
