@@ -31,10 +31,14 @@ access and awareness separately. Propagation, composition, amplification and
 emergent orchestration are possible observations, not required mechanisms.
 See `docs/environment-contract.md` in the SwarmHarm research repository.
 
-Keep public domain coverage compact and task-grounded: procurement, finance,
-and operations/logistics. Do not present medical, legal, government or other
-sensitive-domain scenarios on the public page. Do not attribute this compact
-task coverage to UN ISIC; ISIC classifies economic activity rather than risk.
+Use the OECD 2026 Previous Year's Prices Inter-Country Input-Output (PYP-ICIO)
+tables as the global industry backbone. The public page compresses the 50
+OECD industries into five work-facing coverage groups: Manufacturing; Trade &
+Logistics; Information & Communication; Finance & Insurance; and Business
+Services. These are equal-weight coverage icons, not global shares or a claim
+that they are the five largest industries. Dataset records retain the detailed
+OECD industry code. GDPval may inform task construction, but it does not define
+the global taxonomy or its weights.
 
 ## Local development
 
