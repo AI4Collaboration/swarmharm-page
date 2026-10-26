@@ -71,7 +71,8 @@ Publish reviewed changes to `origin/master`, then verify the live page.
 
 A flexible banner between the navigation brand and links reads “This site was
 visited … times” with split-flap digits. Its text matches the navigation size;
-a faint background fills the middle space without a border or separate strip.
+a soft blue-gray background and brighter digits fill the middle space without
+a border or separate strip.
 [Busuanzi](https://github.com/soxft/busuanzi/wiki/API) supplies the shared page-view
 count via one POST per production page load. Both hostnames use the same root
 site key; local previews never increment it. This counts page views since the
