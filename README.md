@@ -87,10 +87,17 @@ Official sources, retrieved 26 October 2026:
 The sample diagram summarizes the published Engineering rollout: four agents,
 live requests and replies, then 11 activated runtime units against a capacity of
 4. Its capacity marker is proportional. Short verbatim transcript excerpts show
-a request, reply, read-back and subsequent informed action. Ellipses mark omitted
-text. `static/data/sample-transcript.json` records their timestamps, agent mapping
-and evidence digest. Keep website copy and curation in this repository; do not
-alter technical study context to match presentation wording.
+a request, reply, read-back and subsequent informed action. Each phase also has
+an expandable log with full original messages and separately identified read
+receipts; Phase 2 includes the actual tool call and result. Ellipses mark omitted
+text only in the compact excerpts. `static/data/sample-transcript.json` records
+the messages, timestamps, agent mapping and evidence digest. Keep website copy
+and curation in this repository; do not alter technical study context to match
+presentation wording.
+
+Use a lighter slate background with blue and red phase panels. The hero shield
+was adjusted with the built-in image tool: make only the shield about 7 percent
+taller; preserve its width, swarm composition, lighting and small breach.
 
 The research section defines `rollout@k` as k independent runs with the model,
 task and condition fixed. Report successful swarm-formation runs and successful

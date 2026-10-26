@@ -7,7 +7,7 @@
 .channel-card > p { margin-top: 12px; color: var(--muted); font-size: 14px; }
 
 /* The observed Engineering campaign, from formation to a shared outcome. */
-.sample-section { background: #07090c; }
+.sample-section { background: #151f2a; }
 .sample-heading { margin-bottom: 28px; }
 .sample-heading > p { color: #9cabb9; font-size: 13px; }
 .sample-brief { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 20px 0; margin-bottom: 30px; border-block: 1px solid #303a44; }
@@ -21,11 +21,11 @@
 .observed-tag { display: inline-flex; flex: none; align-items: center; gap: 7px; color: #b6c5cf; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
 .observed-tag i { width: 5px; height: 5px; border-radius: 50%; background: #b5d5bd; box-shadow: 0 0 10px #b5d5bd30; }
 .release-flow { display: grid; grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr); }
-.release-phase { min-width: 0; padding: 25px; border: 1px solid #334250; background: linear-gradient(145deg, #0c1721, #080d13 70%); }
+.release-phase { min-width: 0; padding: 25px; border: 1px solid #4a6175; background: linear-gradient(145deg, #24374a, #1b2937 70%); }
 .release-phase header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 22px; }
 .release-phase header > span { color: #91b6d4; font-size: 10px; letter-spacing: .11em; text-transform: uppercase; }
 .release-phase h4 { margin: 0; color: #eff4f8; font: 500 23px/1.25 var(--display); letter-spacing: -.035em; }
-.release-harm { border-color: #4c3739; background: linear-gradient(145deg, #1c1215, #0d0b0e 70%); }
+.release-harm { border-color: #705359; background: linear-gradient(145deg, #36272f, #261e28 70%); }
 .release-harm header > span { color: #ee9d92; }
 .scene-label { margin-bottom: 15px; color: #91a7ba; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
 .formation-scene { min-width: 0; }
@@ -34,7 +34,7 @@
 .formation-agents > span::after { content: ""; position: absolute; right: 6px; top: 6px; width: 3px; height: 3px; background: #89b5d6; }
 .formation-agents i, .activation-series i { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #9ebfd8; border-radius: 50%; color: #d7e6f1; font: 400 11px var(--display); font-style: normal; }
 .formation-routes { display: block; width: 100%; height: 38px; fill: none; stroke: #86aaca; stroke-width: 1; vector-effect: non-scaling-stroke; }
-.release-activity { padding: 16px; border: 1px solid #597b97; background: #0e1c28; }
+.release-activity { padding: 16px; border: 1px solid #597b97; background: #203445; }
 .activity-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; }
 .activity-heading > svg { width: 20px; height: 20px; fill: none; stroke: #adcee6; stroke-width: 1.3; }
 .activity-heading > strong { font: 500 14px var(--display); color: #dfeef8; }
@@ -70,7 +70,7 @@
 .capacity-track b { position: absolute; top: 100%; left: 0; transform: translateX(-50%); padding-top: 6px; white-space: nowrap; color: #d4b5b1; font: 400 9px var(--display); }
 .capacity-ledger > p { margin-top: 34px; color: #f09c8f; font-size: 10px; text-align: right; text-transform: uppercase; letter-spacing: .06em; }
 .release-phase > p { margin-top: 22px; padding-top: 18px; border-top: 1px solid #483238; color: #c6b3b9; font-size: 12px; line-height: 1.65; }
-.release-outcome { display: flex; align-items: center; gap: 18px; margin-top: 24px; padding: 21px 25px; border: 1px solid #754d47; background: linear-gradient(100deg, #241417, #0c0d11); }
+.release-outcome { display: flex; align-items: center; gap: 18px; margin-top: 24px; padding: 21px 25px; border: 1px solid #8c655d; background: linear-gradient(100deg, #3a2830, #212632); }
 .outcome-symbol { flex: none; }
 .outcome-symbol svg { display: block; width: 36px; height: 36px; fill: none; stroke: #ed9586; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 .release-effect > span { display: block; margin-bottom: 4px; color: #d3a9a2; font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
@@ -94,6 +94,23 @@
 .action-receipt { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 5px 12px; margin-top: 12px; font-size: 11px; }
 .action-receipt code { color: #d6bac1; font: 11px var(--display); }
 .action-receipt > span { color: #ffab9c; }
+.communication-log { margin-top: 20px; border-top: 1px solid #526777; }
+.communication-log > summary { display: flex; justify-content: space-between; align-items: center; min-height: 44px; gap: 12px; cursor: pointer; list-style: none; color: #d4e5f1; font-size: 12px; }
+.communication-log > summary span { font-size: 20px; }
+.communication-log[open] > summary span { transform: rotate(45deg); }
+.communication-log > a { display: inline-block; margin-top: 12px; color: #b9d4e7; font-size: 11px; text-decoration: underline; text-underline-offset: 3px; }
+.log-entries { max-height: 430px; overflow: auto; overscroll-behavior: contain; scrollbar-color: #718b9f #172635; scrollbar-width: thin; }
+.log-entry { margin: 0 0 12px; padding: 14px; border-left: 2px solid #86b5d5; background: #192b3b; }
+.log-entry header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin: 0 0 8px; color: #d4e5f1; font-size: 11px; }
+.log-entry header strong { font-weight: 500; }
+.log-entry time { color: #acc0ce; font: 10px var(--display); white-space: nowrap; }
+.log-entry p, .log-entry pre { margin: 0; color: #d8e2ea; font-size: 12px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.log-entry pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; }
+.log-read { padding: 8px 14px; background: transparent; border-color: #78948f; }
+.log-read p { font-size: 11px; color: #abc9c0; }
+.release-harm .communication-log { border-color: #7b5e68; }
+.release-harm .log-entry { background: #32232f; border-color: #dd9c92; }
+.release-harm .log-read { background: transparent; border-color: #78948f; }
 
 summary::-webkit-details-marker { display: none; }
 summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }

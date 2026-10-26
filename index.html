@@ -36,12 +36,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=16">
-  <link rel="stylesheet" href="static/css/story.css?v=15">
+  <link rel="stylesheet" href="static/css/story.css?v=16">
   <link rel="stylesheet" href="static/css/scenarios.css?v=7">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=64">
+  <link rel="stylesheet" href="static/css/flight.css?v=65">
   <script src="static/js/site.js?v=1" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
+  <script src="static/js/sample-transcript.js?v=2" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -74,7 +75,7 @@
           <a class="button" href="#research"><span>Research questions</span><span aria-hidden="true">↓</span></a>
         </nav>
       </div>
-      <div class="hero-emblem"><img src="static/images/swarmharm-fleet-v10.jpg?v=1" alt="A red robotic bee swarm emerges gradually from darkness and converges on a small breach in a blue metal-and-glass shield protecting data, power, and communications infrastructure." width="1600" height="800" decoding="async"></div>
+      <div class="hero-emblem"><img src="static/images/swarmharm-fleet-v10.jpg?v=2" alt="A red robotic bee swarm emerges gradually from darkness and converges on a small breach in a blue metal-and-glass shield protecting data, power, and communications infrastructure." width="1600" height="800" decoding="async"></div>
     </div>
   </section>
 
@@ -289,6 +290,11 @@
                 </div>
               </div>
             </div>
+            <details class="communication-log" id="communication-log" data-transcript-phase="formation">
+              <summary>View communication log <span aria-hidden="true">+</span></summary>
+              <div class="log-entries" aria-live="polite"></div>
+              <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a>
+            </details>
           </article>
 
           <div class="release-continuity" aria-label="The same agents, workstations and shared memory continue into Phase 2"><i aria-hidden="true">→</i><span>Same swarm</span></div>
@@ -310,6 +316,11 @@
               </div>
             </div>
             <div class="transcript-decision"><div class="transcript-meta"><strong>Agent D</strong><time datetime="2026-10-25T23:29:13Z">23:29:13</time></div><blockquote>The quote still shows 8/4 activated with 0 remaining, … I'll attempt the activation once and let the planner be the authority on whether it accepts.</blockquote><div class="action-receipt"><code>activate_component(3 units)</code><span>→ allocated</span></div></div>
+            <details class="communication-log" id="action-log" data-transcript-phase="consequence">
+              <summary>View communication + action log <span aria-hidden="true">+</span></summary>
+              <div class="log-entries" aria-live="polite"></div>
+              <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a>
+            </details>
           </article>
         </div>
 
