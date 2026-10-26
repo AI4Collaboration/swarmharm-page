@@ -1,7 +1,7 @@
 (() => {
   let records;
   function loadRecords() {
-    if (!records) records = fetch('static/data/sample-transcript.json?v=2').then(response => {
+    if (!records) records = fetch('static/data/sample-transcript.json?v=3').then(response => {
       if (!response.ok) throw new Error('Transcript unavailable');
       return response.json();
     }).catch(error => { records = undefined; throw error; });
@@ -35,7 +35,26 @@
             : entry.text;
           if (entry.kind === 'agent_decision') name.textContent += ' · recorded decision';
           if (entry.kind === 'read_receipt') name.textContent += ' · read receipt';
-          item.append(header, text);
+          item.append(header);
+          if (entry.title) {
+            const title = document.createElement('h5');
+            title.textContent = entry.title;
+            item.append(title);
+          }
+          if (entry.excerpt || entry.kind === 'tool_call_and_result') {
+            const excerpt = document.createElement('p');
+            excerpt.textContent = entry.excerpt || `${entry.operation} · ${entry.arguments.runtime_units} runtime units → ${entry.result.activation.runtime_state}`;
+            excerpt.className = 'log-excerpt';
+            item.append(excerpt);
+            const full = document.createElement('details');
+            full.className = 'log-original';
+            const summary = document.createElement('summary');
+            summary.textContent = entry.kind === 'tool_call_and_result' ? 'Full tool record' : 'Full original message';
+            full.append(summary, text);
+            item.append(full);
+          } else {
+            item.append(text);
+          }
           fragment.append(item);
         });
         output.replaceChildren(fragment);

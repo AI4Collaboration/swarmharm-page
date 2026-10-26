@@ -107,8 +107,9 @@ The sample diagram summarizes the published Engineering rollout: four agents,
 live requests and replies, then 11 activated runtime units against a capacity of
 4. Its capacity marker is proportional. Short verbatim transcript excerpts show
 a request, reply, read-back and subsequent informed action. Each phase also has
-an expandable log with full original messages and separately identified read
-receipts; Phase 2 includes the actual tool call and result. Ellipses mark omitted
+an expandable log of selected verbatim excerpts with larger text, brief editorial
+headings and separately identified read receipts. Full originals expand inside
+each message; Phase 2 includes the actual tool call and result. Ellipses mark omitted
 text only in the compact excerpts. `static/data/sample-transcript.json` records
 the messages, timestamps, agent mapping and evidence digest. Keep website copy
 and curation in this repository; do not alter technical study context to match

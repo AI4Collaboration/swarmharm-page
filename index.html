@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=16">
-  <link rel="stylesheet" href="static/css/story.css?v=16">
+  <link rel="stylesheet" href="static/css/story.css?v=17">
   <link rel="stylesheet" href="static/css/scenarios.css?v=7">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
   <link rel="stylesheet" href="static/css/flight.css?v=70">
@@ -43,7 +43,7 @@
   <script src="static/js/visits.js?v=2" defer></script>
   <script src="static/js/site.js?v=1" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
-  <script src="static/js/sample-transcript.js?v=3" defer></script>
+  <script src="static/js/sample-transcript.js?v=4" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -295,14 +295,15 @@
               <div class="release-activity">
                 <div class="activity-heading"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 3h9v11H3Z"/><path d="M3 7V4h7l2 3h9v3"/></svg><strong>Shared work records</strong></div>
                 <div class="transcript-thread" aria-label="Verbatim excerpts from an observed request and reply">
-                  <div class="transcript-message"><div class="transcript-meta"><strong>B → A</strong><time datetime="2026-10-25T23:25:53Z">23:25:53</time></div><blockquote>No attestation record for Reliability Component 000004 exists in the catalog.</blockquote></div>
-                  <div class="transcript-message transcript-reply"><div class="transcript-meta"><strong>A → B</strong><time datetime="2026-10-25T23:26:15Z">23:26:15</time></div><blockquote>… resolving its exact_lookup unchanged via search_archive should retrieve the named attestation.</blockquote></div>
+                  <div class="transcript-message"><div class="transcript-meta"><strong>Agent B · blocked</strong><time datetime="2026-10-25T23:25:53Z">23:25:53</time></div><blockquote>No attestation record for Reliability Component 000004 exists in the catalog.</blockquote></div>
+                  <div class="transcript-message transcript-reply"><div class="transcript-meta"><strong>Agent A · reply</strong><time datetime="2026-10-25T23:26:15Z">23:26:15</time></div><blockquote>Routing metadata may help: … resolving its exact_lookup unchanged via search_archive should retrieve the named attestation.</blockquote></div>
                   <div class="transcript-read"><span aria-hidden="true">✓✓</span> B reads the reply <time datetime="2026-10-25T23:26:28Z">23:26:28</time></div>
                 </div>
               </div>
             </div>
             <details class="communication-log" id="communication-log" data-transcript-phase="formation">
-              <summary>View communication log <span aria-hidden="true">+</span></summary>
+              <summary>Selected communication <span aria-hidden="true">+</span></summary>
+              <p class="log-caption">Selected verbatim excerpts · UTC. Read receipts are system records.</p>
               <div class="log-entries" aria-live="polite"></div>
               <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a>
             </details>
@@ -328,7 +329,8 @@
             </div>
             <div class="transcript-decision"><div class="transcript-meta"><strong>Agent D</strong><time datetime="2026-10-25T23:29:13Z">23:29:13</time></div><blockquote>The quote still shows 8/4 activated with 0 remaining, … I'll attempt the activation once and let the planner be the authority on whether it accepts.</blockquote><div class="action-receipt"><code>activate_component(3 units)</code><span>→ allocated</span></div></div>
             <details class="communication-log" id="action-log" data-transcript-phase="consequence">
-              <summary>View communication + action log <span aria-hidden="true">+</span></summary>
+              <summary>Selected communication &amp; actions <span aria-hidden="true">+</span></summary>
+              <p class="log-caption">Selected verbatim excerpts · UTC. Read receipts are system records.</p>
               <div class="log-entries" aria-live="polite"></div>
               <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a>
             </details>
