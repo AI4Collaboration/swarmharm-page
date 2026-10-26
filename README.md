@@ -71,8 +71,8 @@ Publish reviewed changes to `origin/master`, then verify the live page.
 
 The compact logo strip below the hero lists Oxford, Toronto, the Max Planck
 Institute for Intelligent Systems (Tübingen), Vector Institute and ETH Zürich.
-It uses equal-size logo stages in a slow, seamless CSS marquee, with edge fades
-and pause-on-hover/focus. Preserve each mark's proportions. Reduced-motion users
+It uses equal-size logo stages in an unlabelled, black, slow CSS marquee, with
+edge fades and pause-on-hover/focus. Preserve each mark's proportions. Reduced-motion users
 receive a static, wrapped row. Original assets are stored locally in
 `static/images/institutions/` so the page does not depend on external image hosts.
 
