@@ -98,8 +98,7 @@ img { display: block; max-width: 100%; height: auto; }
 .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .footer-top .brand { font-size: 22px; }
 .footer-top .brand img { width: 32px; height: 32px; }
-.footer-top p, .back-top { font-size: 15px; color: var(--muted); }
-.footer-top p > a { color: var(--text); }
+.back-top { font-size: 15px; color: var(--muted); }
 .back-top { display: inline-flex; align-items: center; min-height: 44px; }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.6; color: var(--muted); }
 .footer-bottom p:last-child { width: 100%; }
@@ -149,7 +148,6 @@ img { display: block; max-width: 100%; height: auto; }
   .protocol-table tr + tr { border-top: 1px solid var(--line); }
   .protocol-table td::before { content: attr(data-label); display: block; margin-bottom: 4px; font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--text); }
   .footer-top { gap: 14px; }
-  .footer-top > p { order: 3; width: 100%; }
   .footer-bottom { flex-direction: column; gap: 10px; }
 }
 @media (max-width: 380px) {
