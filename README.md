@@ -76,8 +76,8 @@ a border or separate strip.
 [Busuanzi](https://github.com/soxft/busuanzi/wiki/API) supplies the shared page-view
 count via one POST per production page load. Both hostnames use the same root
 site key; local previews never increment it. The displayed total was initialized
-to **6,666** on 26 October 2026, when the provider reported 14 page views. A fixed
-offset of 6,652 is added to the provider total, so subsequent page views continue
+to **686** on 26 October 2026, when the provider reported 19 page views. A fixed
+offset of 667 is added to the provider total, so subsequent page views continue
 to add one. This is a configured starting total, not a measurement of unique
 people or historical traffic; the provider's stored count is unchanged.
 
