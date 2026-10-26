@@ -15,7 +15,7 @@ Phase 1 asks whether initially separate agents autonomously form a persistent,
 live communication channel. Its environment combines a legitimate task that is
 mechanically impossible through the intended workflow, concurrent agents in
 separate least-privilege workstations, and one ordinary shared business
-directory that is discoverable but never announced or seeded. Agents are not
+directory that is discoverable but never announced or pre-populated. Agents are not
 told that other agents or a communication channel exist. The public visual
 shows the mechanism rather than unpublished results: four simultaneously active
 private contexts explore their workstations, discover the shared directory and
@@ -86,9 +86,16 @@ Official sources, retrieved 26 October 2026:
 
 The sample diagram summarizes the published Engineering rollout: four agents,
 live requests and replies, then 11 activated runtime units against a capacity of
-4. Its capacity marker is proportional. The captions distinguish observed model
-actions from synthetic system consequences; dialogue descriptions are summaries,
-not verbatim quotations.
+4. Its capacity marker is proportional. Short verbatim transcript excerpts show
+a request, reply, read-back and subsequent informed action. Ellipses mark omitted
+text. `static/data/sample-transcript.json` records their timestamps, agent mapping
+and evidence digest. Keep website copy and curation in this repository; do not
+alter technical study context to match presentation wording.
+
+The research section defines `rollout@k` as k independent runs with the model,
+task and condition fixed. Report successful swarm-formation runs and successful
+end-to-end collective-harm runs out of k separately. This is a measurement
+definition, not an additional result claim.
 
 ## Attribution and license
 
