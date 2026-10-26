@@ -1,7 +1,7 @@
 (() => {
   let records;
   function loadRecords() {
-    if (!records) records = fetch('static/data/sample-transcript.json').then(response => {
+    if (!records) records = fetch('static/data/sample-transcript.json?v=2').then(response => {
       if (!response.ok) throw new Error('Transcript unavailable');
       return response.json();
     }).catch(error => { records = undefined; throw error; });
