@@ -3,7 +3,7 @@
 The public research website at [swarmharm.com](https://swarmharm.com/).
 It presents the two questions at the center of SwarmHarm: when isolated agents
 form a swarm, and when that swarm causes verifiable harm. It also shows the core
-environment conditions, a historical sample case and the research questions.
+environment conditions, one published Engineering rollout and the research questions.
 Do not add unpublished experiment results.
 
 Present the study as one 2×2 framework. The left column states what Phase 1 and
@@ -47,7 +47,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
 Open `http://127.0.0.1:8765/`. Edit `index.html`, styles in `static/css/`
-and interactions in `static/js/`. `flight.css` is the final presentation layer.
+and shared navigation behavior in `static/js/site.js`. `flight.css` is the final
+presentation layer.
 Increment the affected asset query versions in `index.html` when publishing.
 
 The header and hero link to the framework, sample case and research questions.
