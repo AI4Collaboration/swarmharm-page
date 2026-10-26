@@ -1,6 +1,11 @@
 (() => {
   const counter = document.querySelector('.visit-counter');
-  if (!counter || !['swarmharm.com', 'www.swarmharm.com'].includes(location.hostname)) return;
+  if (!counter) return;
+  const digits = counter.querySelector('.visit-digits');
+  if (!['swarmharm.com', 'www.swarmharm.com'].includes(location.hostname)) {
+    digits.setAttribute('aria-label', 'Visit count available on the live site');
+    return;
+  }
 
   async function loadVisits() {
     const controller = new AbortController();
@@ -22,8 +27,8 @@
       if (!match) return;
       const count = (match[1] || match[2]).replace(/^0+(?=\d)/, '');
       const groups = count.replace(/\B(?=(\d{3})+(?!\d))/g, ',').split(',');
-      const digits = counter.querySelector('.visit-digits');
-      digits.setAttribute('aria-label', groups.join(','));
+      const fragment = document.createDocumentFragment();
+      let digitIndex = 0;
       groups.forEach((group, groupIndex) => {
         const row = document.createElement('span');
         row.className = 'visit-group';
@@ -37,21 +42,25 @@
         for (const value of group) {
           const digit = document.createElement('span');
           digit.className = 'flip-digit';
-          for (const face of ['flip-top', 'flip-bottom', 'flip-leaf']) {
+          digit.style.setProperty('--flip-delay', `${Math.min(digitIndex++, 6) * 25}ms`);
+          for (const face of ['flip-top', 'flip-bottom', 'flip-out', 'flip-leaf']) {
             const span = document.createElement('span');
             span.className = face;
-            span.textContent = value;
+            span.textContent = face === 'flip-out' ? '–' : value;
             digit.append(span);
           }
           row.append(digit);
         }
-        digits.append(row);
+        fragment.append(row);
       });
-      counter.hidden = false;
+      digits.replaceChildren(fragment);
+      digits.setAttribute('aria-label', groups.join(','));
+      counter.dataset.loaded = 'true';
     } catch {
-      // A counter outage must never block the page or display a fabricated count.
+      // Preserve the clock layout without inventing a count during an outage.
     } finally {
       clearTimeout(timeout);
+      if (!counter.dataset.loaded) digits.setAttribute('aria-label', 'Visit count temporarily unavailable');
     }
   }
   loadVisits();

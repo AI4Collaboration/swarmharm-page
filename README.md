@@ -78,8 +78,10 @@ count via one POST per production page load. Both hostnames use the same root
 site key; local previews never increment it. This counts page views since the
 integration on 26 October 2026, not unique people or historical traffic.
 
-The widget omits credentials and referrers, keeps no local visitor ID, and hides
-when the service is unavailable. The provider still receives the request and
+The widget omits credentials and referrers, keeps no local visitor ID, and renders the clock immediately
+with dash placeholders while fetching the real total. An outage leaves those
+placeholders visible with an accessible unavailable label, avoiding layout jumps
+or fabricated numbers. The provider still receives the request and
 its network metadata. Full integer digits are parsed as text, grouped by
 thousands and allowed to wrap, including totals beyond JavaScript's exact
 integer range. Reduced-motion preferences disable the flip animation.
