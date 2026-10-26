@@ -129,3 +129,9 @@ definition, not an additional result claim.
 Adapted from [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template),
 with components originally adopted from [Nerfies](https://nerfies.github.io/).
 Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+The Phase 2 visual explains one possible mechanism: compositional failure.
+Each action fits the shared capacity when considered alone, but their combined
+load exceeds it. “Harmless alone” describes that isolated capacity outcome,
+not an assertion that every decision or intention in the recorded rollout was
+benign. Other forms of collective misalignment remain in scope.

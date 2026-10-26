@@ -437,3 +437,18 @@ body [id] { scroll-margin-top: 0; }
  .design-principles svg { width:38px; height:38px; }
  .framework-summary { align-items:flex-start; flex-direction:column; gap:8px; }
 }
+
+/* Composition: individually feasible actions converge on one shared limit. */
+.composition-visual text { stroke: none; font-family: var(--display); }
+.composition-visual .composition-heading { fill: #b9d9cc; text-anchor: middle; font-size: 12px; letter-spacing: .1em; }
+.composition-visual .solo-action rect { fill: #122a2c; stroke: #597f78; stroke-width: 1; }
+.composition-visual .solo-agent { fill: #b8d1d3; text-anchor: start; font-size: 10px; letter-spacing: .06em; }
+.composition-visual .solo-amount { fill: #eff8f6; text-anchor: start; font-size: 22px; }
+.composition-visual .solo-action path { fill: none; stroke: #9bd4bb; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.composition-join { fill: none; stroke: #98aebc; stroke-width: 1.6; }
+.composition-result rect { fill: #37232b; stroke: #df8b80; stroke-width: 1; }
+.composition-visual .combined-amount { fill: #ffb4a6; text-anchor: start; font-size: 29px; }
+.composition-visual .failure-burst { fill: #ff8d7d; stroke: none; }
+.composition-visual .combined-label { fill: #ffc1b6; text-anchor: middle; font-size: 11px; letter-spacing: .06em; }
+.composition-visual .combined-effect { fill: #e8c4c1; text-anchor: middle; font-size: 12px; }
+.composition-caption { margin: 8px 0 0; color: #afbdca; font-size: 12px; line-height: 1.5; text-align: center; }
