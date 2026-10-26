@@ -67,6 +67,28 @@ of a new experiment.
 Publish reviewed changes to `origin/master`, then verify the live page.
 `CNAME` retains the custom domain.
 
+## Institution logos
+
+The compact logo strip below the hero lists Oxford, Toronto, the Max Planck
+Institute for Intelligent Systems (Tübingen), Vector Institute and ETH Zürich.
+Keep the supplied proportions and colors. The Toronto reverse mark uses a dark
+background; the other marks use white. Original assets are stored locally in
+`static/images/institutions/` so the page does not depend on external image hosts.
+
+Official sources, retrieved 26 October 2026:
+
+- [Oxford SVG](https://www.maths.ox.ac.uk/themes/custom/maths/images/header/oxford-logo.svg)
+- [Toronto SVG](https://www.utoronto.ca/themes/custom/bootstrap_uoft/logo.svg)
+- [MPI-IS WebP](https://is.mpg.de/assets/logos/logo_green_en-55a1f978f4981c37f203f17d6d635402376bc4788d9bf835c6e53e4b10288b06.webp)
+- [Vector Institute PNG](https://vectorinstitute.ai/wp-content/uploads/2024/05/Vector-Logo-FullColour_Horizontal.png)
+- [ETH Zürich](https://ethz.ch/en.html) (header SVG, original path and viewBox)
+
+The sample diagram summarizes the published Engineering rollout: four agents,
+live requests and replies, then 11 activated runtime units against a capacity of
+4. Its capacity marker is proportional. The captions distinguish observed model
+actions from synthetic system consequences; dialogue descriptions are summaries,
+not verbatim quotations.
+
 ## Attribution and license
 
 Adapted from [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template),
