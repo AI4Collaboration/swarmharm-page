@@ -99,7 +99,7 @@ body [id] { scroll-margin-top: 0; }
 
 .scenario-explorer { padding-block: 32px; }
 .scenario-status { border-color: #515b69; }
-.scenario-controls, .protocol-inline, .protocol-method summary, .taxonomy-grounding, .scenario-axis, .scenario-question { border-color: #353d48; }
+.scenario-controls, .protocol-inline, .protocol-method summary, .scenario-axis, .scenario-question { border-color: #353d48; }
 .scenario-choice { background: #10151c; border-color: #38424f; }
 .scenario-choice:has(input:checked) { background: #1c2531; border-color: #b6c4d7; }
 .scenario-choice input { accent-color: #e3eaf5; }
@@ -248,19 +248,34 @@ body [id] { scroll-margin-top: 0; }
 }
 
 /* Equal-weight work categories communicate coverage, not sample proportions. */
-.domain-coverage { margin: 22px 0 8px; padding: 22px 0; border-top: 1px solid #30353c; border-bottom: 1px solid #30353c; scroll-margin-top: 110px; }
-.domain-coverage figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
-.domain-coverage h3 { font-size: 17px; font-weight: 500; margin: 0; }
-.domain-coverage figcaption > span { color: #929ca9; font-size: 11px; }
-.coverage-source { color: #929ca9; font-size: 11px; white-space: nowrap; }
-.coverage-source a { color: inherit; text-decoration: none; }
-.coverage-source a:hover, .coverage-source a:focus-visible { color: #d9e5f4; }
-.coverage-icons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px 20px; padding: 4px 0 10px; margin: 0; list-style: none; }
-.coverage-icons li { display: flex; flex-direction: column; align-items: center; gap: 12px; color: #c6d4e6; font-size: 12px; text-align: center; }
-.coverage-icons svg { width: 36px; height: 36px; color: #93adc9; }
-@media (max-width: 640px) { .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; } }
-@media (max-width: 460px) { .domain-coverage figcaption { align-items: flex-start; flex-direction: column; } }
-@media (max-width: 420px) { .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.domain-coverage { margin: 32px 0 8px; padding: 26px 0 32px; border-block: 1px solid #30353c; scroll-margin-top: 110px; }
+.domain-coverage figcaption { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; }
+.domain-coverage h3 { margin: 0; font-family: var(--display); font-size: 20px; font-weight: 500; letter-spacing: -.035em; }
+.coverage-source { margin: 0; color: #929ca9; font-size: 12px; line-height: 1.7; }
+.coverage-source a { color: #b8c2cf; text-decoration: underline; text-decoration-color: #4a535f; text-underline-offset: 4px; }
+.coverage-source a:hover, .coverage-source a:focus-visible { color: #fff; text-decoration-color: currentColor; }
+.coverage-source a span { display: inline-block; padding-left: 4px; }
+.coverage-icons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0; margin: 30px 0 0; list-style: none; }
+.coverage-icons li { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 19px; padding: 5px 16px 6px; color: #e1e7ef; text-align: center; }
+.coverage-icons li + li { border-left: 1px solid #242b34; }
+.coverage-icons li > span { font-family: var(--display); font-size: 16px; font-weight: 500; line-height: 1.4; letter-spacing: -.02em; }
+.coverage-icons svg { display: block; width: 120px; max-width: 100%; height: 88px; flex: none; color: #b6c7da; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.coverage-frame { stroke: #71849a; }
+.coverage-detail { stroke: #455465; }
+.coverage-accent { stroke: #e0eaf5; }
+.coverage-points { fill: #b6c7da; stroke: #030406; stroke-width: 2; }
+@media (max-width: 640px) {
+  .domain-coverage { padding-block: 24px; }
+  .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; margin-top: 24px; }
+  .coverage-icons li { gap: 13px; padding-inline: 10px; }
+  .coverage-icons li:nth-child(odd) { border-left: 0; }
+  .coverage-icons li:nth-child(n + 3) { padding-top: 24px; border-top: 1px solid #242b34; }
+  .coverage-icons li > span { font-size: 15px; }
+}
+@media (max-width: 360px) {
+  .coverage-icons li { padding-inline: 6px; }
+  .coverage-icons li > span { font-size: 14px; }
+}
 
 /* Reflow for narrow windows and browser zoom; never hide navigation links. */
 @media (max-width: 900px) {

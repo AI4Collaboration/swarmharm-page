@@ -38,9 +38,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=15">
   <link rel="stylesheet" href="static/css/story.css?v=12">
-  <link rel="stylesheet" href="static/css/scenarios.css?v=6">
+  <link rel="stylesheet" href="static/css/scenarios.css?v=7">
   <link rel="stylesheet" href="static/css/hf-map.css?v=5">
-  <link rel="stylesheet" href="static/css/flight.css?v=54">
+  <link rel="stylesheet" href="static/css/flight.css?v=55">
   <script src="static/js/sample.js?v=4" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
   <script type="application/ld+json">
@@ -193,14 +193,46 @@
       <div class="framework-summary"><p>Agents interact with task data, shared environments, and one another—without being told to form a swarm.</p><a href="#test-methods">Inspect the design contract <span aria-hidden="true">↗</span></a></div>
       <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
         <figcaption>
-          <h3 id="coverage-title">Domain taxonomy</h3>
-          <span class="coverage-source"><a href="https://openai.com/index/how-agents-are-transforming-work/" target="_blank" rel="noopener noreferrer">OpenAI work categories · 2026</a> <span aria-hidden="true">↗</span></span>
+          <h3 id="coverage-title">Domain coverage</h3>
+          <p class="coverage-source">Based on <a href="https://openai.com/index/how-agents-are-transforming-work/" target="_blank" rel="noopener noreferrer">OpenAI’s 2026 work categories <span aria-hidden="true">↗</span></a></p>
         </figcaption>
         <ul class="coverage-icons">
-          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 31 19 20m-6-8 7-7 4 4-7 7m-4-4-6 1-3 3 7 7 3-3m10-2 12 12-6 6-12-12m9 3 3-3"/></svg><span>Engineering</span></li>
-          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 34h28M9 30V18h6v12m5 0V9h6v21m5 0V14h4M7 12l8-6 7 5 11-7"/></svg><span>Data Analysis</span></li>
-          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 16-8 16 8M6 15h28M8 17v15m8-15v15m8-15v15m8-15v15M4 35h32"/><path d="M20 20v9m-4-5h8"/></svg><span>Financial Analysis</span></li>
-          <li><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5h18l6 6v24H8Zm18 0v7h6M13 18h14M13 24h14M13 30h9"/><path d="m5 10 3-3m24 26 3-3"/></svg><span>Knowledge Work</span></li>
+          <li>
+            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
+              <rect class="coverage-frame" x="19" y="15" width="82" height="58" rx="3"/>
+              <path class="coverage-detail" d="M19 29h82M27 22h2m6 0h2m6 0h2"/>
+              <path d="m44 40-11 11 11 11m32-22 11 11-11 11"/>
+              <path class="coverage-accent" d="m65 38-10 26"/>
+            </svg>
+            <span>Engineering</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
+              <path class="coverage-frame" d="M22 15v58h79"/>
+              <path class="coverage-detail" d="M22 54h79M22 35h79M48 15v58m26-58v58"/>
+              <path class="coverage-accent" d="m32 63 58-42"/>
+              <g class="coverage-points"><circle cx="35" cy="52" r="3"/><circle cx="48" cy="60" r="3"/><circle cx="55" cy="39" r="3"/><circle cx="72" cy="44" r="3"/><circle cx="85" cy="29" r="3"/><circle cx="96" cy="18" r="3"/></g>
+            </svg>
+            <span>Data Analysis</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
+              <path class="coverage-frame" d="M31 15H19v58h82V53"/>
+              <path class="coverage-detail" d="M19 34h29M19 53h29m-13-38v58m15-8h43"/>
+              <circle cx="74" cy="31" r="22"/>
+              <path class="coverage-accent" d="M81 23H71a5 5 0 0 0 0 10h6a5 5 0 0 1 0 10H67m7-25v30"/>
+            </svg>
+            <span>Financial Analysis</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
+              <path class="coverage-frame" d="M60 23c-11-8-25-10-41-8v52c16-2 30 0 41 8 11-8 25-10 41-8V15c-16-2-30 0-41 8Z"/>
+              <path d="M60 23v52"/>
+              <path class="coverage-detail" d="M29 44c7 0 13 1 20 4M29 54c7 0 13 1 20 4m22-10c7-3 13-4 20-4M71 58c7-3 13-4 20-4"/>
+              <path class="coverage-accent" d="M29 32c7 0 13 1 20 4m22 0c7-3 13-4 20-4"/>
+            </svg>
+            <span>Knowledge Work</span>
+          </li>
         </ul>
       </figure>
     </div>
