@@ -71,8 +71,9 @@ Publish reviewed changes to `origin/master`, then verify the live page.
 
 The compact logo strip below the hero lists Oxford, Toronto, the Max Planck
 Institute for Intelligent Systems (Tübingen), Vector Institute and ETH Zürich.
-Keep the supplied proportions and colors. The Toronto reverse mark uses a dark
-background; the other marks use white. Original assets are stored locally in
+It uses equal-size logo stages in a slow, seamless CSS marquee, with edge fades
+and pause-on-hover/focus. Preserve each mark's proportions. Reduced-motion users
+receive a static, wrapped row. Original assets are stored locally in
 `static/images/institutions/` so the page does not depend on external image hosts.
 
 Official sources, retrieved 26 October 2026:
