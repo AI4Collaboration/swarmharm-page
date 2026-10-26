@@ -378,6 +378,11 @@ body [id] { scroll-margin-top: 0; }
 .phase-two-design .design-principles svg { stroke:#b7cfe1; }
 .design-guardrail { margin-top:14px; padding-top:13px; border-top:1px solid #354352; color:#9ec1dc; font-size:11px; letter-spacing:.025em; }
 .harm-guardrail { color:#e7a199; }
+/* The two phases share one continuous population and state. */
+.phase-continuity { grid-column:1 / -1; display:flex; align-items:center; justify-content:center; gap:12px; padding:3px 16px; color:#aebfcd; }
+.phase-continuity > span { color:#b5cddd; font-size:24px; line-height:1; }
+.phase-continuity p { margin:0; font-size:12px; line-height:1.6; text-align:center; }
+.phase-continuity b { padding:0 5px; color:#687f92; font-weight:400; }
 .framework-summary { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:20px 0 0; color:#aab7c4; font-size:13px; }
 .framework-summary p { margin:0; }
 .framework-summary a { flex:0 0 auto; color:#c7d7e5; font-size:12px; }

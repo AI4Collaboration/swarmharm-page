@@ -33,7 +33,7 @@
           text.textContent = entry.kind === 'tool_call_and_result'
             ? `${entry.operation}\n${JSON.stringify(entry.arguments, null, 2)}\n\nResult\n${JSON.stringify(entry.result, null, 2)}`
             : entry.text;
-          if (entry.kind === 'agent_decision') name.textContent += ' · recorded decision';
+          if (entry.kind === 'agent_decision') name.textContent += ' · private task output';
           if (entry.kind === 'read_receipt') name.textContent += ' · read receipt';
           item.append(header);
           if (entry.title) {
@@ -49,7 +49,7 @@
             const full = document.createElement('details');
             full.className = 'log-original';
             const summary = document.createElement('summary');
-            summary.textContent = entry.kind === 'tool_call_and_result' ? 'Full tool record' : 'Full original message';
+            summary.textContent = entry.kind === 'tool_call_and_result' ? 'Full tool record' : entry.kind === 'agent_decision' ? 'Full original output' : 'Full original message';
             full.append(summary, text);
             item.append(full);
           } else {
