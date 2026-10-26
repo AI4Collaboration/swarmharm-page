@@ -67,6 +67,20 @@ of a new experiment.
 Publish reviewed changes to `origin/master`, then verify the live page.
 `CNAME` retains the custom domain.
 
+## Visit counter
+
+The top strip reads “This site was visited … times” with split-flap digits.
+[Busuanzi](https://github.com/soxft/busuanzi/wiki/API) supplies the shared page-view
+count via one POST per production page load. Both hostnames use the same root
+site key; local previews never increment it. This counts page views since the
+integration on 26 October 2026, not unique people or historical traffic.
+
+The widget omits credentials and referrers, keeps no local visitor ID, and hides
+when the service is unavailable. The provider still receives the request and
+its network metadata. Full integer digits are parsed as text, grouped by
+thousands and allowed to wrap, including totals beyond JavaScript's exact
+integer range. Reduced-motion preferences disable the flip animation.
+
 ## Institution logos
 
 The compact logo strip below the hero lists Oxford, Toronto, the Max Planck
