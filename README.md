@@ -69,8 +69,9 @@ Publish reviewed changes to `origin/master`, then verify the live page.
 
 ## Visit counter
 
-A compact counter between the navigation brand and links reads “This site was
-visited … times” with muted split-flap digits. It has no separate strip or frame.
+A flexible banner between the navigation brand and links reads “This site was
+visited … times” with split-flap digits. Its text matches the navigation size;
+a faint background fills the middle space without a border or separate strip.
 [Busuanzi](https://github.com/soxft/busuanzi/wiki/API) supplies the shared page-view
 count via one POST per production page load. Both hostnames use the same root
 site key; local previews never increment it. This counts page views since the

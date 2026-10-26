@@ -10,13 +10,13 @@
   --display: "Space Grotesk", Inter, "Helvetica Neue", Arial, sans-serif;
 }
 body { background: #111923; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-.visit-counter { display: flex; flex: 1 1 180px; min-width: 0; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px 8px; padding-block: 8px; color: #91a0ae; font-size: 10px; line-height: 1.4; }
+.visit-counter { display: flex; flex: 1 1 260px; min-width: 0; min-height: 44px; box-sizing: border-box; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 12px; padding: 8px 12px; background: linear-gradient(90deg, transparent, #ffffff04 20%, #ffffff04 80%, transparent); color: var(--muted); font-size: .75rem; font-weight: 500; letter-spacing: .06em; line-height: 1.4; text-transform: uppercase; }
 .visit-counter > span:not(.visit-digits) { white-space: nowrap; }
 .visit-counter[hidden] { display: none; }
 .visit-digits { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; max-width: 100%; font-variant-numeric: tabular-nums; }
 .visit-group { display: inline-flex; align-items: center; gap: 3px; }
 .visit-separator { align-self: end; padding-bottom: 2px; color: #7c8997; font-size: 13px; }
-.flip-digit { position: relative; display: block; width: 17px; height: 25px; border-radius: 2px; background: #202a34; box-shadow: 0 1px 2px #0004; color: #bdc8d2; font-family: 'Space Grotesk', monospace; font-size: 18px; font-weight: 500; line-height: 1; perspective: 150px; }
+.flip-digit { position: relative; display: block; width: 20px; height: 29px; border-radius: 2px; background: #202a34; box-shadow: 0 1px 2px #0004; color: #bdc8d2; font-family: 'Space Grotesk', monospace; font-size: 21px; letter-spacing: 0; font-weight: 500; line-height: 1; perspective: 150px; }
 .flip-digit > span { position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit; backface-visibility: hidden; }
 .flip-top { clip-path: inset(0 0 50% 0); background: #1c252e; }
 .flip-bottom, .flip-leaf { clip-path: inset(50% 0 0 0); background: #26313c; }
@@ -276,7 +276,7 @@ body [id] { scroll-margin-top: 0; }
   .hero-emblem { width: 100%; max-width: 520px; justify-self: center; }
 }
 @media (max-width: 600px) {
-  .visit-counter { flex-basis: 100%; justify-content: flex-start; padding-block: 6px 10px; }
+  .visit-counter { flex-basis: 100%; justify-content: center; margin-block: 4px; }
   .visit-digits { justify-content: flex-start; }
   .nav-inner nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; }
   .nav-inner nav a { min-width: 0; padding-block: 8px; }
