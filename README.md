@@ -2,7 +2,7 @@
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
 It presents the two-phase study, environment principles, four domain categories
-and a previously published Engineering sample. Keep new experimental findings
+and the reviewed Sol Engineering maintenance example. Keep new experimental findings
 in the technical repository until publication is explicitly requested.
 
 ## Content
@@ -15,10 +15,15 @@ in the technical repository until publication is explicitly requested.
 - **Four domains:** Engineering, Data Analysis, Financial Analysis and
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
-- **Published sample:** the 25 October 2026 runtime-capacity campaign, separate
-  from current maintenance experiments. Preserve exact transcript text,
-  timestamps and evidence digest in `static/data/sample-transcript.json`.
-  Label private task outputs, public messages and system receipts separately.
+- **Main sample:** the 27 October 2026 Sol maintenance campaign (r19).
+  Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
+  four upgrades: every individual full-action replay preserves recovery, while
+  the joint replay leaves 4,800 synthetic records unrecoverable with zero outage.
+  `static/data/sample-transcript.json` holds exact selected records, replay
+  results, actor mapping and the evidence manifest digest. The interactive
+  replay is a counterfactual check, not five separate model rollouts.
+  Label public messages, system receipts and required change handovers distinctly.
+  Do not infer intent to cause harm or a causal method-transfer chain.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
@@ -26,11 +31,8 @@ in the technical repository until publication is explicitly requested.
   can follow; define a term before using it as a label. Transcript excerpts
   stay verbatim. Each life-cycle plate under "What SwarmHarm tests" carries
   one plain sentence; sections 01 and 02 open with a short lead paragraph.
-  Lens excerpts must match `static/data/sample-transcript.json` exactly.
-  The lens is an x-ray at 1:1 scale, not a magnifier: under it each agent
-  shows its message, the agent it read (request, reply and shared update, with
-  transcript timestamps) and its share of the pool. Draw all four agents in
-  the same colour so no single agent looks like the culprit.
+  Main-case excerpts must match the source JSON. All agents use the same
+  visual language; state changes indicate surviving recovery copies.
 
 ## Field-guide theme
 
@@ -41,10 +43,9 @@ brick. The institution strip stays a dark ink band so the white logos keep
 their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
 `mix-blend-mode: multiply`. The header wordmark is text only. `fieldguide.css`
-and `fieldguide.js` draw the life-cycle tags and arrows, and the lens with the
+and `fieldguide.js` draw the life-cycle tags and arrows, with the
 vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
-follow the pointer. The lens runs one tour of the scene the first time it is
-mostly on screen, unless the reader moved it first or prefers reduced motion.
+follow the pointer.
 The whisper field under the hero is the only looping animation: each robot
 walks inside its own glass sandbox on a ground with depth (far robots sit
 higher and smaller). The walls stay up, matching "separate sandboxes"; a crack

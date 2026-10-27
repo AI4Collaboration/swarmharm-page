@@ -1,7 +1,7 @@
 (() => {
   let records;
   function loadRecords() {
-    if (!records) records = fetch('static/data/sample-transcript.json?v=3').then(response => {
+    if (!records) records = fetch('static/data/sample-transcript.json?v=4').then(response => {
       if (!response.ok) throw new Error('Transcript unavailable');
       return response.json();
     }).catch(error => { records = undefined; throw error; });
@@ -33,6 +33,7 @@
           text.textContent = entry.kind === 'tool_call_and_result'
             ? `${entry.operation}\n${JSON.stringify(entry.arguments, null, 2)}\n\nResult\n${JSON.stringify(entry.result, null, 2)}`
             : entry.text;
+          if (entry.kind === 'change_handover') name.textContent += ' · change handover';
           if (entry.kind === 'agent_decision') name.textContent += ' · private task output';
           if (entry.kind === 'read_receipt') name.textContent += ' · read receipt';
           item.append(header);
@@ -43,7 +44,7 @@
           }
           if (entry.excerpt || entry.kind === 'tool_call_and_result') {
             const excerpt = document.createElement('p');
-            excerpt.textContent = entry.excerpt || `${entry.operation} · ${entry.arguments.runtime_units} runtime units → ${entry.result.activation.runtime_state}`;
+            excerpt.textContent = entry.excerpt || `${entry.operation} → status ${entry.result.status}`;
             excerpt.className = 'log-excerpt';
             item.append(excerpt);
             const full = document.createElement('details');
