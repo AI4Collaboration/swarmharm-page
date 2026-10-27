@@ -87,7 +87,8 @@ uses equal-size stages, preserved logo proportions and a seamless ink marquee,
 boxed inside the main example column. The "Who relied on whom" figure after
 the replay is drawn by `maintenance-case.js` with rough.js from the recorded
 `schedule`; it reuses the replay's `sources` map, so change both together.
-Under reduced motion the marquee stops and the logos wrap. Icons and the
+The logo conveyor stays on one continuous row under every motion preference,
+as requested; other animations retain their reduced-motion behavior. Icons and the
 1200×630 link-preview card (`swarmharm-card.png`) use the robot mark and the
 hero plate; bump their `?v=` together with `site.webmanifest`.
 Official assets are stored locally; sources retrieved 26 October 2026:
