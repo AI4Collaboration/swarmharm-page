@@ -22,6 +22,22 @@ in the technical repository until publication is explicitly requested.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
+- **Life cycle and lens:** the life-cycle plates under "What SwarmHarm tests"
+  and the sample-case lens reuse wording that already appears on the page.
+  Lens excerpts must match `static/data/sample-transcript.json` exactly.
+
+## Field-guide theme
+
+A naturalist's field guide: cream paper (`#f4ecd8`) with fine grain, ink
+(`#2b241b`), ochre and sage robots, brick for harm. Special Elite for display
+type, Courier Prime for text. Phase 1 surfaces use sage washes; Phase 2 uses
+brick. The institution strip stays a dark ink band so the white logos keep
+their contrast. Plates in `static/images/fieldguide/` were generated with
+`openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
+`mix-blend-mode: multiply`. `fieldguide.css` and `fieldguide.js` draw the
+robot mark, the life-cycle tags and arrows, and the lens with the vendored
+[rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
+follow the pointer; nothing animates on its own.
 
 ## Develop and publish
 
@@ -40,8 +56,8 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 
 ## Assets and counter
 
-Use the current unified swarm/shield artwork. The unlabelled institution strip
-uses equal-size stages, preserved logo proportions and a seamless black marquee.
+Use the field-guide plates for artwork. The unlabelled institution strip
+uses equal-size stages, preserved logo proportions and a seamless ink marquee.
 Official assets are stored locally; sources retrieved 26 October 2026:
 
 - [Oxford](https://www.maths.ox.ac.uk/themes/custom/maths/images/header/oxford-logo.svg)

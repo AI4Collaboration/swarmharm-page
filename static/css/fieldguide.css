@@ -1,0 +1,60 @@
+/* Field-guide figures: brand robot, life-cycle plates and the sample-case lens. */
+.brand .brand-bot { width: 36px; height: 29px; flex: none; overflow: visible; }
+.site-footer .brand .brand-bot { width: 32px; height: 26px; }
+
+/* Life cycle: four plates in reading order, arrows between them, phase names above. */
+.life-cycle { margin: 0 0 40px; }
+.life-phases, .life-row { display: grid; grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr) 60px minmax(0, 1fr) 132px minmax(0, 1fr); align-items: center; }
+.life-phases { margin-bottom: 8px; }
+.life-phase { display: grid; gap: 2px; font-family: var(--display); font-size: 15px; color: var(--text); }
+.life-phase small { font-family: var(--font); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.life-phase svg { display: block; width: 100%; height: 12px; overflow: visible; }
+.life-phase.p1 { grid-column: 1 / 6; }
+.life-phase.p2 { grid-column: 7 / 8; color: var(--risk); }
+.life-step { display: grid; justify-items: center; gap: 8px; min-width: 0; margin: 0; }
+.life-step img { display: block; width: 100%; max-width: 240px; height: auto; mix-blend-mode: multiply; }
+.life-tag { position: relative; isolation: isolate; display: inline-flex; align-items: center; min-height: 44px; padding: 6px 16px 6px 36px; font-family: var(--display); font-size: clamp(17px, 1.7vw, 22px); line-height: 1.1; color: var(--text); }
+.life-tag svg { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; overflow: visible; }
+.life-arrow { align-self: stretch; display: grid; align-content: center; justify-items: center; gap: 6px; min-height: 60px; }
+.life-arrow svg { width: 100%; height: 40px; overflow: visible; }
+.life-bridge p { margin: 0; display: grid; gap: 1px; font-family: var(--font); font-style: italic; font-size: 11.5px; line-height: 1.35; color: var(--muted); text-align: center; }
+.life-bridge b { display: none; }
+.life-note { max-width: 26ch; font-style: italic; font-size: 13px; line-height: 1.4; color: var(--muted); text-align: center; }
+
+/* Lens: one scene drawn twice; the lower layer is magnified and clipped to the lens. */
+.lens-figure { margin: 0 0 34px; }
+.lens-stage { position: relative; width: 100%; aspect-ratio: var(--aspect, 1000 / 560); overflow: hidden; border: 1.5px solid var(--text); border-radius: 6px; background: #f8f1df; cursor: none; touch-action: none; outline: none; --lx: 40%; --ly: 20%; --lr: 140px; --zoom: 1.12; }
+.lens-stage:focus-visible { box-shadow: 0 0 0 3px var(--risk); }
+.lens-layer { position: absolute; inset: 0; }
+.lens-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lens-beneath { background: #f3dfcf; transform-origin: var(--lx) var(--ly); transform: scale(var(--zoom)); clip-path: circle(calc(var(--lr) / var(--zoom)) at var(--lx) var(--ly)); }
+.lens-ring { position: absolute; left: 0; top: 0; width: calc(var(--lr) * 2); height: calc(var(--lr) * 2); border-radius: 50%; pointer-events: none; transform: translate(calc(var(--lx) - var(--lr)), calc(var(--ly) - var(--lr))); box-shadow: 0 0 0 2px var(--text), 0 0 0 6px rgba(248, 241, 223, .75), 0 0 0 7.5px var(--text), 0 12px 30px rgba(43, 36, 27, .22); }
+.lens-ring::after { content: ""; position: absolute; right: 2%; bottom: -44px; width: 15px; height: 60px; border-radius: 6px; background: var(--text); transform: rotate(-45deg); transform-origin: top center; }
+.lens-title { position: absolute; margin: 0; transform: translateX(-50%); display: grid; justify-items: center; gap: 2px; text-align: center; white-space: nowrap; }
+.lens-title strong { font-family: var(--display); font-weight: 400; font-size: clamp(18px, 2.4vw, 28px); line-height: 1.1; }
+.lens-title span { font-size: clamp(10px, 1.2vw, 13px); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lens-chip { position: absolute; transform: translateX(-50%); padding: 1px 8px; border: 1px solid var(--text); border-radius: 999px; background: #fbf6e8; font-size: clamp(9.5px, 1.15vw, 12px); white-space: nowrap; }
+.lens-chip b { font-family: var(--display); font-weight: 400; margin-right: 3px; }
+.lens-chip.harm { border-color: var(--risk); color: var(--risk); }
+.lens-pool-label { position: absolute; margin: 0; transform: translateX(-50%); font-size: clamp(10px, 1.2vw, 13px); color: var(--muted); white-space: nowrap; }
+.lens-pool-total { position: absolute; margin: 0; transform: translateX(-50%); display: grid; justify-items: center; gap: 2px; color: var(--risk); text-align: center; font-size: clamp(10px, 1.2vw, 13px); white-space: nowrap; }
+.lens-pool-total strong { font-family: var(--display); font-weight: 400; font-size: clamp(20px, 3vw, 34px); line-height: 1; }
+.lens-bubble { position: absolute; margin: 0; padding: 9px 12px; border: 1.5px solid var(--text); border-radius: 10px; background: #fbf6e8; font-size: clamp(10.5px, 1.3vw, 14px); line-height: 1.38; color: var(--text); }
+.lens-bubble small { display: block; margin-bottom: 4px; font-size: .78em; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lens-bubble.private { border-style: dashed; }
+.lens-hint { margin-top: 8px; font-size: 13px; font-style: italic; color: var(--muted); }
+
+@media (max-width: 999px) {
+  .life-phases { display: none; }
+  .life-row { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .life-step img { max-width: 240px; }
+  .life-arrow { min-height: 56px; width: 100%; }
+  .life-arrow svg { width: 36px; height: 52px; }
+}
+@media (max-width: 760px) {
+  .lens-stage { cursor: crosshair; }
+  .lens-bubble { font-size: 11.5px; padding: 7px 9px; }
+}
+@media print {
+  .lens-figure { display: none; }
+}

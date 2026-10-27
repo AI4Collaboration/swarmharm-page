@@ -1,13 +1,13 @@
 /* SwarmHarm: dark artwork-led opening, warm editorial research sections.
    One font family; no animated effects or product-dashboard styling. */
 :root {
-  color-scheme: dark;
-  --bg: #09090b;
-  --text: #f4f4f2;
-  --muted: #b9b9c1;
-  --line: #303037;
-  --accent: #f36951;
-  --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color-scheme: light;
+  --bg: #f8f4eb;
+  --text: #2c2519;
+  --muted: #544d41;
+  --line: #d0cbc1;
+  --accent: #a94024;
+  --font: "Courier Prime", "Courier New", Courier, monospace;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 100px; }
@@ -53,11 +53,11 @@ img { display: block; max-width: 100%; height: auto; }
 /* An editorial surface distinguishes the research page from a product page. */
 .section {
   color-scheme: light;
-  --bg: #f5f3ee;
-  --text: #24262b;
-  --muted: #555b63;
-  --line: #d1cec7;
-  --accent: #a33d2c;
+  --bg: #2c2519;
+  --text: #dcd7ce;
+  --muted: #a59f95;
+  --line: #453f32;
+  --accent: #d67c64;
   padding-block: 52px;
   background: var(--bg);
   color: var(--text);
