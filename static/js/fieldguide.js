@@ -65,7 +65,7 @@
     svg.replaceChildren();
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     const draw = pen(svg);
-    draw(`M16,0 H${w} V${h} H16 L0,${h * 0.62} V${h * 0.38} Z`, { fill: C.tag, hatchColor: C.tagHatch, gap: 7, washOpacity: 1, rough: 0.8 });
+    draw(`M16,0 H${w} V${h} H16 L0,${h * 0.62} V${h * 0.38} Z`, { fill: C.tag, hatch: false, washOpacity: 1, rough: 0.8 });
     draw(`M22,4 H${w - 4} V${h - 4} H22 L6,${h * 0.6} V${h * 0.4} Z`, { sw: 0.5, rough: 0.6 });
     draw(circle(22, h / 2, 4.5), { sw: 0.8 });
     draw(`M22,${h / 2} C6,${h / 2 + 3} -10,${h / 2 + 18} -5,${h / 2 + 30}`, { sw: 0.6 });

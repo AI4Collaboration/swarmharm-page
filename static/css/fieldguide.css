@@ -21,8 +21,6 @@
 .life-desc { max-width: 24ch; margin: 0; font-size: 15px; line-height: 1.45; color: var(--muted); text-align: center; }
 .life-note { max-width: 26ch; font-style: italic; font-size: 15px; line-height: 1.4; color: var(--muted); text-align: center; }
 
-/* Whisper field: robots walk inside glass sandboxes on a ground with depth; one bubble above the listener. */
-
 /* Lens: one scene drawn twice at the same scale; the lower layer shows only inside the lens circle. */
 .lens-figure { margin: 0 0 34px; }
 .lens-stage { position: relative; width: 100%; max-width: 100%; aspect-ratio: var(--aspect, 1000 / 610); overflow: hidden; border: 1.5px solid var(--text); border-radius: 6px; background: #f8f1df; cursor: none; touch-action: pan-y; outline: none; container-type: inline-size; --lx: 40%; --ly: 40%; --lr: 140px; }
