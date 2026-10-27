@@ -61,6 +61,9 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 
 Use the field-guide plates for artwork. The unlabelled institution strip
 uses equal-size stages, preserved logo proportions and a seamless ink marquee.
+Under reduced motion the marquee stops and the logos wrap. Icons and the
+1200×630 link-preview card (`swarmharm-card.png`) use the robot mark and the
+hero plate; bump their `?v=` together with `site.webmanifest`.
 Official assets are stored locally; sources retrieved 26 October 2026:
 
 - [Oxford](https://www.maths.ox.ac.uk/themes/custom/maths/images/header/oxford-logo.svg)

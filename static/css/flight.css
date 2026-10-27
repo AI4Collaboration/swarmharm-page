@@ -79,6 +79,14 @@ body [id] { scroll-margin-top: 0; }
 .institution-vector img { filter: grayscale(1) invert(1) brightness(1.2); }
 .institution-eth img { filter: invert(1); }
 .institution-aim img { height: 32px; }
+@media (prefers-reduced-motion: reduce) {
+ .institution-marquee { -webkit-mask-image: none; mask-image: none; }
+ .institution-track { width: auto; justify-content: center; animation: none; }
+ .institutions .institution-list { flex: 1 1 auto; flex-wrap: wrap; justify-content: center; gap: 8px 20px; padding-inline: 16px; }
+ .institutions .institution-list li { flex: 0 0 min(150px, calc(50% - 10px)); width: min(150px, calc(50% - 10px)); height: 64px; }
+ .institutions .institution-list a { width: calc(100% - 10px); height: 56px; }
+ .institution-list[aria-hidden="true"] { display: none; }
+}
 @keyframes institution-marquee {
  from { transform: translate3d(0, 0, 0); }
  to { transform: translate3d(-50%, 0, 0); }
