@@ -54,7 +54,8 @@ EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
 `mix-blend-mode: multiply`. The header wordmark is text only. The two-phase overview uses equal columns,
 matching rows and plain backgrounds. The left diagram maps actual D/C writes
-and reads through shared records with UTC timestamps. The right shows every
+and reads through a shared letterbox with UTC timestamps. The letterbox depicts
+files in the actual shared directory, not a separate messaging tool. The right shows every
 booking’s recovery reference and old-copy losses at upgrade completion
 (minutes 10, 20 and 30). The diagrams summarize the source records; they do not
 add dialogue or infer harmful intent.
