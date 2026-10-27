@@ -97,15 +97,6 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - EuroSafeAI: supplied 27 October 2026, recoloured white on transparent and trimmed; links to
   [eurosafe.ai.utoronto.ca](https://eurosafe.ai.utoronto.ca/)
 
-The visit banner is centered at the top of the page, above navigation, and uses
-[Busuanzi](https://github.com/soxft/busuanzi/wiki/API), one POST per production
-page load and a shared root key for both hostnames. Local previews never
-increment it. The displayed total is the provider's recorded page visits,
-without a manual offset; it is not a unique visitor count or a reconstruction
-of visits before tracking began. BigInt preserves large totals; loading/failure shows
-dash placeholders. No credentials, referrer or local visitor ID is sent, but
-the provider receives ordinary request metadata.
-
 ## Attribution and license
 
 Adapted from [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template)
