@@ -53,7 +53,7 @@ keep their own colours, and the white-only files (AIM, Toronto, Georgia Tech,
 EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
 `mix-blend-mode: multiply`. The header wordmark is text only. The two-phase overview uses the original four illustrations in two equal halves:
-Separate and Find & reply under Phase 1; Use other copies and Harmful together
+Impossible Task and Discover/Establish Communication under Phase 1; Spread the hack and Collective harm
 under Phase 2. Captions summarize the recorded main example. Labels have plain
 fills without diagonal hatching; images and caption baselines align across phases.
 The remaining lens illustration uses the vendored
