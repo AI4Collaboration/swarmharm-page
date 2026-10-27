@@ -25,6 +25,10 @@ in the technical repository until publication is explicitly requested.
 - **Life cycle and lens:** the life-cycle plates under "What SwarmHarm tests"
   and the sample-case lens reuse wording that already appears on the page.
   Lens excerpts must match `static/data/sample-transcript.json` exactly.
+  The lens is an x-ray at 1:1 scale, not a magnifier: under it each agent
+  shows its message, the agent it read (request, reply and shared update, with
+  transcript timestamps) and its share of the pool. Draw all four agents in
+  the same colour so no single agent looks like the culprit.
 
 ## Field-guide theme
 
@@ -37,8 +41,9 @@ their contrast. Plates in `static/images/fieldguide/` were generated with
 `mix-blend-mode: multiply`. `fieldguide.css` and `fieldguide.js` draw the
 robot mark, the life-cycle tags and arrows, and the lens with the vendored
 [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
-follow the pointer. The whisper field under the hero is the only self-running
-animation: robots wander, and when two meet one whispers a verbatim fragment
+follow the pointer. The lens runs one tour of the scene the first time it is
+mostly on screen, unless the reader moved it first or prefers reduced motion.
+The whisper field under the hero is the only looping animation: robots wander, and when two meet one whispers a verbatim fragment
 of the sample transcript (kept in `index.html`). It pauses off screen and shows
 a single still whisper under reduced motion.
 

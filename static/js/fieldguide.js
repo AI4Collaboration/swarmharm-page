@@ -4,6 +4,7 @@
   const NS = 'http://www.w3.org/2000/svg';
   const C = { ink: '#2b241b', ochre: '#e9a35a', ochreHatch: '#b8692a', sage: '#9db08c', sageHatch: '#6f8a5f', eye: '#fffaf0', tag: '#f3e6c4', tagHatch: '#e2cf9f', harm: '#a8432f', harmHatch: '#7a2a1d' };
   let pupils = [];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   const svgEl = (tag, attrs, parent) => {
     const node = document.createElementNS(NS, tag);
@@ -106,113 +107,233 @@
     document.querySelectorAll('.life-phase svg').forEach(svg => drawRule(svg, svg.closest('.p2') ? C.harm : C.ink));
   }
 
-  // Lens: the same scene drawn twice. Outside the lens each agent stands alone; inside, the shared system.
-  const RUN = { units: { A: 2, B: 3, C: 3, D: 3 }, capacity: 4, total: 11, alt: { B: true } };
+  // Lens: the same scene drawn twice. Outside the lens each agent stands alone in its jar; under it,
+  // each agent shows its message, the agent it read and its share of the shared pool.
+  const RUN = { units: { A: 2, B: 3, C: 3, D: 3 }, capacity: 4, total: 11 };
+  // Who each agent attends to in the transcript: A reads B's request, B reads A's reply, D reads A's shared update.
+  const GAZE = { A: 'B', B: 'A', C: 'pool', D: 'A' };
   const LAYOUTS = {
     wide: {
-      vw: 1000, vh: 560, size: 72,
-      robots: { A: [130, 280], B: [380, 280], C: [620, 280], D: [870, 280] },
-      pool: { x: 80, y: 456, w: 840, h: 30 },
-      boxes: { 'bubble-A': [1.5, 3, 25], 'bubble-B': [28.5, 5, 24], 'bubble-D': [62, 2, 36.5] },
-      points: { title: [500, 26], 'pool-cap': [null, 498], 'pool-total': [700, 398] },
+      vw: 1000, vh: 610, size: 70, hint: [0.55, -0.85], strings: true,
+      robots: { A: [125, 340], B: [375, 340], C: [625, 340], D: [875, 340] },
+      pool: { x: 80, y: 516, w: 840, h: 30 },
+      bubbles: { A: { x: 12, bottom: 240, w: 236 }, B: { x: 262, bottom: 240, w: 226 }, D: { x: 694, bottom: 240, w: 296 } },
+      points: { title: [500, 16], 'pool-cap': [null, 560], 'pool-total': [652, 556], 'link-request': [250, 294], 'link-reply': [250, 388], 'link-update': [500, 261] },
+      links: [
+        { pts: [[333, 326], [292, 288], [208, 288], [167, 326]] },
+        { pts: [[167, 354], [208, 392], [292, 392], [333, 354]] },
+        { pts: [[150, 306], [330, 246], [670, 246], [850, 306]] },
+      ],
     },
     tall: {
-      vw: 600, vh: 1300, size: 62,
-      robots: { A: [112, 260], B: [112, 470], C: [112, 680], D: [112, 890] },
-      pool: { x: 40, y: 1210, w: 520, h: 28 },
-      boxes: { 'bubble-A': [40, 13.6, 57], 'bubble-B': [40, 30, 57], 'bubble-D': [40, 61.7, 57] },
-      points: { title: [300, 30], 'pool-cap': [300, 1246], 'pool-total': [300, 1140] },
+      vw: 600, vh: 1520, size: 62, hint: [0.8, -0.55], strings: false,
+      robots: { A: [140, 280], B: [140, 540], C: [140, 780], D: [140, 1030] },
+      pool: { x: 40, y: 1420, w: 520, h: 28 },
+      bubbles: { A: { x: 230, cy: 280, w: 360, beside: true }, B: { x: 230, cy: 540, w: 360, beside: true }, D: { x: 230, bottom: 1095, w: 360, beside: true } },
+      points: { title: [300, 16], 'pool-cap': [300, 1465], 'pool-total': [300, 1282], 'action-D': [300, 1185] },
+      links: [
+        { pts: [[100, 525], [58, 460], [58, 350], [100, 285]], both: true },
+        { pts: [[92, 265], [26, 440], [26, 870], [92, 1015]] },
+      ],
     },
   };
-  const lens = { fx: 0.4, fy: 0.2 };
+  // The wide scene needs this much figure width before the bubbles above the robots stay clear of the title.
+  const WIDE_MIN = 860;
+  const TOUR_MOVE = 620, TOUR_DWELL = 380;
+  const lens = { fx: 0, fy: 0, moved: false, tour: 0, L: null };
+  const pt = ([x, y]) => `${x},${y}`;
+  const bubbleCenter = b => [b.x + b.w / 2, b.cy ?? b.bottom - 50];
+
+  function arrowHead(draw, [x, y], [fx, fy], h) {
+    const a = Math.atan2(y - fy, x - fx);
+    draw(`M${x - h * Math.cos(a - 0.45)},${y - h * Math.sin(a - 0.45)} L${x},${y} L${x - h * Math.cos(a + 0.45)},${y - h * Math.sin(a + 0.45)}`, { sw: 1.1 });
+  }
 
   function drawLensLayer(layer, L, beneath) {
     const svg = layer.querySelector('svg.lens-art');
     svg.replaceChildren();
     svg.setAttribute('viewBox', `0 0 ${L.vw} ${L.vh}`);
     const draw = pen(svg);
-    const unit = L.pool.w / RUN.total;
-    const capW = unit * RUN.capacity;
-    const place = (el, x, y) => { el.style.left = `${(x / L.vw) * 100}%`; el.style.top = `${(y / L.vh) * 100}%`; };
+    const s = L.size, unit = L.pool.w / RUN.total, capW = unit * RUN.capacity;
+    const place = (el, [x, y]) => { el.style.left = `${(x / L.vw) * 100}%`; el.style.top = `${(y / L.vh) * 100}%`; };
+    const shares = {};
+    let next = 0;
+    for (const [id, units] of Object.entries(RUN.units)) {
+      shares[id] = { start: next, units, x: L.pool.x + (next + units / 2) * unit };
+      next += units;
+    }
+
     for (const [id, [x, y]] of Object.entries(L.robots)) {
+      const chip = layer.querySelector(`[data-at="agent-${id}"]`);
       if (!beneath) {
-        const w = L.size * 2.1, top = y - L.size * 1.25, base = y + L.size * 1.35;
+        const w = s * 2.1, top = y - s * 1.25, base = y + s * 1.35;
         draw(`M${x - w / 2},${base} V${top + w / 2} A${w / 2},${w / 2} 0 0 1 ${x + w / 2},${top + w / 2} V${base}`, { sw: 0.7 });
         draw(rrect(x - w / 2 - 8, base, w + 16, 10, 3), { fill: C.sage, hatchColor: C.sageHatch, gap: 5 });
+        robot(draw, svg, x, y, s, false);
+        // A closed "…" bubble marks each agent whose message the lens reveals.
+        if (L.bubbles[id]) {
+          const hx = x + L.hint[0] * s, hy = y + L.hint[1] * s, hw = s * 0.66, hh = s * 0.36;
+          draw(rrect(hx - hw / 2, hy - hh / 2, hw, hh, hh * 0.45), { fill: C.eye, hatch: false, washOpacity: 1, sw: 1.1 });
+          for (const k of [-1, 0, 1]) svgEl('circle', { cx: hx + k * hw * 0.24, cy: hy, r: s * 0.035, fill: C.ink }, svg);
+        }
+        if (chip) place(chip, [x, y + s * 0.6]);
+        continue;
       }
-      robot(draw, svg, x, y, L.size, RUN.alt[id]);
-      const chip = layer.querySelector(`[data-at="agent-${id}"]`);
-      if (chip) place(chip, x, y + L.size * 0.6);
+      const { eyes } = robot(draw, svg, x, y, s, false, svg, false);
+      const [tx, ty] = GAZE[id] === 'pool' ? [shares[id].x, L.pool.y] : L.robots[GAZE[id]];
+      for (const eye of eyes) {
+        const ex = Number(eye.getAttribute('cx')), d = Math.hypot(tx - ex, ty - y) || 1;
+        eye.setAttribute('transform', `translate(${((tx - ex) / d) * s * 0.05} ${((ty - y) / d) * s * 0.05})`);
+      }
+      if (chip) place(chip, L.points[`action-${id}`] || [x, y + s * 0.6]);
     }
+
     for (const [key, [x, y]] of Object.entries(L.points)) {
       const el = layer.querySelector(`[data-at="${key}"]`);
-      if (el) place(el, x ?? L.pool.x + capW / 2, y);
+      if (el) place(el, [x ?? L.pool.x + capW / 2, y]);
     }
-    for (const [key, [left, top, width]] of Object.entries(L.boxes)) {
-      const el = layer.querySelector(`[data-at="${key}"]`);
-      if (el) Object.assign(el.style, { left: `${left}%`, top: `${top}%`, width: `${width}%` });
+    layer.querySelectorAll('[data-at^="link-"]').forEach(el => { el.hidden = !L.points[el.dataset.at]; });
+    for (const [id, b] of Object.entries(L.bubbles)) {
+      const el = layer.querySelector(`[data-at="bubble-${id}"]`);
+      if (!el) continue;
+      const [rx, ry] = L.robots[id];
+      el.classList.toggle('is-beside', Boolean(b.beside));
+      el.classList.toggle('is-centered', b.cy != null);
+      el.style.left = `${(b.x / L.vw) * 100}%`;
+      el.style.width = `${(b.w / L.vw) * 100}%`;
+      el.style.top = b.cy != null ? `${(b.cy / L.vh) * 100}%` : '';
+      el.style.bottom = b.cy != null ? '' : `${((L.vh - b.bottom) / L.vh) * 100}%`;
+      el.style.setProperty('--tail', `${((rx - b.x) / b.w) * 100}%`);
+      if (b.bottom != null) el.style.setProperty('--tail-y', `${((b.bottom - ry) / L.vw) * 100}cqw`);
     }
+
     if (!beneath) {
       draw(rrect(L.pool.x, L.pool.y, capW, L.pool.h, 4), { fill: C.sage, hatchColor: C.sageHatch, gap: 7 });
       draw(rrect(L.pool.x, L.pool.y, L.pool.w, L.pool.h, 4), { sw: 0.6, dash: [4, 6] });
       return;
     }
-    let x0 = L.pool.x;
-    for (const [id, units] of Object.entries(RUN.units)) {
-      const w = unit * units, over = x0 + w > L.pool.x + capW;
-      draw(rrect(x0, L.pool.y, w - 3, L.pool.h, 4), { fill: over ? C.harm : C.ochre, hatchColor: over ? C.harmHatch : C.ochreHatch, gap: 5 });
-      const [rx, ry] = L.robots[id];
-      draw(`M${rx},${ry + L.size * 1.05} C${rx},${L.pool.y - 50} ${x0 + w / 2},${L.pool.y - 70} ${x0 + w / 2},${L.pool.y - 4}`, { sw: 0.6, dash: [3, 5] });
-      x0 += w;
+    // Each share is cut at the capacity line: the part that fits is ochre, the overflow is brick.
+    const cap = RUN.capacity;
+    for (const [id, { start, units, x }] of Object.entries(shares)) {
+      const end = start + units;
+      const parts = end <= cap ? [[start, end, false]] : start >= cap ? [[start, end, true]] : [[start, cap, false], [cap, end, true]];
+      parts.forEach(([from, to, over], i) => {
+        const gap = i === parts.length - 1 ? 3 : 0;
+        draw(rrect(L.pool.x + from * unit, L.pool.y, (to - from) * unit - gap, L.pool.h, 4), { fill: over ? C.harm : C.ochre, hatchColor: over ? C.harmHatch : C.ochreHatch, gap: 5 });
+      });
+      const label = svgEl('text', { x, y: L.pool.y + L.pool.h * 0.7, 'text-anchor': 'middle', 'font-size': L.pool.h * 0.62, class: 'lens-share', fill: start + units / 2 > cap ? C.eye : C.ink }, svg);
+      label.textContent = id;
+      if (L.strings) {
+        const [rx, ry] = L.robots[id];
+        draw(`M${rx},${ry + s * 1.05} C${rx},${L.pool.y - 50} ${x},${L.pool.y - 70} ${x},${L.pool.y - 4}`, { sw: 0.6, dash: [3, 5] });
+      }
     }
     draw(`M${L.pool.x + capW},${L.pool.y - 14} V${L.pool.y + L.pool.h + 14}`, { sw: 1.4 });
-    if (L === LAYOUTS.wide) {
-      const [ax, ay] = L.robots.A, [bx, by] = L.robots.B;
-      draw(`M${bx - 30},${by - 58} C${bx - 80},${by - 112} ${ax + 70},${ay - 112} ${ax + 30},${ay - 58}`, { sw: 0.8, dash: [6, 5] });
+    // Message links between heads: B's request, A's reply and A's shared update that D read.
+    for (const { pts: [p0, p1, p2, p3], both } of L.links) {
+      draw(`M${pt(p0)} C${pt(p1)} ${pt(p2)} ${pt(p3)}`, { sw: 1.1, dash: [6, 5] });
+      arrowHead(draw, p3, p2, s * 0.16);
+      if (both) arrowHead(draw, p0, p1, s * 0.16);
     }
   }
   function placeLens(stage) {
     const r = stage.getBoundingClientRect();
+    if (!r.width) return;
     const radius = Math.max(64, Math.min(150, r.width * 0.22));
     stage.style.setProperty('--lx', `${lens.fx * r.width}px`);
     stage.style.setProperty('--ly', `${lens.fy * r.height}px`);
     stage.style.setProperty('--lr', `${radius}px`);
+    stage.querySelector('.lens-tag')?.classList.toggle('is-below', lens.fy * r.height - radius < 40);
   }
   function drawLens() {
     const stage = document.querySelector('[data-lens-stage]');
     if (!stage) return;
-    const L = stage.getBoundingClientRect().width >= 640 ? LAYOUTS.wide : LAYOUTS.tall;
+    const L = stage.parentElement.getBoundingClientRect().width >= WIDE_MIN ? LAYOUTS.wide : LAYOUTS.tall;
+    lens.L = L;
+    stage.classList.toggle('is-tall', L === LAYOUTS.tall);
     stage.style.setProperty('--aspect', `${L.vw} / ${L.vh}`);
+    if (!lens.moved) {
+      const [bx, by] = bubbleCenter(L.bubbles.B), [rx, ry] = L.robots.B;
+      lens.fx = (bx + rx) / 2 / L.vw;
+      lens.fy = (by + ry) / 2 / L.vh;
+    }
     drawLensLayer(stage.querySelector('.lens-surface'), L, false);
     drawLensLayer(stage.querySelector('.lens-beneath'), L, true);
     placeLens(stage);
   }
+
+  // Tour: the lens visits the title, each message and face, then the pool, once, before anyone moves it.
+  function tourPoints(L) {
+    const pts = [[L.points.title[0], L.points.title[1] + 30]];
+    for (const id of Object.keys(L.robots)) {
+      if (L.bubbles[id]) pts.push(bubbleCenter(L.bubbles[id]));
+      pts.push(L.robots[id]);
+    }
+    const [tx, ty] = L.points['pool-total'];
+    pts.push([tx, ty + 10]);
+    return pts.map(([x, y]) => [x / L.vw, y / L.vh]);
+  }
+  function stopTour() {
+    cancelAnimationFrame(lens.tour);
+    lens.tour = 0;
+  }
+  function playTour(stage) {
+    const pts = tourPoints(lens.L);
+    let i = 0, from = [lens.fx, lens.fy], t0 = performance.now();
+    const step = now => {
+      const to = pts[i], k = Math.min(1, (now - t0) / TOUR_MOVE), e = k < 0.5 ? 2 * k * k : 1 - ((2 - 2 * k) ** 2) / 2;
+      lens.fx = from[0] + (to[0] - from[0]) * e;
+      lens.fy = from[1] + (to[1] - from[1]) * e;
+      placeLens(stage);
+      if (now - t0 >= TOUR_MOVE + TOUR_DWELL) {
+        from = to; i += 1; t0 = now;
+        if (i === pts.length) { lens.tour = 0; return; }
+      }
+      lens.tour = requestAnimationFrame(step);
+    };
+    lens.tour = requestAnimationFrame(step);
+  }
+
   function wireLens() {
     const stage = document.querySelector('[data-lens-stage]');
     if (!stage) return;
-    const move = event => {
-      const r = stage.getBoundingClientRect();
-      lens.fx = Math.min(1, Math.max(0, (event.clientX - r.left) / r.width));
-      lens.fy = Math.min(1, Math.max(0, (event.clientY - r.top) / r.height));
+    const setLens = (fx, fy) => {
+      stopTour();
+      lens.moved = true;
+      lens.fx = Math.min(1, Math.max(0, fx));
+      lens.fy = Math.min(1, Math.max(0, fy));
       placeLens(stage);
     };
+    const move = event => {
+      const r = stage.getBoundingClientRect();
+      setLens((event.clientX - r.left) / r.width, (event.clientY - r.top) / r.height);
+    };
+    // touch-action: pan-y keeps vertical swipes scrolling the page; a tap places the lens.
     stage.addEventListener('pointermove', move);
-    stage.addEventListener('pointerdown', event => { stage.setPointerCapture(event.pointerId); move(event); });
+    stage.addEventListener('pointerdown', move);
     stage.addEventListener('keydown', event => {
       const step = event.shiftKey ? 0.1 : 0.03;
       const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[event.key];
       if (!d) return;
       event.preventDefault();
-      lens.fx = Math.min(1, Math.max(0, lens.fx + d[0]));
-      lens.fy = Math.min(1, Math.max(0, lens.fy + d[1]));
-      placeLens(stage);
+      setLens(lens.fx + d[0], lens.fy + d[1]);
     });
+    if (reduceMotion.matches) return;
+    const seen = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      const mostlyVisible = entry.intersectionRatio >= 0.6 || entry.intersectionRect.height >= innerHeight * 0.6;
+      if (!entry.isIntersecting || !mostlyVisible) return;
+      seen.disconnect();
+      if (lens.moved || !lens.L) return;
+      lens.moved = true;
+      playTour(stage);
+    }, { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] });
+    seen.observe(stage);
   }
 
   // Whisper field: robots wander a strip; when two meet, one leans in and whispers a transcript fragment.
   // A listener keeps a brick tint for a while and is more likely to pass the next whisper on.
   const field = { robots: [], lines: [], lineIndex: 0, nextAt: 0, active: null, last: 0, frame: 0, visible: true };
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   function buildField() {
     const host = document.querySelector('[data-whisper-field]');

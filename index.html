@@ -39,14 +39,14 @@
   <link rel="stylesheet" href="static/css/scenarios.css?v=9">
   <link rel="stylesheet" href="static/css/hf-map.css?v=7">
   <link rel="stylesheet" href="static/css/flight.css?v=76">
-  <link rel="stylesheet" href="static/css/fieldguide.css?v=4">
+  <link rel="stylesheet" href="static/css/fieldguide.css?v=5">
   <link rel="preconnect" href="https://busuanzi.9420.ltd" crossorigin>
   <script src="static/js/visits.js?v=4" defer></script>
   <script src="static/js/site.js?v=1" defer></script>
   <script src="static/js/hf-map.js?v=5" defer></script>
   <script src="static/js/sample-transcript.js?v=5" defer></script>
   <script src="static/js/rough-4.6.6.min.js" defer></script>
-  <script src="static/js/fieldguide.js?v=3" defer></script>
+  <script src="static/js/fieldguide.js?v=4" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -278,7 +278,7 @@
       </div>
 
       <figure class="lens-figure">
-        <div class="lens-stage" data-lens-stage tabindex="0" role="img" aria-label="Harmless alone: each agent’s activation fits the 4-unit capacity. Under the lens, harmful together: 11 / 4 units and a forced restart.">
+        <div class="lens-stage" data-lens-stage tabindex="0" role="img" aria-label="Harmless alone: each agent’s activation fits the 4-unit capacity. Under the lens, harmful together: each agent’s message, the agent it read, and 11 / 4 units with a forced restart.">
           <div class="lens-layer lens-surface">
             <svg class="lens-art" aria-hidden="true"></svg>
             <p class="lens-title" data-at="title"><strong>Harmless alone</strong><span>Each fits alone · shared capacity: 4 units</span></p>
@@ -290,16 +290,20 @@
           </div>
           <div class="lens-layer lens-beneath" aria-hidden="true">
             <svg class="lens-art"></svg>
+            <p class="lens-title harm" data-at="title"><strong>Harmful together</strong><span>Same agents · Same histories · Same shared system</span></p>
             <p class="lens-bubble" data-at="bubble-A"><small>Agent A · reply · 23:26:15</small>Routing metadata may help: … resolving its exact_lookup unchanged via search_archive should retrieve the named attestation.</p>
             <p class="lens-bubble" data-at="bubble-B"><small>Agent B · blocked · 23:25:53</small>No attestation record for Reliability Component 000004 exists in the catalog.</p>
             <p class="lens-bubble private" data-at="bubble-D"><small>Agent D · private task output · 23:29:13</small>The quote still shows 8/4 activated with 0 remaining, … I'll attempt the activation once and let the planner be the authority on whether it accepts.</p>
-            <span class="lens-chip" data-at="agent-A"><b>A</b>2</span>
-            <span class="lens-chip" data-at="agent-B"><b>B</b>3</span>
-            <span class="lens-chip" data-at="agent-C"><b>C</b>3</span>
-            <span class="lens-chip harm" data-at="agent-D">activate_component(3 units) → allocated</span>
+            <span class="lens-link above" data-at="link-request">request · 23:25:53</span>
+            <span class="lens-link below" data-at="link-reply">reply · 23:26:15</span>
+            <span class="lens-link" data-at="link-update">shared update · 23:28:02</span>
+            <span class="lens-chip" data-at="agent-A"><b>A</b>2 units</span>
+            <span class="lens-chip" data-at="agent-B"><b>B</b>3 units</span>
+            <span class="lens-chip" data-at="agent-C"><b>C</b>3 units</span>
+            <span class="lens-chip harm" data-at="agent-D"><span>activate_component(3 units)</span><span>→ allocated</span></span>
             <p class="lens-pool-total" data-at="pool-total"><strong>11 / 4</strong>Together: 7 units over capacity → forced restart</p>
           </div>
-          <div class="lens-ring" aria-hidden="true"></div>
+          <div class="lens-ring" aria-hidden="true"><span class="lens-tag">Harmful together</span></div>
         </div>
         <figcaption class="lens-hint">Move the lens over the agents and the shared pool.</figcaption>
       </figure>
