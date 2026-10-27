@@ -103,7 +103,7 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - EuroSafeAI: supplied 27 October 2026, recoloured white on transparent and trimmed; links to
   [eurosafe.ai.utoronto.ca](https://eurosafe.ai.utoronto.ca/)
 
-The visit banner sits in the footer and uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
+The visit banner sits immediately below the hero and uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
 one POST per production page load and a shared root key for both hostnames.
 Local previews never increment it. The display starts at **686** on 26 October
 2026 by adding 667 to the provider's count of 19. This is a configured starting
