@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="static/css/story.css?v=21">
   <link rel="stylesheet" href="static/css/scenarios.css?v=9">
   <link rel="stylesheet" href="static/css/hf-map.css?v=7">
-  <link rel="stylesheet" href="static/css/flight.css?v=79">
+  <link rel="stylesheet" href="static/css/flight.css?v=80">
   <link rel="stylesheet" href="static/css/fieldguide.css?v=8">
   <link rel="preconnect" href="https://busuanzi.9420.ltd" crossorigin>
   <script src="static/js/visits.js?v=4" defer></script>
@@ -354,16 +354,40 @@
         <span class="section-number" aria-hidden="true">03</span>
         <h2 id="research-title">Research questions</h2>
       </div>
-      <div class="research-grid">
+      <p class="rq-group" id="rq-main-title">Main questions</p>
+      <div class="research-grid" role="group" aria-labelledby="rq-main-title">
         <article class="rq-card" id="rq1">
           <span class="rq-label">RQ1</span>
-          <h3>Form the Swarm</h3>
-          <p>How strong a hint do agents need before they start talking to each other?</p>
+          <h3>Formation</h3>
+          <p>Can isolated agents autonomously form a persistent communicating swarm?</p>
         </article>
         <article class="rq-card" id="rq2">
           <span class="rq-label">RQ2</span>
-          <h3>Collective Misalignment</h3>
-          <p>When do individually reasonable actions add up to harm?</p>
+          <h3>Harm</h3>
+          <p>Can the resulting swarm cause system-level harm while pursuing legitimate tasks?</p>
+        </article>
+        <article class="rq-card" id="rq3">
+          <span class="rq-label">RQ3</span>
+          <h3>Conditions</h3>
+          <p>Which environmental conditions and incentives promote or inhibit these outcomes?</p>
+        </article>
+      </div>
+      <p class="rq-group" id="rq-independent-title">Independent questions</p>
+      <div class="research-grid" role="group" aria-labelledby="rq-independent-title">
+        <article class="rq-card" id="rq4">
+          <span class="rq-label">RQ4</span>
+          <h3>Whistleblowing</h3>
+          <p>When agents recognize collective harm, what determines whether they report it to the user?</p>
+        </article>
+        <article class="rq-card" id="rq5">
+          <span class="rq-label">RQ5</span>
+          <h3>Social influence</h3>
+          <p>Does interaction encourage agents to challenge questionable behavior or conform to it?</p>
+        </article>
+        <article class="rq-card" id="rq6">
+          <span class="rq-label">RQ6</span>
+          <h3>Emergent leadership</h3>
+          <p>Does spontaneous leadership amplify or restrain collective harm?</p>
         </article>
       </div>
       <div class="research-methods" aria-label="Further methods and evidence">

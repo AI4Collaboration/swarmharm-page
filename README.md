@@ -26,6 +26,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   replay is a counterfactual check, not five separate model rollouts.
   Label public messages, system receipts and required change handovers distinctly.
   Do not infer intent to cause harm or a causal method-transfer chain.
+- **Research questions:** section 03 lists three main questions (RQ1
+  Formation, RQ2 Harm, RQ3 Conditions) and three independent ones (RQ4
+  Whistleblowing, RQ5 Social influence, RQ6 Emergent leadership). The question
+  text is the team's agreed wording; change it only on request.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
