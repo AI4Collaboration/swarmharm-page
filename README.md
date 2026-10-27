@@ -2,8 +2,8 @@
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
 It presents the two-phase study, environment principles, four domain categories
-and the reviewed Sol Engineering maintenance example. Keep new experimental findings
-in the technical repository until publication is explicitly requested.
+and the reviewed Sol Engineering maintenance example. Public findings must
+accurately reflect the reviewed evidence, conditions and outcome of each campaign.
 
 ## Content
 
@@ -36,23 +36,21 @@ in the technical repository until publication is explicitly requested.
 
 ## Field-guide theme
 
-A naturalist's field guide: cream paper (`#f4ecd8`) with fine grain, ink
-(`#2b241b`), ochre robots (all the same, so none looks like the culprit), brick for harm. Special Elite for display
-type, Courier Prime for text. Phase 1 surfaces use sage washes; Phase 2 uses
+A naturalist's field guide with clear system sans-serif typography, ink
+(`#2b241b`), ochre robots and brick for harm. Phase 1 surfaces use sage washes; Phase 2 uses
 brick. The institution strip stays a dark ink band so the white logos keep
 their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
 `mix-blend-mode: multiply`. The header wordmark is text only. `fieldguide.css`
 and `fieldguide.js` draw the life-cycle tags and arrows, with the
 vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
-follow the pointer.
-The whisper field under the hero is the only looping animation: each robot
-walks inside its own glass sandbox on a ground with depth (far robots sit
-higher and smaller). The walls stay up, matching "separate sandboxes"; a crack
-opens across the shared sand floor and joins them, standing in for the shared
-directory. Whispers, verbatim fragments of the sample transcript (kept in
-`index.html`), travel along the crack from one robot to another. It pauses off
-screen and, under reduced motion, shows the open crack and one still whisper.
+follow the pointer. The whisper field under the hero is the only looping
+animation: robots start in a row of glass sandboxes, crack the front walls one
+by one and walk onto a ground with depth. When two meet, one whispers an exact
+sample transcript excerpt (kept in `index.html`). This is a conceptual animation,
+not a literal replay of the run. It pauses off screen and uses a still scene
+under reduced motion. The main sample uses a separate evidence-backed recovery
+replay in `maintenance-case.css` and `maintenance-case.js`.
 
 ## Develop and publish
 
