@@ -22,8 +22,10 @@ in the technical repository until publication is explicitly requested.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
-- **Life cycle and lens:** the life-cycle plates under "What SwarmHarm tests"
-  and the sample-case lens reuse wording that already appears on the page.
+- **Plain wording:** write page copy as full sentences a first-time reader
+  can follow; define a term before using it as a label. Transcript excerpts
+  stay verbatim. Each life-cycle plate under "What SwarmHarm tests" carries
+  one plain sentence; sections 01 and 02 open with a short lead paragraph.
   Lens excerpts must match `static/data/sample-transcript.json` exactly.
   The lens is an x-ray at 1:1 scale, not a magnifier: under it each agent
   shows its message, the agent it read (request, reply and shared update, with
@@ -38,9 +40,9 @@ type, Courier Prime for text. Phase 1 surfaces use sage washes; Phase 2 uses
 brick. The institution strip stays a dark ink band so the white logos keep
 their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
-`mix-blend-mode: multiply`. `fieldguide.css` and `fieldguide.js` draw the
-robot mark, the life-cycle tags and arrows, and the lens with the vendored
-[rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
+`mix-blend-mode: multiply`. The header wordmark is text only. `fieldguide.css`
+and `fieldguide.js` draw the life-cycle tags and arrows, and the lens with the
+vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
 follow the pointer. The lens runs one tour of the scene the first time it is
 mostly on screen, unless the reader moved it first or prefers reduced motion.
 The whisper field under the hero is the only looping animation: each robot
@@ -83,7 +85,7 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - Georgia Tech: supplied 27 October 2026, recoloured white on transparent and trimmed
 - AIM Intelligence: supplied white logo, 27 October 2026
 
-The visit banner uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
+The visit banner sits in the footer and uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
 one POST per production page load and a shared root key for both hostnames.
 Local previews never increment it. The display starts at **686** on 26 October
 2026 by adding 667 to the provider's count of 19. This is a configured starting

@@ -1,6 +1,5 @@
-/* Field-guide figures: brand robot, life-cycle plates and the sample-case lens. */
-.brand .brand-bot { width: 36px; height: 29px; flex: none; overflow: visible; }
-.site-footer .brand .brand-bot { width: 32px; height: 26px; }
+/* Field-guide figures: section leads, life-cycle plates, the whisper field and the sample-case lens. */
+.section-lead { max-width: 64ch; margin: 4px 0 30px; font-size: 17.5px; line-height: 1.65; }
 
 /* Life cycle: four plates in reading order, arrows between them, phase names above. */
 .life-cycle { margin: 0 0 40px; }
@@ -19,6 +18,7 @@
 .life-arrow svg { width: 100%; height: 40px; overflow: visible; }
 .life-bridge p { margin: 0; display: grid; gap: 1px; font-family: var(--font); font-style: italic; font-size: 14px; line-height: 1.35; color: var(--muted); text-align: center; }
 .life-bridge b { display: none; }
+.life-desc { max-width: 24ch; margin: 0; font-size: 15px; line-height: 1.45; color: var(--muted); text-align: center; }
 .life-note { max-width: 26ch; font-style: italic; font-size: 15px; line-height: 1.4; color: var(--muted); text-align: center; }
 
 /* Whisper field: robots walk inside glass sandboxes on a ground with depth; one bubble above the listener. */

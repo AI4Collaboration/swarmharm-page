@@ -32,7 +32,6 @@ img { display: block; max-width: 100%; height: auto; }
 .site-header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
 .nav-inner { min-height: 80px; display: flex; align-items: center; gap: 28px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 23px; font-weight: 600; letter-spacing: -0.025em; white-space: nowrap; }
-.brand img { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; }
 .nav-inner nav { display: flex; align-items: center; gap: 28px; margin-left: auto; }
 .nav-inner nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: 16.5px; font-weight: 500; color: var(--muted); }
 .nav-inner nav a:hover { color: var(--text); }
@@ -97,7 +96,6 @@ img { display: block; max-width: 100%; height: auto; }
 .site-footer { padding-block: 30px; border-top: 1px solid var(--line); }
 .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .footer-top .brand { font-size: 22px; }
-.footer-top .brand img { width: 32px; height: 32px; }
 .back-top { font-size: 16.5px; color: var(--muted); }
 .back-top { display: inline-flex; align-items: center; min-height: 44px; }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 16px; line-height: 1.6; color: var(--muted); }

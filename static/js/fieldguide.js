@@ -57,13 +57,6 @@
     return { g, eyes };
   }
 
-  function drawBrands() {
-    document.querySelectorAll('svg.brand-bot').forEach(svg => {
-      svg.replaceChildren();
-      robot(pen(svg), svg, 0, 2, 36);
-    });
-  }
-
   // Life cycle: a tag behind each label, an arrow between plates, a hand-drawn rule under each phase name.
   function drawTag(svg) {
     const r = svg.getBoundingClientRect();
@@ -641,7 +634,6 @@
 
   function render() {
     pupils = [];
-    drawBrands();
     drawLifeCycle();
     drawLens();
     buildField();

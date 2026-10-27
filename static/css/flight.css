@@ -40,7 +40,6 @@ body [id] { scroll-margin-top: 0; }
 .status { font-size: 13.5px; letter-spacing: .04em; }
 .status > span { background: #a94124; }
 .brand { font-family: var(--display); letter-spacing: -.05em; }
-.brand img { mix-blend-mode: screen; }
 .hero { background: radial-gradient(ellipse at 85% 45%, rgba(43, 36, 27, 0.031), transparent 55%); }
 .hero-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); align-items: center; gap: 24px; padding-block: 64px 58px; }
 .hero-emblem { min-width: 0; }
