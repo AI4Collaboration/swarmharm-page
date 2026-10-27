@@ -50,13 +50,12 @@ their contrast. Plates in `static/images/fieldguide/` were generated with
 and `fieldguide.js` draw the life-cycle tags and arrows, with the
 vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
 follow the pointer. The whisper field under the hero is the only looping
-animation: each robot walks inside its own glass sandbox on a ground with depth
-(far robots sit higher and smaller). The walls stay up, matching "separate
-sandboxes"; a crack opens across the shared sand floor and joins them, standing
-in for the shared directory. Whispers, exact sample transcript excerpts (kept in
-`index.html`), travel along the crack from one robot to another. This is a
-conceptual animation, not a literal replay of the run. It pauses off screen and,
-under reduced motion, shows the open crack and one still whisper. The main
+animation: robots start in a row of glass sandboxes, crack the front walls one
+by one and walk onto a ground with depth (far robots sit higher and smaller).
+When two meet, one whispers an exact main-example transcript excerpt (kept in
+`index.html`). Every robot is ochre. This is a conceptual animation, not a
+literal replay of the run. It pauses off screen and uses a still scene under
+reduced motion. The main
 sample uses a separate evidence-backed recovery
 replay in `maintenance-case.css` and `maintenance-case.js`.
 
