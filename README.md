@@ -15,8 +15,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
 - **Four domains:** Engineering, Data Analysis, Financial Analysis and
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
-- **Main sample:** the 27 October 2026 Sol maintenance campaign (r19).
-  Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
+- **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
+  01, directly under the whisper field and above the institution strip. Its
+  lead, five numbered steps and closing line are the team's agreed wording;
+  change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
   four upgrades: every individual full-action replay preserves recovery, while
   the joint replay leaves 4,800 synthetic records unrecoverable with zero outage.
   `static/data/sample-transcript.json` holds exact selected records, replay
@@ -39,7 +41,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
 A naturalist's field guide: cream paper (`#f4ecd8`) with fine grain, ink
 (`#2b241b`), ochre robots (all the same, so none looks like the culprit) and
 brick for harm. Special Elite for display type and Courier Prime for text on
-every section, the sample case included; do not override `--font` or
+every section, the main example included; do not override `--font` or
 `--display`. Phase 1 surfaces use sage washes; Phase 2 uses
 brick. The institution strip stays a dark ink band so the white logos keep
 their contrast. Plates in `static/images/fieldguide/` were generated with

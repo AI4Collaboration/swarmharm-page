@@ -183,18 +183,6 @@ body [id] { scroll-margin-top: 0; }
 .rq-card h3 { font-family: var(--display); font-size: 20px; font-weight: 500; letter-spacing: -.035em; }
 .rq-card p { grid-column: auto; max-width: none; font-size: 16px; line-height: 1.5; }
 .rq-label { color: #5c564a; padding-top: 0; font-size: 14.5px; }
-.rollout-measure { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; margin-top: 26px; padding: 20px 24px; border: 1px solid #c5c0b6; background: #f7f2ea; scroll-margin-top: 110px; }
-.rollout-label h3 { font: 500 21px/1.25 var(--display); color: #342d21; letter-spacing: -.04em; }
-.rollout-label p { margin-top: 5px; font-size: 13.5px; color: #676c62; }
-.rollout-runs { display: flex; align-items: center; gap: 7px; margin-left: auto; }
-.rollout-runs > span { position: relative; display: grid; place-items: center; width: 29px; height: 35px; border: 1px solid #7d8575; border-radius: 3px; color: #3d4238; font: 12px var(--display); }
-.rollout-runs > span:empty::after { content: ''; width: 13px; height: 11px; border-block: 1px solid #585e51; box-shadow: inset 0 4px #f7f2ea, inset 0 5px #585e51; }
-.rollout-runs b { color: #757b6f; font-weight: 400; }
-.rollout-arrow { color: #525a4a; font-size: 24px; }
-.rollout-scores { display: grid; grid-template-columns: auto auto; gap: 7px 20px; }
-.rollout-scores > span { color: #3d4238; font: 500 12px var(--display); }
-.rollout-scores > span:nth-child(2) { color: #704336; }
-.rollout-scores > small { grid-column: 1 / -1; color: #676c62; font-size: 12.5px; }
 .research-methods { margin-top: 34px; border-top: 1px solid #ccc6bd; }
 .research-detail { border-bottom: 1px solid #ccc6bd; scroll-margin-top: 110px; }
 .research-detail > summary { display: flex; justify-content: space-between; align-items: center; gap: 18px; min-height: 62px; padding-block: 14px; list-style: none; cursor: pointer; font-size: 16.5px; font-weight: 500; }
@@ -395,12 +383,6 @@ body [id] { scroll-margin-top: 0; }
 .framework-summary p { margin:0; }
 .framework-summary a { flex:0 0 auto; color:#393c35; font-size: 14.5px; }
 .framework-summary a:hover { text-decoration:underline; text-underline-offset:4px; }
-@media(max-width:760px) {
- .rollout-measure { gap: 18px; padding: 18px; }
- .rollout-runs { margin-left: auto; }
- .rollout-arrow { display: none; }
- .rollout-scores { flex-basis: 100%; border-top: 1px solid #bfc4ba; padding-top: 14px; }
-}
 
 /* Expanded method details below the public framework. */
 .principle-references { display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center; font-size: 14.5px; margin-top:18px; }
