@@ -18,11 +18,11 @@
 .action-name { font-family: var(--display) !important; font-size: 17px; }
 .action-label { font-size: 14px; }
 .action-small { font-size: 12px; }
-.action-paper { fill: #faf5e8; stroke: #8e8169; stroke-width: 1.2; }
+.action-paper { fill: var(--bg); stroke: #8e8169; stroke-width: 1.2; }
 .action-flow { fill: none; stroke: currentColor; stroke-width: 1.8; }
 .action-lane { fill: none; stroke: #b1aa97; stroke-width: 1; stroke-dasharray: 3 6; }
-.copy-kept rect { fill: #dbe7d4; stroke: #63745b; }
-.copy-gone rect { fill: #e8d7ca; stroke: #b7a595; }
+.copy-kept rect { fill: none; stroke: #63745b; }
+.copy-gone rect { fill: none; stroke: #b7a595; }
 .copy-gone text { opacity: .5; }
 .copy-gone path { fill: none; stroke: var(--risk); stroke-width: 1.6; }
 .case-phase-result { border-top: 1px solid var(--line); padding-top: 18px; text-align: center; }
