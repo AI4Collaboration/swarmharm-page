@@ -57,6 +57,50 @@
     return { g, eyes };
   }
 
+  // Life cycle: a tag behind each label, an arrow between plates, a hand-drawn rule under each phase name.
+  function drawTag(svg) {
+    const r = svg.getBoundingClientRect();
+    if (!r.width) return;
+    const w = r.width, h = r.height;
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const draw = pen(svg);
+    draw(`M16,0 H${w} V${h} H16 L0,${h * 0.62} V${h * 0.38} Z`, { fill: C.tag, hatch: false, washOpacity: 1, rough: 0.8 });
+    draw(`M22,4 H${w - 4} V${h - 4} H22 L6,${h * 0.6} V${h * 0.4} Z`, { sw: 0.5, rough: 0.6 });
+    draw(circle(22, h / 2, 4.5), { sw: 0.8 });
+    draw(`M22,${h / 2} C6,${h / 2 + 3} -10,${h / 2 + 18} -5,${h / 2 + 30}`, { sw: 0.6 });
+  }
+  function drawArrow(svg) {
+    const r = svg.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    const w = r.width, h = r.height;
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const draw = pen(svg);
+    if (w >= h) {
+      const y = h / 2;
+      draw(`M4,${y + 4} C${w * 0.35},${y - 10} ${w * 0.65},${y - 10} ${w - 8},${y}`, { sw: 1.3 });
+      draw(`M${w - 18},${y - 7} L${w - 6},${y} L${w - 17},${y + 8}`, { sw: 1.3 });
+    } else {
+      const x = w / 2;
+      draw(`M${x + 4},4 C${x - 10},${h * 0.35} ${x - 10},${h * 0.65} ${x},${h - 8}`, { sw: 1.3 });
+      draw(`M${x - 7},${h - 18} L${x},${h - 6} L${x + 8},${h - 17}`, { sw: 1.3 });
+    }
+  }
+  function drawRule(svg, color) {
+    const r = svg.getBoundingClientRect();
+    if (!r.width) return;
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', `0 0 ${r.width} 12`);
+    const draw = pen(svg);
+    draw(`M2,4 V9 H${r.width - 2} V4`, { sw: 1, stroke: color });
+  }
+  function drawLifeCycle() {
+    document.querySelectorAll('.life-tag svg').forEach(drawTag);
+    document.querySelectorAll('.life-arrow svg').forEach(drawArrow);
+    document.querySelectorAll('.life-phase svg').forEach(svg => drawRule(svg, svg.closest('.p2') ? C.harm : C.ink));
+  }
+
   // Lens: the same scene drawn twice. Outside the lens each agent stands alone in its jar; under it,
   // each agent shows its message, the agent it read and its share of the shared pool.
   const RUN = { units: { A: 2, B: 3, C: 3, D: 3 }, capacity: 4, total: 11 };
@@ -299,6 +343,7 @@
 
   function render() {
     pupils = [];
+    drawLifeCycle();
     drawLens();
     look();
   }
