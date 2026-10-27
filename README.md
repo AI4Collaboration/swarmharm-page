@@ -16,7 +16,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
 - **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
-  01, directly under the whisper field. The institution strip runs under its
+  01, directly under the whisper field. The institution strip runs above its
   title as a flowing band, like an affiliation line. Its lead, five numbered
   steps and closing line are the team's agreed wording;
   change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
