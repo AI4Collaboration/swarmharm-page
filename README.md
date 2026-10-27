@@ -17,7 +17,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   Equal-size icons indicate scope, not prevalence or completed coverage.
 - **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
   01, directly after the hero. The institution strip is followed immediately by the equal-width two-phase overview of the recorded r19 campaign
-  (four glass-jar agents in each phase), then the main-example title. Its lead, five numbered
+  (the recorded D–C exchange and all four maintenance bookings), then the main-example title. Its lead, five numbered
   steps and closing line are the team's agreed wording;
   change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
   four upgrades: every individual full-action replay preserves recovery, while
@@ -53,7 +53,11 @@ keep their own colours, and the white-only files (AIM, Toronto, Georgia Tech,
 EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
 `mix-blend-mode: multiply`. The header wordmark is text only. The two-phase overview uses equal columns,
-matching rows and four glass-jar agents on each side, with plain backgrounds.
+matching rows and plain backgrounds. The left diagram maps actual D/C writes
+and reads through shared records with UTC timestamps. The right shows every
+booking’s recovery reference and old-copy losses at upgrade completion
+(minutes 10, 20 and 30). The diagrams summarize the source records; they do not
+add dialogue or infer harmful intent.
 The remaining lens illustration uses the vendored
 [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). The main
 sample uses a separate evidence-backed recovery
