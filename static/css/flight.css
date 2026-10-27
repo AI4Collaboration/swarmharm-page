@@ -11,7 +11,7 @@
 }
 body { background: #f4ecd8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .18 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 .visit-counter { display: flex; flex: 1 1 260px; min-width: 0; min-height: 48px; box-sizing: border-box; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 12px; padding: 8px 12px; background: linear-gradient(90deg, transparent, rgba(160, 170, 154, 0.082) 15%, rgba(160, 170, 154, 0.082) 85%, transparent); color: #3d362a; font-size: .9rem; font-weight: 500; letter-spacing: .06em; line-height: 1.4; text-transform: uppercase; }
-.visit-banner { margin-block: 0 20px; }
+.visit-banner { margin-block: 0; padding-block: 8px; }
 .visit-counter > span:not(.visit-digits) { white-space: nowrap; }
 .visit-counter[hidden] { display: none; }
 .visit-digits { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-width: 86px; max-width: 100%; font-variant-numeric: tabular-nums; }

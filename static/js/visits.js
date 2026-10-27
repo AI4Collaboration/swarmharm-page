@@ -25,9 +25,7 @@
       // Parse integer digits directly so large totals stay exact.
       const match = body.match(/"site_pv"\s*:\s*(?:"(\d+)"|(\d+))\s*[,}]/);
       if (!match) return;
-      // Initialize the display to 686 at the provider's 19 visits on 2026-10-26.
-      // Keep the fixed offset so each subsequent page view still adds one.
-      const count = (BigInt(match[1] || match[2]) + 667n).toString();
+      const count = BigInt(match[1] || match[2]).toString();
       const groups = count.replace(/\B(?=(\d{3})+(?!\d))/g, ',').split(',');
       const fragment = document.createDocumentFragment();
       let digitIndex = 0;

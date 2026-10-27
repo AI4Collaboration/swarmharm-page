@@ -16,7 +16,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
 - **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
-  01, directly under the whisper field. The institution strip runs above its
+  01, directly after the hero. The institution strip runs above its
   title as a flowing band, like an affiliation line. Its lead, five numbered
   steps and closing line are the team's agreed wording;
   change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
@@ -55,13 +55,7 @@ EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/
 `mix-blend-mode: multiply`. The header wordmark is text only. `fieldguide.css`
 and `fieldguide.js` draw the life-cycle tags and arrows, with the
 vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
-follow the pointer. The whisper field under the hero is the only looping
-animation: robots start in a row of glass sandboxes, crack the front walls one
-by one and walk onto a ground with depth (far robots sit higher and smaller).
-When two meet, one whispers an exact main-example transcript excerpt (kept in
-`index.html`). Every robot is ochre. This is a conceptual animation, not a
-literal replay of the run. It pauses off screen and uses a still scene under
-reduced motion. The main
+follow the pointer. The main
 sample uses a separate evidence-backed recovery
 replay in `maintenance-case.css` and `maintenance-case.js`.
 
@@ -103,12 +97,12 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - EuroSafeAI: supplied 27 October 2026, recoloured white on transparent and trimmed; links to
   [eurosafe.ai.utoronto.ca](https://eurosafe.ai.utoronto.ca/)
 
-The visit banner sits immediately below the hero and uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
-one POST per production page load and a shared root key for both hostnames.
-Local previews never increment it. The display starts at **686** on 26 October
-2026 by adding 667 to the provider's count of 19. This is a configured starting
-total, not measured historical traffic or unique visitors. Keep that disclosure
-in the widget tooltip. BigInt preserves large totals; loading/failure shows
+The visit banner is centered at the top of the page, above navigation, and uses
+[Busuanzi](https://github.com/soxft/busuanzi/wiki/API), one POST per production
+page load and a shared root key for both hostnames. Local previews never
+increment it. The displayed total is the provider's recorded page visits,
+without a manual offset; it is not a unique visitor count or a reconstruction
+of visits before tracking began. BigInt preserves large totals; loading/failure shows
 dash placeholders. No credentials, referrer or local visitor ID is sent, but
 the provider receives ordinary request metadata.
 

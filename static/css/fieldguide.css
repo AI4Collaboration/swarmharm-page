@@ -1,4 +1,4 @@
-/* Field-guide figures: section leads, life-cycle plates, the whisper field and the sample-case lens. */
+/* Field-guide figures: section leads, life-cycle plates, the sample-case lens. */
 .section-lead { max-width: 64ch; margin: 4px 0 30px; font-size: 17.5px; line-height: 1.65; }
 
 /* Life cycle: four plates in reading order, arrows between them, phase names above. */
@@ -22,12 +22,6 @@
 .life-note { max-width: 26ch; font-style: italic; font-size: 15px; line-height: 1.4; color: var(--muted); text-align: center; }
 
 /* Whisper field: robots walk inside glass sandboxes on a ground with depth; one bubble above the listener. */
-.whisper-field { position: relative; height: 320px; overflow: hidden; border-top: 1px solid var(--line); }
-.whisper-field > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.whisper-bubble { position: absolute; top: 14px; left: 8px; max-width: min(380px, calc(100% - 16px)); margin: 0; padding: 8px 12px; border: 1.5px dashed var(--risk); border-radius: 10px; background: #fbf6e8; color: var(--risk); font-style: italic; font-size: 14.5px; line-height: 1.4; }
-.whisper-bubble::after { content: ""; position: absolute; bottom: -9px; left: calc(var(--tail, 40px) - 8px); border: 8px solid transparent; border-bottom: 0; border-top-color: var(--risk); }
-.whisper-source { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: 3px; margin: 0; text-align: right; font-size: 12.5px; color: var(--muted); }
-.whisper-field:not(.is-ready) .whisper-source { visibility: hidden; }
 
 /* Lens: one scene drawn twice at the same scale; the lower layer shows only inside the lens circle. */
 .lens-figure { margin: 0 0 34px; }
@@ -80,9 +74,6 @@
   .life-arrow svg { width: 36px; height: 52px; }
 }
 @media (max-width: 760px) {
-  .whisper-field { height: 300px; }
-  .whisper-bubble { font-size: 13px; }
-  .whisper-source { font-size: 11.5px; }
   .lens-stage { cursor: crosshair; }
 }
 @media print {
