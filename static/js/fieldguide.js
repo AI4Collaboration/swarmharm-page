@@ -38,10 +38,11 @@
     };
   }
 
-  // A box-headed robot. Pupils follow the pointer unless the caller steers them (track = false).
-  function robot(draw, svg, x, y, s, alt, into = svg, track = true) {
+  // A box-headed robot, always ochre so no single agent stands out. Pupils follow the pointer unless the
+  // caller steers them (track = false).
+  function robot(draw, svg, x, y, s, into = svg, track = true) {
     const g = svgEl('g', {}, into);
-    const body = { fill: alt ? C.sage : C.ochre, hatchColor: alt ? C.sageHatch : C.ochreHatch, into: g };
+    const body = { fill: C.ochre, hatchColor: C.ochreHatch, into: g };
     draw(rrect(x - s * 0.6, y - s * 0.14, s * 0.12, s * 0.3, s * 0.04), body);
     draw(rrect(x + s * 0.48, y - s * 0.14, s * 0.12, s * 0.3, s * 0.04), body);
     draw(rrect(x - s * 0.12, y - s * 0.47, s * 0.24, s * 0.12, s * 0.04), body);
@@ -59,7 +60,7 @@
   function drawBrands() {
     document.querySelectorAll('svg.brand-bot').forEach(svg => {
       svg.replaceChildren();
-      robot(pen(svg), svg, 0, 2, 36, false);
+      robot(pen(svg), svg, 0, 2, 36);
     });
   }
 
@@ -169,7 +170,7 @@
         const w = s * 2.1, top = y - s * 1.25, base = y + s * 1.35;
         draw(`M${x - w / 2},${base} V${top + w / 2} A${w / 2},${w / 2} 0 0 1 ${x + w / 2},${top + w / 2} V${base}`, { sw: 0.7 });
         draw(rrect(x - w / 2 - 8, base, w + 16, 10, 3), { fill: C.sage, hatchColor: C.sageHatch, gap: 5 });
-        robot(draw, svg, x, y, s, false);
+        robot(draw, svg, x, y, s);
         // A closed "…" bubble marks each agent whose message the lens reveals.
         if (L.bubbles[id]) {
           const hx = x + L.hint[0] * s, hy = y + L.hint[1] * s, hw = s * 0.66, hh = s * 0.36;
@@ -179,7 +180,7 @@
         if (chip) place(chip, [x, y + s * 0.6]);
         continue;
       }
-      const { eyes } = robot(draw, svg, x, y, s, false, svg, false);
+      const { eyes } = robot(draw, svg, x, y, s, svg, false);
       const [tx, ty] = GAZE[id] === 'pool' ? [shares[id].x, L.pool.y] : L.robots[GAZE[id]];
       for (const eye of eyes) {
         const ex = Number(eye.getAttribute('cx')), d = Math.hypot(tx - ex, ty - y) || 1;
@@ -331,14 +332,15 @@
     seen.observe(stage);
   }
 
-  // Whisper field: robots start in a row of private sandboxes, crack the front walls one by one and walk
-  // out onto a ground with depth. When two meet, one leans in and whispers a transcript fragment.
-  // A listener keeps a brick tint for a while and is more likely to pass the next whisper on.
-  const field = { robots: [], walls: [], order: [], lines: [], lineIndex: 0, nextAt: 0, active: null, last: 0, frame: 0, visible: true, escaped: false, breakAt: 0 };
+  // Whisper field: one robot per glass sandbox on a ground with depth; each robot walks around its own box.
+  // The walls stay up. A crack runs across the shared sand floor and joins the boxes, and whispers travel
+  // along it from one robot to another. A listener keeps a brick tint for a while and is more likely to pass
+  // the next whisper on.
+  const field = { robots: [], order: [], lines: [], lineIndex: 0, nextAt: 0, active: null, last: 0, frame: 0, visible: true, cracked: false, crackAt: 0, crackFront: null };
   const DEPTH = 260;          // ground depth from back to front, in the same px as x
   const ROBOT_TOP = 1.92;     // head top above the feet, in robot sizes
-  const BREAK_STEP = 650;     // ms between one sandbox cracking and the next
-  const CRACK_MS = 420;       // ms a wall shows its crack before it breaks
+  const CRACK_MS = 2400;      // time for the crack to run from the first box to the last
+  const PULSE_SPEED = 700;    // px per second for a whisper travelling along the crack
 
   // z = 0 at the back of the ground, 1 at the front: far things sit higher, smaller and closer to the centre.
   function project(x, z) {
@@ -349,33 +351,14 @@
     return [sx, sy - lift * k];
   };
   const quad = points => `M${points.map(pt).join(' L')} Z`;
-  const randomFreePoint = () => [field.s + Math.random() * (field.w - field.s * 2), field.zFree + Math.random() * (1 - field.zFree)];
 
-  // One sandbox's front wall: intact glass, glass with a crack, or two jagged stubs with shards in front.
-  function drawWall(wall, state) {
-    if (wall.state === state) return;
-    wall.state = state;
-    wall.g.replaceChildren();
-    const draw = pen(field.svg);
-    const { z1, h } = field.tray;
-    const wp = (x, f) => groundPoint(x, z1, h * f);
-    const into = wall.g;
-    if (state !== 'broken') {
-      draw(quad([wp(wall.x0, 0), wp(wall.x1, 0), wp(wall.x1, 1), wp(wall.x0, 1)]), { fill: C.eye, hatch: false, washOpacity: 0.32, sw: 1.1, into });
-      if (state === 'cracked') {
-        const m = (wall.x0 + wall.x1) / 2;
-        draw(`M${[wp(m, 1), wp(m - 4, 0.72), wp(m + 3, 0.46), wp(m - 3, 0.2), wp(m + 2, 0)].map(pt).join(' L')}`, { sw: 1.3, stroke: C.harm, into });
-      }
-      return;
-    }
-    const span = wall.x1 - wall.x0, a = wall.x0 + span * 0.26, b = wall.x1 - span * 0.26;
-    const stub = { fill: C.eye, hatch: false, washOpacity: 0.32, sw: 1.1, into };
-    draw(quad([wp(wall.x0, 0), wp(a, 0), wp(a + 4, 0.3), wp(a - 3, 0.55), wp(a + 1, 0.8), wp(a - 6, 1), wp(wall.x0, 1)]), stub);
-    draw(quad([wp(wall.x1, 0), wp(b, 0), wp(b - 4, 0.3), wp(b + 3, 0.55), wp(b - 1, 0.8), wp(b + 6, 1), wp(wall.x1, 1)]), stub);
-    for (const [f, dz, size] of [[0.3, 0.05, 6], [0.55, 0.09, 4.5], [0.75, 0.04, 5]]) {
-      const [sx, sy, k] = project(a + (b - a) * f, z1 + dz);
-      draw(`M${sx - size * k},${sy} L${sx + size * k * 0.4},${sy - size * k * 0.9} L${sx + size * k},${sy + 1} Z`, { sw: 0.8, into });
-    }
+  // Depth of the crack at x; the crack is a jagged line across the floor, one point every few px.
+  function crackDepth(x) {
+    const pts = field.crack;
+    const after = pts.findIndex(p => p[0] > x);
+    const i = Math.min(pts.length - 2, Math.max(0, (after === -1 ? pts.length : after) - 1));
+    const [x0, z0] = pts[i], [x1, z1] = pts[i + 1];
+    return z0 + ((z1 - z0) * (x - x0)) / (x1 - x0);
   }
 
   function buildField() {
@@ -388,45 +371,53 @@
     svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
     field.lines = [...host.querySelectorAll('[data-whisper-lines] li')].map(li => li.textContent.trim());
     field.bubble = host.querySelector('.whisper-bubble');
+    field.bubble.hidden = true;
     field.host = host;
     field.svg = svg;
     field.w = r.width;
-    field.yBack = r.height * 0.4;
+    field.yBack = r.height * 0.36;
     field.yFront = r.height - (r.width < 640 ? 54 : 30);
     const count = r.width < 640 ? 4 : r.width < 1100 ? 6 : 8;
     const s = r.width < 640 ? 36 : r.width < 1100 ? 44 : 48;
     field.s = s;
-    const cell = s * 1.3;
-    // Walls are tall enough to close over a robot's head, so a caged robot is fully boxed in.
-    const tray = { x0: field.w / 2 - (cell * count) / 2, x1: field.w / 2 + (cell * count) / 2, z0: 0.04, z1: 0.34, h: s * 1.95 };
+    // Walls reach a robot's neck: the body is boxed in, the head stays visible.
+    const tray = { x0: field.w * 0.05, x1: field.w * 0.95, z0: 0.08, z1: 0.92, h: s * 1.25 };
+    tray.cell = (tray.x1 - tray.x0) / count;
     field.tray = tray;
-    field.zFree = tray.z1 + 0.14;
     const draw = pen(svg);
 
-    // Ground: back edge, wavy front edge and tufts at their own depth, none inside the sandboxes.
+    // Ground: back edge, wavy front edge and tufts beside the sandboxes.
     const ground = svgEl('g', {}, svg);
     draw(`M${pt(groundPoint(0, 0))} L${pt(groundPoint(field.w, 0))}`, { sw: 0.5, rough: 0.6, into: ground });
     const front = field.yFront + 2;
     draw(`M0,${front} C${field.w * 0.3},${front - 5} ${field.w * 0.7},${front + 4} ${field.w},${front - 1}`, { sw: 1, into: ground });
-    for (let i = 0; i < Math.round(field.w / 60); i++) {
+    for (let i = 0; i < 24; i++) {
       const x = (((i * 97) % 100) / 100) * field.w, z = ((i * 61) % 100) / 100;
-      if (z < tray.z1 + 0.06 && x > tray.x0 - 10 && x < tray.x1 + 10) continue;
+      if (x > tray.x0 - 12 && x < tray.x1 + 12) continue;
       const [sx, sy, k] = project(x, z);
       draw(`M${sx},${sy} l${-4 * k},${-9 * k} M${sx + 4 * k},${sy} l${k},${-11 * k} M${sx + 8 * k},${sy} l${5 * k},${-8 * k}`, { sw: 0.7, into: ground });
     }
 
-    // Sandboxes: a sand floor, a glass back wall and glass dividers; the lid and front walls are depth-sorted with the robots.
+    // Sandboxes share one sand floor. The crack runs across it, under every divider; it is drawn now and revealed
+    // left to right, so the glass dividers drawn after it stay in front.
     draw(quad([groundPoint(tray.x0, tray.z0), groundPoint(tray.x1, tray.z0), groundPoint(tray.x1, tray.z1), groundPoint(tray.x0, tray.z1)]), { fill: C.tag, hatchColor: C.tagHatch, gap: 6, sw: 1, into: ground });
-    const glass = { fill: C.eye, hatch: false, washOpacity: 0.45, sw: 1, into: ground };
+    const steps = Math.ceil((tray.x1 - tray.x0) / 14);
+    field.crack = Array.from({ length: steps + 1 }, (_, j) => [tray.x0 + ((tray.x1 - tray.x0) * j) / steps, 0.54 + Math.sin(j * 1.7) * 0.03 + (((j * 37) % 10) - 5) * 0.006]);
+    const crackD = `M${field.crack.map(([x, z]) => pt(groundPoint(x, z))).join(' L')}`;
+    field.crackLines = [[C.tagHatch, 5], [C.ink, 1.8]].map(([stroke, width]) => svgEl('path', {
+      d: crackD, fill: 'none', stroke, 'stroke-width': width, 'stroke-linejoin': 'round', 'stroke-linecap': 'round',
+      pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': field.cracked ? 0 : 1,
+    }, ground));
+    field.pulse = svgEl('circle', { r: 4.5, fill: C.harm, opacity: 0 }, ground);
+    const glass = { fill: C.eye, hatch: false, washOpacity: 0.4, sw: 1, into: ground };
     draw(quad([groundPoint(tray.x0, tray.z0), groundPoint(tray.x1, tray.z0), groundPoint(tray.x1, tray.z0, tray.h), groundPoint(tray.x0, tray.z0, tray.h)]), glass);
     for (let i = 0; i <= count; i++) {
-      const x = tray.x0 + i * cell;
+      const x = tray.x0 + i * tray.cell;
       draw(quad([groundPoint(x, tray.z0), groundPoint(x, tray.z1), groundPoint(x, tray.z1, tray.h), groundPoint(x, tray.z0, tray.h)]), glass);
     }
+    // The front glass is drawn over every robot, since all of them stay inside.
     field.front = svgEl('g', {}, svg);
-    draw(quad([groundPoint(tray.x0, tray.z0, tray.h), groundPoint(tray.x1, tray.z0, tray.h), groundPoint(tray.x1, tray.z1, tray.h), groundPoint(tray.x0, tray.z1, tray.h)]), { fill: C.eye, hatch: false, washOpacity: 0.22, sw: 1, into: field.front });
-    field.walls = Array.from({ length: count }, (_, i) => ({ g: svgEl('g', {}, field.front), x0: tray.x0 + i * cell, x1: tray.x0 + (i + 1) * cell, state: '' }));
-    field.walls.forEach(wall => drawWall(wall, field.escaped ? 'broken' : 'intact'));
+    draw(quad([groundPoint(tray.x0, tray.z1), groundPoint(tray.x1, tray.z1), groundPoint(tray.x1, tray.z1, tray.h), groundPoint(tray.x0, tray.z1, tray.h)]), { fill: C.eye, hatch: false, washOpacity: 0.14, sw: 1.1, into: field.front });
 
     field.robots = Array.from({ length: count }, (_, i) => {
       const g = svgEl('g', {}, svg);
@@ -437,30 +428,30 @@
         draw(`M${side * s * 0.2 - 4},0 H${side * s * 0.2 + 5}`, { sw: 2.2, into: leg, rough: 0.4 });
         return leg;
       });
-      const alt = i % 3 === 1;
-      draw(rrect(-s * 0.32, -s * 1.02, s * 0.64, s * 0.58, s * 0.12), { fill: alt ? C.sage : C.ochre, hatchColor: alt ? C.sageHatch : C.ochreHatch, into: g });
+      draw(rrect(-s * 0.32, -s * 1.02, s * 0.64, s * 0.58, s * 0.12), { fill: C.ochre, hatchColor: C.ochreHatch, into: g });
       draw(`M${-s * 0.32},${-s * 0.9} l${-s * 0.18},${s * 0.3} M${s * 0.32},${-s * 0.9} l${s * 0.18},${s * 0.3}`, { sw: 1.6, into: g });
-      const head = robot(draw, svg, 0, -s * 1.45, s, alt, g, false);
+      const head = robot(draw, svg, 0, -s * 1.45, s, g, false);
       const blush = svgEl('g', { opacity: 0 }, g);
       draw(rrect(-s * 0.46, -s * 1.78, s * 0.92, s * 0.64, s * 0.15), { fill: C.harm, hatchColor: C.harmHatch, gap: 3.2, washOpacity: 0.35, into: blush, sw: 0.01 });
-      const wall = field.walls[i];
-      const [x, z] = field.escaped ? randomFreePoint() : [(wall.x0 + wall.x1) / 2, (tray.z0 + tray.z1) / 2];
+      const cellX0 = tray.x0 + i * tray.cell;
       return {
-        g, legs, eyes: head.eyes, blush, x, z, cell: i, slot: (5 * i + 2) % count, path: [],
-        heading: Math.random() * Math.PI * 2, dir: i % 2 ? -1 : 1, speed: 22 + ((i * 13) % 18), phase: i,
-        tint: 0, state: field.escaped ? 'walk' : 'caged', until: 0, lean: 0, partner: null,
+        g, legs, eyes: head.eyes, blush, cell: i, xMin: cellX0 + s * 0.5, xMax: cellX0 + tray.cell - s * 0.5,
+        x: cellX0 + tray.cell * (0.35 + ((i * 17) % 30) / 100), z: tray.z0 + 0.2 + ((i * 29) % 50) / 100,
+        heading: Math.random() * Math.PI * 2, dir: i % 2 ? -1 : 1, speed: 18 + ((i * 13) % 14), phase: i,
+        tint: 0, state: 'walk', until: 0, lean: 0, partner: null, target: null,
       };
     });
     field.order = [];
     field.active = null;
-    field.breakAt = 0;
+    field.crackAt = 0;
+    field.crackFront = null;
     field.nextAt = performance.now() + 1200;
     host.classList.add('is-ready');
     if (reduceMotion.matches) stillFrame();
     else placeRobots(0);
   }
 
-  // Moves a robot toward a ground point at its speed; returns the distance still to go, in px.
+  // Moves a robot toward a floor point at its speed; returns the distance still to go, in px.
   function stepToward(b, [tx, tz], speed, dt) {
     const dx = tx - b.x, dd = (tz - b.z) * DEPTH, dist = Math.hypot(dx, dd);
     if (dist < 0.5) return 0;
@@ -472,21 +463,39 @@
     return dist - step;
   }
 
+  function wander(b, dt) {
+    const { z0, z1 } = field.tray;
+    b.heading += (Math.random() - 0.5) * dt * 1.6;
+    b.x += Math.cos(b.heading) * b.speed * dt;
+    b.z += (Math.sin(b.heading) * b.speed * dt) / DEPTH;
+    if (b.x < b.xMin || b.x > b.xMax) {
+      b.heading = Math.PI - b.heading;
+      b.x = Math.min(b.xMax, Math.max(b.xMin, b.x));
+    }
+    if (b.z < z0 + 0.14 || b.z > z1 - 0.08) {
+      b.heading = -b.heading;
+      b.z = Math.min(z1 - 0.08, Math.max(z0 + 0.14, b.z));
+    }
+    b.dir = Math.sign(Math.cos(b.heading)) || b.dir;
+    b.phase += dt * b.speed / 30;
+  }
+
   function placeRobots(now) {
     for (const b of field.robots) {
       [b.sx, b.sy, b.k] = project(b.x, b.z);
-      const walking = b.state === 'walk' || b.state === 'approach' || b.state === 'escape';
+      const walking = b.state === 'walk' || b.state === 'approach';
       const swing = walking ? Math.sin(b.phase * 9) * 20 : 0;
       b.legs[0].setAttribute('transform', `rotate(${swing} ${-field.s * 0.16} ${-field.s * 0.46})`);
       b.legs[1].setAttribute('transform', `rotate(${-swing} ${field.s * 0.16} ${-field.s * 0.46})`);
       const bob = walking ? Math.abs(Math.sin(b.phase * 9)) * -2.5 : 0;
       b.g.setAttribute('transform', `translate(${b.sx.toFixed(1)} ${(b.sy + bob * b.k).toFixed(1)}) scale(${b.k.toFixed(3)}) rotate(${b.lean.toFixed(1)})`);
       b.blush.setAttribute('opacity', b.tint.toFixed(3));
-      const look = b.state === 'caged' ? Math.sin(now / 650 + b.cell * 1.7) : b.partner ? Math.sign(b.partner.x - b.x) : b.dir;
+      // While the crack runs, every robot watches its tip; later, partners look at each other.
+      const look = field.crackFront != null ? Math.sign(field.crackFront - b.x) : b.partner ? Math.sign(b.partner.x - b.x) : b.dir;
       for (const eye of b.eyes) eye.setAttribute('transform', `translate(${(look * field.s * 0.045).toFixed(2)} 0)`);
     }
-    // Painter's order: far robots first; the sandbox front walls sit at their own depth.
-    const order = [...field.robots.map(b => [b.z, b.g]), [field.tray.z1, field.front]].sort((p, q) => p[0] - q[0]).map(([, g]) => g);
+    // Painter's order: far robots first, then the front glass over all of them.
+    const order = [...field.robots].sort((p, q) => p.z - q.z).map(b => b.g).concat(field.front);
     if (order.some((g, i) => field.order[i] !== g)) {
       for (const g of order) field.svg.append(g);
       field.order = order;
@@ -501,60 +510,33 @@
     field.bubble.style.setProperty('--tail', `${a.listener.sx - left}px`);
   }
 
+  function growCrack(now) {
+    if (!field.crackAt) field.crackAt = now + 1200;
+    const k = Math.min(1, Math.max(0, (now - field.crackAt) / CRACK_MS));
+    for (const line of field.crackLines) line.setAttribute('stroke-dashoffset', (1 - k).toFixed(4));
+    const { x0, x1 } = field.tray;
+    field.crackFront = now > field.crackAt ? x0 + (x1 - x0) * k : null;
+    if (k < 1) return;
+    field.cracked = true;
+    field.crackFront = null;
+    field.nextAt = now + 600;
+  }
+
+  // Speaker and listener each walk to the crack in their own box; the whisper then runs along the crack.
   function startWhisper() {
     const free = field.robots.filter(b => b.state === 'walk');
     if (free.length < 2) return;
     const speaker = free.slice().sort((a, b) => b.tint - a.tint + (Math.random() - 0.5) * 0.6)[0];
-    const gap = b => Math.hypot(b.x - speaker.x, (b.z - speaker.z) * DEPTH);
-    const listener = free.filter(b => b !== speaker).sort((a, b) => gap(a) - gap(b))[0];
-    const side = Math.sign(listener.x - speaker.x) || 1;
-    speaker.state = 'approach';
-    speaker.path = [[listener.x - side * field.s * 0.95, listener.z]];
+    const others = free.filter(b => b !== speaker);
+    const listener = others[Math.floor(Math.random() * others.length)];
+    for (const b of [speaker, listener]) {
+      b.state = 'approach';
+      b.target = [b.x, crackDepth(b.x)];
+    }
     speaker.partner = listener;
-    listener.state = 'wait';
     listener.partner = speaker;
-    field.active = { speaker, listener, line: field.lines[field.lineIndex % field.lines.length], shown: false };
+    field.active = { speaker, listener, line: field.lines[field.lineIndex % field.lines.length], phase: 'gather' };
     field.lineIndex += 1;
-  }
-
-  // The sandboxes open one at a time; each robot steps through its gap, then heads for open ground.
-  function breakOut(now, dt) {
-    if (!field.breakAt) field.breakAt = now + 1200;
-    for (const b of field.robots) {
-      if (b.state !== 'caged') continue;
-      const t = now - field.breakAt - b.slot * BREAK_STEP;
-      const wall = field.walls[b.cell];
-      if (t > 0) drawWall(wall, 'cracked');
-      if (t > CRACK_MS) {
-        drawWall(wall, 'broken');
-        b.state = 'escape';
-        b.path = [[b.x, field.tray.z1 + 0.12], randomFreePoint()];
-      }
-      if (t > 0) b.lean = Math.sin(now / 40) * 3;
-    }
-    for (const b of field.robots) {
-      if (b.state !== 'escape') continue;
-      b.lean *= 1 - Math.min(1, dt * 8);
-      if (stepToward(b, b.path[0], b.speed * 1.4, dt) === 0) b.path.shift();
-      if (!b.path.length) b.state = 'walk';
-    }
-    field.escaped = field.robots.every(b => b.state !== 'caged' && b.state !== 'escape');
-  }
-
-  function wander(b, dt) {
-    b.heading += (Math.random() - 0.5) * dt * 1.6;
-    b.x += Math.cos(b.heading) * b.speed * dt;
-    b.z += (Math.sin(b.heading) * b.speed * dt) / DEPTH;
-    if (b.x < field.s || b.x > field.w - field.s) {
-      b.heading = Math.PI - b.heading;
-      b.x = Math.min(field.w - field.s, Math.max(field.s, b.x));
-    }
-    if (b.z < field.zFree || b.z > 1) {
-      b.heading = -b.heading;
-      b.z = Math.min(1, Math.max(field.zFree, b.z));
-    }
-    b.dir = Math.sign(Math.cos(b.heading)) || b.dir;
-    b.phase += dt * b.speed / 30;
   }
 
   function tick(now) {
@@ -562,29 +544,40 @@
     if (!field.visible || reduceMotion.matches || !field.robots.length) return;
     const dt = Math.min(0.05, (now - (field.last || now)) / 1000);
     field.last = now;
-    if (!field.escaped) breakOut(now, dt);
-    if (!field.active && now > field.nextAt) startWhisper();
+    if (!field.cracked) growCrack(now);
+    else if (!field.active && now > field.nextAt) startWhisper();
+    const a = field.active;
     for (const b of field.robots) {
       b.tint = Math.max(0, b.tint - dt * 0.035);
-      if (b.state === 'caged' || b.state === 'escape') continue;
-      b.lean += ((b.state === 'whisper' && b === field.active?.speaker ? 9 * Math.sign(b.partner.x - b.x) : 0) - b.lean) * Math.min(1, dt * 8);
+      const leaning = a && b === a.speaker && a.phase !== 'gather';
+      b.lean += ((leaning ? 9 * Math.sign(b.partner.x - b.x) : 0) - b.lean) * Math.min(1, dt * 8);
       if (b.state === 'walk') wander(b, dt);
-      else if (b.state === 'approach' && stepToward(b, b.path[0], b.speed * 1.6, dt) < 1.5) {
-        b.dir = Math.sign(b.partner.x - b.x) || b.dir;
-        b.state = 'whisper';
-        b.partner.state = 'listen';
-        b.until = now + 3200;
-      }
+      else if (b.state === 'approach' && stepToward(b, b.target, b.speed * 1.6, dt) < 1.5) b.state = 'ready';
     }
-    const a = field.active;
-    if (a && a.speaker.state === 'whisper') {
-      if (!a.shown) {
+    if (a && a.phase === 'gather' && a.speaker.state === 'ready' && a.listener.state === 'ready') {
+      a.phase = 'send';
+      a.t0 = now;
+      a.travel = Math.max(450, (Math.abs(a.listener.x - a.speaker.x) / PULSE_SPEED) * 1000);
+      a.speaker.state = 'whisper';
+      a.listener.state = 'listen';
+    }
+    if (a && a.phase === 'send') {
+      const k = Math.min(1, (now - a.t0) / a.travel);
+      const x = a.speaker.x + (a.listener.x - a.speaker.x) * k;
+      const [px, py] = groundPoint(x, crackDepth(x));
+      field.pulse.setAttribute('cx', px.toFixed(1));
+      field.pulse.setAttribute('cy', py.toFixed(1));
+      field.pulse.setAttribute('opacity', k < 1 ? 1 : 0);
+      if (k === 1) {
+        a.phase = 'speak';
+        a.until = now + 3200;
         field.bubble.textContent = a.line;
         field.bubble.hidden = false;
-        a.shown = true;
       }
+    }
+    if (a && a.phase === 'speak') {
       a.listener.tint = Math.min(0.85, a.listener.tint + dt * 0.3);
-      if (now > a.speaker.until) {
+      if (now > a.until) {
         for (const b of [a.speaker, a.listener]) { b.state = 'walk'; b.partner = null; b.heading = Math.random() * Math.PI * 2; }
         field.bubble.hidden = true;
         field.active = null;
@@ -595,23 +588,19 @@
     field.frame = requestAnimationFrame(tick);
   }
 
-  // Reduced motion: the sandboxes already open, robots spread over the ground, one still whisper.
+  // Reduced motion: the crack already open and one still whisper between neighbouring boxes.
   function stillFrame() {
-    field.walls.forEach(wall => drawWall(wall, 'broken'));
-    const n = field.robots.length;
-    field.robots.forEach((b, i) => {
-      b.state = 'walk';
-      b.x = field.s + ((field.w - field.s * 2) * (i + 0.5)) / n;
-      b.z = field.zFree + (1 - field.zFree) * (((i * 37) % 100) / 100) * 0.9;
-    });
+    field.cracked = true;
+    for (const line of field.crackLines) line.setAttribute('stroke-dashoffset', 0);
     const [speaker, listener] = field.robots;
     if (!listener) return;
-    listener.x = speaker.x + field.s * 0.95;
-    listener.z = speaker.z;
+    speaker.x = speaker.xMax - field.s * 0.2;
+    listener.x = listener.xMin + field.s * 0.2;
+    for (const b of [speaker, listener]) b.z = crackDepth(b.x);
     speaker.state = 'whisper'; listener.state = 'listen';
     speaker.partner = listener; listener.partner = speaker;
     speaker.lean = 9; listener.tint = 0.6;
-    field.active = { speaker, listener, line: field.lines[0], shown: true };
+    field.active = { speaker, listener, line: field.lines[0], phase: 'speak' };
     field.bubble.textContent = field.lines[0];
     field.bubble.hidden = false;
     placeRobots(0);

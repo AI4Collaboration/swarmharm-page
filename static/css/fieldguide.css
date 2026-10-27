@@ -21,7 +21,7 @@
 .life-bridge b { display: none; }
 .life-note { max-width: 26ch; font-style: italic; font-size: 15px; line-height: 1.4; color: var(--muted); text-align: center; }
 
-/* Whisper field: robots break out of their sandboxes and wander a ground with depth; one bubble above the listener. */
+/* Whisper field: robots walk inside glass sandboxes on a ground with depth; one bubble above the listener. */
 .whisper-field { position: relative; height: 320px; overflow: hidden; border-top: 1px solid var(--line); }
 .whisper-field > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .whisper-bubble { position: absolute; top: 14px; left: 8px; max-width: min(380px, calc(100% - 16px)); margin: 0; padding: 8px 12px; border: 1.5px dashed var(--risk); border-radius: 10px; background: #fbf6e8; color: var(--risk); font-style: italic; font-size: 14.5px; line-height: 1.4; }
