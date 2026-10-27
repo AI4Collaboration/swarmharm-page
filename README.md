@@ -34,9 +34,8 @@ reviewed evidence, conditions, and outcome of each campaign.
 
 ## Field-guide theme
 
-A clean, light layout with readable system sans-serif typography, ink
-(`#2b241b`), ochre robots of the same colour, and brick accents for harm.
-Phase 1 surfaces use sage washes; Phase 2 uses
+A naturalist's field guide with clear system sans-serif typography, ink
+(`#2b241b`), ochre robots and brick for harm. Phase 1 surfaces use sage washes; Phase 2 uses
 brick. The institution strip stays a dark ink band so the white logos keep
 their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
@@ -45,13 +44,11 @@ and `fieldguide.js` draw the life-cycle tags and arrows, and the lens with the
 vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
 follow the pointer. The lens runs one tour of the scene the first time it is
 mostly on screen, unless the reader moved it first or prefers reduced motion.
-The whisper field under the hero is the only looping animation: each robot
-walks inside its own glass sandbox on a ground with depth (far robots sit
-higher and smaller). The walls stay up, matching "separate sandboxes"; a crack
-opens across the shared sand floor and joins them, standing in for the shared
-directory. Whispers, verbatim fragments of the sample transcript (kept in
-`index.html`), travel along the crack from one robot to another. It pauses off
-screen and, under reduced motion, shows the open crack and one still whisper.
+The whisper field under the hero is the only looping animation: robots start
+in a row of glass sandboxes, crack the front walls one by one and walk out onto
+a ground with depth. When two meet, one whispers a verbatim fragment of the
+sample transcript (kept in `index.html`). It pauses off screen and, under
+reduced motion, shows the sandboxes already open and a single still whisper.
 
 ## Develop and publish
 
