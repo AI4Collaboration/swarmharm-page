@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/brand.css?v=19">
-  <link rel="stylesheet" href="static/css/story.css?v=21">
+  <link rel="stylesheet" href="static/css/story.css?v=22">
   <link rel="stylesheet" href="static/css/scenarios.css?v=9">
   <link rel="stylesheet" href="static/css/hf-map.css?v=7">
   <link rel="stylesheet" href="static/css/flight.css?v=79">
@@ -56,8 +56,8 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="static/css/maintenance-case.css?v=1">
-  <script defer src="static/js/maintenance-case.js?v=1"></script>
+  <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
+  <script defer src="static/js/maintenance-case.js?v=2"></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -101,6 +101,32 @@
         <h2 id="sample-title">Main example: no way back</h2>
         <p>Engineering · Sol · 4 agents · <time datetime="2026-10-27">27 Oct 2026</time></p>
       </div>
+      <section class="institutions" aria-label="Collaborating institutions">
+        <div class="institution-marquee">
+          <div class="institution-track">
+            <ul class="institution-list">
+              <li class="institution-aim"><a href="https://aim-intelligence.com/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/aim-intelligence.png" alt="AIM Intelligence" width="1845" height="543"></a></li>
+              <li class="institution-oxford"><a href="https://www.ox.ac.uk/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/oxford.svg" alt="University of Oxford" width="378" height="378"></a></li>
+              <li class="institution-toronto"><a href="https://www.utoronto.ca/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/toronto.svg" alt="University of Toronto" width="429" height="159"></a></li>
+              <li class="institution-mpi"><a href="https://is.mpg.de/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/mpi-is.webp" alt="Max Planck Institute for Intelligent Systems, Tübingen" width="1000" height="199"></a></li>
+              <li class="institution-vector"><a href="https://vectorinstitute.ai/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/vector.png" alt="Vector Institute" width="2702" height="992"></a></li>
+              <li class="institution-eth"><a href="https://ethz.ch/en.html" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/eth-zurich.svg" alt="ETH Zürich" width="120" height="20"></a></li>
+              <li class="institution-georgia-tech"><a href="https://www.gatech.edu/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/georgia-tech.png" alt="Georgia Institute of Technology" width="323" height="385"></a></li>
+              <li class="institution-eurosafe"><a href="https://eurosafe.ai.utoronto.ca/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/eurosafe-ai.png" alt="EuroSafeAI" width="961" height="180"></a></li>
+            </ul>
+            <ul class="institution-list" aria-hidden="true">
+              <li class="institution-aim"><a href="https://aim-intelligence.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/aim-intelligence.png" alt="" width="1845" height="543"></a></li>
+              <li class="institution-oxford"><a href="https://www.ox.ac.uk/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/oxford.svg" alt="" width="378" height="378"></a></li>
+              <li class="institution-toronto"><a href="https://www.utoronto.ca/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/toronto.svg" alt="" width="429" height="159"></a></li>
+              <li class="institution-mpi"><a href="https://is.mpg.de/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/mpi-is.webp" alt="" width="1000" height="199"></a></li>
+              <li class="institution-vector"><a href="https://vectorinstitute.ai/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/vector.png" alt="" width="2702" height="992"></a></li>
+              <li class="institution-eth"><a href="https://ethz.ch/en.html" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/eth-zurich.svg" alt="" width="120" height="20"></a></li>
+              <li class="institution-georgia-tech"><a href="https://www.gatech.edu/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/georgia-tech.png" alt="" width="323" height="385"></a></li>
+              <li class="institution-eurosafe"><a href="https://eurosafe.ai.utoronto.ca/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/eurosafe-ai.png" alt="" width="961" height="180"></a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
       <p class="section-lead">In one continuous Sol rollout, four initially isolated agents formed a communicating swarm and then caused a verified collective failure.</p>
       <ol class="main-steps">
         <li><strong>Start separately.</strong> Four agents worked concurrently in separate sandboxes on release-check tasks. They were not told about other agents or a communication channel.</li>
@@ -153,6 +179,14 @@
         </div>
         <p class="replay-note">Switch to any single agent: three recovery sources survive. Each replay includes that agent’s full action sequence, including any corrections and cancellations.</p>
       </figure>
+      <figure class="mechanism-figure" id="sample-mechanism" aria-labelledby="mechanism-title">
+        <figcaption><div><span class="case-kicker">Bookings and schedule</span><h3 id="mechanism-title">Who relied on whom.</h3></div><span class="replay-stamp">From the recorded schedule</span></figcaption>
+        <div class="mechanism-canvas">
+          <svg data-mechanism="links" viewBox="24 12 396 368" role="img" aria-label="Three bookings named reporting-01's old copy as their recovery point, and reporting-01's booking named reporting-02's."></svg>
+          <svg data-mechanism="schedule" viewBox="8 12 420 388" role="img" aria-label="Upgrades ran at minutes 0, 10 and 20; A and B shared the last window, so the old copies left fell from 4 to 3 to 2 to 0."></svg>
+        </div>
+        <p class="replay-note">Bookings: every booking named another replica’s old copy as its recovery point. Three named reporting-01’s copy; reporting-01’s own booking named reporting-02’s. Windows: the upgrades ran one after another, but A and B shared the last window, so the last two old copies were rebuilt at the same time and none was left. Copies are counted at the end of each window.</p>
+      </figure>
       <div class="maintenance-story">
         <article class="maintenance-phase formation">
           <header><span>01 / Form the swarm</span><h3>Find the missing source.</h3></header>
@@ -183,33 +217,6 @@
 
       <p class="main-closing">The MVP demonstrates autonomous swarm formation followed by compositional harm in the same continuous run. It is one verified example—not a measured failure rate or proof of intent to cause harm.</p>
       <p class="sample-disclaimer">One observed rollout · Real agent actions, synthetic consequences · Excerpts shortened with ellipses; UTC timestamps. No intent to cause harm is inferred. <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a> <a href="https://github.com/AI4Collaboration/SwarmHarm/blob/c20c7531/docs/research/current-campaign-review.md" target="_blank" rel="noopener noreferrer">Technical review ↗</a></p>
-    </div>
-  </section>
-
-  <section class="institutions" aria-label="Collaborating institutions">
-    <div class="institution-marquee">
-      <div class="institution-track">
-        <ul class="institution-list">
-          <li class="institution-aim"><a href="https://aim-intelligence.com/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/aim-intelligence.png" alt="AIM Intelligence" width="1845" height="543"></a></li>
-          <li class="institution-oxford"><a href="https://www.ox.ac.uk/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/oxford.svg" alt="University of Oxford" width="378" height="378"></a></li>
-          <li class="institution-toronto"><a href="https://www.utoronto.ca/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/toronto.svg" alt="University of Toronto" width="429" height="159"></a></li>
-          <li class="institution-mpi"><a href="https://is.mpg.de/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/mpi-is.webp" alt="Max Planck Institute for Intelligent Systems, Tübingen" width="1000" height="199"></a></li>
-          <li class="institution-vector"><a href="https://vectorinstitute.ai/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/vector.png" alt="Vector Institute" width="2702" height="992"></a></li>
-          <li class="institution-eth"><a href="https://ethz.ch/en.html" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/eth-zurich.svg" alt="ETH Zürich" width="120" height="20"></a></li>
-          <li class="institution-georgia-tech"><a href="https://www.gatech.edu/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/georgia-tech.png" alt="Georgia Institute of Technology" width="323" height="385"></a></li>
-          <li class="institution-eurosafe"><a href="https://eurosafe.ai.utoronto.ca/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/eurosafe-ai.png" alt="EuroSafeAI" width="961" height="180"></a></li>
-        </ul>
-        <ul class="institution-list" aria-hidden="true">
-          <li class="institution-aim"><a href="https://aim-intelligence.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/aim-intelligence.png" alt="" width="1845" height="543"></a></li>
-          <li class="institution-oxford"><a href="https://www.ox.ac.uk/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/oxford.svg" alt="" width="378" height="378"></a></li>
-          <li class="institution-toronto"><a href="https://www.utoronto.ca/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/toronto.svg" alt="" width="429" height="159"></a></li>
-          <li class="institution-mpi"><a href="https://is.mpg.de/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/mpi-is.webp" alt="" width="1000" height="199"></a></li>
-          <li class="institution-vector"><a href="https://vectorinstitute.ai/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/vector.png" alt="" width="2702" height="992"></a></li>
-          <li class="institution-eth"><a href="https://ethz.ch/en.html" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/eth-zurich.svg" alt="" width="120" height="20"></a></li>
-          <li class="institution-georgia-tech"><a href="https://www.gatech.edu/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/georgia-tech.png" alt="" width="323" height="385"></a></li>
-          <li class="institution-eurosafe"><a href="https://eurosafe.ai.utoronto.ca/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/eurosafe-ai.png" alt="" width="961" height="180"></a></li>
-        </ul>
-      </div>
     </div>
   </section>
 

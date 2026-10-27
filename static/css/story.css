@@ -10,6 +10,19 @@
 .sample-section { background: #dfe3da; }
 .sample-heading { margin-bottom: 28px; }
 .sample-heading > p { color: #595d55; font-size: 15px; }
+/* The logo strip runs as a flowing band inside the column, right under the main example title. */
+.sample-section .institutions { margin: -6px 0 30px; padding-block: 14px; border: 1px solid #4a3f31; border-radius: 3px; }
+.sample-section .institution-list li { flex-basis: 170px; width: 170px; height: 58px; }
+.sample-section .institution-list a { width: 156px; height: 50px; }
+.sample-section .institution-list img { max-width: 148px; height: 40px; }
+.sample-section .institution-aim img { height: 26px; }
+.sample-section .institution-list { gap: clamp(30px, 3.5vw, 52px); padding-inline: clamp(15px, 1.75vw, 26px); }
+@media (max-width: 560px) {
+  .sample-section .institution-list li { flex-basis: 128px; width: 128px; height: 50px; }
+  .sample-section .institution-list a { width: 118px; height: 44px; }
+  .sample-section .institution-list img { max-width: 110px; height: 32px; }
+  .sample-section .institution-aim img { height: 20px; }
+}
 .sample-brief { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 20px 0; margin-bottom: 30px; border-block: 1px solid #c7c2b8; }
 .sample-brief > svg { width: 34px; height: 34px; stroke: #505846; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .sample-brief .sample-brief-accent { stroke: #312a1d; }

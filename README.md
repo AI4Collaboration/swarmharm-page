@@ -16,8 +16,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
 - **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
-  01, directly under the whisper field and above the institution strip. Its
-  lead, five numbered steps and closing line are the team's agreed wording;
+  01, directly under the whisper field. The institution strip runs under its
+  title as a flowing band, like an affiliation line. Its lead, five numbered
+  steps and closing line are the team's agreed wording;
   change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
   four upgrades: every individual full-action replay preserves recovery, while
   the joint replay leaves 4,800 synthetic records unrecoverable with zero outage.
@@ -78,7 +79,10 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets and counter
 
 Use the field-guide plates for artwork. The unlabelled institution strip
-uses equal-size stages, preserved logo proportions and a seamless ink marquee.
+uses equal-size stages, preserved logo proportions and a seamless ink marquee,
+boxed inside the main example column. The "Who relied on whom" figure after
+the replay is drawn by `maintenance-case.js` with rough.js from the recorded
+`schedule`; it reuses the replay's `sources` map, so change both together.
 Under reduced motion the marquee stops and the logos wrap. Icons and the
 1200×630 link-preview card (`swarmharm-card.png`) use the robot mark and the
 hero plate; bump their `?v=` together with `site.webmanifest`.
