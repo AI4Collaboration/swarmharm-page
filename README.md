@@ -16,8 +16,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
 - **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
-  01, directly after the hero. The institution strip is followed immediately by the two-phase life-cycle
-  diagram, then the main-example title. Its lead, five numbered
+  01, directly after the hero. The institution strip is followed immediately by the equal-width two-phase overview of the recorded r19 campaign
+  (four glass-jar agents in each phase), then the main-example title. Its lead, five numbered
   steps and closing line are the team's agreed wording;
   change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
   four upgrades: every individual full-action replay preserves recovery, while
@@ -36,8 +36,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   repository's `docs/environment-contract.md`.
 - **Plain wording:** write page copy as full sentences a first-time reader
   can follow; define a term before using it as a label. Transcript excerpts
-  stay verbatim. Each life-cycle plate below the institution strip carries
-  one plain sentence; sections 01 and 02 open with a short lead paragraph.
+  stay verbatim. The overview below the institution strip shows the actual missing-source
+  exchange and maintenance recovery loss; sections 01 and 02 open with a short lead paragraph.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
 
@@ -52,11 +52,10 @@ brick. The institution strip sits on the main example's own background; logos
 keep their own colours, and the white-only files (AIM, Toronto, Georgia Tech,
 EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
-`mix-blend-mode: multiply`. The header wordmark is text only. `fieldguide.css`
-and `fieldguide.js` draw the life-cycle tags and arrows. Tags have plain fills
-without diagonal hatching, using the
-vendored [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
-follow the pointer. The main
+`mix-blend-mode: multiply`. The header wordmark is text only. The two-phase overview uses equal columns,
+matching rows and four glass-jar agents on each side, with plain backgrounds.
+The remaining lens illustration uses the vendored
+[rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). The main
 sample uses a separate evidence-backed recovery
 replay in `maintenance-case.css` and `maintenance-case.js`.
 
