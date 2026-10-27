@@ -10,11 +10,13 @@
 .sample-section { background: #dfe3da; }
 .sample-heading { margin-bottom: 28px; }
 .sample-heading > p { color: #595d55; font-size: 15px; }
-/* The logo strip runs as a flowing band inside the column, right under the main example title. */
-.sample-section .institutions { margin: -6px 0 30px; padding-block: 14px; border: 1px solid #4a3f31; border-radius: 3px; }
+/* The logo strip runs as a flowing band inside the column, right under the main example title, on the section's own background. */
+.sample-section .institutions { margin: -6px 0 30px; padding-block: 14px; background: transparent; border: 1px solid #c9c0ae; border-radius: 3px; }
 .sample-section .institution-list li { flex-basis: 170px; width: 170px; height: 58px; }
 .sample-section .institution-list a { width: 156px; height: 50px; }
-.sample-section .institution-list img { max-width: 148px; height: 40px; }
+/* Logos keep their own colours; the four white-only files turn ink so they stay visible on the light band. */
+.sample-section .institution-list img { max-width: 148px; height: 40px; filter: none; }
+.sample-section :is(.institution-aim, .institution-toronto, .institution-georgia-tech, .institution-eurosafe) img { filter: brightness(0); }
 .sample-section .institution-aim img { height: 26px; }
 .sample-section .institution-list { gap: clamp(30px, 3.5vw, 52px); padding-inline: clamp(15px, 1.75vw, 26px); }
 @media (max-width: 560px) {

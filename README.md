@@ -48,8 +48,9 @@ A naturalist's field guide: cream paper (`#f4ecd8`) with fine grain, ink
 brick for harm. Special Elite for display type and Courier Prime for text on
 every section, the main example included; do not override `--font` or
 `--display`. Phase 1 surfaces use sage washes; Phase 2 uses
-brick. The institution strip stays a dark ink band so the white logos keep
-their contrast. Plates in `static/images/fieldguide/` were generated with
+brick. The institution strip sits on the main example's own background; logos
+keep their own colours, and the white-only files (AIM, Toronto, Georgia Tech,
+EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
 `mix-blend-mode: multiply`. The header wordmark is text only. `fieldguide.css`
 and `fieldguide.js` draw the life-cycle tags and arrows, with the
