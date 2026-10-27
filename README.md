@@ -2,8 +2,8 @@
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
 It presents the two-phase study, environment principles, four domain categories
-and a previously published Engineering sample. Keep new experimental findings
-in the technical repository until publication is explicitly requested.
+and reviewed Engineering results. Public findings should accurately reflect the
+reviewed evidence, conditions, and outcome of each campaign.
 
 ## Content
 
@@ -34,9 +34,9 @@ in the technical repository until publication is explicitly requested.
 
 ## Field-guide theme
 
-A naturalist's field guide: cream paper (`#f4ecd8`) with fine grain, ink
-(`#2b241b`), ochre robots (all the same, so none looks like the culprit), brick for harm. Special Elite for display
-type, Courier Prime for text. Phase 1 surfaces use sage washes; Phase 2 uses
+A clean, light layout with readable system sans-serif typography, ink
+(`#2b241b`), ochre robots of the same colour, and brick accents for harm.
+Phase 1 surfaces use sage washes; Phase 2 uses
 brick. The institution strip stays a dark ink band so the white logos keep
 their contrast. Plates in `static/images/fieldguide/` were generated with
 `openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
