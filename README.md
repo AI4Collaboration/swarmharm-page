@@ -43,9 +43,12 @@ robot mark, the life-cycle tags and arrows, and the lens with the vendored
 [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
 follow the pointer. The lens runs one tour of the scene the first time it is
 mostly on screen, unless the reader moved it first or prefers reduced motion.
-The whisper field under the hero is the only looping animation: robots wander, and when two meet one whispers a verbatim fragment
-of the sample transcript (kept in `index.html`). It pauses off screen and shows
-a single still whisper under reduced motion.
+The whisper field under the hero is the only looping animation: robots start
+in a row of glass sandboxes, crack the front walls one by one and walk out onto
+a ground with depth (far robots sit higher and smaller). When two meet, one
+whispers a verbatim fragment of the sample transcript (kept in `index.html`).
+It pauses off screen and, under reduced motion, shows the sandboxes already
+open and a single still whisper.
 
 ## Develop and publish
 
