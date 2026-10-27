@@ -183,6 +183,8 @@ body [id] { scroll-margin-top: 0; }
 .rq-card h3 { font-family: var(--display); font-size: 20px; font-weight: 500; letter-spacing: -.035em; }
 .rq-card p { grid-column: auto; max-width: none; font-size: 16px; line-height: 1.5; }
 .rq-label { color: #5c564a; padding-top: 0; font-size: 14.5px; }
+.rq-group { margin: 0 0 10px; color: #5c564a; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+.research-grid + .rq-group { margin-top: 34px; }
 .research-methods { margin-top: 34px; border-top: 1px solid #ccc6bd; }
 .research-detail { border-bottom: 1px solid #ccc6bd; scroll-margin-top: 110px; }
 .research-detail > summary { display: flex; justify-content: space-between; align-items: center; gap: 18px; min-height: 62px; padding-block: 14px; list-style: none; cursor: pointer; font-size: 16.5px; font-weight: 500; }
