@@ -37,7 +37,10 @@ their contrast. Plates in `static/images/fieldguide/` were generated with
 `mix-blend-mode: multiply`. `fieldguide.css` and `fieldguide.js` draw the
 robot mark, the life-cycle tags and arrows, and the lens with the vendored
 [rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). Robot pupils
-follow the pointer; nothing animates on its own.
+follow the pointer. The whisper field under the hero is the only self-running
+animation: robots wander, and when two meet one whispers a verbatim fragment
+of the sample transcript (kept in `index.html`). It pauses off screen and shows
+a single still whisper under reduced motion.
 
 ## Develop and publish
 

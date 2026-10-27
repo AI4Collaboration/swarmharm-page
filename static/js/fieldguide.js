@@ -37,18 +37,22 @@
     };
   }
 
-  function robot(draw, svg, x, y, s, alt) {
-    const g = svgEl('g', {}, svg);
+  // A box-headed robot. Pupils follow the pointer unless the caller steers them (track = false).
+  function robot(draw, svg, x, y, s, alt, into = svg, track = true) {
+    const g = svgEl('g', {}, into);
     const body = { fill: alt ? C.sage : C.ochre, hatchColor: alt ? C.sageHatch : C.ochreHatch, into: g };
     draw(rrect(x - s * 0.6, y - s * 0.14, s * 0.12, s * 0.3, s * 0.04), body);
     draw(rrect(x + s * 0.48, y - s * 0.14, s * 0.12, s * 0.3, s * 0.04), body);
     draw(rrect(x - s * 0.12, y - s * 0.47, s * 0.24, s * 0.12, s * 0.04), body);
     draw(rrect(x - s / 2, y - s * 0.37, s, s * 0.72, s * 0.17), body);
+    const eyes = [];
     for (const dx of [-0.2, 0.2]) {
       draw(circle(x + dx * s, y, s * 0.115), { fill: C.eye, hatch: false, washOpacity: 1, into: g });
       const p = svgEl('circle', { cx: x + dx * s, cy: y, r: s * 0.052, fill: C.ink }, g);
-      pupils.push({ el: p, svg, cx: x + dx * s, cy: y, reach: s * 0.05 });
+      eyes.push(p);
+      if (track) pupils.push({ el: p, svg, cx: x + dx * s, cy: y, reach: s * 0.05 });
     }
+    return { g, eyes };
   }
 
   function drawBrands() {
@@ -205,6 +209,168 @@
     });
   }
 
+  // Whisper field: robots wander a strip; when two meet, one leans in and whispers a transcript fragment.
+  // A listener keeps a brick tint for a while and is more likely to pass the next whisper on.
+  const field = { robots: [], lines: [], lineIndex: 0, nextAt: 0, active: null, last: 0, frame: 0, visible: true };
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  function buildField() {
+    const host = document.querySelector('[data-whisper-field]');
+    if (!host) return;
+    const svg = host.querySelector('svg');
+    const r = host.getBoundingClientRect();
+    if (!r.width) return;
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
+    field.lines = [...host.querySelectorAll('[data-whisper-lines] li')].map(li => li.textContent.trim());
+    field.bubble = host.querySelector('.whisper-bubble');
+    field.host = host;
+    field.w = r.width;
+    field.ground = r.height - (r.width < 640 ? 46 : 28);
+    const draw = pen(svg);
+    draw(`M0,${field.ground + 2} C${r.width * 0.3},${field.ground - 3} ${r.width * 0.7},${field.ground + 6} ${r.width},${field.ground}`, { sw: 1 });
+    for (let x = 30; x < r.width; x += 90 + ((x * 7) % 60)) draw(`M${x},${field.ground + 2} l-4,-9 M${x + 4},${field.ground + 2} l1,-11 M${x + 8},${field.ground + 2} l5,-8`, { sw: 0.7 });
+    const count = r.width < 640 ? 4 : r.width < 1100 ? 6 : 8;
+    const s = r.width < 640 ? 36 : r.width < 1100 ? 44 : 48;
+    field.s = s;
+    field.robots = Array.from({ length: count }, (_, i) => {
+      const g = svgEl('g', {}, svg);
+      const legs = [-1, 1].map(side => {
+        const leg = svgEl('g', {}, g);
+        draw(`M${side * s * 0.16},${-s * 0.46} L${side * s * 0.2},0`, { sw: 2.2, into: leg, rough: 0.6 });
+        draw(`M${side * s * 0.2 - 4},0 H${side * s * 0.2 + 5}`, { sw: 2.2, into: leg, rough: 0.4 });
+        return leg;
+      });
+      const alt = i % 3 === 1;
+      draw(rrect(-s * 0.32, -s * 1.02, s * 0.64, s * 0.58, s * 0.12), { fill: alt ? C.sage : C.ochre, hatchColor: alt ? C.sageHatch : C.ochreHatch, into: g });
+      draw(`M${-s * 0.32},${-s * 0.9} l${-s * 0.18},${s * 0.3} M${s * 0.32},${-s * 0.9} l${s * 0.18},${s * 0.3}`, { sw: 1.6, into: g });
+      const head = robot(draw, svg, 0, -s * 1.45, s, alt, g, false);
+      const blush = svgEl('g', { opacity: 0 }, g);
+      draw(rrect(-s * 0.46, -s * 1.78, s * 0.92, s * 0.64, s * 0.15), { fill: C.harm, hatchColor: C.harmHatch, gap: 3.2, washOpacity: 0.35, into: blush, sw: 0.01 });
+      return {
+        g, legs, eyes: head.eyes, blush, x: (r.width / (count + 1)) * (i + 1), dir: i % 2 ? -1 : 1,
+        speed: 22 + ((i * 13) % 18), phase: i, tint: 0, state: 'walk', until: 0, lean: 0, target: null, partner: null,
+      };
+    });
+    field.active = null;
+    field.nextAt = performance.now() + 1200;
+    host.classList.add('is-ready');
+    if (reduceMotion.matches) stillFrame();
+    else placeRobots(0);
+  }
+
+  function placeRobots(t) {
+    for (const b of field.robots) {
+      const walking = b.state === 'walk' || b.state === 'approach';
+      const swing = walking ? Math.sin(b.phase * 9) * 20 : 0;
+      b.legs[0].setAttribute('transform', `rotate(${swing} ${-field.s * 0.16} ${-field.s * 0.46})`);
+      b.legs[1].setAttribute('transform', `rotate(${-swing} ${field.s * 0.16} ${-field.s * 0.46})`);
+      const bob = walking ? Math.abs(Math.sin(b.phase * 9)) * -2.5 : 0;
+      b.g.setAttribute('transform', `translate(${b.x.toFixed(1)} ${(field.ground + bob).toFixed(1)}) rotate(${b.lean.toFixed(1)})`);
+      b.blush.setAttribute('opacity', b.tint.toFixed(3));
+      const look = b.partner ? Math.sign(b.partner.x - b.x) : b.dir;
+      for (const eye of b.eyes) eye.setAttribute('transform', `translate(${look * field.s * 0.045} 0)`);
+    }
+    const a = field.active;
+    if (!a || !field.bubble) return;
+    const r = field.host.getBoundingClientRect();
+    const bw = field.bubble.offsetWidth;
+    const left = Math.min(r.width - bw - 8, Math.max(8, a.listener.x - bw / 2));
+    field.bubble.style.left = `${left}px`;
+    field.bubble.style.setProperty('--tail', `${a.listener.x - left}px`);
+  }
+
+  function startWhisper() {
+    const free = field.robots.filter(b => b.state === 'walk');
+    if (free.length < 2) return;
+    const speaker = free.slice().sort((a, b) => b.tint - a.tint + (Math.random() - 0.5) * 0.6)[0];
+    const listener = free.filter(b => b !== speaker).sort((a, b) => Math.abs(a.x - speaker.x) - Math.abs(b.x - speaker.x))[0];
+    const side = Math.sign(listener.x - speaker.x) || 1;
+    speaker.state = 'approach';
+    speaker.target = listener.x - side * field.s * 0.95;
+    speaker.partner = listener;
+    listener.state = 'wait';
+    listener.partner = speaker;
+    field.active = { speaker, listener, line: field.lines[field.lineIndex % field.lines.length], shown: false };
+    field.lineIndex += 1;
+  }
+
+  function tick(now) {
+    field.frame = 0;
+    if (!field.visible || reduceMotion.matches || !field.robots.length) return;
+    const dt = Math.min(0.05, (now - (field.last || now)) / 1000);
+    field.last = now;
+    if (!field.active && now > field.nextAt) startWhisper();
+    for (const b of field.robots) {
+      b.tint = Math.max(0, b.tint - dt * 0.035);
+      b.lean += ((b.state === 'whisper' && b === field.active?.speaker ? 9 * Math.sign(b.partner.x - b.x) : 0) - b.lean) * Math.min(1, dt * 8);
+      if (b.state === 'walk') {
+        b.x += b.dir * b.speed * dt;
+        b.phase += dt * b.speed / 30;
+        if (b.x < field.s || b.x > field.w - field.s) { b.dir *= -1; b.x = Math.min(field.w - field.s, Math.max(field.s, b.x)); }
+        if (Math.random() < dt * 0.15) b.dir *= -1;
+      } else if (b.state === 'approach') {
+        const dx = b.target - b.x;
+        b.dir = Math.sign(dx) || b.dir;
+        b.x += Math.sign(dx) * Math.min(Math.abs(dx), b.speed * 1.6 * dt);
+        b.phase += dt * b.speed / 22;
+        if (Math.abs(dx) < 1.5) {
+          b.state = 'whisper';
+          b.partner.state = 'listen';
+          b.until = now + 3200;
+        }
+      }
+    }
+    const a = field.active;
+    if (a && a.speaker.state === 'whisper') {
+      if (!a.shown) {
+        field.bubble.textContent = a.line;
+        field.bubble.hidden = false;
+        a.shown = true;
+      }
+      a.listener.tint = Math.min(0.85, a.listener.tint + dt * 0.3);
+      if (now > a.speaker.until) {
+        for (const b of [a.speaker, a.listener]) { b.state = 'walk'; b.partner = null; b.dir = Math.random() < 0.5 ? -1 : 1; }
+        field.bubble.hidden = true;
+        field.active = null;
+        field.nextAt = now + 700 + Math.random() * 1100;
+      }
+    }
+    placeRobots(now);
+    field.frame = requestAnimationFrame(tick);
+  }
+
+  // Reduced motion: one still whisper, no movement.
+  function stillFrame() {
+    const [speaker, listener] = field.robots;
+    if (!listener) return;
+    listener.x = speaker.x + field.s * 0.95;
+    speaker.state = 'whisper'; listener.state = 'listen';
+    speaker.partner = listener; listener.partner = speaker;
+    speaker.lean = 9; listener.tint = 0.6;
+    field.active = { speaker, listener, line: field.lines[0], shown: true };
+    field.bubble.textContent = field.lines[0];
+    field.bubble.hidden = false;
+    placeRobots(0);
+  }
+
+  function runField() {
+    cancelAnimationFrame(field.frame);
+    field.last = 0;
+    if (!reduceMotion.matches && field.robots.length) field.frame = requestAnimationFrame(tick);
+  }
+  function watchField() {
+    const host = document.querySelector('[data-whisper-field]');
+    if (!host) return;
+    field.nextAt = performance.now() + 1500;
+    new IntersectionObserver(entries => {
+      field.visible = entries[0].isIntersecting && !document.hidden;
+      if (field.visible) runField();
+    }).observe(host);
+    document.addEventListener('visibilitychange', () => { field.visible = !document.hidden; if (field.visible) runField(); });
+    reduceMotion.addEventListener('change', () => { buildField(); runField(); });
+  }
+
   // Pupils turn toward the pointer: one animation frame per pointer move.
   let pointer = null, frame = 0;
   function look() {
@@ -226,9 +392,12 @@
     drawBrands();
     drawLifeCycle();
     drawLens();
+    buildField();
+    runField();
     look();
   }
   wireLens();
+  watchField();
   let width = 0;
   new ResizeObserver(() => {
     if (Math.abs(innerWidth - width) < 2) return;
