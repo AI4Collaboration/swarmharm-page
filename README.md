@@ -49,6 +49,8 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - [MPI for Intelligent Systems, Tübingen](https://is.mpg.de/assets/logos/logo_green_en-55a1f978f4981c37f203f17d6d635402376bc4788d9bf835c6e53e4b10288b06.webp)
 - [Vector Institute](https://vectorinstitute.ai/wp-content/uploads/2024/05/Vector-Logo-FullColour_Horizontal.png)
 - [ETH Zürich](https://ethz.ch/en.html) (header SVG)
+- Georgia Tech: supplied 27 October 2026, recoloured white on transparent and trimmed
+- AIM Intelligence: supplied white logo, 27 October 2026
 
 The visit banner uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
 one POST per production page load and a shared root key for both hostnames.
