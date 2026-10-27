@@ -83,6 +83,8 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - [ETH Zürich](https://ethz.ch/en.html) (header SVG)
 - Georgia Tech: supplied 27 October 2026, recoloured white on transparent and trimmed
 - AIM Intelligence: supplied white logo, 27 October 2026
+- EuroSafeAI: supplied 27 October 2026, recoloured white on transparent and trimmed; links to
+  [eurosafe.ai.utoronto.ca](https://eurosafe.ai.utoronto.ca/)
 
 The visit banner sits in the footer and uses [Busuanzi](https://github.com/soxft/busuanzi/wiki/API),
 one POST per production page load and a shared root key for both hostnames.
