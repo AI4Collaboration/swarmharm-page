@@ -23,9 +23,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   replay is a counterfactual check, not five separate model rollouts.
   Label public messages, system receipts and required change handovers distinctly.
   Do not infer intent to cause harm or a causal method-transfer chain.
-- **Research questions:** three main questions and three independent questions
-  appear directly, without numbers or topic labels. The question
-  text is the team's agreed wording; change it only on request.
+- **Research questions:** the three main questions appear below the hero tagline,
+  each with a compact vector diagram: discovering unknown peers and establishing
+  communication, coordinated collective misalignment through communication, and
+  misaligned outcomes from actions taken without harmful intent. The remaining
+  questions appear below the example. Avoid repeating the main questions there.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
@@ -45,7 +47,9 @@ logos in both themes. Use system
 sans-serif type for reading and monospace only for metadata. `orbit.css` is the
 final presentation layer. Keep direct headings and expandable details. The
 header links to the study overview, example, questions and source records.
-The hero contains the wordmark and tagline; navigation appears only in the header.
+The hero contains the wordmark, tagline and three illustrated research questions;
+navigation appears only in the header. Use line diagrams, without extra titles or
+numbering. Arrange them in three columns on desktop and compact rows on phones.
 Keep the hero compact: the main wordmark is capped at 520px, with tight vertical
 spacing so readers reach the example sooner.
 

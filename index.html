@@ -48,7 +48,7 @@
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <script defer src="static/js/maintenance-case.js?v=7"></script>
-  <link rel="stylesheet" href="static/css/orbit.css?v=10">
+  <link rel="stylesheet" href="static/css/orbit.css?v=11">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -68,6 +68,36 @@
       <div class="hero-copy">
         <h1 id="hero-title"><img data-wordmark class="hero-wordmark" src="static/images/swarmharm-wordmark.svg?v=5" alt="SwarmHarm" width="2172" height="520" fetchpriority="high"></h1>
         <p class="hero-tagline">Stress-test the <span>swarm,</span> not just the agent.</p>
+        <div class="hero-questions" id="research" role="group" aria-label="Main research questions">
+          <article class="hero-question" id="rq1">
+            <svg viewBox="0 0 180 72" aria-hidden="true" focusable="false">
+              <g class="rq-hint"><circle cx="40" cy="36" r="22"/><circle cx="140" cy="36" r="22"/></g>
+              <path class="rq-signal" d="M52 36h76m-6-5 6 5-6 5"/>
+              <circle class="rq-agent" cx="40" cy="36" r="7"/><circle class="rq-agent" cx="140" cy="36" r="7"/>
+              <path d="M28 24a17 17 0 0 0 0 24m124-24a17 17 0 0 1 0 24"/>
+            </svg>
+            <p>Can agents discover one another and establish communication without being told others exist?</p>
+          </article>
+          <article class="hero-question" id="rq2">
+            <svg viewBox="0 0 180 72" aria-hidden="true" focusable="false">
+              <path d="m32 36 42-24 42 24-42 24Z"/>
+              <path class="rq-signal" d="M39 36h70M74 19v34m50-17h38m-6-5 6 5-6 5"/>
+              <circle class="rq-agent" cx="32" cy="36" r="7"/><circle class="rq-agent" cx="74" cy="12" r="7"/>
+              <circle class="rq-agent" cx="116" cy="36" r="7"/><circle class="rq-agent" cx="74" cy="60" r="7"/>
+            </svg>
+            <p>Can that communication enable coordinated collective misalignment?</p>
+          </article>
+          <article class="hero-question" id="rq3">
+            <svg viewBox="0 0 180 72" aria-hidden="true" focusable="false">
+              <path d="M38 14h24l30 22M38 36h54M38 58h24l30-22"/>
+              <rect class="rq-agent" x="24" y="8" width="12" height="12"/><rect class="rq-agent" x="24" y="30" width="12" height="12"/><rect class="rq-agent" x="24" y="52" width="12" height="12"/>
+              <path class="rq-signal" d="M92 36h45m-6-5 6 5-6 5"/>
+              <rect class="rq-outcome" x="144" y="24" width="24" height="24"/>
+              <path class="rq-signal" d="m151 31 10 10m0-10-10 10"/>
+            </svg>
+            <p>Can agents’ actions combine into a misaligned outcome even when none intends harm?</p>
+          </article>
+        </div>
       </div>
     </div>
   </section>
@@ -207,21 +237,10 @@
     </div>
   </section>
 
-  <section class="section" id="research" aria-labelledby="research-title">
+  <section class="section" id="further-questions" aria-labelledby="research-title">
     <div class="container">
       <div class="section-heading">
-        <h2 id="research-title">Research questions</h2>
-      </div>
-      <div class="research-grid" role="group" aria-label="Main research questions">
-        <article class="rq-card" id="rq1">
-          <p>Can isolated agents autonomously form a persistent communicating swarm?</p>
-        </article>
-        <article class="rq-card" id="rq2">
-          <p>Can the resulting swarm cause system-level harm while pursuing legitimate tasks?</p>
-        </article>
-        <article class="rq-card" id="rq3">
-          <p>Which environmental conditions and incentives promote or inhibit these outcomes?</p>
-        </article>
+        <h2 id="research-title">Further questions</h2>
       </div>
       <div class="research-grid" role="group" aria-label="Independent research questions">
         <article class="rq-card" id="rq4">
