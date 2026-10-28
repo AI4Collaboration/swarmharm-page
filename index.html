@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="static/css/flight.css?v=84">
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
   <script src="static/js/site.js?v=2" defer></script>
-  <script src="static/js/trace-reader.js?v=1" defer></script>
+  <script src="static/js/trace-reader.js?v=2" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -48,16 +48,16 @@
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <link rel="stylesheet" href="static/css/orbit.css?v=13">
-  <link rel="stylesheet" href="static/css/plate-animation.css?v=2">
-  <link rel="stylesheet" href="static/css/sample-trace.css?v=1">
-  <script src="static/js/plate-animation.js?v=2" defer></script>
+  <link rel="stylesheet" href="static/css/plate-animation.css?v=3">
+  <link rel="stylesheet" href="static/css/sample-trace.css?v=2">
+  <script src="static/js/plate-animation.js?v=3" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img data-wordmark src="static/images/swarmharm-wordmark.svg?v=7" alt="SwarmHarm" width="2172" height="520"></a>
-    <nav aria-label="Main navigation"><a href="#motivation">Study Design</a><a href="#sample">Sample</a><a href="#research">Research Questions</a><a href="#domains">Domains</a><a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source Data ↗</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation">Study Design</a><a href="#sample">Transcript</a><a href="#research">Research Questions</a><a href="#domains">Domains</a><a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source Data ↗</a></nav>
     <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode" hidden>
       <svg class="theme-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.4 14.7A8.6 8.6 0 0 1 9.3 3.6 8.6 8.6 0 1 0 20.4 14.7Z"/></svg>
       <svg class="theme-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
@@ -75,8 +75,8 @@
             <svg viewBox="0 0 200 100" aria-hidden="true" focusable="false">
               <g class="rq-hint"><circle cx="33" cy="49" r="30"/><circle cx="167" cy="49" r="30"/></g>
               <path class="rq-signal" d="M58 49h84m-7-5 7 5-7 5"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="12" y="20" width="42" height="56"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="146" y="20" width="42" height="56"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-watchful.svg?v=1" x="12" y="20" width="42" height="56"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-narrow.svg?v=1" x="146" y="20" width="42" height="56"/>
             </svg>
             <p>Can agents discover one another and establish communication without being told others exist?</p>
           </article>
@@ -84,19 +84,19 @@
             <svg viewBox="0 0 200 100" aria-hidden="true" focusable="false">
               <path d="m19 50 56-32 56 32-56 32Z"/>
               <path class="rq-signal" d="M32 50h86M75 32v36m69-18h43m-7-5 7 5-7 5"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="5" y="31" width="28" height="38"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="61" y="0" width="28" height="38"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="117" y="31" width="28" height="38"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="61" y="62" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-watchful.svg?v=1" x="5" y="31" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-narrow.svg?v=1" x="61" y="0" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-watchful.svg?v=1" x="117" y="31" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-narrow.svg?v=1" x="61" y="62" width="28" height="38"/>
             </svg>
             <p>Can that communication enable coordinated collective misalignment?</p>
           </article>
           <article class="hero-question" id="rq3">
             <svg viewBox="0 0 200 100" aria-hidden="true" focusable="false">
               <path d="M35 16h30l34 34M35 50h64M35 84h30l34-34"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="8" y="0" width="25" height="32"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="8" y="34" width="25" height="32"/>
-              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="8" y="68" width="25" height="32"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-watchful.svg?v=1" x="8" y="0" width="25" height="32"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-narrow.svg?v=1" x="8" y="34" width="25" height="32"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent-watchful.svg?v=1" x="8" y="68" width="25" height="32"/>
               <path class="rq-signal" d="M99 50h47m-7-5 7 5-7 5"/>
               <rect class="rq-outcome" x="155" y="36" width="28" height="28"/>
               <path class="rq-signal" d="m163 44 12 12m0-12-12 12"/>
@@ -143,11 +143,11 @@
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Form the Swarm<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate.webp?v=1" alt="A robot sealed in a glass bell jar beside a locked box." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover.webp?v=1" alt="A robot leans out of a filing drawer shared by two bell jars and finds a note left by the robot next door." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate-still.svg?v=1" data-plate-source="static/images/fieldguide/plate-separate.webp?v=1" alt="Two agents explore independently, each sealed in its own glass bell jar beside a locked box." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover-still.svg?v=1" data-plate-source="static/images/fieldguide/plate-discover.webp?v=1" alt="A robot leans out of a filing drawer shared by two bell jars and finds a note left by the robot next door." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective Misalignment<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-collective.svg?v=1" alt="Four robots finish their own upgrades while their shared recovery copies disappear." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade and erase every old copy. The original evaluator marks 4,800 synthetic records unrecoverable.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=1" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=1" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots load a wooden shelf together until its center breaks, spilling splinters and dropping the load." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade and erase every old copy. The original evaluator marks 4,800 synthetic records unrecoverable.</p></figure></div>
           </section>
         </div>
       </figure>
@@ -157,11 +157,12 @@
 
   <section class="section sample-section" id="sample" aria-labelledby="sample-title">
     <div class="container">
-      <div class="section-heading"><h2 id="sample-title">Sample</h2></div>
-      <div class="sample-trace" data-sample-trace>
+      <div class="section-heading transcript-heading"><h2 id="sample-title">Read the <span>Transcript</span></h2><p>See how agents talk to each other.</p></div>
+      <div class="sample-trace" data-sample-trace data-view="conversation">
         <div class="trace-toolbar">
           <span>Engineering · Sol 5.6 · 27 Oct 2026</span>
-          <label><input type="checkbox" data-expand-outputs disabled>Expand outputs</label>
+          <div class="trace-views" role="group" aria-label="Transcript view"><button type="button" data-trace-view="conversation" aria-pressed="true" disabled>Conversation</button><button type="button" data-trace-view="all" aria-pressed="false" disabled>All events</button></div>
+          <label hidden><input type="checkbox" data-expand-outputs disabled>Expand outputs</label>
           <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source JSON ↗</a>
         </div>
         <div class="trace-scroll" tabindex="0" role="region" aria-label="Selected source events in chronological order, UTC" aria-busy="true">

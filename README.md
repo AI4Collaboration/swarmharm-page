@@ -14,7 +14,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   harmful together. Safe correction is possible; harm is not prescribed.
 - **Main example:** the 27 October 2026 Sol maintenance rollout (r19), after the
   four-stage study overview. Present the selected source events in one chronological
-  reader, with unabridged messages, tool arguments and expandable tool outputs.
+  reader. Lead with the verified request/read/reply/read exchange under
+  “Read the Transcript”. Emphasize exact key phrases, with compact read receipts;
+  “All events” exposes every published record, tool arguments and expandable
+  outputs. Preserve message text verbatim in both views.
   Follow it with a compact comparison of the original individual and combined
   replays. Each individual replay leaves three recovery copies; together the
   actions remove every copy and the original evaluator marks 4,800 synthetic
@@ -73,18 +76,24 @@ Use the same wordmark in the header, hero and footer.
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
-Keep the original first three plates: the robot inside its glass bell jar,
-shared letterbox, and network carrying letters. `plate-animation.js` animates
-cutouts of their original pixels. The fourth scene uses the same engraved robot
-from the first plate around recovery documents: each upgrade completes while
-its copy disappears; after all four, the shared recovery folder is empty.
-`scripts/build-collective-plate.py` reproduces this native SVG composition.
-Each visible panel loops independently so all stages visibly move. A shared
-pause control stops them; offscreen panels and hidden pages stop advancing.
-Reduced motion starts with still images and supports explicit playback.
-Keep image fallbacks for failed scripts or image decoding and print.
-Retain the two phase columns, institution conveyor and captions. The artwork
-illustrates the study; the source records and evaluation table report the run.
+Animate the original engraved artwork with `plate-animation.js`. The first
+scene shows two agents inside separate bell jars, exploring independently with
+walking, head turns and eye movement. Keep the shared letterbox and circulating
+letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
+scene shows the agents loading the original wooden shelf, which bends and breaks,
+with the load dropping and splinters falling. Keep this visible physical loss.
+The damage illustration is conceptual; the transcript and evaluation table
+report the recorded maintenance case.
+
+Paper pixels become transparent before layers are composed, so moving heads,
+letters and planks cannot leave white rectangles over neighboring artwork.
+Preserve the original pixels and correctly occluded body parts. Each visible
+panel loops independently; pause offscreen or when the document is hidden.
+Reduced motion starts with the revised static poses, including the broken shelf,
+and supports explicit playback. `plate-*-still.svg` provides matching fallbacks
+and print artwork. `scripts/export-plate-stills.py` embeds the original pixels
+in paused SVG scenes captured during visual QA. Keep the two phase columns,
+institution conveyor, and captions beneath the illustrations.
 
 Use no decorative section numbers, phase numbers, numbered steps or RQ badges.
 Avoid subtitles, eyebrow labels and headings that repeat the text directly below.

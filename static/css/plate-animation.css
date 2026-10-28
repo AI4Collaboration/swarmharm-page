@@ -1,10 +1,12 @@
 /* Layers retain the pixels of the original bell-jar and letterbox plates. */
 .life-cycle { position: relative; }
 .life-phase { padding-right: 38px; }
-.life-step .plate-motion { display: none; width: 100%; height: auto; aspect-ratio: 1; overflow: hidden; filter: grayscale(1); mix-blend-mode: multiply; }
+.life-step .plate-motion { display: none; width: 100%; height: auto; aspect-ratio: 1; overflow: hidden; filter: grayscale(1); mix-blend-mode: normal; }
+.life-step > img[data-plate-source] { mix-blend-mode: normal; }
 .has-plate-motion .life-step > img { display: none; }
 .has-plate-motion .plate-motion { display: block; }
-[data-theme="dark"] .life-step .plate-motion { filter: grayscale(1) invert(1); mix-blend-mode: screen; }
+[data-theme="dark"] .life-step .plate-motion { filter: grayscale(1) invert(1); mix-blend-mode: normal; }
+[data-theme="dark"] .life-step > img[data-plate-source] { mix-blend-mode: normal; }
 .life-control { position: absolute; right: 0; top: 6px; display: grid; place-items: center; width: 34px; height: 34px; padding: 7px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; }
 .life-control[hidden] { display: none; }
 .life-control:hover { background: var(--surface); color: var(--text); }

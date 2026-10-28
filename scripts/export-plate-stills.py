@@ -1,0 +1,51 @@
+"""Make self-contained SVG fallbacks from paused production scene SVGs.
+
+Usage: python scripts/export-plate-stills.py path/to/scene-svgs.json
+The JSON contains the four .plate-motion outerHTML strings captured during QA.
+"""
+from pathlib import Path
+import base64
+import copy
+import json
+import sys
+import xml.etree.ElementTree as ET
+
+root = Path(__file__).resolve().parents[1]
+namespace = 'http://www.w3.org/2000/svg'
+ET.register_namespace('', namespace)
+tag = lambda name: f'{{{namespace}}}{name}'
+scenes = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+assert len(scenes) == 4
+for name, source in zip(['separate', 'discover', 'communicate', 'harm'], scenes):
+    if 'xmlns=' not in source.split('>')[0]:
+        source = source.replace('<svg ', f'<svg xmlns="{namespace}" ', 1)
+    svg = ET.fromstring(source)
+    svg.attrib.pop('class', None)
+    svg.set('width', '720')
+    svg.set('height', '720')
+    defs = svg.find(tag('defs'))
+    embedded = {}
+    for image in list(svg.iter(tag('image'))):
+        href = image.get('href')
+        if href not in embedded:
+            path = (root / href.split('?')[0]).resolve()
+            assert root in path.parents and path.suffix == '.webp'
+            identifier = f'still-{name}-source-{len(embedded)}'
+            uri = 'data:image/webp;base64,' + base64.b64encode(path.read_bytes()).decode()
+            ET.SubElement(defs, tag('image'), {'id': identifier, 'href': uri, 'width': '720', 'height': '720'})
+            embedded[href] = identifier
+        image.tag = tag('use')
+        image.set('href', '#' + embedded[href])
+    output = root / f'static/images/fieldguide/plate-{name}-still.svg'
+    output.write_text(ET.tostring(svg, encoding='unicode') + '\n', encoding='utf-8', newline='\n')
+    print(output.name)
+
+# The research-question miniatures share the same engraved figures and eyes.
+separate = ET.parse(root / 'static/images/fieldguide/plate-separate-still.svg').getroot()
+for i, name in enumerate(['watchful', 'narrow']):
+    svg = ET.Element(tag('svg'), {'viewBox': '198 242 230 310', 'width': '230', 'height': '310'})
+    svg.append(copy.deepcopy(separate.find(tag('defs'))))
+    actor = next(node for node in separate.iter(tag('g')) if node.get('data-explorer') == str(i))
+    svg.append(copy.deepcopy(actor))
+    output = root / f'static/images/fieldguide/swarm-agent-{name}.svg'
+    output.write_text(ET.tostring(svg, encoding='unicode') + '\n', encoding='utf-8', newline='\n')
