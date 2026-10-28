@@ -26,7 +26,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   model rollouts. Distinguish agent messages, system receipts and required
   handovers. Do not infer harmful intent or causal method transfer.
 - **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
-  appear directly after the main example, with the original domain icons.
+  appear directly after the main example. Their technical line illustrations
+  show connected system modules, a data distribution, market candles and
+  linked documents. Keep the transparent backgrounds and single red accent.
 - **Research questions:** the three main questions appear below the hero tagline,
   each with a compact diagram in the engraved robot style of the original illustrations: discovering unknown peers and establishing
   communication, coordinated collective misalignment through communication, and
@@ -65,8 +67,9 @@ decorative dialogue, floating notes and extra labels.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals, with all four HARM letters red in both themes. Both R glyphs have complete bowls and diagonal legs.
-The low crescent bridge contains thousands of fine, irregular sand grains,
-rising from S. Keep the dense texture and full letterforms intact.
+The low crescent bridge rises from S, with visible coarse grains and finer sand
+between them. Its color grades from charcoal to red in light mode and white
+to red in dark mode. Keep the tapered trajectory and full letterforms intact.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
 imagegen studies informed the direction; the final artwork is native SVG.
 The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.

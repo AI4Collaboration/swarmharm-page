@@ -209,6 +209,25 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .coverage-icons li { background: none; }
 .coverage-icons li + li { border-color: var(--line); }
 .coverage-icons li > span { color: var(--muted); font: 12px/1.5 var(--font); }
+.coverage-icons .domain-visual { width: 220px; max-width: 100%; height: auto; aspect-ratio: 3 / 2; stroke: var(--text); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+.domain-visual .domain-grid { stroke: var(--line); stroke-width: 1; }
+.domain-visual .domain-muted { stroke: var(--subtle); stroke-width: 1.2; }
+.domain-visual .domain-panel { fill: var(--bg); }
+.domain-visual .domain-plane { fill: var(--surface); }
+.domain-visual .domain-accent { stroke: var(--risk); stroke-width: 1.7; }
+.domain-visual .domain-accent-fill { fill: var(--risk); stroke: none; }
+.domain-visual .domain-point { fill: var(--text); stroke: none; }
+.domain-visual .domain-wash { fill: var(--risk); fill-opacity: .08; stroke: none; }
+.domain-visual .domain-dashed { stroke-dasharray: 3 4; }
+.domain-visual .domain-volume { fill: var(--subtle); fill-opacity: .35; stroke: none; }
+.domains-section .coverage-icons { margin-top: 0; gap: 28px; }
+.domains-section .coverage-icons li { border: 0; gap: 18px; }
+.domains-section .coverage-icons li > span { font-weight: 500; }
+.domains-section .coverage-icons li:nth-child(n + 3) { border-top: 0; }
+@media (max-width: 640px) {
+  .domains-section .coverage-icons { column-gap: 22px; }
+  .domains-section .coverage-icons li { gap: 12px; }
+}
 .research-grid { border-color: var(--line); }
 .research-grid + .research-grid { border-top: 0; }
 .rq-card { display: block; padding: 22px 0; border-color: var(--line); }

@@ -18,7 +18,7 @@ for i, char in enumerate(word):
     pen = SVGPathPen(glyphs)
     glyphs[cmap[ord(char)]].draw(pen)
     x = left + cursor * scale
-    fill = '#dc2c25' if i >= 5 else 'INK'
+    fill = '#e52b24' if i >= 5 else 'INK'
     paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" transform="translate({x:.5f} {baseline}) scale({scale:.8f} {-scale:.8f})" d="{pen.getCommands()}"/>')
     if i == 6:
         red_peak = x + 1088 * scale
@@ -35,53 +35,68 @@ def curve(t, points):
     return x, y, dx, dy
 
 
-def grains(points, width, radius, count, gap, seed):
+def grains(points, width, radius, count, gap, seed, levels=None):
     rng = random.Random(seed)
     result, cells = [], {}
     cell_size = radius * 3
-    for _ in range(count * 100):
-        if len(result) >= count:
-            break
-        t = rng.uniform(.006, .994)
-        taper = math.sin(math.pi*t)
-        x, y, dx, dy = curve(t, points)
-        offset = rng.uniform(-1, 1) * width * taper**1.5
-        norm = math.hypot(dx, dy)
-        x, y = x - dy/norm*offset, y + dx/norm*offset
-        r = radius * rng.uniform(.45, 1) * (.35 + .65*taper**.4)
-        cell = (int(x/cell_size), int(y/cell_size))
-        nearby = [node for i in range(-1, 2) for j in range(-1, 2)
-                  for node in cells.get((cell[0]+i, cell[1]+j), [])]
-        if any(math.hypot(x-nx, y-ny) < r+nr+gap for nx, ny, nr in nearby):
-            continue
-        cells.setdefault(cell, []).append((x, y, r))
-        verts = []
-        turn = rng.uniform(0, 2*math.pi)
-        for k in range(7):
-            angle = turn + k*2*math.pi/7
-            rr = r*rng.uniform(.7, 1)
-            verts.append((x+math.cos(angle)*rr, y+math.sin(angle)*rr))
-        mids = [((verts[k][0]+verts[(k+1)%7][0])/2,
-                 (verts[k][1]+verts[(k+1)%7][1])/2) for k in range(7)]
-        d = f'M{mids[-1][0]:.2f},{mids[-1][1]:.2f}'
-        for v, m in zip(verts, mids):
-            d += f'Q{v[0]:.2f},{v[1]:.2f} {m[0]:.2f},{m[1]:.2f}'
-        result.append((d+'Z', t, rng.uniform(.92, 1)))
+    # Place visible grains first, then let finer sand fill their interstices.
+    # One shared packing map keeps each grain distinct at every size.
+    for size, quantity in levels or [(radius, count)]:
+        target = len(result) + quantity
+        for _ in range(quantity * 100):
+            if len(result) >= target:
+                break
+            t = rng.uniform(.003, .997)
+            taper = math.sin(math.pi*t)
+            x, y, dx, dy = curve(t, points)
+            spread = max(-1.3, min(1.3, rng.gauss(0, .5))) if levels else rng.uniform(-1, 1)
+            offset = spread * width * taper**1.5
+            norm = math.hypot(dx, dy)
+            x, y = x - dy/norm*offset, y + dx/norm*offset
+            r = size * rng.uniform(.55, 1) * (.1 + .9*taper**.65)
+            cell = (int(x/cell_size), int(y/cell_size))
+            nearby = [node for i in range(-1, 2) for j in range(-1, 2)
+                      for node in cells.get((cell[0]+i, cell[1]+j), [])]
+            if any(math.hypot(x-nx, y-ny) < r+nr+gap for nx, ny, nr in nearby):
+                continue
+            cells.setdefault(cell, []).append((x, y, r))
+            verts = []
+            turn = rng.uniform(0, 2*math.pi)
+            for k in range(7):
+                angle = turn + k*2*math.pi/7
+                rr = r*rng.uniform(.65, 1)
+                verts.append((x+math.cos(angle)*rr, y+math.sin(angle)*rr))
+            mids = [((verts[k][0]+verts[(k+1)%7][0])/2,
+                     (verts[k][1]+verts[(k+1)%7][1])/2) for k in range(7)]
+            d = f'M{mids[-1][0]:.2f},{mids[-1][1]:.2f}'
+            for v, m in zip(verts, mids):
+                d += f'Q{v[0]:.2f},{v[1]:.2f} {m[0]:.2f},{m[1]:.2f}'
+            result.append((d+'Z', t, rng.uniform(.9, 1)))
     return result
+
+
+def gradient(t, stops):
+    for (at, color), (next_at, next_color) in zip(stops, stops[1:]):
+        if t <= next_at:
+            mix = (t-at)/(next_at-at)
+            return [round(a+(b-a)*mix) for a, b in zip(color, next_color)]
+    return stops[-1][1]
 
 
 start = (left + 1250*scale, baseline - 1540*scale)
 end = (red_peak, baseline - 1536*scale)
-bridge = grains((start, (540, 170), (1110, 195), end), 38, 2.4, 7000, .02, 281026)
+bridge = grains((start, (540, 170), (1110, 195), end), 48, 14, 2270, .2, 281026,
+                levels=[(14, 240), (5, 580), (1.5, 1450)])
 for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef', (226, 228, 231))]:
     particles = []
+    stops = [(0, origin), (.28, (86, 24, 26) if theme == 'light' else (221, 169, 165)),
+             (.65, (207, 37, 30)), (.88, (240, 45, 34)), (1, (229, 43, 36))]
     for d, t, opacity in bridge:
-        mix = min(1, t/.65)**.85
-        rgb = [round(a+(b-a)*mix) for a, b in zip(origin, (220, 44, 37))]
+        rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="520" viewBox="0 140 2172 520" role="img" aria-labelledby="title desc">
 <title id="title">SWARMHARM</title>
-<desc id="desc">Individual sand grains form a low crescent bridge rising from S, above complete Michroma letterforms.</desc>
+<desc id="desc">Coarse and fine sand grains form a low orbital crescent, grading from the S into red above complete Michroma letterforms.</desc>
 <g aria-label="Sand-grain crescent">{''.join(particles)}</g>
 <g aria-label="SWARMHARM">{''.join(paths).replace('INK', ink)}</g>
 </svg>
