@@ -2,6 +2,7 @@
 from pathlib import Path
 from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
+from fontTools.pens.boundsPen import BoundsPen
 import json
 import math
 import random
@@ -13,13 +14,17 @@ word, tracking = 'SWARMHARM', 80
 advances = [glyphs[cmap[ord(c)]].width for c in word]
 scale = 1972 / (sum(advances) + tracking * (len(word) - 1))
 left, baseline, cursor = 100, 604, 0
-paths = []
+paths, letter_info = [], []
 for i, char in enumerate(word):
     pen = SVGPathPen(glyphs)
     glyphs[cmap[ord(char)]].draw(pen)
     x = left + cursor * scale
     fill = '#e52b24' if i >= 5 else 'INK'
-    paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" transform="translate({x:.5f} {baseline}) scale({scale:.8f} {-scale:.8f})" d="{pen.getCommands()}"/>')
+    placement = f'translate({x:.5f} {baseline}) scale({scale:.8f} {-scale:.8f})'
+    paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" transform="{placement}" d="{pen.getCommands()}"/>')
+    bounds = BoundsPen(glyphs)
+    glyphs[cmap[ord(char)]].draw(bounds)
+    letter_info.append((char, x, pen.getCommands(), placement, bounds.bounds))
     if i == 6:
         red_peak = x + 1088 * scale
     cursor += advances[i] + tracking
@@ -35,6 +40,21 @@ def curve(t, points):
     return x, y, dx, dy
 
 
+def grain_path(x, y, radius, rng):
+    turn = rng.uniform(0, 2*math.pi)
+    verts = []
+    for k in range(7):
+        angle = turn + k*2*math.pi/7
+        r = radius*rng.uniform(.65, 1)
+        verts.append((x+math.cos(angle)*r, y+math.sin(angle)*r))
+    mids = [((verts[k][0]+verts[(k+1)%7][0])/2,
+             (verts[k][1]+verts[(k+1)%7][1])/2) for k in range(7)]
+    d = f'M{mids[-1][0]:.2f},{mids[-1][1]:.2f}'
+    for v, m in zip(verts, mids):
+        d += f'Q{v[0]:.2f},{v[1]:.2f} {m[0]:.2f},{m[1]:.2f}'
+    return d+'Z'
+
+
 def grains(points, width, radius, count, gap, seed, levels=None):
     rng = random.Random(seed)
     result, cells = [], {}
@@ -46,32 +66,23 @@ def grains(points, width, radius, count, gap, seed, levels=None):
         for _ in range(quantity * 100):
             if len(result) >= target:
                 break
-            t = rng.uniform(.003, .997)
+            t = rng.betavariate(2.2, 2.2) if levels and size == radius else rng.uniform(.003, .997)
             taper = math.sin(math.pi*t)
             x, y, dx, dy = curve(t, points)
             spread = max(-1.3, min(1.3, rng.gauss(0, .5))) if levels else rng.uniform(-1, 1)
             offset = spread * width * taper**1.5
             norm = math.hypot(dx, dy)
             x, y = x - dy/norm*offset, y + dx/norm*offset
-            r = size * rng.uniform(.55, 1) * (.1 + .9*taper**.65)
+            size_profile = .055 + .945*taper**3.3 if levels else .1 + .9*taper**.65
+            r = size * rng.uniform(.55, 1) * size_profile
             cell = (int(x/cell_size), int(y/cell_size))
             nearby = [node for i in range(-1, 2) for j in range(-1, 2)
                       for node in cells.get((cell[0]+i, cell[1]+j), [])]
-            if any(math.hypot(x-nx, y-ny) < r+nr+gap for nx, ny, nr in nearby):
+            separation = .84 if levels else 1
+            if any(math.hypot(x-nx, y-ny) < separation*(r+nr)+gap for nx, ny, nr in nearby):
                 continue
             cells.setdefault(cell, []).append((x, y, r))
-            verts = []
-            turn = rng.uniform(0, 2*math.pi)
-            for k in range(7):
-                angle = turn + k*2*math.pi/7
-                rr = r*rng.uniform(.65, 1)
-                verts.append((x+math.cos(angle)*rr, y+math.sin(angle)*rr))
-            mids = [((verts[k][0]+verts[(k+1)%7][0])/2,
-                     (verts[k][1]+verts[(k+1)%7][1])/2) for k in range(7)]
-            d = f'M{mids[-1][0]:.2f},{mids[-1][1]:.2f}'
-            for v, m in zip(verts, mids):
-                d += f'Q{v[0]:.2f},{v[1]:.2f} {m[0]:.2f},{m[1]:.2f}'
-            result.append((d+'Z', t, rng.uniform(.9, 1)))
+            result.append((grain_path(x, y, r, rng), t, rng.uniform(.9, 1)))
     return result
 
 
@@ -83,10 +94,52 @@ def gradient(t, stops):
     return stops[-1][1]
 
 
+def swarm_letters():
+    """Use the complete glyphs only as clips, with actual grains as their ink."""
+    rng = random.Random(1082826)
+    defs, letters = [], []
+    total = 0
+    for i, (char, x, outline, placement, bounds) in enumerate(letter_info[:5]):
+        clip_id = f'swarm-letter-{i}'
+        defs.append(f'<clipPath id="{clip_id}" clipPathUnits="userSpaceOnUse"><path transform="{placement}" d="{outline}"/></clipPath>')
+        x0, y0, x1, y1 = bounds
+        x0, x1 = x+x0*scale-4, x+x1*scale+4
+        y0, y1 = baseline-y1*scale-4, baseline-y0*scale+4
+        dots = []
+        row, y = 0, y0
+        while y <= y1:
+            xx = x0 + (row % 2)*2.8
+            while xx <= x1:
+                px, py = xx+rng.uniform(-1.5,1.5), y+rng.uniform(-1.3,1.3)
+                radius = rng.uniform(2.4,3.9)
+                dots.append(f'<path d="{grain_path(px,py,radius,rng)}"/>')
+                xx += 5.6
+            row += 1
+            y += 4.85
+        total += len(dots)
+        letters.append(f'<g data-letter="{char}" data-index="{i}" clip-path="url(#{clip_id})">{"".join(dots)}</g>')
+    return ''.join(defs), ''.join(letters), total
+
+
+def incoming_sand():
+    rng = random.Random(281028)
+    dots = []
+    for _ in range(270):
+        progress = rng.betavariate(2,1.05)
+        x = -92 + 217*progress
+        lane = rng.choice([467, 527, 590])
+        y = lane - 7*math.sin(progress*math.pi) + rng.gauss(0,14-9*progress)
+        radius = .55 + 2.75*progress**1.35*rng.uniform(.55,1)
+        dots.append(f'<path d="{grain_path(x,y,radius,rng)}" opacity="{.22+.78*progress:.2f}"/>')
+    return ''.join(dots)
+
+
 start = (left + 1250*scale, baseline - 1540*scale)
 end = (red_peak, baseline - 1536*scale)
-bridge = grains((start, (540, 170), (1110, 195), end), 48, 14, 2270, .2, 281026,
-                levels=[(14, 240), (5, 580), (1.5, 1450)])
+bridge = grains((start, (540, 170), (1110, 195), end), 48, 14, 2520, .2, 281026,
+                levels=[(14, 320), (5, 700), (1.5, 1500)])
+letter_defs, letter_grains, letter_grain_count = swarm_letters()
+wind = incoming_sand()
 for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef', (226, 228, 231))]:
     particles = []
     stops = [(0, origin), (.28, (86, 24, 26) if theme == 'light' else (221, 169, 165)),
@@ -94,11 +147,14 @@ for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef
     for d, t, opacity in bridge:
         rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="520" viewBox="0 140 2172 520" role="img" aria-labelledby="title desc">
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="520" viewBox="-100 140 2272 520" role="img" aria-labelledby="title desc">
 <title id="title">SWARMHARM</title>
-<desc id="desc">Coarse and fine sand grains form a low orbital crescent, grading from the S into red above complete Michroma letterforms.</desc>
+<desc id="desc">Sand blows in from the left and forms SWARM. A crescent of coarse grains at its center tapers to fine sand at both ends, above solid red HARM.</desc>
+<defs>{letter_defs}</defs>
 <g aria-label="Sand-grain crescent">{''.join(particles)}</g>
-<g aria-label="SWARMHARM">{''.join(paths).replace('INK', ink)}</g>
+<g fill="{ink}" aria-label="Incoming sand">{wind}</g>
+<g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
+<g aria-label="HARM">{''.join(paths[5:])}</g>
 </svg>
 '''
     suffix = '-dark' if theme == 'dark' else ''
@@ -109,4 +165,4 @@ mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Swarm
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)
 mark += '</svg>\n'
 (root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8')
-print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'sand_grains': len(bridge), 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))
+print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'crescent_grains': len(bridge), 'letter_grains_before_clipping': letter_grain_count, 'incoming_grains': 270, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))

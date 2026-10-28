@@ -219,7 +219,9 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .domain-visual .domain-point { fill: var(--text); stroke: none; }
 .domain-visual .domain-wash { fill: var(--risk); fill-opacity: .08; stroke: none; }
 .domain-visual .domain-dashed { stroke-dasharray: 3 4; }
-.domain-visual .domain-volume { fill: var(--subtle); fill-opacity: .35; stroke: none; }
+.domain-visual .domain-code { fill: var(--text); stroke: none; font: 10px "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+.domain-visual .domain-syntax { fill: var(--risk); }
+.domain-visual .domain-books { stroke-width: 1.2; }
 .domains-section .coverage-icons { margin-top: 0; gap: 28px; }
 .domains-section .coverage-icons li { border: 0; gap: 18px; }
 .domains-section .coverage-icons li > span { font-weight: 500; }
