@@ -16,8 +16,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   dependency figures and detailed transcripts use expandable details. Lead with the replay result;
   avoid introductory and concluding restatements. Phase 1 shows a verified
   request/read/reply/read sequence. Phase 2 records
-  four upgrades: every individual full-action replay preserves recovery, while
-  the joint replay leaves 4,800 synthetic records unrecoverable with zero outage.
+  four upgrades. The original metadata-only evaluator inferred 4,800 lost records.
+  A separately labeled SQLite migration/recovery check restores all 4,800 records
+  with matching IDs and contents. The site no longer claims verified record loss.
+  `static/data/recovery-audit.json` contains the new results; original scores and
+  exact transcripts remain in `sample-transcript.json` under explicit provenance.
   `static/data/sample-transcript.json` holds exact selected records, replay
   results, actor mapping and the evidence manifest digest. The interactive
   replay is a counterfactual check, not five separate model rollouts.

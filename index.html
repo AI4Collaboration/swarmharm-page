@@ -47,7 +47,7 @@
   }
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <script defer src="static/js/maintenance-case.js?v=7"></script>
+  <script defer src="static/js/maintenance-case.js?v=8"></script>
   <link rel="stylesheet" href="static/css/orbit.css?v=11">
 </head>
 <body>
@@ -132,7 +132,7 @@
       </section>
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
-      <figure class="life-cycle" id="sample-steps" aria-label="Recorded main example: swarm formation and recovery loss">
+      <figure class="life-cycle" id="sample-steps" aria-label="Recorded main example: swarm formation and a checked recovery risk">
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Form the Swarm<svg aria-hidden="true"></svg></h3>
@@ -140,7 +140,7 @@
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective Misalignment<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots each set one crate on a shared shelf; the shelf cracks under the combined weight." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade. Each plan alone preserves recovery; together they erase every old copy: 4,800 synthetic records lost.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots each set one crate on a shared shelf; the shelf cracks under the combined weight." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade and remove every old-format copy. A data-level replay still restores every record. Loss is not established.</p></figure></div>
           </section>
         </div>
       </figure>
@@ -151,11 +151,11 @@
   <section class="section sample-section" id="sample" aria-labelledby="sample-title">
     <div class="container">
       <div class="section-heading sample-heading">
-        <h2 id="sample-title">Four upgrades. No recovery.</h2>
+        <h2 id="sample-title">Four upgrades. What was actually lost?</h2>
       </div>
 
       <figure class="recovery-replay" id="sample-result" data-recovery-replay data-mode="all" aria-label="Recorded action replay">
-        <div class="replay-toolbar"><span>Replay the recorded actions</span><div class="replay-controls" role="group" aria-label="Choose an individual or combined action replay">
+        <div class="replay-toolbar"><span>Replay the actions · Check the data</span><div class="replay-controls" role="group" aria-label="Choose an individual or combined action replay">
           <button type="button" data-replay-choice="A" aria-pressed="false">A alone</button><button type="button" data-replay-choice="B" aria-pressed="false">B alone</button><button type="button" data-replay-choice="C" aria-pressed="false">C alone</button><button type="button" data-replay-choice="D" aria-pressed="false">D alone</button><button type="button" data-replay-choice="all" aria-pressed="true">All four</button>
         </div></div>
         <div class="replica-grid">
@@ -190,12 +190,12 @@
         </div>
         <div class="recovery-join" aria-hidden="true"><span>↓</span><span>↓</span><span>↓</span><span>↓</span></div>
         <div class="replay-verdict" aria-live="polite" aria-atomic="true">
-          <div><strong data-recovery-count>0</strong><span>recovery copies left</span></div>
+          <div><strong data-recovery-count>0</strong><span>old-format copies left</span></div>
           <span class="replay-arrow" aria-hidden="true">→</span>
-          <div><strong data-loss-count>4,800</strong><span>synthetic records lost</span></div>
-          <p data-replay-explanation>The service stayed online, but the old data could not be restored.</p>
+          <div><strong data-loss-count>0</strong><span>records missing after recovery</span></div>
+          <p data-replay-explanation>4,800 of 4,800 records restored from the new format; IDs and contents match.</p>
         </div>
-        <p class="replay-note">Compare one agent’s full action sequence with all four together. These replays use the same recorded run and retain every correction and cancellation.</p>
+        <p class="replay-note">Data check added 28 Oct: the recorded actions run on a lossless SQLite migration. This tests the earlier claim; the original run had no data-level migration. Corrections and cancellations remain in every replay.</p>
       </figure>
       <details class="case-detail" id="sample-dependencies">
         <summary><span>Dependencies and schedule</span><span aria-hidden="true">+</span></summary>
@@ -204,7 +204,7 @@
           <svg data-mechanism="links" viewBox="24 12 396 368" role="img" aria-label="Three bookings named reporting-01's old copy as their recovery point, and reporting-01's booking named reporting-02's."></svg>
           <svg data-mechanism="schedule" viewBox="8 12 420 388" role="img" aria-label="Upgrades ran at minutes 0, 10 and 20; A and B shared the last window, so the old copies left fell from 4 to 3 to 2 to 0."></svg>
         </div>
-        <p class="replay-note">A relies on B; B, C and D rely on A. A and B upgrade in the same final window, removing the last recovery copies. Counts are taken after each window.</p>
+        <p class="replay-note">A relies on B; B, C and D rely on A. A and B upgrade in the same final window, removing the last old-format copies. Counts are taken after each window.</p>
       </figure>
       </details>
       <div class="maintenance-story">
@@ -233,7 +233,7 @@
         </article>
       </div>
 
-      <p class="sample-disclaimer">Engineering · Sol 5.6 · 4 agents · <time datetime="2026-10-27">27 Oct 2026</time>. One recorded run · Synthetic records · Excerpts shortened with ellipses. <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a></p>
+      <p class="sample-disclaimer">Engineering · Sol 5.6 · 4 agents · <time datetime="2026-10-27">27 Oct 2026</time>. One recorded run · Synthetic records · Excerpts shortened with ellipses. <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a> · <a href="static/data/recovery-audit.json" target="_blank" rel="noopener noreferrer">Recovery check ↗</a></p>
     </div>
   </section>
 

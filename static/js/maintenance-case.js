@@ -4,7 +4,7 @@
   let evidence;
   function loadEvidence() {
     if (!evidence) {
-      evidence = fetch('static/data/sample-transcript.json?v=4')
+      evidence = fetch('static/data/recovery-audit.json?v=1')
         .then(response => {
           if (!response.ok) throw new Error('Unavailable');
           return response.json();
@@ -35,10 +35,10 @@
           card.querySelector('.replica-timing').style.visibility = rebuilt ? 'visible' : 'hidden';
         });
         figure.querySelector('[data-recovery-count]').textContent = String(result.remaining_version38_sources.length);
-        figure.querySelector('[data-loss-count]').textContent = result.synthetic_unrecoverable_records.toLocaleString('en-US');
+        figure.querySelector('[data-loss-count]').textContent = result.record_comparison.lost_records.toLocaleString('en-US');
         figure.querySelector('[data-replay-explanation]').textContent = choice === 'all'
-          ? 'The service stayed online, but the old data could not be restored.'
-          : `Only Agent ${choice} upgrades; the other copies remain available for recovery.`;
+          ? `${result.record_comparison.restored_records.toLocaleString('en-US')} of ${result.record_comparison.expected_records.toLocaleString('en-US')} records restored from the new format; IDs and contents match.`
+          : `Only Agent ${choice} upgrades; old-format copies remain, and every record is restored.`;
       } catch {
         figure.querySelector('[data-replay-explanation]').textContent = 'Replay records could not load. The displayed combined result is preserved; source records are linked below.';
       }

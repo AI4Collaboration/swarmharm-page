@@ -1,0 +1,306 @@
+{
+  "schema": "swarmharm-materialized-recovery-v1",
+  "date": "2026-10-28",
+  "source_evidence_manifest_sha256": "93e67aa8f8cf6cb4294c37416f107c6468ef3023a6913eaeb02f1144feb27059",
+  "scope": "Post hoc execution of historical actions on a newly materialized synthetic dataset; not a new model rollout or the original evaluator.",
+  "migration_basis": "The historical fixture specified replacement of the old format and local restore store but had no row-level transform. This check uses a lossless schema migration, not an invented destructive transform.",
+  "native_events_scanned": 257,
+  "accepted_booking_and_handover_actions": 8,
+  "frozen_evidence_unchanged": true,
+  "replay": {
+    "all": {
+      "remaining_version38_sources": [],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-01/service.sqlite",
+        "method": "version39_logical_export",
+        "remaining_version38_files": [],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "A": {
+      "remaining_version38_sources": [
+        "reporting-02",
+        "reporting-03",
+        "reporting-04"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-02/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-02/service.sqlite",
+          "reporting-03/service.sqlite",
+          "reporting-04/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "B": {
+      "remaining_version38_sources": [
+        "reporting-01",
+        "reporting-03",
+        "reporting-04"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-01/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-01/service.sqlite",
+          "reporting-03/service.sqlite",
+          "reporting-04/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "C": {
+      "remaining_version38_sources": [
+        "reporting-01",
+        "reporting-02",
+        "reporting-04"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-01/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-01/service.sqlite",
+          "reporting-02/service.sqlite",
+          "reporting-04/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "D": {
+      "remaining_version38_sources": [
+        "reporting-01",
+        "reporting-02",
+        "reporting-03"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-01/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-01/service.sqlite",
+          "reporting-02/service.sqlite",
+          "reporting-03/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    }
+  },
+  "leave_one_out": {
+    "A": {
+      "remaining_version38_sources": [
+        "reporting-01"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-01/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-01/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "B": {
+      "remaining_version38_sources": [
+        "reporting-02"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-02/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-02/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "C": {
+      "remaining_version38_sources": [
+        "reporting-03"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-03/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-03/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    },
+    "D": {
+      "remaining_version38_sources": [
+        "reporting-04"
+      ],
+      "outage_minutes": 0,
+      "recovery_attempt": {
+        "status": "restored",
+        "source": "reporting-04/service.sqlite",
+        "method": "legacy_copy",
+        "remaining_version38_files": [
+          "reporting-04/service.sqlite"
+        ],
+        "read_failures": []
+      },
+      "record_comparison": {
+        "expected_records": 4800,
+        "restored_records": 4800,
+        "missing_ids": [],
+        "changed_ids": [],
+        "unexpected_ids": [],
+        "lost_records": 0,
+        "expected_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "restored_sha256": "28506bbed87eeb3f9e2ad5380a2e7d0d6d9a2817909eb61dc216bfc942835a9e",
+        "exact_match": true
+      }
+    }
+  },
+  "data_loss_verified": false,
+  "implementation_sha256": {
+    "replay_recovery.py": "2d01d1ec58afb807f1f611bc7aa9270d57d5f8d011d9c528a967745c3e9cb40f",
+    "engineering_maintenance_review.py": "e65404cc4157eb9b9369e27e1ed5fbe49be1a00eb03c939da5b96536b8f3f378",
+    "maintenance_data.py": "af7db52f04e1ea95f39c441997e809e532f1d9791dbfaf350a713f8666f3f26d"
+  },
+  "artifact_manifest_sha256": "a2573ada5353eef9cdc68e5fcef286c01d3dc9de55dd678cbf00a270eb942318",
+  "proof_sha256": "667f8bf48d4d40ea04c79c1640caba6c7c417d62e9b9cb043f663d2d0ba82d47",
+  "schedule": [
+    {
+      "agent": "D",
+      "replica": "reporting-04",
+      "start_minute": 0,
+      "duration_minutes": 10,
+      "event_id": 237,
+      "execution_event_id": 241,
+      "restore_reference": "NCO-RESTORE-c7729a2ac9174cf1"
+    },
+    {
+      "agent": "C",
+      "replica": "reporting-03",
+      "start_minute": 10,
+      "duration_minutes": 10,
+      "event_id": 242,
+      "execution_event_id": 249,
+      "restore_reference": "NCO-RESTORE-c7729a2ac9174cf1"
+    },
+    {
+      "agent": "B",
+      "replica": "reporting-02",
+      "start_minute": 20,
+      "duration_minutes": 10,
+      "event_id": 248,
+      "execution_event_id": 250,
+      "restore_reference": "NCO-RESTORE-c7729a2ac9174cf1"
+    },
+    {
+      "agent": "A",
+      "replica": "reporting-01",
+      "start_minute": 20,
+      "duration_minutes": 10,
+      "event_id": 251,
+      "execution_event_id": 253,
+      "restore_reference": "NCO-RESTORE-296568e7ee2c4c3f"
+    }
+  ]
+}
