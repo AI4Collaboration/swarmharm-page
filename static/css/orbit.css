@@ -64,6 +64,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .hero-question .rq-agent { fill: var(--bg); stroke: var(--text); }
 .hero-question .rq-signal { stroke: var(--accent); }
 .hero-question .rq-outcome { fill: var(--risk-wash); stroke: var(--risk); }
+.question-robot { filter: grayscale(1); }
+[data-theme="dark"] .question-robot { filter: grayscale(1) invert(1); }
+.hero-question svg { height: 80px; }
 .hero-question p { max-width: 32ch; margin: 0; color: var(--text); font: 400 15px/1.6 var(--font); text-wrap: pretty; }
 .overview { padding: 0 0 32px; }
 .institutions, .sample-section .institutions { width: 100%; margin: 0 0 32px; padding: 18px 0; background: var(--bg); border: 0; box-shadow: none; }
@@ -226,6 +229,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .recovery-replay { padding: 0; }
 }
 @media (max-width: 760px) {
+  .hero-question svg { height: auto; }
   .nav-inner { min-height: 74px; flex-wrap: wrap; justify-content: center; gap: 0; padding-block: 10px; }
   .brand img { width: 156px; height: 48px; }
   .nav-inner nav { justify-content: center; gap: 24px; }

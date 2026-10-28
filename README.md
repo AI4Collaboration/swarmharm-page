@@ -26,7 +26,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Label public messages, system receipts and required change handovers distinctly.
   Do not infer intent to cause harm or a causal method-transfer chain.
 - **Research questions:** the three main questions appear below the hero tagline,
-  each with a compact diagram using the same engraved robot as the stage animation: discovering unknown peers and establishing
+  each with a compact diagram in the engraved robot style of the original illustrations: discovering unknown peers and establishing
   communication, coordinated collective misalignment through communication, and
   misaligned outcomes from actions taken without harmful intent. The remaining
   questions appear below the example. Avoid repeating the main questions there.
@@ -74,14 +74,15 @@ Use the same wordmark in the header, hero and footer.
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
-The four stages share one loop: exploration and thinking, discovery of shared
-records, message exchange and planning, then joint execution and removal of the old copies. Reuse the engraved
-robot asset in the hero diagrams and animation. Keep original plates as the
-no-JavaScript fallback. Retain the two equal phase columns and institution conveyor. Core captions align beneath the four illustrations. The animation is illustrative; only the separate recorded replay reports measured
-outcomes. Pause the animation on request, offscreen or when the document is hidden.
-Reduced motion starts with static completed scenes. Other figures use straight SVG
-geometry, without rough.js or cartoon marks. The recovery replay and dependency
-figures use `maintenance-case.js` and the unchanged source records.
+Use the four original `plate-*.webp` illustrations directly: the robot under a
+glass bell jar, the shared letterbox between jars, the network carrying letters,
+and the robots loading a shelf until it breaks. Keep their full compositions;
+do not replace them with generated robot-and-node schematics. Display the plates
+in grayscale, with the existing dark-theme treatment. Retain the two equal phase
+columns, institution conveyor and captions beneath the four illustrations. These
+images illustrate the study; the separate recorded replay reports the evaluation
+outputs. Other figures use straight SVG geometry. The recovery replay and
+dependency figures use `maintenance-case.js` and the unchanged source records.
 
 Use no decorative section numbers, phase numbers, numbered steps or RQ badges.
 Avoid subtitles, eyebrow labels and headings that repeat the text directly below.

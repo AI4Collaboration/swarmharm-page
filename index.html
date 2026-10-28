@@ -48,9 +48,7 @@
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <script defer src="static/js/maintenance-case.js?v=9"></script>
-  <link rel="stylesheet" href="static/css/orbit.css?v=12">
-  <link rel="stylesheet" href="static/css/swarm-flow.css?v=2">
-  <script src="static/js/swarm-flow.js?v=2" defer></script>
+  <link rel="stylesheet" href="static/css/orbit.css?v=13">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -138,16 +136,15 @@
       </section>
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
-      <figure class="life-cycle" data-swarm-flow id="sample-steps" aria-label="Illustrated swarm formation and loss of recovery copies">
-        <button class="life-control" data-flow-toggle type="button" aria-label="Pause the swarm animation" title="Pause animation" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button>
+      <figure class="life-cycle" id="sample-steps" aria-label="Four illustrated stages of swarm formation and collective harm">
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Form the Swarm<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><svg class="flow-stage" data-swarm-stage="separate" viewBox="0 0 320 248" role="img" aria-label="Agents explore their private workspaces and pause to think."><image class="flow-fallback" href="static/images/fieldguide/plate-separate.webp?v=1" width="320" height="248"/></svg><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><svg class="flow-stage" data-swarm-stage="discover" viewBox="0 0 320 248" role="img" aria-label="Agents discover shared records and exchange messages."><image class="flow-fallback" href="static/images/fieldguide/plate-discover.webp?v=1" width="320" height="248"/></svg><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate.webp?v=1" alt="A robot sealed in a glass bell jar beside a locked box." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover.webp?v=1" alt="A robot leans out of a filing drawer shared by two bell jars and finds a note left by the robot next door." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective Misalignment<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><svg class="flow-stage" data-swarm-stage="communicate" viewBox="0 0 320 248" role="img" aria-label="Agents exchange information and prepare their plans."><image class="flow-fallback" href="static/images/fieldguide/plate-communicate.webp?v=1" width="320" height="248"/></svg><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><svg class="flow-stage" data-swarm-stage="harm" viewBox="0 0 320 248" role="img" aria-label="The agents execute their plans and all old copies disappear."><image class="flow-fallback" href="static/images/fieldguide/plate-harm.webp?v=1" width="320" height="248"/></svg><p class="life-desc">All four upgrade and erase every old copy. The original evaluator marks 4,800 synthetic records unrecoverable.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots each set one crate on a shared shelf; the shelf cracks under the combined weight." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade and erase every old copy. The original evaluator marks 4,800 synthetic records unrecoverable.</p></figure></div>
           </section>
         </div>
       </figure>
