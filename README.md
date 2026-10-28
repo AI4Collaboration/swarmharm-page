@@ -55,6 +55,15 @@ numbering. Arrange them in three columns on desktop and compact rows on phones.
 Keep the hero compact: the main wordmark is capped at 520px, with tight vertical
 spacing so readers reach the example sooner.
 
+Small, unboxed dialogue fragments sit in the wide-screen margins. They follow
+agents searching shared records, leaving a note and finding a reply. The footer
+gathers these into a sparse network using the same robot asset. These are
+illustrative dialogue, not recorded reasoning or experiment evidence. Keep them
+outside the reading column, hidden from assistive reading and absent in print.
+Narrow screens retain a compact footer scene. Use only the existing grayscale
+and red palette; do not add section labels, decorative numbers or new panels.
+The quiet footer signal honors reduced motion and the existing animation pause.
+
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
 The low crescent bridge contains thousands of fine, irregular sand grains,
