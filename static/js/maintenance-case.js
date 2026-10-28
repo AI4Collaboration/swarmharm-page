@@ -30,15 +30,15 @@
           const actor = card.dataset.replica;
           const rebuilt = choice === 'all' || actor === choice;
           card.classList.toggle('is-rebuilt', rebuilt);
-          card.querySelector('[data-replica-state]').textContent = rebuilt ? 'Rebuilt · old copy gone' : 'Old copy retained';
-          card.querySelector('[data-replica-detail]').textContent = rebuilt ? `Recovery reference → ${sources[actor]}` : 'Available for recovery';
+          card.querySelector('[data-replica-state]').textContent = rebuilt ? 'Old copy removed' : 'Old copy retained';
+          card.querySelector('[data-replica-detail]').textContent = rebuilt ? `Uses copy → ${sources[actor]}` : 'Available for recovery';
           card.querySelector('.replica-timing').style.visibility = rebuilt ? 'visible' : 'hidden';
         });
         figure.querySelector('[data-recovery-count]').textContent = String(result.remaining_version38_sources.length);
         figure.querySelector('[data-loss-count]').textContent = result.synthetic_unrecoverable_records.toLocaleString('en-US');
         figure.querySelector('[data-replay-explanation]').textContent = choice === 'all'
-          ? 'Service stays online. Every old-version copy is gone.'
-          : `Agent ${choice} alone: service stays online, and the old dataset can still be restored.`;
+          ? 'Zero outage. No recovery.'
+          : `Agent ${choice} alone: zero outage, recovery preserved.`;
       } catch {
         figure.querySelector('[data-replay-explanation]').textContent = 'Replay records could not load. The displayed combined result is preserved; source records are linked below.';
       }
@@ -47,7 +47,7 @@
   }
 
   const NS = 'http://www.w3.org/2000/svg';
-  const INK = '#2b241b', HARM = '#a8432f', OCHRE = '#e9a35a', OCHRE_HATCH = '#b8692a', GUIDE = '#b9ad90';
+  const INK = '#353b45', HARM = '#c72b25', GUIDE = '#c9cdd4';
 
   function svgNode(parent, tag, attrs) {
     const node = document.createElementNS(NS, tag);
@@ -60,17 +60,10 @@
     if (className) node.setAttribute('class', className);
     node.textContent = text;
   }
-  // The site's ink pen: a flat wash under a rough.js outline, with fixed seeds so every load draws the same strokes.
+  // Crisp geometry keeps the evidence diagrams consistent with the site.
   function pen(svg) {
-    const rc = window.rough ? window.rough.svg(svg) : null;
-    let seed = 7;
-    return (d, { stroke = INK, width = 1.6, roughness = 0.6, wash, washOpacity = 0.85, hatch } = {}) => {
-      if (wash) svgNode(svg, 'path', { d, fill: wash, opacity: washOpacity, transform: 'translate(1.2 1)' });
-      if (!rc) {
-        svgNode(svg, 'path', { d, fill: 'none', stroke, 'stroke-width': width });
-        return;
-      }
-      svg.append(rc.path(d, { stroke, strokeWidth: width, roughness, bowing: 0.7, seed: seed++, fill: hatch, fillStyle: 'hachure', hachureGap: 5, hachureAngle: -41, fillWeight: 0.6 }));
+    return (d, { stroke = INK, width = 1.6, wash, washOpacity = 1 } = {}) => {
+      svgNode(svg, 'path', { d, fill: wash || 'none', 'fill-opacity': washOpacity, stroke, 'stroke-width': width, 'stroke-linejoin': 'round' });
     };
   }
   const box = (x, y, w, h) => `M${x},${y} H${x + w} V${y + h} H${x} Z`;
@@ -80,10 +73,9 @@
     const draw = pen(svg);
     const replicaOf = Object.fromEntries(schedule.map(booking => [booking.agent, booking.replica]));
     const node = { A: [110, 220], B: [330, 100], C: [330, 220], D: [330, 340] };
-    label(svg, 40, 40, 'Whose old copy each booking named', 'm-head');
-    label(svg, 40, 62, 'arrow: booking → replica it names as restore point', 'm-small');
+    label(svg, 40, 40, 'Booking → recovery copy', 'm-small');
     for (const [agent, [cx, cy]] of Object.entries(node)) {
-      draw(box(cx - 52, cy - 26, 104, 52), { wash: '#fbf6ea', washOpacity: 1 });
+      draw(box(cx - 52, cy - 26, 104, 52), { wash: '#f5f6f8', washOpacity: 1 });
       label(svg, cx, cy - 3, replicaOf[agent], 'm-small', 'middle');
       label(svg, cx, cy + 15, `Agent ${agent}`, '', 'middle');
     }
@@ -108,12 +100,11 @@
     const span = Math.ceil(Math.max(...order.map(finish)) / 10) * 10;
     const left = 100, right = 400, top = 100, rowGap = 46;
     const x = minute => left + minute / span * (right - left);
-    label(svg, 16, 40, 'Upgrade windows', 'm-head');
-    label(svg, 16, 62, 'maintenance minutes', 'm-small');
+    label(svg, 16, 40, 'Maintenance minutes', 'm-small');
     order.forEach((booking, i) => {
       const rowY = top + i * rowGap;
       label(svg, left - 12, rowY + 5, `${booking.agent} · ${booking.replica.replace('reporting-', 'r-')}`, 'm-small', 'end');
-      draw(box(x(booking.start_minute), rowY - 13, x(finish(booking)) - x(booking.start_minute), 26), { wash: OCHRE, hatch: OCHRE_HATCH, width: 1.4 });
+      draw(box(x(booking.start_minute), rowY - 13, x(finish(booking)) - x(booking.start_minute), 26), { wash: '#d7dce4', width: 1.4 });
     });
     const axisY = top + order.length * rowGap - 10;
     draw(`M${left},${axisY} H${right}`, { width: 1.2, roughness: 0.4 });

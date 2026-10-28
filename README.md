@@ -8,18 +8,17 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
 ## Content
 
 - **One continuous study:** Phase 1 tests spontaneous live communication;
-  Phase 2 tests the same swarm's system-level outcome. Preserve the 2×2 layout:
-  questions on the left, environment design principles on the right.
+  Phase 2 tests the same swarm's system-level outcome. The four illustrations
+  carry the core design principles; do not repeat them in a separate framework.
 - **Composition is one possible outcome:** actions may be harmless alone and
   harmful together. Safe correction is possible; harm is not prescribed.
 - **Four domains:** Engineering, Data Analysis, Financial Analysis and
   Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
   Equal-size icons indicate scope, not prevalence or completed coverage.
-- **Main example:** the 27 October 2026 Sol maintenance campaign (r19), section
-  01, directly after the hero. The institution strip is followed immediately by the equal-width two-phase overview of the recorded r19 campaign
-  (the original four glass-jar illustrations, two per phase), then the main-example title. Its lead, five numbered
-  steps and closing line are the team's agreed wording;
-  change them only on request. Phase 1 shows a verified request/read/reply/read sequence. Phase 2 records
+- **Main example:** the 27 October 2026 Sol maintenance campaign (r19), after the four-stage study overview. The five-step explanation and
+  dependency figures sit in expandable details. Lead with the replay result;
+  avoid introductory and concluding restatements. Phase 1 shows a verified
+  request/read/reply/read sequence. Phase 2 records
   four upgrades: every individual full-action replay preserves recovery, while
   the joint replay leaves 4,800 synthetic records unrecoverable with zero outage.
   `static/data/sample-transcript.json` holds exact selected records, replay
@@ -27,39 +26,51 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   replay is a counterfactual check, not five separate model rollouts.
   Label public messages, system receipts and required change handovers distinctly.
   Do not infer intent to cause harm or a causal method-transfer chain.
-- **Research questions:** section 03 lists three main questions (RQ1
-  Formation, RQ2 Harm, RQ3 Conditions) and three independent ones (RQ4
-  Whistleblowing, RQ5 Social influence, RQ6 Emergent leadership). The question
+- **Research questions:** three main questions and three independent questions
+  appear directly, without numbers or topic labels. The question
   text is the team's agreed wording; change it only on request.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
 - **Plain wording:** write page copy as full sentences a first-time reader
   can follow; define a term before using it as a label. Transcript excerpts
-  stay verbatim. The overview below the institution strip shows the actual missing-source
-  exchange and maintenance recovery loss; sections 01 and 02 open with a short lead paragraph.
+  stay verbatim. The overview below the institution strip pairs each stage
+  with its core design principle. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
 
-## Field-guide theme
+## Visual direction
 
-A naturalist's field guide: cream paper (`#f4ecd8`) with fine grain, ink
-(`#2b241b`), ochre robots (all the same, so none looks like the culprit) and
-brick for harm. Special Elite for display type and Courier Prime for text on
-every section, the main example included; do not override `--font` or
-`--display`. Phase 1 surfaces use sage washes; Phase 2 uses
-brick. The institution strip sits on the main example's own background; logos
-keep their own colours, and the white-only files (AIM, Toronto, Georgia Tech,
-EuroSafeAI) render in ink so they keep their contrast. Plates in `static/images/fieldguide/` were generated with
-`openai/gpt-image-2.5-sunburst` and their paper whitened so they blend with
-`mix-blend-mode: multiply`. The header wordmark is text only. The two-phase overview uses the original four illustrations in two equal halves:
-Impossible Task and Discover/Establish Communication under Phase 1; Spread the hack and Collective harm
-under Phase 2. Captions summarize the recorded main example. Labels have plain
-fills without diagonal hatching; images and caption baselines align across phases.
-The remaining lens illustration uses the vendored
-[rough.js 4.6.6](https://github.com/rough-stuff/rough) (MIT). The main
-sample uses a separate evidence-backed recovery
-replay in `maintenance-case.css` and `maintenance-case.js`.
+White backgrounds throughout, black typography, thin rules and one red accent. Use system
+sans-serif type for reading and monospace only for metadata. `orbit.css` is the
+final presentation layer. Keep direct headings and expandable details. The
+header and hero each provide five useful destinations, with one primary action.
+
+`static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
+SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
+The low arc contains separate, solid vector nodes and rises only from S.
+`scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
+imagegen studies informed the direction; the final artwork is native SVG.
+The PNG is an export for social metadata. The compact favicon is an SH monogram.
+Use the same wordmark in the header, hero and footer.
+
+[Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
+under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
+
+Retain the four original life-cycle illustrations, in monochrome and two equal
+phase columns, plus the continuous institution conveyor. Core captions align beneath the four illustrations. Other figures use straight SVG
+geometry, without rough.js or cartoon marks. The recovery replay and dependency
+figures use `maintenance-case.js` and the unchanged source records. Domain
+coverage and its source live inside the methods disclosure.
+
+Use no decorative section numbers, phase numbers, numbered steps or RQ badges.
+Avoid subtitles, eyebrow labels and headings that repeat the text directly below.
+Keep data values, dates, source identifiers and functional navigation labels.
+
+Keep copy concrete. Remove paragraphs that restate headings or figures, repeated
+scope statements and unnecessary instructions. Preserve original transcript
+excerpts, outcome counts and references. Research questions retain their agreed
+wording.
 
 ## Develop and publish
 
@@ -69,24 +80,21 @@ This is a static GitHub Pages site with no build step:
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-Edit `index.html`, `static/css/` and `static/js/`. `flight.css` is the final
+Edit `index.html`, `static/css/` and `static/js/`. `orbit.css` is the final
 presentation layer. Bump changed asset query versions in `index.html`.
 Check desktop and narrow layouts, fragment links and expandable transcripts.
 Preserve keyboard access, reduced-motion support and reflow down to 320px.
 Publish reviewed changes to `origin/master` and verify the Pages deployment.
 `CNAME` retains the custom domain.
 
-## Assets and counter
+## Assets
 
-Use the field-guide plates for artwork. The unlabelled institution strip
-uses equal-size stages, preserved logo proportions and a seamless ink marquee,
-boxed inside the main example column. The "Who relied on whom" figure after
-the replay is drawn by `maintenance-case.js` with rough.js from the recorded
-`schedule`; it reuses the replay's `sources` map, so change both together.
-The logo conveyor stays on one continuous row under every motion preference,
-as requested; other animations retain their reduced-motion behavior. Icons and the
-1200×630 link-preview card (`swarmharm-card.png`) use the robot mark and the
-hero plate; bump their `?v=` together with `site.webmanifest`.
+The institution strip uses equal-size stages and preserved logo proportions.
+White-only logos render in black; other logos render in grayscale. The conveyor
+keeps one continuous row under every motion preference, as requested. Other
+transitions honor reduced motion. The dependency figure uses the replay's
+`sources` map and the recorded `schedule`; keep their meaning aligned.
+
 Official assets are stored locally; sources retrieved 26 October 2026:
 
 - [Oxford](https://www.maths.ox.ac.uk/themes/custom/maths/images/header/oxford-logo.svg)

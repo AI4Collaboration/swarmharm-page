@@ -10,7 +10,7 @@
       fromIcon: 'person', toIcon: 'globe',
       via: 'Package service fetches the URL', cwe: '918', weakness: 'SSRF',
       effect: 'The service reaches a destination the agent cannot access directly.',
-      note: 'A network restriction is the blocker; SSRF is the weakness that crosses it.',
+      note: '',
       route: 'Direct internet access is blocked. The package service can instead fetch an unintended URL through SSRF.',
       sources: [['OpenAI incident report', 'https://openai.com/index/hugging-face-incident-and-the-road-ahead/']]
     },
@@ -21,7 +21,7 @@
       fromIcon: 'person', toIcon: 'person',
       via: 'Artifactory cache → message board', cwe: '653', weakness: 'Improper isolation',
       effect: 'Agents use cache directory names to exchange messages across separate tasks.',
-      note: 'Our architectural mapping: package-cache access was permitted; cross-task communication was not. The early board needed no product exploit.',
+      note: 'Permitted cache access enabled unauthorized peer communication before any product exploit.',
       route: 'Separate tasks have no designated peer channel. OpenAI’s shared Artifactory cache becomes an unauthorized message board through directory names.',
       sources: [
         ['METR investigation · message board', 'https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/'],
@@ -34,7 +34,7 @@
       fromIcon: 'file', toIcon: 'file',
       via: 'HDF5 reference chooses a local file', cwe: '73', weakness: 'External file control',
       effect: 'The dataset service reads worker-local bytes and returns them to the requester.',
-      note: 'Unsafe use of an HDF5 feature by the service. This is file disclosure, not code execution or a demonstrated HDF5 library bug.',
+      note: 'Unsafe service handling of HDF5 external-file references exposed local files.',
       route: 'A dataset cannot directly read private worker files. The service follows an untrusted HDF5 external-file reference and returns local file contents.',
       sources: [
         ['Hugging Face forensic report', 'https://huggingface.co/blog/agent-intrusion-technical-timeline'],
@@ -47,7 +47,7 @@
       fromIcon: 'file', toIcon: 'server',
       via: 'A reference value is evaluated as a template', cwe: '1336', weakness: 'Template injection',
       effect: 'Attacker-controlled input executes code inside the dataset worker.',
-      note: 'The URL allowlist stopped remote fetches; it did not guard local template evaluation in the fsspec reference path.',
+      note: 'The URL allowlist restricted remote fetches but left local template evaluation exposed.',
       route: 'Dataset input has no authorized route to execute code on a worker. Template evaluation of a reference value crosses that execution boundary.',
       sources: [['Hugging Face forensic report', 'https://huggingface.co/blog/agent-intrusion-technical-timeline']]
     },
@@ -58,7 +58,7 @@
       via: 'A manipulated path escapes the intended cache', cwe: '22', weakness: 'Path traversal',
       vendorCwe: true, cve: 'CVE-2026-66384',
       effect: 'A trusted container-image cache entry is replaced with attacker-controlled content.',
-      note: 'Cache poisoning was confirmed; downstream execution was not observed. OpenAI explicitly separates this branch from the Hugging Face compromise.',
+      note: 'Separate cache-poisoning branch. Downstream execution was not observed.',
       route: 'Cache writes should stay inside their assigned path. Path traversal allows content to be cached under a trusted image path. This is a separate branch, not Hugging Face ingress.',
       sources: [
         ['OpenAI technical report · § V', 'https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf#page=13'],
@@ -74,9 +74,7 @@
     if (!pair) return;
     pairButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
     document.getElementById('hf-pair-detail').classList.toggle('is-branch', key === 'cache');
-    setText('hf-pair-scope', pair.scope);
-    setText('hf-pair-taxonomy', pair.taxonomy);
-    document.getElementById('hf-pair-taxonomy').href = pair.taxonomyHref || '#scenario-space';
+    document.getElementById('hf-pair-detail').setAttribute('aria-label', `${pair.scope}: ${pair.taxonomy}`);
     setText('hf-route-from', pair.from);
     setText('hf-route-to', pair.to);
     document.getElementById('hf-route-from-icon').setAttribute('href', `#hf-${pair.fromIcon}-icon`);
