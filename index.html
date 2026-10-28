@@ -49,6 +49,8 @@
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <script defer src="static/js/maintenance-case.js?v=9"></script>
   <link rel="stylesheet" href="static/css/orbit.css?v=13">
+  <link rel="stylesheet" href="static/css/plate-animation.css?v=1">
+  <script src="static/js/plate-animation.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -136,7 +138,8 @@
       </section>
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
-      <figure class="life-cycle" id="sample-steps" aria-label="Four illustrated stages of swarm formation and collective harm">
+      <figure class="life-cycle" data-swarm-flow id="sample-steps" aria-label="Four illustrated stages of swarm formation and collective harm">
+        <button class="life-control" data-flow-toggle type="button" aria-label="Play the four-stage animation" title="Play animation" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7Z"/></svg></button>
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Form the Swarm<svg aria-hidden="true"></svg></h3>

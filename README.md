@@ -74,11 +74,19 @@ Use the same wordmark in the header, hero and footer.
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
-Use the four original `plate-*.webp` illustrations directly: the robot under a
+Use the four original `plate-*.webp` illustrations: the robot under a
 glass bell jar, the shared letterbox between jars, the network carrying letters,
 and the robots loading a shelf until it breaks. Keep their full compositions;
 do not replace them with generated robot-and-node schematics. Display the plates
-in grayscale, with the existing dark-theme treatment. Retain the two equal phase
+in grayscale, with the existing dark-theme treatment. `plate-animation.js` clips
+the original pixels into moving layers: a robot explores inside its jar, the
+shared letterbox opens and carries a reply, envelopes travel between jars, then
+the robots load and break the shelf. Keep the jars, letterbox, engraved characters
+and timber from the original artwork. Do not substitute schematic agents.
+The sequence loops and supports pause/resume. Pause while offscreen or hidden;
+reduced motion starts with the original still images and allows explicit playback.
+Keep original images visible if JavaScript or image decoding fails, and in print.
+Retain the two equal phase
 columns, institution conveyor and captions beneath the four illustrations. These
 images illustrate the study; the separate recorded replay reports the evaluation
 outputs. Other figures use straight SVG geometry. The recovery replay and
