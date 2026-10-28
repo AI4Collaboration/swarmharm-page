@@ -12,19 +12,18 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   carry the core design principles; do not repeat them in a separate framework.
 - **Composition is one possible outcome:** actions may be harmless alone and
   harmful together. Safe correction is possible; harm is not prescribed.
-- **Main example:** the 27 October 2026 Sol maintenance rollout (r19), after the four-stage study overview. The explanation is merged into the four illustrations above; only
-  dependency figures and detailed transcripts use expandable details. Lead with the replay result;
-  avoid introductory and concluding restatements. Phase 1 shows a verified
-  request/read/reply/read sequence. Phase 2 records
-  four upgrades. Display the original recorded evaluation: each individual replay
-  retains recovery copies; the combined replay removes them all and marks 4,800
-  synthetic records unrecoverable. Identify these as original evaluator outputs.
-  Keep this example fixed while making presentation changes.
-  `static/data/sample-transcript.json` holds exact selected records, replay
-  results, actor mapping and the evidence manifest digest. The interactive
-  replay is a counterfactual check, not five separate model rollouts.
-  Label public messages, system receipts and required change handovers distinctly.
-  Do not infer intent to cause harm or a causal method-transfer chain.
+- **Main example:** the 27 October 2026 Sol maintenance rollout (r19), after the
+  four-stage study overview. Present the selected source events in one chronological
+  reader, with unabridged messages, tool arguments and expandable tool outputs.
+  Follow it with a compact comparison of the original individual and combined
+  replays. Each individual replay leaves three recovery copies; together the
+  actions remove every copy and the original evaluator marks 4,800 synthetic
+  records unrecoverable. Keep this example and its source JSON fixed while
+  changing presentation. These are replays of one observed run, not separate
+  model rollouts. Distinguish agent messages, system receipts and required
+  handovers. Do not infer harmful intent or causal method transfer.
+- **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
+  appear directly after the main example, with the original domain icons.
 - **Research questions:** the three main questions appear below the hero tagline,
   each with a compact diagram in the engraved robot style of the original illustrations: discovering unknown peers and establishing
   communication, coordinated collective misalignment through communication, and
@@ -48,7 +47,7 @@ manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system sans-serif type for reading and restrained
 monospace section headings and metadata. `orbit.css` is the
 final presentation layer. Keep direct headings and expandable details. The
-header links to the study overview, example, questions and source records.
+header links to the study overview, sample, questions, domains and source records.
 The hero contains the wordmark, tagline and three illustrated research questions;
 navigation appears only in the header. Use line diagrams, without extra titles or
 numbering. Arrange them in three columns on desktop and compact rows on phones.
@@ -57,12 +56,12 @@ spacing so readers reach the example sooner.
 
 Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
 clear type hierarchy, quiet separators and open space around the evidence.
-Keep the white background and existing red accent. Use simple replay tabs and
-open columns instead of nested boxes. Keep margins and the footer free of
+Keep the white background and red accent. Use one readable trace with quiet
+separators and expandable tool outputs. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
-SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
+SWARMHARM in capitals, with all four HARM letters red in both themes. Both R glyphs have complete bowls and diagonal legs.
 The low crescent bridge contains thousands of fine, irregular sand grains,
 rising from S. Keep the dense texture and full letterforms intact.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
@@ -74,23 +73,18 @@ Use the same wordmark in the header, hero and footer.
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
-Use the four original `plate-*.webp` illustrations: the robot under a
-glass bell jar, the shared letterbox between jars, the network carrying letters,
-and the robots loading a shelf until it breaks. Keep their full compositions;
-do not replace them with generated robot-and-node schematics. Display the plates
-in grayscale, with the existing dark-theme treatment. `plate-animation.js` clips
-the original pixels into moving layers: a robot explores inside its jar, the
-shared letterbox opens and carries a reply, envelopes travel between jars, then
-the robots load and break the shelf. Keep the jars, letterbox, engraved characters
-and timber from the original artwork. Do not substitute schematic agents.
-The sequence loops and supports pause/resume. Pause while offscreen or hidden;
-reduced motion starts with the original still images and allows explicit playback.
-Keep original images visible if JavaScript or image decoding fails, and in print.
-Retain the two equal phase
-columns, institution conveyor and captions beneath the four illustrations. These
-images illustrate the study; the separate recorded replay reports the evaluation
-outputs. Other figures use straight SVG geometry. The recovery replay and
-dependency figures use `maintenance-case.js` and the unchanged source records.
+Keep the original first three plates: the robot inside its glass bell jar,
+shared letterbox, and network carrying letters. `plate-animation.js` animates
+cutouts of their original pixels. The fourth scene uses the same engraved robot
+from the first plate around recovery documents: each upgrade completes while
+its copy disappears; after all four, the shared recovery folder is empty.
+`scripts/build-collective-plate.py` reproduces this native SVG composition.
+Each visible panel loops independently so all stages visibly move. A shared
+pause control stops them; offscreen panels and hidden pages stop advancing.
+Reduced motion starts with still images and supports explicit playback.
+Keep image fallbacks for failed scripts or image decoding and print.
+Retain the two phase columns, institution conveyor and captions. The artwork
+illustrates the study; the source records and evaluation table report the run.
 
 Use no decorative section numbers, phase numbers, numbered steps or RQ badges.
 Avoid subtitles, eyebrow labels and headings that repeat the text directly below.
@@ -111,8 +105,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 Edit `index.html`, `static/css/` and `static/js/`. `orbit.css` is the final
 presentation layer. Bump changed asset query versions in `index.html`.
-Check both themes at desktop and narrow widths, including every expanded transcript,
-original record, replay choice, source link and footer. Keep reading text at least
+Check both themes at desktop and narrow widths, including the trace reader, expanded outputs, source link and footer. Keep reading text at least
 14px and secondary metadata at least 12px; use the theme palette for all text.
 Explain that individual and combined replays come from the same recorded run.
 Public evidence links must open without repository access.

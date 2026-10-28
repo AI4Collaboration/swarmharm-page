@@ -1,0 +1,57 @@
+/* One continuous record, with messages readable and tool outputs expandable. */
+.sample-section .section-heading { text-align: left; margin-bottom: 22px; }
+.sample-section .section-heading h2 { margin: 0; }
+.sample-trace { border: 1px solid var(--line); }
+.trace-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 15px 20px; border-bottom: 1px solid var(--line); color: var(--muted); font: 12px/1.5 var(--mono); }
+.trace-toolbar > span { margin-right: auto; }
+.trace-toolbar label { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+.trace-toolbar input { accent-color: var(--accent); }
+.trace-toolbar a { color: var(--text); text-decoration: none; }
+.trace-scroll { max-height: 620px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--icon) var(--surface); scrollbar-gutter: stable; padding: 8px 24px; }
+.trace-event { display: grid; grid-template-columns: 80px minmax(0,1fr); gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.trace-event:last-child { border-bottom: 0; }
+.trace-event > time { color: var(--subtle); font: 12px/1.8 var(--mono); padding-top: 2px; }
+.trace-event header { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; margin-bottom: 10px; }
+.trace-event header strong { color: var(--text); font: 600 14px/1.5 var(--font); }
+.trace-kind { color: var(--muted); font: 12px/1.5 var(--mono); }
+.trace-event p { color: var(--text); font: 14px/1.8 var(--font); white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.trace-event pre { margin: 10px 0 0; padding: 14px 16px; border-left: 2px solid var(--line); background: var(--surface); color: var(--text); font: 12px/1.8 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; }
+.trace-operation { color: var(--text); font: 13px/1.6 var(--mono); overflow-wrap: anywhere; }
+.trace-output { margin-top: 12px; }
+.trace-output summary { color: var(--muted); font: 12px/1.7 var(--mono); min-height: 28px; display: flex; align-items: center; gap: 8px; }
+.trace-output summary::before { content: '+'; color: var(--text); width: 10px; }
+.trace-output[open] summary::before { content: '−'; }
+.trace-receipt { padding-block: 12px; }
+.trace-receipt header { margin-bottom: 4px; }
+.trace-receipt p { color: var(--muted); font-size: 12px; }
+.trace-loading { padding: 24px 0; color: var(--muted); }
+.sample-outcome { margin: 24px 0 0; width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+.sample-outcome th, .sample-outcome td { padding: 13px 16px; border-bottom: 1px solid var(--line); }
+.sample-outcome th { color: var(--muted); font-weight: 400; }
+.sample-outcome th:first-child, .sample-outcome td:first-child { padding-left: 0; }
+.sample-outcome th:not(:first-child), .sample-outcome td:not(:first-child) { text-align: right; }
+.sample-outcome tbody tr:last-child td { color: var(--risk); }
+.sample-outcome caption { caption-side: bottom; text-align: left; padding-top: 12px; color: var(--muted); font: 12px/1.6 var(--font); }
+.domains-section { padding-block: 42px; }
+.domains-section .domain-coverage { margin: 0; padding: 0; border: 0; }
+.domains-section .domain-coverage h3 { font: 600 24px/1.35 var(--display); margin-bottom: 26px; }
+.domains-section .coverage-icons li > span { color: var(--text); font-size: 15px; }
+.domains-section .coverage-icons li { padding: 0; }
+@media (max-width: 600px) {
+  .trace-toolbar { padding: 14px; gap: 12px 18px; }
+  .trace-toolbar > span { flex-basis: 100%; }
+  .trace-toolbar a { margin-left: auto; }
+  .trace-scroll { padding: 0 14px; max-height: 560px; }
+  .trace-event { grid-template-columns: minmax(0,1fr); gap: 6px; padding: 18px 0; }
+  .trace-event > time { padding: 0; }
+  .trace-event header { margin-bottom: 8px; }
+  .trace-event pre { padding: 12px; }
+  .sample-outcome { font-size: 12px; }
+  .sample-outcome th, .sample-outcome td { padding: 12px 8px; }
+  .domains-section .coverage-icons { row-gap: 28px; }
+}
+@media print {
+  .trace-scroll { max-height: none; overflow: visible; }
+  .trace-toolbar label { display: none; }
+  .trace-event { break-inside: avoid; }
+}

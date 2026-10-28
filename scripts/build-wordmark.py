@@ -18,7 +18,7 @@ for i, char in enumerate(word):
     pen = SVGPathPen(glyphs)
     glyphs[cmap[ord(char)]].draw(pen)
     x = left + cursor * scale
-    fill = '#dc2c25' if i == 6 else 'INK'
+    fill = '#dc2c25' if i >= 5 else 'INK'
     paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" transform="translate({x:.5f} {baseline}) scale({scale:.8f} {-scale:.8f})" d="{pen.getCommands()}"/>')
     if i == 6:
         red_peak = x + 1088 * scale

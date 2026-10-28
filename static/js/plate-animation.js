@@ -23,8 +23,8 @@
   };
   const opacity = (element, value) => element.setAttribute('opacity', clamp(value).toFixed(3));
 
-  // Every moving cutout references the original plate, at its original scale.
-  // Masks separate its artwork into layers; no replacement illustrations are used.
+  // The first three scenes retain the original bell jars, letterbox and envelopes.
+  // Cutouts separate the engraved pixels into independently moving layers.
   function plate(index) {
     const source = images[index].getAttribute('src');
     const svg = document.createElementNS(NS, 'svg');
@@ -64,13 +64,13 @@
     [0, 1, 2].forEach(i => node(thoughts, 'circle', { cx: 280 + i * 14, cy: 245 - i * 4, r: 3.2 - i * .4 }));
     return p => {
       const left = between(p, .04, .27), returnToBox = between(p, .48, .76);
-      const x = -25 * left + 35 * returnToBox;
+      const x = -32 * left + 40 * returnToBox - 8 * between(p, .9, 1);
       const walking = (p > .04 && p < .27) || (p > .48 && p < .76);
-      const bob = walking ? -3 * Math.abs(Math.sin(p * Math.PI * 22)) : 0;
-      const glance = -3.5 * Math.sin(Math.PI * between(p, .25, .48)) + 3 * between(p, .78, .9);
+      const bob = walking ? -5 * Math.abs(Math.sin(p * Math.PI * 22)) : 0;
+      const glance = -3.5 * Math.sin(Math.PI * between(p, .25, .48)) + 3 * Math.sin(Math.PI * between(p, .78, 1));
       transform(robot, x, bob, glance, 305, 518);
       transform(thoughts, x, 0);
-      opacity(thoughts, (between(p, .28, .34) - between(p, .44, .49)) + between(p, .82, .9));
+      opacity(thoughts, (between(p, .28, .34) - between(p, .44, .49)) + between(p, .82, .9) * (1 - between(p, .94, 1)));
     };
   }
 
@@ -90,17 +90,17 @@
     const signals = notice.map(shape => scene.cutout(shape));
     const reply = scene.cutout('M224 211L264 191L275 218L242 240Z', scene.svg, images[2].getAttribute('src'));
     return p => {
-      const opened = between(p, .1, .4);
-      transform(drawer, -17 * opened, 3 * opened);
+      const opened = between(p, .04, .3) * (1 - between(p, .85, 1));
+      transform(drawer, -24 * opened, 4 * opened);
       transform(left, 0, 0, -7 * (1 - opened) + 2 * Math.sin(p * Math.PI * 2), 238, 324);
-      transform(right, 0, 0, 7 * (1 - opened) - 3 * between(p, .42, .62), 550, 343);
+      transform(right, 0, 0, 7 * (1 - opened) - 3 * between(p, .42, .62) * (1 - between(p, .85, 1)), 550, 343);
       signals.forEach(signal => opacity(signal, between(p, .29, .4) * (1 - between(p, .58, .7))));
-      const outbound = between(p, .42, .71);
+      const outbound = p > .88 ? 0 : between(p, .3, .58);
       transform(letter, 180 * outbound, 45 * Math.sin(Math.PI * outbound), 8 * Math.sin(Math.PI * outbound), 306, 335);
-      opacity(letter, 1 - between(p, .71, .77));
-      const inbound = between(p, .72, .96);
+      opacity(letter, p > .88 ? between(p, .91, 1) : 1 - between(p, .58, .64));
+      const inbound = between(p, .6, .86);
       transform(reply, lerp(270, 68, inbound), 123 + 40 * Math.sin(Math.PI * inbound), -12, 249, 216);
-      opacity(reply, between(p, .69, .74));
+      opacity(reply, between(p, .57, .62) * (1 - between(p, .87, .93)));
     };
   }
 
@@ -121,54 +121,37 @@
     ['M147 295L320 154', 'M396 170L566 283', 'M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
     const envelopes = letters.map(letter => scene.cutout(letter.shape));
     return p => {
-      const running = p > 0 && p < 1;
       envelopes.forEach((envelope, i) => {
         const letter = letters[i];
-        const t = running ? ((p * 2.4 + i * .16) % 1) : .5;
+        const t = (p * 2 + i * .16) % 1;
+        opacity(envelope, Math.min(1, t * 8, (1 - t) * 8));
         const travel = ease(t);
         transform(envelope, lerp(letter.from[0], letter.to[0], travel) - letter.center[0], lerp(letter.from[1], letter.to[1], travel) - letter.center[1]);
       });
     };
   }
 
-  function consequence() {
-    const scene = plate(3);
-    scene.cutout('M42 399L119 403L121 500L89 501L84 455Z');
-    scene.cutout('M612 402L654 399L642 503L608 503Z');
-    const leftShelf = scene.cutout('M23 378L350 399L359 435L25 405Z');
-    const rightShelf = scene.cutout('M365 401L697 381L699 406L355 438L350 425Z');
-    const seam = scene.cutout(rect(276, 402, 68, 23));
-    const actors = [rect(37, 204, 161, 179), rect(206, 211, 138, 184), rect(357, 221, 141, 178), rect(507, 219, 182, 174)].map(shape => scene.cutout(shape));
-    const crack = scene.cutout('M342 399L369 398L390 411L369 426L353 447L342 441L353 421Z');
-    const chips = [
-      { shape: 'M325 443L338 447L311 467L309 461Z', x: -12, y: 28 },
-      { shape: 'M371 447L382 469L374 473L364 455Z', x: 9, y: 36 },
-      { shape: 'M335 477L342 485L335 505L327 514L326 506Z', x: -3, y: 46 },
-      { shape: 'M357 496L366 500L363 512L356 509Z', x: 4, y: 43 },
-      { shape: 'M373 514L379 518L375 530L369 525Z', x: 11, y: 51 }
-    ].map(piece => ({ ...piece, element: scene.cutout(piece.shape) }));
+  function consequence(source) {
+    const document = new DOMParser().parseFromString(source, 'image/svg+xml');
+    const svg = document.documentElement;
+    svg.setAttribute('class', 'plate-motion');
+    svg.setAttribute('aria-label', images[3].alt);
+    svg.setAttribute('focusable', 'false');
+    steps[3].insertBefore(svg, images[3].nextSibling);
+    const copies = [...svg.querySelectorAll('[data-collective-copy]')];
+    const checks = [...svg.querySelectorAll('[data-collective-check]')];
+    const robots = [...svg.querySelectorAll('[data-collective-robot]')];
+    const loss = svg.querySelector('[data-collective-loss]');
     return p => {
-      const loaded = between(p, .29, .63), broken = between(p, .66, .82);
-      const bend = loaded * .8 + broken * 3.4;
-      transform(leftShelf, 0, 0, -4.2 + bend, 26, 391);
-      transform(rightShelf, 0, 0, 4.2 - bend, 697, 392);
-      seam.setAttribute('transform', `translate(52 ${-20 + 5 * loaded}) translate(310 402) scale(1 1.4) translate(-310 -402)`);
-      opacity(seam, 1 - between(p, .65, .73));
-      actors.forEach((actor, i) => {
-        const arrive = between(p, .04 + i * .055, .29 + i * .055);
-        const middle = i === 1 || i === 2;
-        const offset = [0, -12, -15, -7][i];
-        const x = (i < 2 ? -8 : 8) * Math.sin(Math.PI * arrive);
-        const y = -12 * Math.sin(Math.PI * arrive) + offset * (1 - loaded) + (middle ? 12 : 3) * broken;
-        const lean = (i < 2 ? 1 : -1) * (2 * loaded + (middle ? 5 : 1) * broken);
-        transform(actor, x, y, lean, [125, 278, 425, 598][i], [380, 392, 396, 390][i]);
+      const reset = between(p, .88, 1);
+      copies.forEach((copy, i) => {
+        const done = between(p, .16 + i * .13, .29 + i * .13) * (1 - reset);
+        opacity(copy, 1 - done);
+        opacity(checks[i], done);
+        const reach = Math.sin(Math.PI * between(p, .07 + i * .13, .35 + i * .13));
+        transform(robots[i], 10 * reach, -4 * reach, 5 * reach, 310, 520);
       });
-      opacity(crack, broken);
-      chips.forEach((piece, i) => {
-        const fall = between(p, .72 + i * .018, .98);
-        opacity(piece.element, between(p, .71 + i * .018, .76 + i * .018));
-        transform(piece.element, piece.x * fall, piece.y * fall * fall, (i % 2 ? 18 : -14) * fall, 355, 452);
-      });
+      opacity(loss, between(p, .69, .76) * (1 - reset));
     };
   }
 
@@ -176,24 +159,24 @@
     try {
       await Promise.all(images.map(image => { image.loading = 'eager'; return image.decode(); }));
     } catch { return; }
-    const draw = [exploration(), discovery(), communication(), consequence()];
-    const durations = [6200, 6800, 8200, 6800];
-    const ends = durations.map((_, i) => durations.slice(0, i + 1).reduce((a, b) => a + b, 0));
-    const total = ends[3] + 1600;
-    const names = ['explore', 'discover', 'communicate', 'collective-harm'];
+    let source;
+    try {
+      const response = await fetch(images[3].getAttribute('src'));
+      if (!response.ok) return;
+      source = await response.text();
+    } catch { return; }
+    const draw = [exploration(), discovery(), communication(), consequence(source)];
+    const durations = [5600, 6200, 7000, 7800];
+    const elapsed = [500, 0, 0, 0];
+    const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    let paused = reduced.matches, visible = false, elapsed = 0, previous = null, frame = 0;
+    let paused = reduced.matches, previous = null, frame = 0;
     let activated = !paused;
 
     function render() {
-      let startTime = 0;
       draw.forEach((paint, i) => {
-        const progress = clamp((elapsed - startTime) / durations[i]);
-        paint(progress);
-        const active = elapsed >= startTime && elapsed < ends[i];
-        steps[i].classList.toggle('is-current', active);
-        if (active) figure.dataset.flowPhase = names[i];
-        startTime = ends[i];
+        paint(elapsed[i] / durations[i]);
+        steps[i].classList.toggle('is-current', visible[i] && !paused);
       });
       figure.classList.toggle('has-plate-motion', activated);
     }
@@ -201,7 +184,7 @@
       cancelAnimationFrame(frame);
       frame = 0;
       previous = null;
-      const running = activated && !paused && visible && !document.hidden;
+      const running = activated && !paused && visible.some(Boolean) && !document.hidden;
       figure.dataset.flowRunning = String(running);
       button.setAttribute('aria-label', paused ? 'Play the four-stage animation' : 'Pause the four-stage animation');
       button.title = paused ? 'Play animation' : 'Pause animation';
@@ -210,7 +193,10 @@
       if (running) frame = requestAnimationFrame(tick);
     }
     function tick(now) {
-      if (previous !== null) elapsed = (elapsed + Math.min(now - previous, 100)) % total;
+      if (previous !== null) {
+        const delta = Math.min(now - previous, 100);
+        elapsed.forEach((time, i) => { if (visible[i]) elapsed[i] = (time + delta) % durations[i]; });
+      }
       previous = now;
       render();
       frame = requestAnimationFrame(tick);
@@ -230,8 +216,12 @@
     });
     document.addEventListener('visibilitychange', sync);
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }, { threshold: 0 }).observe(figure);
-    } else visible = true;
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => { visible[steps.indexOf(entry.target)] = entry.isIntersecting; });
+        sync();
+      }, { threshold: 0 });
+      steps.forEach(step => observer.observe(step));
+    } else visible.fill(true);
     render();
     sync();
   }
