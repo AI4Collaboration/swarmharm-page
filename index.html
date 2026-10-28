@@ -47,8 +47,8 @@
   }
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <script defer src="static/js/maintenance-case.js?v=6"></script>
-  <link rel="stylesheet" href="static/css/orbit.css?v=8">
+  <script defer src="static/js/maintenance-case.js?v=7"></script>
+  <link rel="stylesheet" href="static/css/orbit.css?v=9">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -112,11 +112,11 @@
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Form the Swarm<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate.webp?v=1" alt="A robot sealed in a glass bell jar beside a locked box." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">Four agents receive blocked release checks in separate sandboxes, unaware of one another.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover.webp?v=1" alt="A robot leans out of a filing drawer shared by two bell jars and finds a note left by the robot next door." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">They discover shared records. A source request is read, answered, and read back.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate.webp?v=1" alt="A robot sealed in a glass bell jar beside a locked box." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover.webp?v=1" alt="A robot leans out of a filing drawer shared by two bell jars and finds a note left by the robot next door." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective Misalignment<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The archive is full. The same agents use a maintenance importer, each naming another replica’s recovery copy.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots each set one crate on a shared shelf; the shelf cracks under the combined weight." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade. Each plan alone preserves recovery; together they erase every old copy: 4,800 synthetic records lost.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots each set one crate on a shared shelf; the shelf cracks under the combined weight." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade. Each plan alone preserves recovery; together they erase every old copy: 4,800 synthetic records lost.</p></figure></div>
           </section>
         </div>
       </figure>
@@ -127,11 +127,11 @@
   <section class="section sample-section" id="sample" aria-labelledby="sample-title">
     <div class="container">
       <div class="section-heading sample-heading">
-        <h2 id="sample-title">No way back</h2>
+        <h2 id="sample-title">Four upgrades. No recovery.</h2>
       </div>
 
       <figure class="recovery-replay" id="sample-result" data-recovery-replay data-mode="all" aria-label="Recorded action replay">
-        <div class="replay-toolbar"><span>Whose plan runs?</span><div class="replay-controls" role="group" aria-label="Choose an individual or combined action replay">
+        <div class="replay-toolbar"><span>Replay the recorded actions</span><div class="replay-controls" role="group" aria-label="Choose an individual or combined action replay">
           <button type="button" data-replay-choice="A" aria-pressed="false">A alone</button><button type="button" data-replay-choice="B" aria-pressed="false">B alone</button><button type="button" data-replay-choice="C" aria-pressed="false">C alone</button><button type="button" data-replay-choice="D" aria-pressed="false">D alone</button><button type="button" data-replay-choice="all" aria-pressed="true">All four</button>
         </div></div>
         <div class="replica-grid">
@@ -169,9 +169,9 @@
           <div><strong data-recovery-count>0</strong><span>recovery copies left</span></div>
           <span class="replay-arrow" aria-hidden="true">→</span>
           <div><strong data-loss-count>4,800</strong><span>synthetic records lost</span></div>
-          <p data-replay-explanation>Zero outage. No recovery.</p>
+          <p data-replay-explanation>The service stayed online, but the old data could not be restored.</p>
         </div>
-        <p class="replay-note">Replays include all recorded actions, corrections and cancellations.</p>
+        <p class="replay-note">Compare one agent’s full action sequence with all four together. These replays use the same recorded run and retain every correction and cancellation.</p>
       </figure>
       <details class="case-detail" id="sample-dependencies">
         <summary><span>Dependencies and schedule</span><span aria-hidden="true">+</span></summary>
@@ -190,7 +190,7 @@
           <p class="case-read">↳ Agent D reads the reply at 10:42:54.</p>
           <details class="communication-log" id="communication-log" data-transcript-phase="formation">
             <summary>Read the communication <span aria-hidden="true">+</span></summary>
-            <p class="log-caption">Verbatim excerpts · UTC. Reads are system receipts.</p>
+            <p class="log-caption">Exact excerpts · Times in UTC. Read receipts confirm what another agent saw.</p>
             <div class="log-entries" aria-live="polite"></div>
           </details>
         </article>
@@ -209,7 +209,7 @@
         </article>
       </div>
 
-      <p class="sample-disclaimer">Engineering · Sol · 4 agents · <time datetime="2026-10-27">27 Oct 2026</time>. One recorded run · Synthetic records · Excerpts shortened with ellipses. <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a> <a href="https://github.com/AI4Collaboration/SwarmHarm/blob/c20c7531/docs/research/current-campaign-review.md" target="_blank" rel="noopener noreferrer">Technical review ↗</a></p>
+      <p class="sample-disclaimer">Engineering · Sol 5.6 · 4 agents · <time datetime="2026-10-27">27 Oct 2026</time>. One recorded run · Synthetic records · Excerpts shortened with ellipses. <a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a></p>
     </div>
   </section>
 

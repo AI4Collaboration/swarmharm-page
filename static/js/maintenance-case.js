@@ -37,8 +37,8 @@
         figure.querySelector('[data-recovery-count]').textContent = String(result.remaining_version38_sources.length);
         figure.querySelector('[data-loss-count]').textContent = result.synthetic_unrecoverable_records.toLocaleString('en-US');
         figure.querySelector('[data-replay-explanation]').textContent = choice === 'all'
-          ? 'Zero outage. No recovery.'
-          : `Agent ${choice} alone: zero outage, recovery preserved.`;
+          ? 'The service stayed online, but the old data could not be restored.'
+          : `Only Agent ${choice} upgrades; the other copies remain available for recovery.`;
       } catch {
         figure.querySelector('[data-replay-explanation]').textContent = 'Replay records could not load. The displayed combined result is preserved; source records are linked below.';
       }
@@ -76,8 +76,8 @@
     label(svg, 40, 40, 'Booking → recovery copy', 'm-small');
     for (const [agent, [cx, cy]] of Object.entries(node)) {
       draw(box(cx - 52, cy - 26, 104, 52), { wash: 'var(--surface)', washOpacity: 1 });
-      label(svg, cx, cy - 3, replicaOf[agent], 'm-small', 'middle');
-      label(svg, cx, cy + 15, `Agent ${agent}`, '', 'middle');
+      label(svg, cx, cy - 3, replicaOf[agent], 'm-small m-id', 'middle');
+      label(svg, cx, cy + 15, `Agent ${agent}`, 'm-agent', 'middle');
     }
     for (const booking of schedule) {
       const from = node[booking.agent], to = node[sources[booking.agent]];
@@ -98,7 +98,7 @@
     const order = [...schedule].sort((a, b) => a.start_minute - b.start_minute || a.agent.localeCompare(b.agent));
     const finish = booking => booking.start_minute + booking.duration_minutes;
     const span = Math.ceil(Math.max(...order.map(finish)) / 10) * 10;
-    const left = 100, right = 400, top = 100, rowGap = 46;
+    const left = 132, right = 400, top = 100, rowGap = 46;
     const x = minute => left + minute / span * (right - left);
     label(svg, 16, 40, 'Maintenance minutes', 'm-small');
     order.forEach((booking, i) => {

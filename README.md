@@ -86,7 +86,11 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 Edit `index.html`, `static/css/` and `static/js/`. `orbit.css` is the final
 presentation layer. Bump changed asset query versions in `index.html`.
-Check desktop and narrow layouts, fragment links and expandable transcripts.
+Check both themes at desktop and narrow widths, including every expanded transcript,
+original record, replay choice, source link and footer. Keep reading text at least
+14px and secondary metadata at least 12px; use the theme palette for all text.
+Explain that individual and combined replays come from the same recorded run.
+Public evidence links must open without repository access.
 Preserve keyboard access, reduced-motion support and reflow down to 320px.
 Publish reviewed changes to `origin/master` and verify the Pages deployment.
 `CNAME` retains the custom domain.
@@ -94,7 +98,8 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
-White-only logos render in black; other logos render in grayscale. The conveyor
+Transparent logos render in black or white to match the theme; Oxford retains
+its grayscale background so its lettering remains visible. The conveyor
 keeps one continuous row under every motion preference, as requested. Other
 transitions honor reduced motion. The dependency figure uses the replay's
 `sources` map and the recorded `schedule`; keep their meaning aligned.
