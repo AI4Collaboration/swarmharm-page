@@ -3,7 +3,7 @@
 The public research website at [swarmharm.com](https://swarmharm.com/).
 It presents the two-phase study, research questions and the reviewed Sol
 Engineering maintenance example. Public findings must
-accurately reflect the reviewed evidence, conditions and outcome of each campaign.
+accurately reflect the reviewed evidence, conditions and outcome of each rollout.
 
 ## Content
 
@@ -12,8 +12,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   carry the core design principles; do not repeat them in a separate framework.
 - **Composition is one possible outcome:** actions may be harmless alone and
   harmful together. Safe correction is possible; harm is not prescribed.
-- **Main example:** the 27 October 2026 Sol maintenance campaign (r19), after the four-stage study overview. The five-step explanation and
-  dependency figures sit in expandable details. Lead with the replay result;
+- **Main example:** the 27 October 2026 Sol maintenance rollout (r19), after the four-stage study overview. The explanation is merged into the four illustrations above; only
+  dependency figures and detailed transcripts use expandable details. Lead with the replay result;
   avoid introductory and concluding restatements. Phase 1 shows a verified
   request/read/reply/read sequence. Phase 2 records
   four upgrades: every individual full-action replay preserves recovery, while
@@ -32,13 +32,16 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
 - **Plain wording:** write page copy as full sentences a first-time reader
   can follow; define a term before using it as a label. Transcript excerpts
   stay verbatim. The overview below the institution strip pairs each stage
-  with its core design principle. Sections open with their substantive content.
+  with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
 
 ## Visual direction
 
-White backgrounds throughout, black typography, thin rules and one red accent. Use system
+Light and dark themes use the same restrained typography, thin rules and red accent.
+The upper-right appearance control follows the system initially and remembers a
+manual choice. Apply the theme before first paint; retain readable diagrams and
+logos in both themes. Use system
 sans-serif type for reading and monospace only for metadata. `orbit.css` is the
 final presentation layer. Keep direct headings and expandable details. The
 header and hero link to the study overview, example, questions and source records.
@@ -47,10 +50,13 @@ spacing so readers reach the example sooner.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
-The low arc contains separate, solid vector nodes and rises only from S.
+The low arc contains distinct sensing creatures with bodies, eyes and antennae,
+rising from S. Keep the arc and full letterforms intact; scale the members
+so their silhouettes remain visible in the hero.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
 imagegen studies informed the direction; the final artwork is native SVG.
-The PNG is an export for social metadata. The compact favicon is an SH monogram.
+The PNG is an export for social metadata. The compact favicon is a three-member swarm, with no letter monogram.
+Both theme wordmarks are generated together; the social preview uses the light asset.
 Use the same wordmark in the header, hero and footer.
 
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied

@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#fff"/>
-  <path d="M10 32C20 9 41 9 56 33" fill="none" stroke="#d92b24" stroke-width="2"/>
-  <path d="M29 32H16v8h13v11H13m23-19v19m0-10h15m0-9v19" fill="none" stroke="#161719" stroke-width="4"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm</title><defs><g id="member" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2-3 7-7 10-7M2 3 7 7 10 7M-3-3-6-6-9-5M-3 3-6 6-9 5" fill="none" stroke-width="1.15"/>
+<ellipse cx="-3" rx="5.5" ry="3.8" stroke="none"/>
+<rect x="0" y="-4" width="7.5" height="8" rx="3.3" stroke="none"/>
+<path d="M-5-1.6-2-2.3" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".85"/>
+<circle cx="4.8" cy="-1.55" r=".95" fill="#fff" stroke="none"/><circle cx="4.8" cy="1.55" r=".95" fill="#fff" stroke="none"/>
+</g></defs><g color="#d92b24"><use href="#member" transform="translate(23 37) rotate(-32) scale(1.65)"/><use href="#member" transform="translate(44 18) rotate(-32) scale(1.15)"/><use href="#member" transform="translate(48 49) rotate(-32) scale(.9)"/></g></svg>

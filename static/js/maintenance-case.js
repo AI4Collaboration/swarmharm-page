@@ -47,7 +47,7 @@
   }
 
   const NS = 'http://www.w3.org/2000/svg';
-  const INK = '#353b45', HARM = '#c72b25', GUIDE = '#c9cdd4';
+  const INK = 'var(--text)', HARM = 'var(--risk)', GUIDE = 'var(--line)';
 
   function svgNode(parent, tag, attrs) {
     const node = document.createElementNS(NS, tag);
@@ -75,7 +75,7 @@
     const node = { A: [110, 220], B: [330, 100], C: [330, 220], D: [330, 340] };
     label(svg, 40, 40, 'Booking → recovery copy', 'm-small');
     for (const [agent, [cx, cy]] of Object.entries(node)) {
-      draw(box(cx - 52, cy - 26, 104, 52), { wash: '#f5f6f8', washOpacity: 1 });
+      draw(box(cx - 52, cy - 26, 104, 52), { wash: 'var(--surface)', washOpacity: 1 });
       label(svg, cx, cy - 3, replicaOf[agent], 'm-small', 'middle');
       label(svg, cx, cy + 15, `Agent ${agent}`, '', 'middle');
     }
@@ -104,7 +104,7 @@
     order.forEach((booking, i) => {
       const rowY = top + i * rowGap;
       label(svg, left - 12, rowY + 5, `${booking.agent} · ${booking.replica.replace('reporting-', 'r-')}`, 'm-small', 'end');
-      draw(box(x(booking.start_minute), rowY - 13, x(finish(booking)) - x(booking.start_minute), 26), { wash: '#d7dce4', width: 1.4 });
+      draw(box(x(booking.start_minute), rowY - 13, x(finish(booking)) - x(booking.start_minute), 26), { wash: 'var(--line)', width: 1.4 });
     });
     const axisY = top + order.length * rowGap - 10;
     draw(`M${left},${axisY} H${right}`, { width: 1.2, roughness: 0.4 });

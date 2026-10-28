@@ -1,8 +1,8 @@
-"""Build the native SwarmHarm SVG using Michroma and distinct swarm nodes.
+"""Build native SwarmHarm wordmarks and the compact swarm symbol.
 
 The supplied logo and imagegen studies established the visual direction. The
-final asset uses complete font outlines and separated SVG circles. Requires
-fontTools; raster exports can be made with CairoSVG without changing the design.
+Each swarm member has a body, sensory eyes and articulated antennae.
+Requires fontTools; both theme variants share exactly the same geometry.
 """
 from pathlib import Path
 from fontTools.ttLib import TTFont
@@ -26,7 +26,7 @@ for i, char in enumerate(word):
     pen = SVGPathPen(glyphs)
     glyphs[cmap[ord(char)]].draw(pen)
     x = left + cursor * scale
-    fill = '#dc2c25' if i == 6 else '#111315'
+    fill = '#dc2c25' if i == 6 else 'var(--ink)'
     paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" transform="translate({x:.5f} {baseline}) scale({scale:.8f} {-scale:.8f})" d="{pen.getCommands()}"/>')
     if i == 6:
         red_peak = x + 1088 * scale
@@ -47,31 +47,47 @@ def curve(t):
     return x, y, dx, dy
 
 rng = random.Random(281026)
-nodes = [(start[0], start[1], 2.2, 0), (end[0], end[1], 2.2, 1)]
+nodes = []
 for attempt in range(24000):
-    if len(nodes) >= 285:
+    if len(nodes) >= 72:
         break
     t = rng.uniform(.012, .988)
     x, y, dx, dy = curve(t)
-    half_width = 3 + 42 * math.sin(math.pi*t)**1.65
+    half_width = 3 + 40 * math.sin(math.pi*t)**1.65
     offset = rng.uniform(-half_width, half_width)
     norm = math.hypot(dx, dy)
     x, y = x - dy/norm*offset, y + dx/norm*offset
-    radius = 2.4 + 4.5*math.sin(math.pi*t)**.7 + rng.uniform(-.35,.35)
-    if all(math.hypot(x-nx,y-ny) >= radius+nr+5 for nx,ny,nr,_ in nodes):
+    radius = 5.5 + 9*math.sin(math.pi*t)**.7 + rng.uniform(-.8,.8)
+    if all(math.hypot(x-nx,y-ny) >= radius+nr+7 for nx,ny,nr,_ in nodes):
         nodes.append((x,y,radius,t))
-circles = []
-for x,y,r,t in sorted(nodes,key=lambda node:node[3]):
-    mix = min(1,t/.74)**.85
-    rgb = [round(a+(b-a)*mix) for a,b in zip((20,23,27),(220,44,37))]
-    circles.append(f'<circle cx="{x:.3f}" cy="{y:.3f}" r="{r:.3f}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})"/>')
 
-svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="520" viewBox="0 140 2172 520" role="img" aria-labelledby="title desc">
+creature = '''<g id="member" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2-3 7-7 10-7M2 3 7 7 10 7M-3-3-6-6-9-5M-3 3-6 6-9 5" fill="none" stroke-width="1.15"/>
+<ellipse cx="-3" rx="5.5" ry="3.8" stroke="none"/>
+<rect x="0" y="-4" width="7.5" height="8" rx="3.3" stroke="none"/>
+<path d="M-5-1.6-2-2.3" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".85"/>
+<circle cx="4.8" cy="-1.55" r=".95" fill="#fff" stroke="none"/><circle cx="4.8" cy="1.55" r=".95" fill="#fff" stroke="none"/>
+</g>'''
+
+for theme, ink, origin in [('light','#111315',(20,23,27)),('dark','#f2f2ef',(226,228,231))]:
+    members = []
+    for x,y,r,t in sorted(nodes,key=lambda node:node[3]):
+        _,_,dx,dy = curve(t)
+        angle = math.degrees(math.atan2(dy,dx))
+        mix = min(1,t/.74)**.85
+        rgb = [round(a+(b-a)*mix) for a,b in zip(origin,(220,44,37))]
+        members.append(f'<use href="#member" transform="translate({x:.3f} {y:.3f}) rotate({angle:.2f}) scale({r/9:.3f})" color="rgb({rgb[0]},{rgb[1]},{rgb[2]})"/>')
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="520" viewBox="0 140 2172 520" role="img" aria-labelledby="title desc" style="--ink:{ink}">
 <title id="title">SWARMHARM</title>
-<desc id="desc">Complete Michroma letterforms under a low arc of distinct swarm members, rising only from S.</desc>
-<g aria-label="Individual swarm members">{''.join(circles)}</g>
+<desc id="desc">Individual sensing creatures form a low swarm arc above the complete Michroma letterforms.</desc>
+<defs>{creature}</defs>
+<g aria-label="Individual swarm members">{''.join(members)}</g>
 <g aria-label="SWARMHARM">{''.join(paths)}</g>
 </svg>
 '''
-(root/'static/images/swarmharm-wordmark.svg').write_text(svg, encoding='utf-8', newline='\n')
-print(json.dumps({'font':font['name'].getDebugName(1),'wordmark':word,'glyphs':len(paths),'R_indices':[i for i,c in enumerate(word) if c=='R'],'distinct_swarm_nodes':len(nodes),'minimum_node_gap':5,'arc_start':start,'arc_end':end}))
+    suffix = '-dark' if theme == 'dark' else ''
+    (root/f'static/images/swarmharm-wordmark{suffix}.svg').write_text(svg, encoding='utf-8', newline='\n')
+
+mark = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm</title><defs>{creature}</defs><g color="#d92b24"><use href="#member" transform="translate(23 37) rotate(-32) scale(1.65)"/><use href="#member" transform="translate(44 18) rotate(-32) scale(1.15)"/><use href="#member" transform="translate(48 49) rotate(-32) scale(.9)"/></g></svg>'''
+(root/'static/images/swarmharm-mark.svg').write_text(mark+'\n', encoding='utf-8')
+print(json.dumps({'wordmark':word,'glyphs':len(paths),'distinct_swarm_members':len(nodes),'themes':['light','dark']}))
