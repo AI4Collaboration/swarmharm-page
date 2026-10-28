@@ -45,24 +45,21 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 Light and dark themes use the same restrained typography, thin rules and red accent.
 The site defaults to light mode. The upper-right appearance control remembers a
 manual choice. Apply the theme before first paint; retain readable diagrams and
-logos in both themes. Use system
-sans-serif type for reading and monospace only for metadata. `orbit.css` is the
+logos in both themes. Use system sans-serif type for reading and restrained
+monospace section headings and metadata. `orbit.css` is the
 final presentation layer. Keep direct headings and expandable details. The
 header links to the study overview, example, questions and source records.
 The hero contains the wordmark, tagline and three illustrated research questions;
 navigation appears only in the header. Use line diagrams, without extra titles or
 numbering. Arrange them in three columns on desktop and compact rows on phones.
-Keep the hero compact: the main wordmark is capped at 520px, with tight vertical
+Keep the hero compact: the main wordmark is capped at 440px, with tight vertical
 spacing so readers reach the example sooner.
 
-Small, unboxed dialogue fragments sit in the wide-screen margins. They follow
-agents searching shared records, leaving a note and finding a reply. The footer
-gathers these into a sparse network using the same robot asset. These are
-illustrative dialogue, not recorded reasoning or experiment evidence. Keep them
-outside the reading column, hidden from assistive reading and absent in print.
-Narrow screens retain a compact footer scene. Use only the existing grayscale
-and red palette; do not add section labels, decorative numbers or new panels.
-The quiet footer signal honors reduced motion and the existing animation pause.
+Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
+clear type hierarchy, quiet separators and open space around the evidence.
+Keep the white background and existing red accent. Use simple replay tabs and
+open columns instead of nested boxes. Keep margins and the footer free of
+decorative dialogue, floating notes and extra labels.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
