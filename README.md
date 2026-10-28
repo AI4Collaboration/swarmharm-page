@@ -44,7 +44,8 @@ manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system
 sans-serif type for reading and monospace only for metadata. `orbit.css` is the
 final presentation layer. Keep direct headings and expandable details. The
-header and hero link to the study overview, example, questions and source records.
+header links to the study overview, example, questions and source records.
+The hero contains the wordmark and tagline; navigation appears only in the header.
 Keep the hero compact: the main wordmark is capped at 520px, with tight vertical
 spacing so readers reach the example sooner.
 

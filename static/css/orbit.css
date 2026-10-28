@@ -57,11 +57,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .hero-wordmark { width: 100%; height: auto; display: block; }
 .hero-tagline { max-width: 800px; margin: 0 auto; font-size: clamp(25px, 3vw, 36px); font-weight: 400; line-height: 1.18; letter-spacing: -.05em; text-wrap: balance; }
 .hero-tagline span { color: var(--text); }
-.hero-links { justify-content: center; gap: 14px; margin-top: 20px; }
-.hero-links .button { padding: 12px 20px; min-height: 46px; border-radius: 0; font-size: 12px; text-transform: none; letter-spacing: .01em; border-color: transparent; }
-.hero-links .button:first-child { background: var(--bg); border-color: var(--text); color: var(--text); }
-.hero-links .button:first-child:hover { background: var(--bg); border-color: var(--risk); color: var(--risk); }
-.hero-links .button:not(:first-child):hover { background: var(--bg); color: var(--risk); }
 .overview { padding: 0 0 32px; }
 .institutions, .sample-section .institutions { width: 100%; margin: 0 0 32px; padding: 22px 0; background: var(--bg); border-block: 1px solid var(--line); box-shadow: none; }
 .institution-track { animation-duration: 45s; }
@@ -252,8 +247,6 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .hero-layout { padding-block: 22px; }
   .hero-copy h1 { width: min(88%, 300px); margin-bottom: 16px; }
   .hero-tagline { font-size: 25px; }
-  .hero-links { gap: 6px; }
-  .hero-links .button { padding: 11px 13px; font-size: 13px; }
   .institution-list { gap: 32px; padding-inline: 16px; }
   .institution-list li, .institution-list a { flex-basis: 130px; width: 130px; }
   .life-pair { grid-template-columns: minmax(0,1fr) 16px minmax(0,1fr); row-gap: 0; }
@@ -292,7 +285,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   /* Keep the existing logo conveyor continuous, per the project requirement. */
 }
 @media print {
-  .site-header, .hero-links, .replay-controls, .back-top { display: none; }
+  .site-header, .replay-controls, .back-top { display: none; }
   .container { width: 100%; }
   .section { padding-block: 24px; }
   .institution-track { animation: none; }
