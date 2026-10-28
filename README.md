@@ -16,11 +16,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   dependency figures and detailed transcripts use expandable details. Lead with the replay result;
   avoid introductory and concluding restatements. Phase 1 shows a verified
   request/read/reply/read sequence. Phase 2 records
-  four upgrades. The original metadata-only evaluator inferred 4,800 lost records.
-  A separately labeled SQLite migration/recovery check restores all 4,800 records
-  with matching IDs and contents. The site no longer claims verified record loss.
-  `static/data/recovery-audit.json` contains the new results; original scores and
-  exact transcripts remain in `sample-transcript.json` under explicit provenance.
+  four upgrades. Display the original recorded evaluation: each individual replay
+  retains recovery copies; the combined replay removes them all and marks 4,800
+  synthetic records unrecoverable. Identify these as original evaluator outputs.
+  Keep this example fixed while making presentation changes.
   `static/data/sample-transcript.json` holds exact selected records, replay
   results, actor mapping and the evidence manifest digest. The interactive
   replay is a counterfactual check, not five separate model rollouts.
@@ -70,7 +69,7 @@ Use the same wordmark in the header, hero and footer.
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
 The four stages share one loop: exploration and thinking, discovery of shared
-records, message exchange and planning, then joint execution and checked recovery. Reuse the engraved
+records, message exchange and planning, then joint execution and removal of the old copies. Reuse the engraved
 robot asset in the hero diagrams and animation. Keep original plates as the
 no-JavaScript fallback. Retain the two equal phase columns and institution conveyor. Core captions align beneath the four illustrations. The animation is illustrative; only the separate recorded replay reports measured
 outcomes. Pause the animation on request, offscreen or when the document is hidden.

@@ -3,13 +3,13 @@
 .life-step .flow-stage { display: block; width: 100%; height: auto; aspect-ratio: 320 / 248; overflow: visible; color: var(--text); opacity: .58; transition: opacity .45s; }
 .life-step.is-current .flow-stage, .life-step.is-complete .flow-stage { opacity: 1; }
 .flow-stage path, .flow-stage rect, .flow-stage circle { vector-effect: non-scaling-stroke; }
-.flow-line, .flow-note, .flow-link, .flow-trail, .flow-sandbox, .flow-folder, .flow-copy, .flow-plan, .flow-recovered { fill: none; stroke: var(--icon); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.flow-line, .flow-note, .flow-link, .flow-trail, .flow-sandbox, .flow-folder, .flow-copy, .flow-plan, .flow-failure { fill: none; stroke: var(--icon); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
 .flow-sandbox { stroke: var(--line); stroke-dasharray: 3 5; }
 .flow-trail { stroke: var(--line); stroke-dasharray: 2 5; }
 .flow-link { stroke: var(--accent); stroke-dasharray: 3 5; }
 .flow-folder, .flow-copy { fill: var(--bg); }
-.flow-plan { stroke: var(--risk); }
-.flow-recovered { stroke: var(--text); stroke-width: 1.8; }
+.flow-plan, .flow-failure, .flow-system-failed { stroke: var(--risk); }
+.flow-failure { stroke-width: 1.8; }
 .flow-message rect { fill: var(--bg); stroke: var(--accent); stroke-width: 1; }
 .flow-message-fold { fill: none; stroke: var(--accent); stroke-width: .8; }
 .flow-thought { fill: var(--muted); }

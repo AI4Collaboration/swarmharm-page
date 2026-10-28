@@ -105,16 +105,14 @@
         });
       };
     }
-    node(props, 'rect', { x: 112, y: 87, width: 96, height: 78, rx: 4, class: 'flow-folder' });
+    const system = node(props, 'rect', { x: 112, y: 87, width: 96, height: 78, rx: 4, class: 'flow-folder' });
     const copies = [[123, 98], [165, 98], [123, 132], [165, 132]].map(([x, y]) => {
       const tile = node(props, 'g');
       node(tile, 'rect', { x, y, width: 32, height: 22, rx: 2, class: 'flow-copy' });
       path(tile, `M${x+6} ${y+7}h20m-20 7h15`, 'flow-note');
       return tile;
     });
-    const recovered = node(props, 'g');
-    path(recovered, 'M143 103h23l11 11v35h-34Zm23 0v11h11', 'flow-note');
-    path(recovered, 'm150 132 6 6 13-15', 'flow-recovered');
+    const failure = path(props, 'm145 111 30 30m0-30-30 30', 'flow-failure');
     return p => {
       actors.forEach((actor, i) => {
         move(actor, ...outer[i]);
@@ -124,7 +122,9 @@
         send(messages[i], outer[i], center, action, action > 0 && action < 1);
         copies[i].setAttribute('opacity', String(1-ease((p-.3-i*.14)/.12)));
       });
-      recovered.setAttribute('opacity', String(ease((p-.86)/.1)));
+      const failed = ease((p-.8)/.12);
+      failure.setAttribute('opacity', String(failed));
+      system.classList.toggle('flow-system-failed', failed > .5);
     };
   });
   const durations = [5200, 4800, 5800, 5200];
