@@ -77,9 +77,11 @@ Use the same wordmark in the header, hero and footer.
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
 Animate the original engraved artwork with `plate-animation.js`. The first
-scene shows two agents inside separate bell jars, exploring independently with
-walking, head turns and eye movement. Keep the shared letterbox and circulating
-letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
+scene shows two agents inside separate bell jars, exploring independently.
+Keep their feet planted and heads rigid. Eyes find each target before a small
+neck rotation and torso lean follow, then hold before the next look. Do not
+scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
+letterbox and circulating letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
 scene shows the agents loading the original wooden shelf, which bends and breaks,
 with the load dropping and splinters falling. Keep this visible physical loss.
 The damage illustration is conceptual; the transcript and evaluation table

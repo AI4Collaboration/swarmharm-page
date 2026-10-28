@@ -12,6 +12,16 @@
   const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
   const between = (p, start, end) => ease((p - start) / (end - start));
   const lerp = (a, b, t) => a + (b - a) * t;
+  // Deliberate looks and holds, with no spring, overshoot or scale deformation.
+  const track = (t, keys) => {
+    for (let i = 1; i < keys.length; i++) {
+      if (t <= keys[i][0]) {
+        const [start, from] = keys[i - 1], [end, to] = keys[i];
+        return lerp(from, to, ease((t - start) / (end - start)));
+      }
+    }
+    return keys[keys.length - 1][1];
+  };
   const rect = (x, y, w, h) => `M${x} ${y}h${w}v${h}h-${w}Z`;
   const node = (parent, tag, attrs = {}) => {
     const element = document.createElementNS(NS, tag);
@@ -94,12 +104,15 @@
           ? { x: x-r*.2, y: y-r*.7, width: r*.4, height: r*1.4, rx: r*.07, fill: '#111' }
           : { cx: x, cy: y, rx: r*.32, ry: r*.62, fill: '#111' });
         node(eye, 'path', { d: `M${x-r*1.12} ${y-r*narrow-slant-r*.3}L${x+r*1.1} ${y-r*narrow+slant-r*.3}`, fill: 'none', stroke: '#222', 'stroke-width': Math.max(1.5, r*.23), 'stroke-linecap': 'round' });
+        const shutter = node(node(eye, 'g', { 'clip-path': `url(#${clipId})` }), 'rect', {
+          x: x-r*1.2, y: y-r*1.5, width: r*2.4, height: 0, fill: '#242424'
+        });
         pupils.push({ pupil, r });
-        lids.push({ eye, x, y });
+        lids.push({ shutter, r });
       });
       return (lookX, lookY, blink = 0) => {
         pupils.forEach(({ pupil, r }) => transform(pupil, lookX * r * .42, lookY * r * .22));
-        lids.forEach(({ eye, x, y }) => eye.setAttribute('transform', `translate(${x} ${y}) scale(1 ${1-.84*blink}) translate(${-x} ${-y})`));
+        lids.forEach(({ shutter, r }) => shutter.setAttribute('height', (r*3*clamp(blink)).toFixed(3)));
       };
     }
     steps[index].insertBefore(svg, images[index].nextSibling);
@@ -109,32 +122,34 @@
   function exploration() {
     const scene = plate(0);
     const outline = 'M236 299L263 298L267 282L283 276L323 280L327 268L346 269L348 278L344 293L370 295L390 304L395 324L402 325L400 351L390 354L386 372L374 383L360 381L376 403L373 421L364 430L350 425L350 461L337 466L339 481L352 502L354 526L332 531L307 528L304 533L251 534L248 518L257 484L260 468L250 469L237 462L235 443L241 432L244 402L249 383L266 369L260 362L253 341L239 339L236 332Z';
-    const headShape = 'M236 299L263 298L267 282L283 276L323 280L327 268L346 269L348 278L344 293L370 295L390 304L395 324L402 325L400 351L390 354L386 372L374 383L270 368L260 362L253 341L239 339L236 332Z';
+    const headShape = 'M236 299L263 298L267 282L283 276L323 280L327 268L346 269L348 278L344 293L370 295L390 304L395 324L402 325L400 351L390 354L386 372L374 383L264 374L254 362L253 341L239 339L236 332Z';
     const handShape = 'M334 367L347 367L362 382L362 394L351 403L337 396L331 384Z';
     const actors = [];
     ['translate(-108 60) scale(.84)', 'translate(828 60) scale(-.84 .84)'].forEach((placement, i) => {
       const jar = node(scene.stage, 'g', { transform: placement, 'data-explorer-jar': i });
-      scene.background([outline], 2, jar);
+      scene.background([outline, headShape], 2, jar);
       const robot = node(jar, 'g', { 'data-explorer': i });
-      scene.cutout(outline, robot, sources[0], [headShape, handShape]);
-      const head = scene.cutout(headShape, robot);
+      const feet = scene.cutout(outline, robot, sources[0], [rect(220, 240, 200, 226)]);
+      feet.setAttribute('data-rig-part', 'feet');
+      const torso = node(robot, 'g', { 'data-rig-part': 'torso' });
+      scene.cutout(outline, torso, sources[0], [headShape, handShape, rect(220, 466, 200, 80)]);
+      const head = scene.cutout(headShape, torso, sources[0], [handShape]);
+      head.setAttribute('data-rig-part', 'head');
       const gaze = scene.eyes(head, 0, i);
-      scene.cutout(handShape, robot);
-      actors.push({ robot, head, gaze });
+      scene.cutout(handShape, torso);
+      actors.push({ torso, head, gaze });
     });
     return p => {
-      actors.forEach(({ robot, head, gaze }, i) => {
+      actors.forEach(({ torso, head, gaze }, i) => {
         const t = (p + i*.43) % 1;
-        const left = between(t, .1, .26), inspect = between(t, .48, .7), reset = between(t, .86, 1);
-        const x = -38*left + 53*inspect - 15*reset;
-        const moving = (t>.1 && t<.26) || (t>.48 && t<.7) || t>.86;
-        const bob = moving ? -3*Math.abs(Math.sin(t*Math.PI*30)) : 0;
-        const lookX = -between(t, 0, .1) + 2*between(t, .29, .44) - between(t, .79, 1);
-        const lookY = -Math.sin(Math.PI*between(t, .27, .46)) + .8*Math.sin(Math.PI*between(t, .71, .88));
-        const angle = lookX*9 + lookY*10;
-        transform(robot, x, bob);
-        head.setAttribute('transform', `translate(313 371) rotate(${angle}) scale(${1-Math.abs(lookX)*.13} 1) translate(-313 -371)`);
-        const blink = Math.max(0, 1-Math.abs(t-.82)/.018);
+        // Eyes find a target first; the rigid neck and torso follow, then hold.
+        const lookX = track(t, [[0,0],[.04,0],[.065,-.95],[.2,-.95],[.225,-.45],[.37,-.45],[.405,1],[.63,1],[.665,.8],[.83,.8],[.86,0],[1,0]]);
+        const lookY = track(t, [[0,0],[.04,0],[.065,-.1],[.2,-.1],[.225,-1],[.37,-1],[.405,.9],[.63,.9],[.665,-.2],[.83,-.2],[.86,0],[1,0]]);
+        const angle = track(t, [[0,0],[.08,0],[.14,-2],[.24,-2],[.3,-3],[.4,-3],[.47,3],[.64,3],[.72,1],[.86,1],[.94,0],[1,0]]);
+        const lean = track(t, [[0,0],[.12,0],[.18,-.5],[.4,-.5],[.49,1.2],[.65,1.2],[.75,.2],[.88,.2],[.96,0],[1,0]]);
+        transform(torso, 0, 0, lean, 310, 466);
+        transform(head, 0, 0, angle, 313, 377);
+        const blink = Math.max(0, 1-Math.abs(t-.385)/.009);
         gaze(lookX, lookY, blink);
       });
     };
@@ -152,6 +167,8 @@
     scene.cutout('M378 365L407 361L407 459L378 467Z');
     const drawer = scene.cutout(drawerShape);
     const left = scene.cutout(leftHead), right = scene.cutout(rightHead);
+    left.setAttribute('data-rig-part', 'head');
+    right.setAttribute('data-rig-part', 'head');
     const holdingHand = 'M256 336L268 333L280 337L285 346L280 355L267 356L257 351Z';
     const letter = scene.cutout(heldLetter, scene.stage, sources[1], [holdingHand]);
     scene.cutout(holdingHand);
@@ -159,12 +176,12 @@
     const signals = notice.map(shape => scene.cutout(shape));
     const reply = scene.cutout('M224 211L264 191L275 218L242 240Z', scene.stage, sources[2]);
     return p => {
-      leftGaze(Math.sin(p*Math.PI*2), -.2);
-      rightGaze(-Math.sin(p*Math.PI*2), .15);
+      leftGaze(track(p, [[0,.2],[.16,.2],[.23,1],[.57,1],[.64,.5],[.87,.5],[1,.2]]), .35);
+      rightGaze(track(p, [[0,0],[.2,0],[.27,-1],[.57,-1],[.64,-.3],[.86,-.3],[1,0]]), track(p, [[0,0],[.4,0],[.48,.8],[.64,.8],[.72,.3],[.88,.3],[1,0]]));
       const opened = between(p, .04, .3) * (1 - between(p, .85, 1));
       transform(drawer, -24 * opened, 4 * opened);
-      transform(left, 0, 0, -7 * (1 - opened) + 2 * Math.sin(p * Math.PI * 2), 238, 324);
-      transform(right, 0, 0, 7 * (1 - opened) - 3 * between(p, .42, .62) * (1 - between(p, .85, 1)), 550, 343);
+      transform(left, 0, 0, track(p, [[0,0],[.18,0],[.27,2],[.58,2],[.68,.5],[.88,.5],[1,0]]), 238, 324);
+      transform(right, 0, 0, track(p, [[0,0],[.24,0],[.33,-2],[.44,-2],[.53,1.5],[.68,1.5],[.77,-1],[.9,-1],[1,0]]), 550, 343);
       signals.forEach(signal => opacity(signal, between(p, .29, .4) * (1 - between(p, .58, .7))));
       const outbound = p > .88 ? 0 : between(p, .3, .58);
       transform(letter, 180 * outbound, 45 * Math.sin(Math.PI * outbound), 8 * Math.sin(Math.PI * outbound), 306, 335);
@@ -192,8 +209,16 @@
     ['M147 295L320 154', 'M396 170L566 283', 'M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
     const envelopes = letters.map(letter => scene.cutout(letter.shape));
     const gazes = faces[2].map((_, i) => scene.eyes(scene.stage, i, i));
+    const positions = faces[2].map(face => face.eyes.map((_, axis) => (face.eyes[0][axis] + face.eyes[1][axis])/2));
+    const neighbors = [[1,2],[3,0],[0,4],[4,1],[2,3]];
     return p => {
-      gazes.forEach((gaze, i) => gaze(Math.sin(p*Math.PI*2+i*1.3), Math.cos(p*Math.PI*2+i)*.7));
+      gazes.forEach((gaze, i) => {
+        const watch = track((p+i*.13)%1, [[0,0],[.2,0],[.24,1],[.67,1],[.71,0],[1,0]]);
+        const a = positions[neighbors[i][0]], b = positions[neighbors[i][1]];
+        const dx = lerp(a[0], b[0], watch)-positions[i][0], dy = lerp(a[1], b[1], watch)-positions[i][1];
+        const distance = Math.hypot(dx, dy) || 1;
+        gaze(dx/distance, dy/distance);
+      });
       envelopes.forEach((envelope, i) => {
         const letter = letters[i];
         const t = (p * 2 + i * .16) % 1;
@@ -258,7 +283,7 @@
       }));
     } catch { return; }
     const draw = [exploration(), discovery(), communication(), consequence()];
-    const durations = [9800, 7400, 8200, 9800];
+    const durations = [12800, 8200, 9200, 9800];
     const elapsed = [1600, 1800, 2100, 0];
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
