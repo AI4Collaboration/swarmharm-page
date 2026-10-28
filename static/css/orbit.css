@@ -146,10 +146,16 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .maintenance-steps li::before { content: none; display: none; }
 .communication-log { border-color: var(--line); background: transparent; }
 .communication-log summary { color: var(--text); font: 500 12px/1.5 var(--font); min-height: 44px; }
+.communication-log > a { color: var(--text); }
+.log-caption { color: var(--muted); }
 .log-entries { background: var(--surface); }
 .log-entry { border-color: var(--line); background: transparent; color: var(--text); }
+.log-entry header { color: var(--text); flex-wrap: wrap; }
+.log-entry time { color: var(--muted); font-family: var(--mono); }
+.log-entry h5 { color: var(--text); }
 .log-entry :is(p, pre, code) { color: var(--muted); }
 .log-entry pre { font-family: var(--mono); }
+.log-original > summary { color: var(--text); }
 .main-closing { border: 0; border-top: 1px solid var(--line); background: transparent; padding: 24px 0 0; font-size: 14px; line-height: 1.8; color: var(--muted); }
 .sample-section .sample-disclaimer { font-size: 11px; color: var(--muted); }
 .phase-matrix { gap: 16px 28px; background: transparent; border: 0; }
