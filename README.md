@@ -1,8 +1,8 @@
 # SwarmHarm website
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
-It presents the two-phase study, environment principles, four domain categories
-and the reviewed Sol Engineering maintenance example. Public findings must
+It presents the two-phase study, research questions and the reviewed Sol
+Engineering maintenance example. Public findings must
 accurately reflect the reviewed evidence, conditions and outcome of each campaign.
 
 ## Content
@@ -12,9 +12,6 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
   carry the core design principles; do not repeat them in a separate framework.
 - **Composition is one possible outcome:** actions may be harmless alone and
   harmful together. Safe correction is possible; harm is not prescribed.
-- **Four domains:** Engineering, Data Analysis, Financial Analysis and
-  Knowledge Work, based on [OpenAI's 2026 work categories](https://openai.com/index/how-agents-are-transforming-work/).
-  Equal-size icons indicate scope, not prevalence or completed coverage.
 - **Main example:** the 27 October 2026 Sol maintenance campaign (r19), after the four-stage study overview. The five-step explanation and
   dependency figures sit in expandable details. Lead with the replay result;
   avoid introductory and concluding restatements. Phase 1 shows a verified
@@ -44,7 +41,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each campaig
 White backgrounds throughout, black typography, thin rules and one red accent. Use system
 sans-serif type for reading and monospace only for metadata. `orbit.css` is the
 final presentation layer. Keep direct headings and expandable details. The
-header and hero each provide five useful destinations, with one primary action.
+header and hero link to the study overview, example, questions and source records.
+Keep the hero compact: the main wordmark is capped at 520px, with tight vertical
+spacing so readers reach the example sooner.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
@@ -60,8 +59,7 @@ under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 Retain the four original life-cycle illustrations, in monochrome and two equal
 phase columns, plus the continuous institution conveyor. Core captions align beneath the four illustrations. Other figures use straight SVG
 geometry, without rough.js or cartoon marks. The recovery replay and dependency
-figures use `maintenance-case.js` and the unchanged source records. Domain
-coverage and its source live inside the methods disclosure.
+figures use `maintenance-case.js` and the unchanged source records.
 
 Use no decorative section numbers, phase numbers, numbered steps or RQ badges.
 Avoid subtitles, eyebrow labels and headings that repeat the text directly below.

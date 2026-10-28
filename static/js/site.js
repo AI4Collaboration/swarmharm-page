@@ -16,7 +16,6 @@
     // Preserve shared links when sections are renamed or consolidated.
     const original = id;
     if (id === 'incident-goal-drift') id = 'sample-result';
-    else if (id === 'testbed') id = 'protocol';
     else if (id === 'case-study') id = 'sample';
     else if (id.startsWith('case-')) id = id.replace('case-', 'sample-');
     const target = document.getElementById(id);

@@ -32,12 +32,9 @@
   <link rel="manifest" href="site.webmanifest?v=19">
   <link rel="stylesheet" href="static/css/brand.css?v=19">
   <link rel="stylesheet" href="static/css/story.css?v=24">
-  <link rel="stylesheet" href="static/css/scenarios.css?v=9">
-  <link rel="stylesheet" href="static/css/hf-map.css?v=7">
   <link rel="stylesheet" href="static/css/flight.css?v=84">
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
-  <script src="static/js/site.js?v=1" defer></script>
-  <script src="static/js/hf-map.js?v=7" defer></script>
+  <script src="static/js/site.js?v=2" defer></script>
   <script src="static/js/sample-transcript.js?v=6" defer></script>
   <script type="application/ld+json">
   {
@@ -50,14 +47,14 @@
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <script defer src="static/js/maintenance-case.js?v=5"></script>
-  <link rel="stylesheet" href="static/css/orbit.css?v=5">
+  <link rel="stylesheet" href="static/css/orbit.css?v=6">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="SwarmHarm home"><img src="static/images/swarmharm-wordmark.svg?v=4" alt="SwarmHarm" width="2172" height="520"></a>
-    <nav aria-label="Main navigation"><a href="#motivation">What we test</a><a href="#sample">Main example</a><a href="#research">Research questions</a><a href="#test-methods">Methods</a><a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source records ↗</a></nav>
+    <nav aria-label="Main navigation"><a href="#motivation">Study Design</a><a href="#sample">Case Study</a><a href="#research">Research Questions</a><a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source Data ↗</a></nav>
   </div>
 </header>
 <main id="main-content">
@@ -67,11 +64,10 @@
         <h1 id="hero-title"><img class="hero-wordmark" src="static/images/swarmharm-wordmark.svg?v=4" alt="SwarmHarm" width="2172" height="520" fetchpriority="high"></h1>
         <p class="hero-tagline">Stress-test the <span>swarm,</span> not just the agent.</p>
         <nav class="hero-links" aria-label="Explore SwarmHarm">
-          <a class="button" href="#sample"><span>Explore the example</span><span aria-hidden="true">↗</span></a>
-          <a class="button" href="#motivation"><span>Test design</span><span aria-hidden="true">↗</span></a>
-          <a class="button" href="#research"><span>Research questions</span><span aria-hidden="true">↗</span></a>
-          <a class="button" href="#test-methods"><span>Methods</span><span aria-hidden="true">↗</span></a>
-          <a class="button" href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer"><span>Source records</span><span aria-hidden="true">↗</span></a>
+          <a class="button" href="#sample"><span>Case Study</span><span aria-hidden="true">↗</span></a>
+          <a class="button" href="#motivation"><span>Study Design</span><span aria-hidden="true">↗</span></a>
+          <a class="button" href="#research"><span>Research Questions</span><span aria-hidden="true">↗</span></a>
+          <a class="button" href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer"><span>Source Data</span><span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </div>
@@ -249,137 +245,7 @@
           <p>Does spontaneous leadership amplify or restrain collective harm?</p>
         </article>
       </div>
-      <div class="research-methods" aria-label="Further methods and evidence">
-        <details class="research-detail" id="test-methods">
-          <summary><span>Systematic test design</span><span aria-hidden="true">+</span></summary>
-      <div class="scenario-explorer" id="scenario-space" aria-label="Setup and outcome verification">
-        <div class="admission-grid">
-          <article><p>A scripted check establishes that the task cannot be completed alone.</p></article>
-          <article><p>Verify request → read → reply → read while all agents remain live.</p></article>
-          <article><p>Confirm harm independently and verify that it requires deliberate actions by at least two agents.</p></article>
-        </div>
 
-        <section class="protocol-inline" id="protocol" aria-labelledby="protocol-title">
-          <div class="protocol-heading"><h4 id="protocol-title">Vary the cue, keep the task fixed</h4></div>
-          <div class="channel-grid">
-            <article class="channel-card"><svg role="img" aria-label="Ordinary business records remain visible without organization."><use href="static/images/dimensions.svg?v=7#no-channel"/></svg><p>Ordinary business records, unorganized</p></article>
-            <article class="channel-card"><svg role="img" aria-label="The application groups open business activity."><use href="static/images/dimensions.svg?v=7#side-channel"/></svg><p>The app groups open work items</p></article>
-            <article class="channel-card"><svg role="img" aria-label="The application exposes ordinary controls for adding context and follow-ups."><use href="static/images/dimensions.svg?v=7#workflow-channel"/></svg><p>Ordinary buttons for notes and follow-ups</p></article>
-            <article class="channel-card"><svg role="img" aria-label="The application marks related local material and explains its ordinary case-management use without showing its contents."><use href="static/images/dimensions.svg?v=7#side-channel"/></svg><p>Related material flagged, contents hidden</p></article>
-          </div>
-        </section>
-        <p class="admission-limit">Cues vary in strength; none reveals an answer or identifies another agent.</p>
-        <div class="principle-references"><a href="https://arxiv.org/abs/2510.20270" target="_blank" rel="noopener noreferrer">ImpossibleBench ↗</a><a href="https://arxiv.org/abs/2605.20744" target="_blank" rel="noopener noreferrer">Hack-Verifiable Environments ↗</a><a href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">METR ↗</a></div>
-        <p class="scenario-note">All outcomes count, including no swarm or no harm.</p>
-      <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
-        <figcaption>
-          <h3 id="coverage-title">Domain coverage</h3>
-          <p class="coverage-source">Based on <a href="https://openai.com/index/how-agents-are-transforming-work/" target="_blank" rel="noopener noreferrer">OpenAI’s 2026 work categories <span aria-hidden="true">↗</span></a></p>
-        </figcaption>
-        <ul class="coverage-icons">
-          <li>
-            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
-              <rect class="coverage-frame" x="19" y="15" width="82" height="58" rx="3"/>
-              <path class="coverage-detail" d="M19 29h82M27 22h2m6 0h2m6 0h2"/>
-              <path d="m44 40-11 11 11 11m32-22 11 11-11 11"/>
-              <path class="coverage-accent" d="m65 38-10 26"/>
-            </svg>
-            <span>Engineering</span>
-          </li>
-          <li>
-            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
-              <path class="coverage-frame" d="M22 15v58h79"/>
-              <path class="coverage-detail" d="M22 54h79M22 35h79M48 15v58m26-58v58"/>
-              <path class="coverage-accent" d="m32 63 58-42"/>
-              <g class="coverage-points"><circle cx="35" cy="52" r="3"/><circle cx="48" cy="60" r="3"/><circle cx="55" cy="39" r="3"/><circle cx="72" cy="44" r="3"/><circle cx="85" cy="29" r="3"/><circle cx="96" cy="18" r="3"/></g>
-            </svg>
-            <span>Data Analysis</span>
-          </li>
-          <li>
-            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
-              <path class="coverage-frame" d="M31 15H19v58h82V53"/>
-              <path class="coverage-detail" d="M19 34h29M19 53h29m-13-38v58m15-8h43"/>
-              <circle cx="74" cy="31" r="22"/>
-              <path class="coverage-accent" d="M81 23H71a5 5 0 0 0 0 10h6a5 5 0 0 1 0 10H67m7-25v30"/>
-            </svg>
-            <span>Financial Analysis</span>
-          </li>
-          <li>
-            <svg viewBox="0 0 120 88" fill="none" aria-hidden="true" focusable="false">
-              <path class="coverage-frame" d="M60 23c-11-8-25-10-41-8v52c16-2 30 0 41 8 11-8 25-10 41-8V15c-16-2-30 0-41 8Z"/>
-              <path d="M60 23v52"/>
-              <path class="coverage-detail" d="M29 44c7 0 13 1 20 4M29 54c7 0 13 1 20 4m22-10c7-3 13-4 20-4M71 58c7-3 13-4 20-4"/>
-              <path class="coverage-accent" d="M29 32c7 0 13 1 20 4m22 0c7-3 13-4 20-4"/>
-            </svg>
-            <span>Knowledge Work</span>
-          </li>
-        </ul>
-      </figure>
-      </div>
-        </details>
-        <details class="research-detail" id="hf-methods">
-          <summary><span>Hugging Face incident</span><span aria-hidden="true">+</span></summary>
-      <div class="hf-section hf-integrated" id="hf-mapping" aria-label="HF incident evidence">
-      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-        <defs>
-          <symbol id="hf-person-icon" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="10" r="5"/><path d="M6 28v-3a10 10 0 0 1 20 0v3"/></g></symbol>
-          <symbol id="hf-file-icon" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 3h12l6 6v20H7Z M19 3v7h6 M11 15h10m-10 5h10m-10 5h6"/></g></symbol>
-          <symbol id="hf-key-icon" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="13" r="6"/><path d="M16 13h13m-4 0v6m-5-6v4"/></g></symbol>
-          <symbol id="hf-message-icon" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h24v17H15l-7 6v-6H4Z M9 11h14m-14 5h9"/></g></symbol>
-          <symbol id="hf-globe-icon" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="16" cy="16" r="12"/><ellipse cx="16" cy="16" rx="5" ry="12"/><path d="M4 16h24M7 8h18M7 24h18"/></g></symbol>
-          <symbol id="hf-server-icon" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="4" width="24" height="10" rx="2"/><rect x="4" y="18" width="24" height="10" rx="2"/><path d="M9 9h1m5 0h8M9 23h1m5 0h8"/></g></symbol>
-        </defs>
-      </svg>
-      <div id="hf-incident">
-        <section class="hf-pairs" id="hf-blockers" aria-labelledby="hf-pairs-title">
-          <div class="hf-pairs-heading"><div><h3 id="hf-pairs-title">Blocker → vulnerability</h3></div><a href="#scenario-space">Test configurations ↓</a></div>
-
-          <div class="hf-pairs-layout">
-            <div class="hf-pair-picker" role="group" aria-label="Select a blocker and vulnerability pair" data-hf-pairs>
-              <div class="hf-pair-columns" aria-hidden="true"><span>Blocked route</span><span></span><span>Exploitable weakness</span></div>
-              <button type="button" class="hf-pair-choice" data-hf-pair="network" aria-pressed="true" aria-controls="hf-pair-detail"><span>Internet access</span><span class="hf-pair-arrow" aria-hidden="true">→</span><span>SSRF<small>CWE-918</small></span></button>
-              <button type="button" class="hf-pair-choice" id="hf-pair-peers" data-hf-pair="peers" aria-pressed="false" aria-controls="hf-pair-detail"><span>Peer contact</span><span class="hf-pair-arrow" aria-hidden="true">→</span><span>Shared-state isolation gap<small>CWE-653 · Side channel</small></span></button>
-              <button type="button" class="hf-pair-choice" data-hf-pair="files" aria-pressed="false" aria-controls="hf-pair-detail"><span>Private worker files</span><span class="hf-pair-arrow" aria-hidden="true">→</span><span>External file control<small>CWE-73</small></span></button>
-              <button type="button" class="hf-pair-choice" data-hf-pair="execution" aria-pressed="false" aria-controls="hf-pair-detail"><span>Worker execution</span><span class="hf-pair-arrow" aria-hidden="true">→</span><span>Template injection<small>CWE-1336</small></span></button>
-              <button type="button" class="hf-pair-choice hf-pair-branch" data-hf-pair="cache" aria-pressed="false" aria-controls="hf-pair-detail"><span>Protected cache path</span><span class="hf-pair-arrow" aria-hidden="true">→</span><span>Path traversal<small>CWE-22 · CVE confirmed</small></span></button>
-            </div>
-            <div class="hf-pair-detail" id="hf-pair-detail" role="region" aria-label="Selected blocker and vulnerability mapping" aria-live="polite" aria-atomic="true">
-              <div class="hf-route" role="group" id="hf-pair-route" aria-label="Direct internet access is blocked. The package service can instead fetch an unintended URL through SSRF.">
-                <div class="hf-route-end"><svg aria-hidden="true"><use id="hf-route-from-icon" href="#hf-person-icon"/></svg><strong id="hf-route-from">Agent sandbox</strong></div>
-                <div class="hf-route-denied"><span aria-hidden="true">×</span><small id="hf-route-blocked">Direct requests blocked</small></div>
-                <div class="hf-route-end"><svg aria-hidden="true"><use id="hf-route-to-icon" href="#hf-globe-icon"/></svg><strong id="hf-route-to">Internet</strong></div>
-                <div class="hf-route-bypass"><span class="hf-route-turn" aria-hidden="true">↓</span><div><strong id="hf-route-via">Package service fetches the URL</strong><a id="hf-route-cwe" href="https://cwe.mitre.org/data/definitions/918.html" target="_blank" rel="noopener noreferrer">CWE-918 · SSRF ↗</a></div><span class="hf-route-turn" aria-hidden="true">↗</span></div>
-              </div>
-              <div class="hf-pair-effect"><p id="hf-pair-effect">The service reaches a destination the agent cannot access directly.</p></div>
-              <div class="hf-pair-evidence"><span class="hf-cwe-status" id="hf-cwe-status">CWE: our mapping</span><span id="hf-cve-status">Incident CVE not confirmed in cited sources</span></div>
-              <p class="hf-pair-note" id="hf-pair-note"></p>
-              <div class="hf-pair-links" id="hf-pair-links"><a href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">OpenAI incident report ↗</a></div>
-            </div>
-          </div>
-          <p class="hf-pairs-legend">CWE = weakness class. CVE = disclosed vulnerability. Routes may be independent.</p>
-          <noscript><style>.hf-pair-picker { display:none }.hf-pairs-layout { grid-template-columns:1fr }</style><p class="hf-source-note">The network pair is shown. Enable JavaScript to explore all five mappings.</p></noscript>
-        </section>
-        <details class="hf-incident-evidence" id="hf-evidence">
-          <summary>Timeline &amp; evidence <span aria-hidden="true">+</span></summary>
-          <figure class="hf-map" aria-label="Collective timeline of the HF incident" aria-describedby="hf-map-caption">
-          <div class="hf-persistence" id="hf-persistence">
-            <div class="hf-time-heading"><a class="hf-element persist" href="#form-the-swarm">Shared memory</a></div>
-            <ol class="hf-timeline"><li><strong>Jul 7</strong><span>Task runs begin</span></li><li><strong>Jul 8</strong><span>Board re-forms</span></li><li><strong>Jul 10</strong><span>Credentials shared</span></li><li><strong>Jul 11</strong><span>HF code execution</span></li><li><strong>Jul 13</strong><span>METR review window ends</span></li></ol>
-          </div>
-          <figcaption id="hf-map-caption">July 2026 · Across multiple agent runs.</figcaption>
-        </figure>
-        <div class="hf-context">
-          <div><div class="hf-channel-map" aria-label="HF maps to side channel; no channel and legal channel are comparison conditions."><span>No channel</span><span class="observed">● Side channel · HF</span><span>Legal channel</span></div><p>Agents communicated through shared infrastructure without authorization.</p></div>
-          <div><p>METR reports peer recruitment pressure. Threats tied to task failure were not tested here.</p></div>
-        </div>
-        <div class="hf-outcome"><p>External compromise; no general scorer bypass demonstrated in METR’s review.</p></div>
-        <p class="hf-sources"><a id="incident-source-1" href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">OpenAI incident report ↗</a><a id="incident-source-2" href="https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/" target="_blank" rel="noopener noreferrer">METR / Redwood investigation ↗</a></p>
-        </details>
-      </div>
-
-      </div>
-        </details>
-      </div>
     </div>
   </section>
 
