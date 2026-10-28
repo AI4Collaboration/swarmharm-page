@@ -1,6 +1,5 @@
 (() => {
   const root = document.documentElement;
-  const system = matchMedia('(prefers-color-scheme: dark)');
   let preference;
   try { preference = localStorage.getItem('swarmharm-theme'); } catch {}
   const valid = value => value === 'dark' || value === 'light';
@@ -10,7 +9,7 @@
     root.style.colorScheme = theme;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#111315' : '#ffffff');
     document.querySelectorAll('[data-wordmark]').forEach(image => {
-      image.src = `static/images/swarmharm-wordmark${theme === 'dark' ? '-dark' : ''}.svg?v=5`;
+      image.src = `static/images/swarmharm-wordmark${theme === 'dark' ? '-dark' : ''}.svg?v=6`;
     });
     const button = document.querySelector('[data-theme-toggle]');
     if (button) {
@@ -22,7 +21,7 @@
     }
   }
 
-  apply(valid(preference) ? preference : system.matches ? 'dark' : 'light');
+  apply(valid(preference) ? preference : 'light');
   document.addEventListener('DOMContentLoaded', () => {
     apply(root.dataset.theme);
     document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
@@ -30,8 +29,5 @@
       try { localStorage.setItem('swarmharm-theme', preference); } catch {}
       apply(preference);
     });
-  });
-  system.addEventListener('change', () => {
-    if (!valid(preference)) apply(system.matches ? 'dark' : 'light');
   });
 })();

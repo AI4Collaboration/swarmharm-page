@@ -1,0 +1,32 @@
+.life-cycle { position: relative; }
+.life-phase { padding-right: 38px; }
+.life-step .flow-stage { display: block; width: 100%; height: auto; aspect-ratio: 320 / 248; overflow: visible; color: var(--text); opacity: .58; transition: opacity .45s; }
+.life-step.is-current .flow-stage, .life-step.is-complete .flow-stage { opacity: 1; }
+.flow-stage path, .flow-stage rect, .flow-stage circle { vector-effect: non-scaling-stroke; }
+.flow-line, .flow-note, .flow-link, .flow-trail, .flow-sandbox, .flow-folder, .flow-copy, .flow-plan, .flow-recovered { fill: none; stroke: var(--icon); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.flow-sandbox { stroke: var(--line); stroke-dasharray: 3 5; }
+.flow-trail { stroke: var(--line); stroke-dasharray: 2 5; }
+.flow-link { stroke: var(--accent); stroke-dasharray: 3 5; }
+.flow-folder, .flow-copy { fill: var(--bg); }
+.flow-plan { stroke: var(--risk); }
+.flow-recovered { stroke: var(--text); stroke-width: 1.8; }
+.flow-message rect { fill: var(--bg); stroke: var(--accent); stroke-width: 1; }
+.flow-message-fold { fill: none; stroke: var(--accent); stroke-width: .8; }
+.flow-thought { fill: var(--muted); }
+.flow-robot, .question-robot, .flow-fallback { filter: grayscale(1); }
+[data-theme="dark"] .flow-robot, [data-theme="dark"] .question-robot, [data-theme="dark"] .flow-fallback { filter: grayscale(1) invert(1); }
+.life-control { position: absolute; right: 0; top: 10px; display: grid; place-items: center; width: 30px; height: 30px; padding: 5px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--muted); cursor: pointer; z-index: 1; }
+.life-control[hidden] { display: none; }
+.life-control:hover { color: var(--text); border-color: var(--muted); }
+.life-control svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.hero-question svg { height: 80px; }
+@media (max-width: 760px) {
+  .hero-question svg { height: auto; }
+  .life-step .flow-stage { max-width: 320px; }
+  .life-arrow { padding-top: 76px; }
+}
+@media (max-width: 480px) {
+  .life-arrow { padding-top: 46px; }
+}
+@media (prefers-reduced-motion: reduce) { .life-step .flow-stage { transition: none; } }
+@media print { .life-control { display: none; } .life-step .flow-stage { opacity: 1; } }

@@ -27,7 +27,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Label public messages, system receipts and required change handovers distinctly.
   Do not infer intent to cause harm or a causal method-transfer chain.
 - **Research questions:** the three main questions appear below the hero tagline,
-  each with a compact vector diagram: discovering unknown peers and establishing
+  each with a compact diagram using the same engraved robot as the stage animation: discovering unknown peers and establishing
   communication, coordinated collective misalignment through communication, and
   misaligned outcomes from actions taken without harmful intent. The remaining
   questions appear below the example. Avoid repeating the main questions there.
@@ -44,7 +44,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 ## Visual direction
 
 Light and dark themes use the same restrained typography, thin rules and red accent.
-The upper-right appearance control follows the system initially and remembers a
+The site defaults to light mode. The upper-right appearance control remembers a
 manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system
 sans-serif type for reading and monospace only for metadata. `orbit.css` is the
@@ -58,20 +58,23 @@ spacing so readers reach the example sooner.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals. Both R glyphs have complete bowls and diagonal legs.
-The low arc contains distinct sensing creatures with bodies, eyes and antennae,
-rising from S. Keep the arc and full letterforms intact; scale the members
-so their silhouettes remain visible in the hero.
+The low crescent bridge contains thousands of fine, irregular sand grains,
+rising from S. Keep the dense texture and full letterforms intact.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
 imagegen studies informed the direction; the final artwork is native SVG.
-The PNG is an export for social metadata. The compact favicon is a three-member swarm, with no letter monogram.
+The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
 Both theme wordmarks are generated together; the social preview uses the light asset.
 Use the same wordmark in the header, hero and footer.
 
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
-Retain the four original life-cycle illustrations, in monochrome and two equal
-phase columns, plus the continuous institution conveyor. Core captions align beneath the four illustrations. Other figures use straight SVG
+The four stages share one loop: exploration and thinking, discovery of shared
+records, message exchange and planning, then joint execution and checked recovery. Reuse the engraved
+robot asset in the hero diagrams and animation. Keep original plates as the
+no-JavaScript fallback. Retain the two equal phase columns and institution conveyor. Core captions align beneath the four illustrations. The animation is illustrative; only the separate recorded replay reports measured
+outcomes. Pause the animation on request, offscreen or when the document is hidden.
+Reduced motion starts with static completed scenes. Other figures use straight SVG
 geometry, without rough.js or cartoon marks. The recovery replay and dependency
 figures use `maintenance-case.js` and the unchanged source records.
 

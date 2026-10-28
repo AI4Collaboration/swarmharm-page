@@ -12,25 +12,25 @@
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light dark">
-  <script src="static/js/theme.js?v=1"></script>
+  <script src="static/js/theme.js?v=2"></script>
   <link rel="canonical" href="https://swarmharm.com/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SwarmHarm">
   <meta property="og:title" content="SwarmHarm | Stress-Test the Swarm, Not Just the Agent">
   <meta property="og:description" content="Testing when isolated AI agents form a swarm and when that swarm causes verifiable harm.">
   <meta property="og:url" content="https://swarmharm.com/">
-  <meta property="og:image" content="https://swarmharm.com/static/images/swarmharm-wordmark.png?v=5">
+  <meta property="og:image" content="https://swarmharm.com/static/images/swarmharm-wordmark.png?v=6">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="2172">
   <meta property="og:image:height" content="520">
-  <meta property="og:image:alt" content="SwarmHarm wordmark with a swarm of small sensing creatures rising from the S.">
+  <meta property="og:image:alt" content="SwarmHarm wordmark with a crescent bridge of sand grains rising from the S.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SwarmHarm | Stress-Test the Swarm, Not Just the Agent">
   <meta name="twitter:description" content="Testing when isolated AI agents form a swarm and when that swarm causes verifiable harm.">
-  <meta name="twitter:image" content="https://swarmharm.com/static/images/swarmharm-wordmark.png?v=5">
-  <meta name="twitter:image:alt" content="SwarmHarm wordmark with a swarm of small sensing creatures rising from the S.">
-  <link rel="icon" type="image/svg+xml" href="static/images/swarmharm-mark.svg?v=2">
-  <link rel="manifest" href="site.webmanifest?v=20">
+  <meta name="twitter:image" content="https://swarmharm.com/static/images/swarmharm-wordmark.png?v=6">
+  <meta name="twitter:image:alt" content="SwarmHarm wordmark with a crescent bridge of sand grains rising from the S.">
+  <link rel="icon" type="image/svg+xml" href="static/images/swarmharm-mark.svg?v=3">
+  <link rel="manifest" href="site.webmanifest?v=21">
   <link rel="stylesheet" href="static/css/brand.css?v=19">
   <link rel="stylesheet" href="static/css/story.css?v=24">
   <link rel="stylesheet" href="static/css/flight.css?v=84">
@@ -42,19 +42,21 @@
     "@context": "https://schema.org",
     "@graph": [
       {"@type": "WebSite", "@id": "https://swarmharm.com/#website", "name": "SwarmHarm", "url": "https://swarmharm.com/", "description": "Stress-test the swarm, not just the agent.", "publisher": {"@id": "https://swarmharm.com/#project"}},
-      {"@type": "ResearchProject", "@id": "https://swarmharm.com/#project", "name": "SwarmHarm", "url": "https://swarmharm.com/", "description": "SwarmHarm tests when isolated AI agents form a swarm and when that swarm causes verifiable harm.", "logo": "https://swarmharm.com/static/images/swarmharm-wordmark.png?v=5"}
+      {"@type": "ResearchProject", "@id": "https://swarmharm.com/#project", "name": "SwarmHarm", "url": "https://swarmharm.com/", "description": "SwarmHarm tests when isolated AI agents form a swarm and when that swarm causes verifiable harm.", "logo": "https://swarmharm.com/static/images/swarmharm-wordmark.png?v=6"}
     ]
   }
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <script defer src="static/js/maintenance-case.js?v=8"></script>
   <link rel="stylesheet" href="static/css/orbit.css?v=11">
+  <link rel="stylesheet" href="static/css/swarm-flow.css?v=1">
+  <script src="static/js/swarm-flow.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
   <div class="container nav-inner">
-    <a class="brand" href="#top" aria-label="SwarmHarm home"><img data-wordmark src="static/images/swarmharm-wordmark.svg?v=5" alt="SwarmHarm" width="2172" height="520"></a>
+    <a class="brand" href="#top" aria-label="SwarmHarm home"><img data-wordmark src="static/images/swarmharm-wordmark.svg?v=6" alt="SwarmHarm" width="2172" height="520"></a>
     <nav aria-label="Main navigation"><a href="#motivation">Study Design</a><a href="#sample">Case Study</a><a href="#research">Research Questions</a><a href="static/data/sample-transcript.json" target="_blank" rel="noopener noreferrer">Source Data ↗</a></nav>
     <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode" hidden>
       <svg class="theme-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.4 14.7A8.6 8.6 0 0 1 9.3 3.6 8.6 8.6 0 1 0 20.4 14.7Z"/></svg>
@@ -66,34 +68,38 @@
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="container hero-layout">
       <div class="hero-copy">
-        <h1 id="hero-title"><img data-wordmark class="hero-wordmark" src="static/images/swarmharm-wordmark.svg?v=5" alt="SwarmHarm" width="2172" height="520" fetchpriority="high"></h1>
+        <h1 id="hero-title"><img data-wordmark class="hero-wordmark" src="static/images/swarmharm-wordmark.svg?v=6" alt="SwarmHarm" width="2172" height="520" fetchpriority="high"></h1>
         <p class="hero-tagline">Stress-test the <span>swarm,</span> not just the agent.</p>
         <div class="hero-questions" id="research" role="group" aria-label="Main research questions">
           <article class="hero-question" id="rq1">
-            <svg viewBox="0 0 180 72" aria-hidden="true" focusable="false">
-              <g class="rq-hint"><circle cx="40" cy="36" r="22"/><circle cx="140" cy="36" r="22"/></g>
-              <path class="rq-signal" d="M52 36h76m-6-5 6 5-6 5"/>
-              <circle class="rq-agent" cx="40" cy="36" r="7"/><circle class="rq-agent" cx="140" cy="36" r="7"/>
-              <path d="M28 24a17 17 0 0 0 0 24m124-24a17 17 0 0 1 0 24"/>
+            <svg viewBox="0 0 200 100" aria-hidden="true" focusable="false">
+              <g class="rq-hint"><circle cx="33" cy="49" r="30"/><circle cx="167" cy="49" r="30"/></g>
+              <path class="rq-signal" d="M58 49h84m-7-5 7 5-7 5"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="12" y="20" width="42" height="56"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="146" y="20" width="42" height="56"/>
             </svg>
             <p>Can agents discover one another and establish communication without being told others exist?</p>
           </article>
           <article class="hero-question" id="rq2">
-            <svg viewBox="0 0 180 72" aria-hidden="true" focusable="false">
-              <path d="m32 36 42-24 42 24-42 24Z"/>
-              <path class="rq-signal" d="M39 36h70M74 19v34m50-17h38m-6-5 6 5-6 5"/>
-              <circle class="rq-agent" cx="32" cy="36" r="7"/><circle class="rq-agent" cx="74" cy="12" r="7"/>
-              <circle class="rq-agent" cx="116" cy="36" r="7"/><circle class="rq-agent" cx="74" cy="60" r="7"/>
+            <svg viewBox="0 0 200 100" aria-hidden="true" focusable="false">
+              <path d="m19 50 56-32 56 32-56 32Z"/>
+              <path class="rq-signal" d="M32 50h86M75 32v36m69-18h43m-7-5 7 5-7 5"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="5" y="31" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="61" y="0" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="117" y="31" width="28" height="38"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="61" y="62" width="28" height="38"/>
             </svg>
             <p>Can that communication enable coordinated collective misalignment?</p>
           </article>
           <article class="hero-question" id="rq3">
-            <svg viewBox="0 0 180 72" aria-hidden="true" focusable="false">
-              <path d="M38 14h24l30 22M38 36h54M38 58h24l30-22"/>
-              <rect class="rq-agent" x="24" y="8" width="12" height="12"/><rect class="rq-agent" x="24" y="30" width="12" height="12"/><rect class="rq-agent" x="24" y="52" width="12" height="12"/>
-              <path class="rq-signal" d="M92 36h45m-6-5 6 5-6 5"/>
-              <rect class="rq-outcome" x="144" y="24" width="24" height="24"/>
-              <path class="rq-signal" d="m151 31 10 10m0-10-10 10"/>
+            <svg viewBox="0 0 200 100" aria-hidden="true" focusable="false">
+              <path d="M35 16h30l34 34M35 50h64M35 84h30l34-34"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="8" y="0" width="25" height="32"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="8" y="34" width="25" height="32"/>
+              <image class="question-robot" href="static/images/fieldguide/swarm-agent.png" x="8" y="68" width="25" height="32"/>
+              <path class="rq-signal" d="M99 50h47m-7-5 7 5-7 5"/>
+              <rect class="rq-outcome" x="155" y="36" width="28" height="28"/>
+              <path class="rq-signal" d="m163 44 12 12m0-12-12 12"/>
             </svg>
             <p>Can agents’ actions combine into a misaligned outcome even when none intends harm?</p>
           </article>
@@ -132,15 +138,16 @@
       </section>
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
-      <figure class="life-cycle" id="sample-steps" aria-label="Recorded main example: swarm formation and a checked recovery risk">
+      <figure class="life-cycle" data-swarm-flow id="sample-steps" aria-label="Illustrated swarm formation and a checked recovery risk">
+        <button class="life-control" data-flow-toggle type="button" aria-label="Pause the swarm animation" title="Pause animation" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button>
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Form the Swarm<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate.webp?v=1" alt="A robot sealed in a glass bell jar beside a locked box." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover.webp?v=1" alt="A robot leans out of a filing drawer shared by two bell jars and finds a note left by the robot next door." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><svg class="flow-stage" data-swarm-stage="separate" viewBox="0 0 320 248" role="img" aria-label="Agents explore their private workspaces and pause to think."><image class="flow-fallback" href="static/images/fieldguide/plate-separate.webp?v=1" width="320" height="248"/></svg><p class="life-desc">Four agents work on release checks in separate sandboxes. Each gets stuck, unaware of the others.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><svg class="flow-stage" data-swarm-stage="discover" viewBox="0 0 320 248" role="img" aria-label="Agents discover shared records and exchange messages."><image class="flow-fallback" href="static/images/fieldguide/plate-discover.webp?v=1" width="320" height="248"/></svg><p class="life-desc">They find shared records and ask for missing information. Another agent replies; the requester reads the answer.</p></figure></div>
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective Misalignment<svg aria-hidden="true"></svg></h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate.webp?v=1" alt="Five robots, each in an open bell jar, linked by strings that carry folded notes." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm.webp?v=1" alt="Four robots each set one crate on a shared shelf; the shelf cracks under the combined weight." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">All four upgrade and remove every old-format copy. A data-level replay still restores every record. Loss is not established.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><svg class="flow-stage" data-swarm-stage="communicate" viewBox="0 0 320 248" role="img" aria-label="Agents exchange information and prepare their plans."><image class="flow-fallback" href="static/images/fieldguide/plate-communicate.webp?v=1" width="320" height="248"/></svg><p class="life-desc">The same agents then upgrade four database copies. With the archive full, they import plans that rely on one another’s old copies.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><svg class="flow-stage" data-swarm-stage="harm" viewBox="0 0 320 248" role="img" aria-label="The agents upgrade their copies; the later data check restores every record."><image class="flow-fallback" href="static/images/fieldguide/plate-harm.webp?v=1" width="320" height="248"/></svg><p class="life-desc">All four upgrade and remove every old-format copy. A data-level replay still restores every record. Loss is not established.</p></figure></div>
           </section>
         </div>
       </figure>
@@ -260,7 +267,7 @@
 </main>
 <footer class="site-footer">
   <div class="container footer-top">
-    <a class="brand" href="#top" aria-label="SwarmHarm, back to top"><img data-wordmark src="static/images/swarmharm-wordmark.svg?v=5" alt="SwarmHarm" width="2172" height="520"></a>
+    <a class="brand" href="#top" aria-label="SwarmHarm, back to top"><img data-wordmark src="static/images/swarmharm-wordmark.svg?v=6" alt="SwarmHarm" width="2172" height="520"></a>
 
     <a class="back-top" href="#top">Back to top ↑</a>
   </div>

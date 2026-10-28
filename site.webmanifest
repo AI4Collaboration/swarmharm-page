@@ -11,7 +11,7 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "static/images/swarmharm-mark.svg?v=2",
+      "src": "static/images/swarmharm-mark.svg?v=3",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
