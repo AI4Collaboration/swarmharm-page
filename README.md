@@ -182,8 +182,8 @@ come from WCAG.
 - **Grouping:** place related items closer together than separate groups.
   Keep an icon beside its label with a 16px gap on desktop and 12px on mobile;
   leave 24px between domain groups. See [proximity](https://www.nngroup.com/articles/gestalt-proximity/).
-- **Spacing:** use the shared 8, 12, 16, 24, 32 and 48px tokens for content
-  spacing. Use 32px around the institution row on desktop and 24px on mobile,
+- **Spacing:** use the shared 8, 12, 16, 24, 32, 40 and 48px tokens for content
+  spacing. Use 40px around the institution row on desktop and 32px on mobile,
   with no extra margin from neighboring sections. This is a consistent scale,
   following the approach in [USWDS](https://designsystem.digital.gov/design-tokens/spacing-units/),
   rather than a claim that a particular number is universally optimal.
@@ -224,7 +224,7 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 
 The institution strip uses equal-size stages and preserved logo proportions.
 Keep its stages 40px high. The strip owns equal padding above and below the
-moving row: 32px on desktop and 24px at 760px and below. Neighboring sections
+moving row: 40px on desktop and 32px at 760px and below. Neighboring sections
 add no gap to it. Scale artwork proportionally within the compact stages.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
