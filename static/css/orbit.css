@@ -58,14 +58,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .site-header { background: var(--header-bg); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
 .nav-inner { min-height: 68px; gap: 24px; }
 .brand { display: inline-flex; align-items: center; font-family: var(--font); font-weight: 600; letter-spacing: -.04em; }
-.brand img { display: block; width: 164px; height: 48px; object-fit: contain; }
+.brand img { display: block; width: 184px; height: 48px; object-fit: contain; }
 .nav-inner nav { gap: var(--space-6); }
 .nav-inner nav a { font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--muted); }
 .nav-inner nav a:hover { color: var(--text); }
 .hero { background: var(--bg); border-bottom: 0; }
 .hero-layout { display: block; padding-block: var(--space-8) 0; text-align: center; }
 .hero-copy { width: 100%; max-width: none; margin: auto; }
-.hero-copy h1 { margin: 0 auto var(--space-4); width: min(100%, 440px); line-height: 1; }
+.hero-copy h1 { margin: 0 auto var(--space-4); width: min(100%, 500px); line-height: 1; }
 .hero-wordmark { width: 100%; height: auto; display: block; }
 .hero-intro { max-width: 700px; margin: 0 auto var(--space-6); color: var(--muted); font: 400 20px/1.5 var(--font); text-wrap: balance; }
 .hero-intro strong { color: var(--text); font-weight: 600; }
@@ -81,14 +81,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .institutions, .sample-section .institutions { width: 100%; margin: 0; padding: var(--space-8) 0; background: var(--bg); border: 0; box-shadow: none; }
 .institution-track { animation-duration: 45s; }
 .institution-list { gap: 54px; padding-inline: 27px; }
-.institution-list li { width: 150px; flex-basis: 150px; height: 36px; }
-.institution-list a { width: 150px; height: 36px; }
-.institution-list img { width: 100%; max-width: 140px; height: 30px; filter: none; opacity: 1; }
-.institution-list .institution-aim img { height: 26px; }
+.institution-list li { width: 160px; flex-basis: 160px; height: 40px; }
+.institution-list a { width: 160px; height: 40px; }
+.institution-list img { width: 100%; max-width: 150px; height: 34px; filter: none; opacity: 1; }
+.institution-list .institution-aim img { height: 29px; }
 .institution-list .institution-eurosafe a { display: flex; align-items: center; justify-content: center; gap: 5px; }
-.institution-list .institution-eurosafe img { width: 26px; height: 26px; flex: 0 0 26px; }
-.institution-eurosafe span { color: #022583; font: 700 15px/1.1 var(--font); letter-spacing: -.035em; }
-.institution-list .institution-oxford img, .institution-list .institution-georgia-tech img { height: 34px; }
+.institution-list .institution-eurosafe img { width: 29px; height: 29px; flex: 0 0 29px; }
+.institution-eurosafe span { color: #022583; font: 700 16px/1.1 var(--font); letter-spacing: -.035em; }
+.institution-list .institution-oxford img, .institution-list .institution-georgia-tech img { height: 38px; }
 .institution-list .institution-oxford img { filter: none; }
 .institution-list a:hover img, .institution-list a:focus-visible img { opacity: 1; }
 .example-intro { display: block; margin: 0 0 24px; }
@@ -282,7 +282,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 }
 @media (max-width: 760px) {
   .nav-inner { min-height: 74px; flex-wrap: wrap; justify-content: center; gap: 0; padding-block: 10px; }
-  .brand img { width: 156px; height: 48px; }
+  .brand img { width: 164px; height: 48px; }
   .nav-inner nav { justify-content: center; gap: 24px; }
   .nav-inner nav a { font-size: 13px; }
   .hero-copy h1 { margin-bottom: 12px; }
@@ -317,14 +317,14 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .nav-inner { gap: 4px; padding-bottom: 15px; }
   .nav-inner nav { width: 100%; gap: 19px; }
   .hero-layout { padding-block: var(--space-6) 0; }
-  .hero-copy h1 { width: min(88%, 300px); margin-bottom: 12px; }
+  .hero-copy h1 { width: min(100%, 340px); margin-bottom: 12px; }
   .hero-intro { font-size: 17px; margin-bottom: var(--space-6); }
   .hero-questions { grid-template-columns: 1fr; gap: 0; text-align: left; }
   .hero-question, .hero-question:first-child { padding: var(--space-3) 0; border-left: 0; border-top: 1px solid var(--line); }
   .hero-question:last-child { padding-bottom: 0; }
   .hero-question p { font-size: 16px; }
   .institution-list { gap: 32px; padding-inline: 16px; }
-  .institution-list li, .institution-list a { flex-basis: 130px; width: 130px; }
+  .institution-list li, .institution-list a { flex-basis: 140px; width: 140px; }
   .life-pair { grid-template-columns: minmax(0,1fr) 16px minmax(0,1fr); row-gap: 0; }
   .life-desc { font-size: 14px; }
   .life-arrow { padding-top: 63px; min-height: 0; align-content: start; }
@@ -390,7 +390,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 @media (max-width: 900px) {
   .nav-inner { grid-template-columns: minmax(0,1fr) auto auto; min-height: 64px; gap: 0 8px; padding-block: 6px; }
-  .nav-inner .brand img { width: 148px; height: 44px; }
+  .nav-inner .brand img { width: 160px; height: 44px; }
   .nav-inner > .brand { grid-column: 1; grid-row: 1; justify-self: start; }
   .nav-inner > .theme-toggle { grid-column: 2; grid-row: 1; }
   .nav-inner > .nav-toggle:not([hidden]) { display: inline-grid; grid-column: 3; grid-row: 1; }

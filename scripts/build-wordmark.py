@@ -11,7 +11,7 @@ root = Path(__file__).resolve().parents[1]
 font = TTFont(root / 'static/fonts/Michroma-Regular.ttf')
 glyphs, cmap = font.getGlyphSet(), font.getBestCmap()
 word, tracking = 'SWARMHARM', 80
-weight = 32  # A small outline expansion; keep the font, spacing and sand unchanged.
+weight = 80  # Strengthen the existing glyphs while keeping their counters open.
 advances = [glyphs[cmap[ord(c)]].width for c in word]
 scale = 1972 / (sum(advances) + tracking * (len(word) - 1))
 left, baseline, cursor = 100, 604, 0
@@ -110,8 +110,9 @@ def swarm_letters():
         clip_id = f'swarm-letter-{i}'
         defs.append(f'<mask id="{clip_id}" maskUnits="userSpaceOnUse" x="-100" y="140" width="2272" height="520"><path fill="white" stroke="white" stroke-width="{weight}" stroke-linejoin="round" transform="{placement}" d="{outline}"/></mask>')
         x0, y0, x1, y1 = bounds
-        x0, x1 = x+x0*scale-4, x+x1*scale+4
-        y0, y1 = baseline-y1*scale-4, baseline-y0*scale+4
+        padding = weight*scale/2 + 4
+        x0, x1 = x+x0*scale-padding, x+x1*scale+padding
+        y0, y1 = baseline-y1*scale-padding, baseline-y0*scale+padding
         dots = []
         row, y = 0, y0
         while y <= y1:
@@ -143,9 +144,9 @@ def incoming_sand():
 
 start = (left + 1250*scale, baseline - 1540*scale)
 end = (red_peak, baseline - 1536*scale)
-bridge_points = (start, (470, 245), (1120, 210), end)
-bridge = grains(bridge_points, 80, 13, 2960, .04, 281026,
-                levels=[(13, 260), (5.5, 1000), (1.7, 1700)])
+bridge_points = (start, (400, 210), (1170, 260), end)
+bridge = grains(bridge_points, 68, 14, 2960, .04, 281026,
+                levels=[(14, 260), (5.5, 1000), (1.7, 1700)])
 # A fine launch stream keeps the cloud visibly connected to S alone.
 launch_rng = random.Random(102926)
 for _ in range(380):
@@ -160,11 +161,11 @@ for _ in range(380):
                    launch_rng.uniform(.6, .95)))
 # The last grains merge into a narrow, tapering trajectory ending at the A.
 tail_edges = [[], []]
-for i in range(45):
-    t = .67 + .33*i/44
+for i in range(65):
+    t = .57 + .43*i/64
     x, y, dx, dy = curve(t, bridge_points)
     norm = math.hypot(dx, dy)
-    half_width = 4.5*((1-t)/.33)**.8
+    half_width = 5.8*((1-t)/.43)**1.05
     tail_edges[0].append((x-dy/norm*half_width, y+dx/norm*half_width))
     tail_edges[1].append((x+dy/norm*half_width, y-dx/norm*half_width))
 tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
@@ -190,7 +191,7 @@ for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef
     suffix = '-dark' if theme == 'dark' else ''
     (root/f'static/images/swarmharm-wordmark{suffix}.svg').write_text(svg, encoding='utf-8', newline='\n')
 
-symbol = grains(((4, 47), (12, 9), (39, 15), (60, 45)), 5, 1.3, 380, .01, 8126,
+symbol = grains(((4, 47), (11, 13), (45, 20), (60, 45)), 5, 1.3, 380, .01, 8126,
                 levels=[(1.3, 70), (.75, 120), (.3, 190)])
 mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm</title>'
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)

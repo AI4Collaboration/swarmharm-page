@@ -79,7 +79,7 @@ At 900px and below, use a compact sticky header with an accessible navigation
 disclosure. Keep theme and menu controls reachable at 320px; close the menu
 after navigation, on Escape, outside clicks and breakpoint changes.
 The hero contains the wordmark, a factual testbed introduction and three questions.
-Keep the hero compact: the main wordmark is capped at 440px, with tight vertical
+Keep the hero compact: the main wordmark is capped at 500px, with tight vertical
 spacing so readers reach the example sooner.
 
 Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
@@ -96,7 +96,7 @@ decorative dialogue, floating notes and extra labels.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals, with all four HARM letters red in both themes. Both R glyphs have complete bowls and diagonal legs.
-The current letterforms have a modest 32-font-unit outline expansion. Preserve
+The current letterforms use an 80-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters from the left. The low crescent rises from S,
@@ -210,7 +210,7 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
-Keep its stages 36px high. The strip owns equal padding above and below the
+Keep its stages 40px high. The strip owns equal padding above and below the
 moving row: 32px on desktop and 24px at 760px and below. Neighboring sections
 add no gap to it. Scale artwork proportionally within the compact stages.
 Use color artwork without monochrome filters. ETH uses the blue from its
