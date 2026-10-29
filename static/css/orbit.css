@@ -113,6 +113,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .sample-section { padding-top: 48px; }
 .section-heading { margin-bottom: 24px; text-align: left; }
 .section-heading h2 { max-width: none; margin: 0; font: 600 24px/1.35 var(--display); letter-spacing: -.025em; }
+.section-heading.research-heading { margin-bottom: var(--space-4); }
 .section-lead { max-width: 790px; margin: 0 0 28px; color: var(--muted); font-size: 16px; line-height: 1.8; }
 .sample-section > .container > .section-lead { max-width: 780px; }
 .case-detail { margin: 0 0 28px; border-block: 1px solid var(--line); }

@@ -34,8 +34,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   a regression plot, financial candlesticks and a report page. Keep each icon beside
   its label, with a transparent background and a restrained red accent.
 - **Research questions:** a one-sentence introduction below the wordmark explains
-  the testbed contribution, agents' propensity to form swarms, and when and how
-  their collective actions can cause harm.
+  active peer discovery, communication channels, swarm formation and their
+  collective consequences. Use a Research Questions section heading in the
+  same style as the Sample Case heading, with the full name in navigation.
   Three short questions follow, emphasizing discovery, communication and
   individually benign actions respectively,
   in a horizontal row on desktop and compact text rows on narrow phones.
@@ -99,7 +100,7 @@ decorative dialogue, floating notes and extra labels.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals, with all four HARM letters red in both themes. Both R glyphs have complete bowls and diagonal legs.
-The current letterforms use an 80-font-unit outline expansion. Preserve
+The current letterforms use a 140-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters from the left. The low crescent rises from S,
