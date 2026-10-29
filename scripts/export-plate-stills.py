@@ -1,22 +1,30 @@
 """Make self-contained SVG fallbacks from paused production scene SVGs.
 
-Usage: python scripts/export-plate-stills.py path/to/scene-svgs.json
+Usage: python scripts/export-plate-stills.py path/to/scene-svgs.json [--scene separate]
 The JSON contains the four .plate-motion outerHTML strings captured during QA.
+Selecting one scene leaves the other plates and research-question miniatures unchanged.
 """
 from pathlib import Path
+import argparse
 import base64
 import copy
 import json
-import sys
 import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[1]
 namespace = 'http://www.w3.org/2000/svg'
 ET.register_namespace('', namespace)
 tag = lambda name: f'{{{namespace}}}{name}'
-scenes = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+names = ['separate', 'discover', 'communicate', 'harm']
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('snapshot', type=Path)
+parser.add_argument('--scene', choices=names)
+args = parser.parse_args()
+scenes = json.loads(args.snapshot.read_text(encoding='utf-8'))
 assert len(scenes) == 4
-for name, source in zip(['separate', 'discover', 'communicate', 'harm'], scenes):
+for name, source in zip(names, scenes):
+    if args.scene and name != args.scene:
+        continue
     if 'xmlns=' not in source.split('>')[0]:
         source = source.replace('<svg ', f'<svg xmlns="{namespace}" ', 1)
     svg = ET.fromstring(source)
@@ -41,6 +49,8 @@ for name, source in zip(['separate', 'discover', 'communicate', 'harm'], scenes)
     print(output.name)
 
 # The research-question miniatures share the same engraved figures and eyes.
+if args.scene:
+    raise SystemExit(0)
 separate = ET.parse(root / 'static/images/fieldguide/plate-separate-still.svg').getroot()
 for i, name in enumerate(['watchful', 'narrow']):
     svg = ET.Element(tag('svg'), {'viewBox': '198 242 230 310', 'width': '230', 'height': '310'})

@@ -124,32 +124,42 @@
     const outline = 'M236 299L263 298L267 282L283 276L323 280L327 268L346 269L348 278L344 293L370 295L390 304L395 324L402 325L400 351L390 354L386 372L374 383L360 381L376 403L373 421L364 430L350 425L350 461L337 466L339 481L352 502L354 526L332 531L307 528L304 533L251 534L248 518L257 484L260 468L250 469L237 462L235 443L241 432L244 402L249 383L266 369L260 362L253 341L239 339L236 332Z';
     const headShape = 'M236 299L263 298L267 282L283 276L323 280L327 268L346 269L348 278L344 293L370 295L390 304L395 324L402 325L400 351L390 354L386 372L374 383L264 374L254 362L253 341L239 339L236 332Z';
     const handShape = 'M334 367L347 367L362 382L362 394L351 403L337 396L331 384Z';
+    const armShape = 'M255 379Q272 376 280 391L275 408L269 434L274 445L270 459L262 466L247 466L236 455L235 443L241 432L245 408L247 391Z';
     const actors = [];
     ['translate(-108 60) scale(.84)', 'translate(828 60) scale(-.84 .84)'].forEach((placement, i) => {
       const jar = node(scene.stage, 'g', { transform: placement, 'data-explorer-jar': i });
-      scene.background([outline, headShape], 2, jar);
+      scene.background([outline, headShape, armShape], 2, jar);
       const robot = node(jar, 'g', { 'data-explorer': i });
       const feet = scene.cutout(outline, robot, sources[0], [rect(220, 240, 200, 226)]);
       feet.setAttribute('data-rig-part', 'feet');
       const torso = node(robot, 'g', { 'data-rig-part': 'torso' });
-      scene.cutout(outline, torso, sources[0], [headShape, handShape, rect(220, 466, 200, 80)]);
+      scene.cutout(outline, torso, sources[0], [headShape, handShape, armShape, rect(220, 466, 200, 80)]);
+      // The shoulder covers this short edge in the source engraving.
+      node(torso, 'path', { d: 'M273 402L269 454L280 458', fill: 'none', stroke: '#393939', 'stroke-width': 1.5, opacity: .65 });
+      const arm = scene.cutout(armShape, torso);
+      arm.setAttribute('data-rig-part', 'probing-arm');
       const head = scene.cutout(headShape, torso, sources[0], [handShape]);
       head.setAttribute('data-rig-part', 'head');
+      node(head, 'path', { d: 'M330 374L354 380', fill: 'none', stroke: '#393939', 'stroke-width': 1.5, opacity: .65 });
       const gaze = scene.eyes(head, 0, i);
       scene.cutout(handShape, torso);
-      actors.push({ torso, head, gaze });
+      actors.push({ jar, torso, head, arm, gaze });
     });
     return p => {
-      actors.forEach(({ torso, head, gaze }, i) => {
-        const t = (p + i*.43) % 1;
-        // Eyes find a target first; the rigid neck and torso follow, then hold.
-        const lookX = track(t, [[0,0],[.04,0],[.065,-.95],[.2,-.95],[.225,-.45],[.37,-.45],[.405,1],[.63,1],[.665,.8],[.83,.8],[.86,0],[1,0]]);
-        const lookY = track(t, [[0,0],[.04,0],[.065,-.1],[.2,-.1],[.225,-1],[.37,-1],[.405,.9],[.63,.9],[.665,-.2],[.83,-.2],[.86,0],[1,0]]);
-        const angle = track(t, [[0,0],[.08,0],[.14,-2],[.24,-2],[.3,-3],[.4,-3],[.47,3],[.64,3],[.72,1],[.86,1],[.94,0],[1,0]]);
-        const lean = track(t, [[0,0],[.12,0],[.18,-.5],[.4,-.5],[.49,1.2],[.65,1.2],[.75,.2],[.88,.2],[.96,0],[1,0]]);
+      actors.forEach(({ jar, torso, head, arm, gaze }, i) => {
+        const t = (p + i*.47) % 1;
+        // Look at the glass, reach and probe it twice, scan the dome, then
+        // lean toward the lock. The second agent explores on its own timing.
+        const lookX = track(t, [[0,0],[.035,-1],[.29,-1],[.34,-.25],[.48,-.25],[.55,1],[.77,1],[.83,-.7],[.92,-.7],[1,0]]);
+        const lookY = track(t, [[0,0],[.035,-.2],[.29,-.2],[.34,-1],[.48,-1],[.55,1],[.77,1],[.83,0],[.92,0],[1,0]]);
+        const angle = track(t, [[0,0],[.1,-9],[.29,-9],[.39,-24],[.46,-24],[.6,14],[.74,14],[.85,-6],[.91,-6],[1,0]]);
+        const lean = track(t, [[0,0],[.14,-5],[.3,-5],[.4,-2],[.48,-2],[.62,7],[.73,7],[.88,0],[1,0]]);
+        const reach = track(t, [[0,0],[.06,12],[.17,80],[.195,80],[.215,65],[.24,80],[.26,80],[.28,66],[.305,80],[.325,80],[.42,28],[.48,28],[.6,-18],[.74,-18],[.87,8],[1,0]]);
         transform(torso, 0, 0, lean, 310, 466);
         transform(head, 0, 0, angle, 313, 377);
-        const blink = Math.max(0, 1-Math.abs(t-.385)/.009);
+        transform(arm, 0, 0, reach, 263, 394);
+        jar.dataset.exploreTarget = t < .33 ? 'glass' : t < .5 ? 'dome' : t < .8 ? 'lock' : 'surroundings';
+        const blink = Math.max(0, 1-Math.abs(t-.5)/.008);
         gaze(lookX, lookY, blink);
       });
     };
@@ -283,37 +293,38 @@
       }));
     } catch { return; }
     const draw = [exploration(), discovery(), communication(), consequence()];
-    const durations = [12800, 8200, 9200, 9800];
-    const elapsed = [1600, 1800, 2100, 0];
+    const durations = [8600, 8200, 9200, 9800];
+    const elapsed = [350, 1800, 2100, 0];
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    let paused = reduced.matches, previous = null, frame = 0;
-    let activated = true;
-    let hasPlayed = !paused;
-    if (paused) elapsed[3] = durations[3]*.79;
+    // These scenes explain the mechanism. Keep them playing when visible;
+    // reduced motion uses a slower pace, with an explicit pause always available.
+    let paused = false, previous = null, frame = 0;
+    let pace = reduced.matches ? .7 : 1;
 
     function render() {
       draw.forEach((paint, i) => {
         paint(elapsed[i] / durations[i]);
         steps[i].classList.toggle('is-current', visible[i] && !paused);
       });
-      figure.classList.toggle('has-plate-motion', activated);
+      figure.classList.add('has-plate-motion');
     }
     function sync() {
       cancelAnimationFrame(frame);
       frame = 0;
       previous = null;
-      const running = activated && !paused && visible.some(Boolean) && !document.hidden;
+      const running = !paused && visible.some(Boolean) && !document.hidden;
       figure.dataset.flowRunning = String(running);
       button.setAttribute('aria-label', paused ? 'Play the four-stage animation' : 'Pause the four-stage animation');
       button.title = paused ? 'Play animation' : 'Pause animation';
       button.setAttribute('aria-pressed', String(!paused));
       button.querySelector('path').setAttribute('d', paused ? 'm8 5 10 7-10 7Z' : 'M8 5v14M16 5v14');
+      button.querySelector('[data-flow-label]').textContent = paused ? 'Play' : 'Pause';
       if (running) frame = requestAnimationFrame(tick);
     }
     function tick(now) {
       if (previous !== null) {
-        const delta = Math.min(now - previous, 100);
+        const delta = Math.min(now - previous, 100) * pace;
         elapsed.forEach((time, i) => { if (visible[i]) elapsed[i] = (time + delta) % durations[i]; });
       }
       previous = now;
@@ -323,18 +334,11 @@
     button.hidden = false;
     button.addEventListener('click', () => {
       paused = !paused;
-      if (!paused) {
-        activated = true;
-        if (!hasPlayed) { elapsed[3] = 0; hasPlayed = true; }
-      }
       render();
       sync();
     });
     reduced.addEventListener('change', () => {
-      paused = reduced.matches;
-      if (!paused) activated = true;
-      render();
-      sync();
+      pace = reduced.matches ? .7 : 1;
     });
     document.addEventListener('visibilitychange', sync);
     if ('IntersectionObserver' in window) {

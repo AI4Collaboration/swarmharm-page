@@ -83,8 +83,9 @@ under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
 Animate the original engraved artwork with `plate-animation.js`. The first
 scene shows two agents inside separate bell jars, exploring independently.
-Keep their feet planted and heads rigid. Eyes find each target before a small
-neck rotation and torso lean follow, then hold before the next look. Do not
+Keep their feet planted and heads rigid. Each agent looks toward the glass,
+reaches out to probe it, scans the dome, then leans toward the locked box.
+Offset their timing so they explore independently. Do not
 scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
 letterbox and circulating letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
 scene shows the agents loading the original wooden shelf, which bends and breaks,
@@ -96,8 +97,8 @@ Paper pixels become transparent before layers are composed, so moving heads,
 letters and planks cannot leave white rectangles over neighboring artwork.
 Preserve the original pixels and correctly occluded body parts. Each visible
 panel loops independently; pause offscreen or when the document is hidden.
-Reduced motion starts with the revised static poses, including the broken shelf,
-and supports explicit playback. `plate-*-still.svg` provides matching fallbacks
+The scenes play when visible; reduced motion slows playback to 70 percent.
+The labeled play/pause control stops all four scenes. `plate-*-still.svg` provides matching fallbacks
 and print artwork. `scripts/export-plate-stills.py` embeds the original pixels
 in paused SVG scenes captured during visual QA. Keep the two phase columns,
 institution conveyor, and captions beneath the illustrations.
