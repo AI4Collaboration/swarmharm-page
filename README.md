@@ -145,6 +145,8 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
+Keep its stages 44px high, with 6px vertical padding and a 16px gap before
+the example. Scale artwork proportionally within this compact strip.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
 the original colors legible. The conveyor
