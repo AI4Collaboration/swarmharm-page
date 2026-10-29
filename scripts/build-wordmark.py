@@ -1,5 +1,6 @@
-"""Build Michroma wordmarks and a compact crescent from irregular sand grains."""
+"""Compose the approved sand arc with unchanged Michroma grain lettering."""
 from pathlib import Path
+import base64
 from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.boundsPen import BoundsPen
@@ -133,34 +134,43 @@ def swarm_letters():
     return ''.join(defs), ''.join(letters), total
 
 
-start = (-40, 340)
-end = (red_peak, baseline - 1536*scale)
-bridge_points = (start, (560, 232), (1220, 222), end)
-bridge = grains(bridge_points, 70, 14, 2960, .04, 281026,
-                levels=[(14, 260), (5.5, 1000), (1.7, 1700)], free_left=True)
-# The last grains merge into a narrow, tapering trajectory ending at the A.
-tail_edges = [[], []]
-for i in range(65):
-    t = .57 + .43*i/64
-    x, y, dx, dy = curve(t, bridge_points)
-    norm = math.hypot(dx, dy)
-    half_width = 5.8*((1-t)/.43)**1.05
-    tail_edges[0].append((x-dy/norm*half_width, y+dx/norm*half_width))
-    tail_edges[1].append((x+dy/norm*half_width, y-dx/norm*half_width))
-tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
-tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
+def approaching_swarm():
+    """Small distant grains converge above the lettering into the approved arc."""
+    rng = random.Random(291026)
+    paths = []
+    currents = [
+        (((-220, 290), (-40, 235), (140, 125), (510, 85)), 650),
+        (((-190, 145), (-10, 157), (170, 95), (480, 105)), 320),
+        (((-200, 355), (10, 265), (170, 170), (480, 135)), 380),
+    ]
+    for points, count in currents:
+        for _ in range(count):
+            t = rng.betavariate(1.3, 1.35)
+            x, y, dx, dy = curve(t, points)
+            norm = math.hypot(dx, dy)
+            offset = max(-2, min(2, rng.gauss(0, .7))) * (24 + 13*t)
+            x, y = x - dy/norm*offset, y + dx/norm*offset
+            radius = (.45 + 3.4*t**.7) * rng.uniform(.65, 1.15)
+            fade = min(1, t/.10, (1-t)/.24)
+            opacity = (.08 + .48*t**1.1) * fade * rng.uniform(.65, 1)
+            rgb = gradient(t, [(0, (239, 117, 108)), (1, (235, 50, 41))])
+            paths.append(f'<path d="{grain_path(x,y,radius,rng)}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.3f}"/>')
+    return ''.join(paths), len(paths)
+
+
+approach, approach_count = approaching_swarm()
+arc_data = base64.b64encode((root/'static/images/swarmharm-sand-arc.png').read_bytes()).decode('ascii')
+# Keep the selected image's shape and its exact attachment to the red A.
+arc_width = 1572.06436
+arc_height = arc_width * 669 / 2062
+arc_y = baseline - 1536*scale - arc_height
+arc = f'<svg x="-40" y="{arc_y:.8f}" width="{arc_width}" height="{arc_height:.8f}" viewBox="33 11 2062 669" overflow="visible"><image width="2151" height="731" href="data:image/png;base64,{arc_data}"/></svg>'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
-    particles = []
-    stops = [(0, (239, 96, 88)), (.35, (235, 50, 41)),
-             (.7, (235, 36, 28)), (1, (229, 43, 36))]
-    for d, t, opacity in bridge:
-        rgb = gradient(t, stops)
-        particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title">
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2432" height="726" viewBox="-260 -66 2432 726" role="img" aria-labelledby="title">
 <title id="title">SWARMHARM</title>
 <defs>{letter_defs}</defs>
-<g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
+<g aria-label="Sand-grain crescent"><g aria-label="Distant grains gathering into the swarm">{approach}</g>{arc}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>
 </svg>
@@ -174,4 +184,4 @@ mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Swarm
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)
 mark += '</svg>\n'
 (root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8')
-print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'crescent_grains': len(bridge), 'letter_grains_before_clipping': letter_grain_count, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))
+print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'approaching_grains': approach_count, 'letter_grains_before_clipping': letter_grain_count, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))

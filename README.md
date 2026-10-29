@@ -106,11 +106,13 @@ SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. There is no loose sand beside the lettering. Above it, a
 separate red plume floats free of S: fine, diffuse grains on the left gather
 into coarser grains through the middle and taper toward A on the right.
+Small, dispersed grains approach from farther left and join the same smooth arc.
 The plume stays red in both themes, with a gentle opacity transition from
 the dispersed left end to the dense center. Preserve the full letterforms.
 HARM stays solid red.
-`scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
-imagegen studies informed the direction; the final artwork is native SVG.
+`scripts/build-wordmark.py` reproduces the composition. The approved transparent
+arc is retained in `static/images/swarmharm-sand-arc.png`; the approaching grains
+and unchanged lettering are native SVG. Keep the arc's smooth outline and tip.
 The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
 Both theme wordmarks are generated together; the social preview uses the light asset.
 Use the same wordmark in the header and hero. Keep the footer to the template credit.
