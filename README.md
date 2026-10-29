@@ -36,7 +36,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Three short questions follow,
   in a horizontal row on desktop and compact text rows on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
-  by communication, and collective harm without harmful intent. Avoid slogans,
+  by communication, and collective harm from individually benign actions. Avoid slogans,
   numbers and diagrams above these questions. The remaining questions
   appear below the domains.
 - Keep website wording here; do not change technical prompts or context to
