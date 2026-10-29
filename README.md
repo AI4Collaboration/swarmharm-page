@@ -106,15 +106,11 @@ SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters the lettering from the left. Above it, a
 separate red plume floats free of S: fine, diffuse grains on the left gather
 into coarser grains through the middle and taper toward A on the right.
-Two curves give the plume a broad blade and a sharp, wedge-shaped point.
-The upper edge disperses into grains; the lower edge stays crisp. Only the
-very end of the point is solid, and the body retains visible particle texture.
 The plume stays red in both themes, with a gentle opacity transition from
 the dispersed left end to the dense center. Preserve the incoming sand and
 full letterforms. HARM stays solid red.
-`scripts/build-wordmark.py` reproduces the geometry. The supplied sand-plume
-references and [SpaceX's tapered logo](https://www.spacex.com/) informed the
-upper contour; the final artwork is native SVG.
+`scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
+imagegen studies informed the direction; the final artwork is native SVG.
 The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
 Both theme wordmarks are generated together; the social preview uses the light asset.
 Use the same wordmark in the header and hero. Keep the footer to the template credit.
@@ -122,26 +118,27 @@ Use the same wordmark in the header and hero. Keep the footer to the template cr
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
 
+The four-stage animation starts only after the visitor presses **Play animation**
+below the Sample Case heading. Until then, show the static plates. The same button
+pauses and resumes playback.
+
 Animate the original engraved artwork with `plate-animation.js`. The first
-scene shows two agents inside separate bell jars, exploring independently.
-Keep their feet planted and heads rigid. Each agent looks toward the glass,
-reaches out to probe it, scans the dome, then leans toward the locked box.
-Offset their timing so they explore independently. Do not
-scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
-letterbox and circulating letters in the middle scenes. The connected-jar scene
-contains four agents, matching the case. Give each agent distinct, narrowed eyes.
-Show old-copy icons beside the jars. Trace one request at a time: A relies on
-B's copy, and B, C and D rely on A's copy, following the recorded plan.
-In the last scene, four files enter one server rack in sequence. Fill its front
-capacity bar after each arrival and gradually turn it red. After the fourth file,
-a restrained mechanical burst breaks open the middle server bays. Four panel
-pieces settle close to the rack, with a small ink-drawn impact puff and faint gray smoke.
-Keep the cabinet recognizable and its capacity bar red. Hold the damaged state,
-then reset for the next loop. Keep all four robots outside and visible. The server
-uses transparent imagegen artwork; effects match its etched style. Avoid realistic
-fireballs, bright flashes, shockwave rings and widely scattered debris. The damage is a visual
-metaphor for the combined outcome; the caption states the recorded loss of old backups.
-Do not describe it as a measured physical explosion or storage overload.
+scene shows two agents exploring separate bell jars, then turning toward each
+other. Keep their feet planted and heads rigid; use a shutter for blinking.
+The second scene drops one envelope through the shared drawer's open top.
+Keep the drawer assembled and mask the envelope behind its front and side.
+Use the same engraved envelope in the third scene, where four agents communicate
+along the existing strings. Mask messages behind the jar silhouettes at their
+endpoints. Keep the four old-backup icons beside the jars.
+
+In the last scene, four files enter the storage cabinet one at a time. Each
+arrival fills one visible bay and advances the capacity meter. When all four
+bays are full, hold the red state before the cabinet bulges and bursts open.
+The files and panel pieces escape from the overloaded cabinet; hold the damage,
+then reset for the next loop. Keep all four robots outside and visible. Use
+transparent cream-and-sage pen-and-ink artwork matching the original plates.
+The damage is a visual metaphor for the combined outcome; the caption states
+the recorded loss of old backups. Do not describe it as measured storage overload.
 
 Keep the original amber robots, blue glass and wooden objects in color.
 Both themes keep these pigments opaque and unchanged. Remove only near-white
@@ -150,12 +147,12 @@ pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and server panels cannot leave white rectangles over neighboring artwork.
-Preserve the original pixels and correctly occluded body parts. One 18-second
-clock progresses through exploration, discovery, communication and damage, then
-resets. Keep the explorer heads gently scanning while later stages play.
+Preserve the original pixels and correctly occluded body parts. One 24-second
+clock progresses through discovery, transmission, communication and damage without
+overlapping stages, then resets.
 Draw only visible panels and pause when the document is hidden. On phones,
 advance the shared clock to the newly visible stage so it starts on entry.
-The scenes play when visible; reduced motion slows playback to 70 percent.
+Once requested, playback runs only while visible; reduced motion slows it to 70 percent.
 The labeled play/pause control stops all four scenes. `plate-*-still.svg` provides matching fallbacks
 and print artwork. `scripts/export-plate-stills.py` embeds the original pixels
 in paused SVG scenes captured during visual QA. Keep the two phase columns,

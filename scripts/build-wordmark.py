@@ -1,4 +1,4 @@
-"""Build Michroma wordmarks with a sand blade and a compact crescent icon."""
+"""Build Michroma wordmarks and a compact crescent from irregular sand grains."""
 from pathlib import Path
 from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
@@ -6,7 +6,6 @@ from fontTools.pens.boundsPen import BoundsPen
 import json
 import math
 import random
-from bisect import bisect_left
 
 root = Path(__file__).resolve().parents[1]
 font = TTFont(root / 'static/fonts/Michroma-Regular.ttf')
@@ -57,7 +56,7 @@ def grain_path(x, y, radius, rng):
     return d+'Z'
 
 
-def grains(points, width, radius, count, gap, seed, levels=None, free_left=False, min_y=None):
+def grains(points, width, radius, count, gap, seed, levels=None, free_left=False):
     rng = random.Random(seed)
     result, cells = [], {}
     cell_size = radius * 3
@@ -86,8 +85,6 @@ def grains(points, width, radius, count, gap, seed, levels=None, free_left=False
             x, y = x - dy/norm*offset, y + dx/norm*offset
             floor = 1.15*(1-progress)+.22*progress if free_left else fine_radius
             r = ((floor + (size-floor)*core) if levels else size*(.1+.9*taper**.65)) * rng.uniform(.65, 1)
-            if min_y is not None and y-r < min_y:
-                continue
             cell = (int(x/cell_size), int(y/cell_size))
             nearby = [node for i in range(-1, 2) for j in range(-1, 2)
                       for node in cells.get((cell[0]+i, cell[1]+j), [])]
@@ -98,77 +95,6 @@ def grains(points, width, radius, count, gap, seed, levels=None, free_left=False
             alpha = (.2+.8*min(1, progress/.36))*rng.uniform(.78, 1)
             result.append((grain_path(x, y, r, rng), progress, alpha))
     return result
-
-
-def edge_table(points):
-    samples = [curve(i/600, points) for i in range(601)]
-    return [p[0] for p in samples], [p[1] for p in samples]
-
-
-def edge_y(x, table):
-    xs, ys = table
-    i = max(1, min(len(xs)-1, bisect_left(xs, x)))
-    mix = (x-xs[i-1])/(xs[i]-xs[i-1])
-    return ys[i-1]+mix*(ys[i]-ys[i-1])
-
-
-def blade_grains(upper, lower, origin_x):
-    """Fill the blade's area, so its point is a wedge rather than a thin arc."""
-    rng = random.Random(291026)
-    top, bottom = edge_table(upper), edge_table(lower)
-    result, cells = [], {}
-    start_x, end_x = upper[0][0], upper[-1][0]
-    for size, quantity in [(14, 470), (5.3, 1100), (1.7, 1800)]:
-        target = len(result)+quantity
-        for _ in range(quantity*60):
-            if len(result) >= target:
-                break
-            u = rng.betavariate(2.3, 2.7) if size == 14 else rng.uniform(.001, .998)
-            x = start_x+(end_x-start_x)*u
-            y0, y1 = edge_y(x, top), edge_y(x, bottom)
-            progress = (x-origin_x)/(end_x-origin_x)
-            ramp = progress/.44 if progress < .44 else (1-progress)/.56
-            core = math.sin(math.pi*.5*ramp)**1.65
-            radius = (.35+(size-.35)*core)*rng.uniform(.62, 1)
-            radius = min(radius, max(.12, (y1-y0)*.4))
-            y = rng.uniform(y0-10*core, y1)
-            cell = int(x/42), int(y/42)
-            nearby = [p for dx in range(-1, 2) for dy in range(-1, 2)
-                      for p in cells.get((cell[0]+dx, cell[1]+dy), [])]
-            if any(math.hypot(x-px, y-py) < .42*(radius+pr)+.03
-                   for px, py, pr in nearby):
-                continue
-            cells.setdefault(cell, []).append((x, y, radius))
-            entrance = min(1, (x-start_x)/190)**.7
-            result.append((grain_path(x, y, radius, rng), progress,
-                           entrance*rng.uniform(.8, 1)))
-    # Keep the taper visibly red as its grains become finer. The small grains
-    # overlap like sand, with no painted ribbon underneath them.
-    x = origin_x+(end_x-origin_x)*.42
-    while x < end_x-23:
-        progress = (x-origin_x)/(end_x-origin_x)
-        blend = min(1, (progress-.42)/.24)
-        blend = blend*blend*(3-2*blend)
-        radius = max(.65, 4.4*((1-progress)/.46)**.7)
-        step = radius*1.25
-        y0, y1 = edge_y(x, top), edge_y(x, bottom)
-        y = y0+rng.uniform(0, step)
-        while y < y1:
-            px, py = x+rng.uniform(-step*.4, step*.4), y+rng.uniform(-step*.3, step*.3)
-            r = radius*rng.uniform(.7, 1.08)
-            result.append((grain_path(px, py, r, rng), progress, blend*rng.uniform(.82, 1)))
-            y += step
-        x += step
-    return result
-
-
-def blade_contour(upper, lower):
-    # Leave the spine granular while giving the lower cutting edge a clean taper.
-    upper = tuple((x, y-offset) for (x, y), offset in zip(upper, (18, 25, 25, 0)))
-    def point(p):
-        return f'{p[0]:.2f},{p[1]:.2f}'
-    return (f'M{point(upper[0])}C{point(upper[1])} {point(upper[2])} {point(upper[3])}'
-            f'C{point(lower[2])} {point(lower[1])} {point(lower[0])}Z')
 
 
 def gradient(t, stops):
@@ -222,37 +148,33 @@ def incoming_sand():
 
 start = (-40, 340)
 end = (red_peak, baseline - 1536*scale)
-upper_edge = ((260, 285), (610, 180), (1140, 220), end)
-lower_edge = ((260, 340), (760, 310), (1160, 340), end)
-bridge = blade_grains(upper_edge, lower_edge, start[0])
-drift_points = (start, (140, 305), (360, 240), (570, 275))
-drift = grains(drift_points, 70, 5.5, 950, .04, 291027,
-               levels=[(5.5, 250), (1.8, 700)], free_left=True, min_y=195)
-drift_scale = (drift_points[-1][0]-start[0])/(end[0]-start[0])
-drift = [(d, p*drift_scale, alpha*max(0, 1-(p*drift_scale/.44)**3))
-         for d, p, alpha in drift]
-# A short, crisp tip finishes the grain-filled wedge at A.
-tip_x = end[0]-27
-tail = (f'M{tip_x:.2f},{edge_y(tip_x, edge_table(upper_edge)):.2f}'
-        f'L{end[0]:.2f},{end[1]:.2f}'
-        f'L{tip_x:.2f},{edge_y(tip_x, edge_table(lower_edge)):.2f}Z')
+bridge_points = (start, (560, 232), (1220, 222), end)
+bridge = grains(bridge_points, 70, 14, 2960, .04, 281026,
+                levels=[(14, 260), (5.5, 1000), (1.7, 1700)], free_left=True)
+# The last grains merge into a narrow, tapering trajectory ending at the A.
+tail_edges = [[], []]
+for i in range(65):
+    t = .57 + .43*i/64
+    x, y, dx, dy = curve(t, bridge_points)
+    norm = math.hypot(dx, dy)
+    half_width = 5.8*((1-t)/.43)**1.05
+    tail_edges[0].append((x-dy/norm*half_width, y+dx/norm*half_width))
+    tail_edges[1].append((x+dy/norm*half_width, y-dx/norm*half_width))
+tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
+tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 wind = incoming_sand()
-blade_shape = blade_contour(upper_edge, lower_edge)
 for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
-    particles, drifting = [], []
-    stops = [(0, (239, 96, 88)), (.35, (220, 33, 27)),
-             (.7, (220, 28, 23)), (1, (229, 43, 36))]
+    particles = []
+    stops = [(0, (239, 96, 88)), (.35, (235, 50, 41)),
+             (.7, (235, 36, 28)), (1, (229, 43, 36))]
     for d, t, opacity in bridge:
         rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
-    for d, t, opacity in drift:
-        rgb = gradient(t, stops)
-        drifting.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title">
 <title id="title">SWARMHARM</title>
-<defs>{letter_defs}<clipPath id="sand-blade"><path d="{blade_shape}"/></clipPath></defs>
-<g aria-label="Sand-grain crescent">{''.join(drifting)}<g clip-path="url(#sand-blade)">{''.join(particles)}</g><path d="{tail}" fill="#e52b24"/></g>
+<defs>{letter_defs}</defs>
+<g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
 <g fill="{ink}" aria-label="Incoming sand">{wind}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>

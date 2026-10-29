@@ -1,22 +1,19 @@
 /* Layers retain the pixels of the original bell-jar and letterbox plates. */
 .life-cycle { position: relative; }
-.life-half:first-child .life-phase { padding-right: 0; }
-.life-half:last-child .life-phase { padding-right: 76px; }
+.life-half .life-phase { padding-right: 0; }
 .life-step .plate-motion { display: none; width: 100%; height: auto; aspect-ratio: 1; overflow: hidden; filter: none; mix-blend-mode: normal; }
 .life-step > img[data-plate-source] { mix-blend-mode: normal; }
 .has-plate-motion .life-step > img { display: none; }
 .has-plate-motion .plate-motion { display: block; }
 /* Both themes use the original pigments, with no glow or color treatment. */
 .life-step :is(.plate-motion, img[data-plate-source]) { filter: none; mix-blend-mode: normal; }
-.life-control { position: absolute; right: 0; top: 6px; display: flex; align-items: center; gap: 5px; min-height: 34px; padding: 5px 7px; border: 0; border-radius: 4px; background: transparent; color: var(--muted); font: 12px/1 var(--font); cursor: pointer; }
+.life-control { position: static; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; margin: 0 0 20px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; background: transparent; color: var(--text); font: 13px/1 var(--font); cursor: pointer; }
 .life-control[hidden] { display: none; }
 .life-control:hover { background: var(--surface); color: var(--text); }
 .life-control:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .life-control svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
 @media (max-width: 760px) {
   .life-step .plate-motion { max-width: 210px; }
-  .life-half:first-child .life-phase { padding-right: 76px; }
-  .life-half:last-child .life-phase { padding-right: 0; }
 }
 @media print {
   .life-control, .has-plate-motion .plate-motion { display: none; }

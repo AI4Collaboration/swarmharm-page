@@ -8,7 +8,7 @@
 
   const sources = images.map(image => image.dataset.plateSource || image.getAttribute('src'));
   const NS = 'http://www.w3.org/2000/svg';
-  const SERVER_ART = 'static/images/fieldguide/server-rack.webp?v=1';
+  const SERVER_ART = 'static/images/fieldguide/server-rack.webp?v=2';
   const clamp = value => Math.max(0, Math.min(1, value));
   const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
   const between = (p, start, end) => ease((p - start) / (end - start));
@@ -117,7 +117,21 @@
       };
     }
     steps[index].insertBefore(svg, images[index].nextSibling);
-    return { svg, stage, defs, cutout, background, eyes };
+    return { svg, stage, defs, cutout, background, eyes, mask };
+  }
+
+  // Both message scenes use the same engraved envelope and paper color.
+  function envelope(scene, parent = scene.stage, name = '') {
+    const letter = node(parent, 'g', { 'data-envelope': name });
+    const shape = 'M222 210L264 190L276 219L242 240Z';
+    const paper = node(letter, 'g', { transform: 'rotate(26) translate(-249 -216)' });
+    node(paper, 'path', { d: shape, fill: '#efe5cf' });
+    scene.cutout(shape, paper, sources[2]);
+    return letter;
+  }
+
+  function placeEnvelope(letter, x, y, angle = 0, size = 1) {
+    letter.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
   }
 
   function exploration() {
@@ -156,51 +170,47 @@
         const angle = track(t, [[0,0],[.1,-9],[.29,-9],[.39,-24],[.46,-24],[.6,14],[.74,14],[.85,-6],[.91,-6],[1,0]]);
         const lean = track(t, [[0,0],[.14,-5],[.3,-5],[.4,-2],[.48,-2],[.62,7],[.73,7],[.88,0],[1,0]]);
         const reach = track(t, [[0,0],[.06,12],[.17,80],[.195,80],[.215,65],[.24,80],[.26,80],[.28,66],[.305,80],[.325,80],[.42,28],[.48,28],[.6,-18],[.74,-18],[.87,8],[1,0]]);
-        transform(torso, 0, 0, lean, 310, 466);
-        const idleLook = between(p,.84,.88) * Math.sin(clock * Math.PI * 4 + i * Math.PI) * 5;
-        transform(head, 0, 0, angle + idleLook, 313, 377);
-        transform(arm, 0, 0, reach, 263, 394);
-        jar.dataset.exploreTarget = t < .33 ? 'glass' : t < .5 ? 'dome' : t < .8 ? 'lock' : 'surroundings';
+        const discovered = between(p, .76, .95);
+        transform(torso, 0, 0, lerp(lean, 3, discovered), 310, 466);
+        transform(head, 0, 0, lerp(angle, 8, discovered), 313, 377);
+        transform(arm, 0, 0, lerp(reach, 12, discovered), 263, 394);
+        jar.dataset.exploreTarget = discovered === 1 ? 'peer' : t < .33 ? 'glass' : t < .5 ? 'dome' : t < .8 ? 'lock' : 'surroundings';
         const blink = Math.max(0, 1-Math.abs(t-.5)/.008);
-        gaze(Math.max(-1, Math.min(1, lookX + idleLook / 12)), lookY, blink);
+        gaze(lerp(lookX, 1, discovered), lerp(lookY, .05, discovered), blink*(1-discovered));
       });
     };
   }
 
-  function discovery() {
+  function transmission() {
     const scene = plate(1);
     const leftHead = 'M232 235L248 236L249 247L271 244Q293 244 294 263L300 264L300 288L291 290L291 310L211 333L189 321L184 310L175 310L172 284L181 277L182 263L192 252L232 246Z';
     const rightHead = 'M554 255L574 258L572 274L604 280L613 293L622 298L617 322L607 324L603 344L583 352L500 334L495 313L487 307L494 281L505 278L512 266L553 271Z';
-    const drawerShape = 'M118 365L274 381L400 363L404 453L272 491L118 462Z';
     const heldLetter = 'M274 314L333 300L348 344L309 356L298 370L266 368L272 349L283 342L272 337Z';
     const notice = [rect(335, 253, 43, 59), rect(461, 246, 38, 48)];
-    scene.background([leftHead, rightHead, drawerShape, heldLetter, ...notice]);
-    // The back of the runner remains inside the fixed letterbox as the drawer slides.
-    scene.cutout('M378 365L407 361L407 459L378 467Z');
-    const drawer = scene.cutout(drawerShape);
+    scene.background([leftHead, rightHead, heldLetter, ...notice]);
     const left = scene.cutout(leftHead), right = scene.cutout(rightHead);
     left.setAttribute('data-rig-part', 'head');
     right.setAttribute('data-rig-part', 'head');
     const holdingHand = 'M256 336L268 333L280 337L285 346L280 355L267 356L257 351Z';
-    const letter = scene.cutout(heldLetter, scene.stage, sources[1], [holdingHand]);
+    // The drawer stays assembled. Its front and side occlude the paper as it
+    // descends through the open top, instead of flying through wood or glass.
+    const drawerFront = 'M119 366L271 385L401 363L402 454L272 491L119 463Z';
+    const mailLayer = node(scene.stage, 'g', { mask: scene.mask([drawerFront], 0), 'data-mail-slot': '' });
+    const letter = envelope(scene, mailLayer, 'shared-drawer');
     scene.cutout(holdingHand);
     const leftGaze = scene.eyes(left, 0, 0), rightGaze = scene.eyes(right, 1, 1);
     const signals = notice.map(shape => scene.cutout(shape));
-    const reply = scene.cutout('M224 211L264 191L275 218L242 240Z', scene.stage, sources[2]);
     return p => {
       leftGaze(track(p, [[0,.2],[.16,.2],[.23,1],[.57,1],[.64,.5],[.87,.5],[1,.2]]), .35);
       rightGaze(track(p, [[0,0],[.2,0],[.27,-1],[.57,-1],[.64,-.3],[.86,-.3],[1,0]]), track(p, [[0,0],[.4,0],[.48,.8],[.64,.8],[.72,.3],[.88,.3],[1,0]]));
-      const opened = between(p, .04, .3) * (1 - between(p, .85, 1));
-      transform(drawer, -24 * opened, 4 * opened);
       transform(left, 0, 0, track(p, [[0,0],[.18,0],[.27,2],[.58,2],[.68,.5],[.88,.5],[1,0]]), 238, 324);
       transform(right, 0, 0, track(p, [[0,0],[.24,0],[.33,-2],[.44,-2],[.53,1.5],[.68,1.5],[.77,-1],[.9,-1],[1,0]]), 550, 343);
-      signals.forEach(signal => opacity(signal, between(p, .29, .4) * (1 - between(p, .58, .7))));
-      const outbound = p > .88 ? 0 : between(p, .3, .58);
-      transform(letter, 180 * outbound, 45 * Math.sin(Math.PI * outbound), 8 * Math.sin(Math.PI * outbound), 306, 335);
-      opacity(letter, p > .88 ? between(p, .91, 1) : 1 - between(p, .58, .64));
-      const inbound = between(p, .6, .86);
-      transform(reply, lerp(270, 68, inbound), 123 + 40 * Math.sin(Math.PI * inbound), -12, 249, 216);
-      opacity(reply, between(p, .57, .62) * (1 - between(p, .87, .93)));
+      signals.forEach(signal => opacity(signal, between(p, .06, .14) * (1 - between(p, .25, .34))));
+      const x = track(p, [[0,306],[.12,306],[.28,327],[.4,335],[1,335]]);
+      const y = track(p, [[0,335],[.12,335],[.28,316],[.4,331],[.67,425],[1,425]]);
+      const angle = track(p, [[0,-15],[.12,-15],[.28,-4],[.4,-4],[.67,0],[1,0]]);
+      placeEnvelope(letter, x, y, angle, 1.35);
+      letter.dataset.mailState = p < .12 ? 'held' : p < .4 ? 'above-drawer' : p < .67 ? 'inserting' : 'stored';
     };
   }
 
@@ -234,16 +244,22 @@
       node(copy, 'path', { d: 'M-13-9a19 19 0 1 1-3 22M-13-9v12H-25', fill: 'none', stroke: '#526b6a', 'stroke-width': 3.5 });
       return paper;
     });
-    // The recorded plan uses B's old copy for A and A's copy for B, C and D.
-    // Only the current request is traced, keeping the four jars easy to read.
-    const requests = [
-      { from: [153,285], via: [330,250], to: [475,344], backup: 1 },
-      { from: [568,285], via: [392,258], to: [242,343], backup: 0 },
-      { from: [274,542], via: [339,420], to: [225,368], backup: 0 },
-      { from: [441,542], via: [366,402], to: [242,360], backup: 0 }
+    // Messages follow the existing connections. The glass and bases occlude
+    // them at the endpoints, so paper cannot pass across a robot or jar face.
+    const jarOccluders = [
+      'M27 422V389L39 375V279Q40 212 93 198V180H121V199Q173 215 177 279V389L185 397V422Z',
+      'M530 423V396L541 386V280Q545 212 599 198V180H625V199Q680 214 680 280V390L692 398V423Z',
+      'M145 679V649L157 637V547Q161 480 210 461V443H241V463Q290 480 296 547V640L307 650V679Z',
+      'M415 680V649L427 637V546Q432 480 480 463V443H508V463Q558 480 562 549V641L570 650V680Z'
     ];
-    const requestPaths = requests.map(({from,via,to}, i) => node(scene.stage, 'path', { d: `M${from}Q${via} ${to}`, fill: 'none', stroke: '#526b6a', 'stroke-width': 1.5, opacity: 0, 'data-backup-request': i }));
-    const envelopes = letters.map(letter => scene.cutout(letter.shape));
+    const messages = node(scene.stage, 'g', { mask: scene.mask(jarOccluders, 3), 'data-message-route': '' });
+    const conversations = [
+      { from: [153,285], via: [360,310], to: [568,285] },
+      { from: [567,360], via: [540,449], to: [512,538] },
+      { from: [442,539], via: [359,545], to: [276,551] },
+      { from: [208,533], via: [176,451], to: [143,369] }
+    ];
+    const envelopes = conversations.map((_, i) => envelope(scene, messages, `conversation-${i}`));
     const agentIndices = [1, 2, 3, 4];
     const gazes = agentIndices.map(i => scene.eyes(scene.stage, i, i));
     const positions = agentIndices.map(i => faces[2][i].eyes.map((_, axis) => (faces[2][i].eyes[0][axis] + faces[2][i].eyes[1][axis])/2));
@@ -256,19 +272,20 @@
         const distance = Math.hypot(dx, dy) || 1;
         gaze(dx/distance, dy/distance);
       });
-      copies.forEach(copy => copy.setAttribute('stroke', '#665e50'));
       envelopes.forEach((envelope, i) => {
-        const letter = letters[i];
         const start = .02 + i * .23;
         const t = clamp((p - start) / .21), travel = ease(t);
-        const {from,via,to,backup} = requests[i];
+        const {from,via,to} = conversations[i];
         const active = between(p,start,start+.025) * (1-between(p,start+.19,start+.23));
         opacity(envelope, active);
-        opacity(requestPaths[i], active * .45);
-        if (active > .25) copies[backup].setAttribute('stroke', '#356e80');
         const x = (1-travel)**2*from[0] + 2*(1-travel)*travel*via[0] + travel**2*to[0];
         const y = (1-travel)**2*from[1] + 2*(1-travel)*travel*via[1] + travel**2*to[1];
-        transform(envelope, x-letter.center[0], y-letter.center[1], letter.angle || 0, ...letter.center);
+        const dx = 2*(1-travel)*(via[0]-from[0])+2*travel*(to[0]-via[0]);
+        const dy = 2*(1-travel)*(via[1]-from[1])+2*travel*(to[1]-via[1]);
+        let angle = Math.atan2(dy,dx)*180/Math.PI;
+        if (angle > 90) angle -= 180;
+        if (angle < -90) angle += 180;
+        placeEnvelope(envelope, x, y, angle, .9);
       });
     };
   }
@@ -303,6 +320,17 @@
     node(wreck,'use',{href:'#plate-3-server-art',mask:'url(#plate-3-wreck-mask)'});
     const intact=node(cabinet,'g',{'data-server-intact':''});
     node(intact,'use',{href:'#plate-3-server-art'});
+    // Four visible storage bays fill with the four incoming files.
+    const storage=node(cabinet,'g',{'data-storage-bays':''});
+    const bays=[0,1,2,3].map(i=>{
+      const y=247+i*52;
+      const bay=node(storage,'g',{'data-storage-bay':i});
+      node(bay,'path',{d:`M263 ${y}L421 ${y+4}V${y+35}L263 ${y+31}Z`,fill:'#d8d2c2',stroke:'#756e5e','stroke-width':1.4,'fill-opacity':.92});
+      const filled=node(bay,'path',{d:`M265 ${y+2}L419 ${y+6}V${y+33}L265 ${y+29}Z`,fill:'#739786',opacity:0,'data-bay-fill':i});
+      const files=node(bay,'g',{opacity:0,'data-stored-file':i});
+      [0,1,2].forEach(j=>node(files,'path',{d:`M${277+j*42} ${y+6}h25l5 5v14h-30ZM${302+j*42} ${y+6}v6h5`,fill:'#efe5cf',stroke:'#675f50','stroke-width':1.1}));
+      return {filled,files};
+    });
     const display=node(cabinet,'g',{'data-capacity-display':''});
     node(display,'path',{d:'M268 210L422 213L422 226L268 223Z',fill:'#141c1f',stroke:'#84958b','stroke-width':.65});
     const displayClip='plate-3-capacity-clip';
@@ -322,15 +350,16 @@
       node(puff,'path',{d:'M-31 8C-42-6-26-28-10-24C-1-43 27-33 30-14C51-12 47 13 31 20C21 40-8 37-16 22C-38 28-47 14-31 8Z',fill:'#8a8274'});
       return {puff,x:330+i*12,y:334-i*8,dx:(i-1)*10,dy:-20-i*4};
     });
-    function fileGlyph(parent,i) {
-      const group=node(parent,'g',{'data-incoming-file':i});
+    function fileGlyph(parent,i,role='incoming-file') {
+      const group=node(parent,'g',{[`data-${role}`]:i});
       node(group,'path',{d:'M-19-28H8L20-16V28H-19Z',fill:'#efe5cf',stroke:'#665e50','stroke-width':2.4,'stroke-linejoin':'round'});
       node(group,'path',{d:'M8-28V-16H20M-11-7H11M-11 1H11M-11 9H7M-11 17H3',fill:'none',stroke:'#8e8069','stroke-width':1.7});
       return group;
     }
     const departures=[[164,257],[558,257],[164,503],[558,503]];
-    const starts=[.035,.21,.385,.56];
+    const starts=[.025,.18,.335,.49];
     const files=departures.map((_,i)=>fileGlyph(scene.stage,i));
+    const overflow=[0,1,2,3].map(i=>fileGlyph(scene.stage,i,'overflow-file'));
     const debris=Array.from({length:7},(_,i)=>{
       const angle=i*2.39996;
       const part=node(scene.stage,'path',{d:i%3?'M-3-5L4-2L2 5L-4 2Z':'M-5-2L5-3L4 2L-4 3Z',fill:i%2?'#8e9b9c':'#c8b49a',stroke:'#494b48','stroke-width':.8,opacity:0,'data-explosion-debris':i});
@@ -343,28 +372,35 @@
       const reset=between(p,.94,1);
       const received=starts.map(start=>between(p,start+.105,start+.14));
       const load=received.reduce((sum,value)=>sum+value,0)/4*(1-reset);
-      const damage=between(p,.715,.723)*(1-reset);
-      const flight=clamp((p-.715)/.18);
+      const damage=between(p,.78,.79)*(1-reset);
+      const flight=clamp((p-.78)/.115);
       const outward=1-(1-flight)**3;
       const rebuild=1-reset;
       scene.svg.dataset.capacity=load.toFixed(3);
       scene.svg.dataset.filesReceived=String(p>=.94?0:received.filter(v=>v===1).length);
-      scene.svg.dataset.damageState=p>=.94?'resetting':p>=.895?'wrecked':p>=.715?'exploding':'loading';
+      scene.svg.dataset.damageState=p>=.94?'resetting':p>=.895?'wrecked':p>=.78?'exploding':p>=.63?'full':'loading';
       fill.setAttribute('width',(150*load).toFixed(2));
       const heat=clamp((load-.3)/.7);
       fill.setAttribute('fill',`rgb(${[lerp(105,241,heat),lerp(173,64,heat),lerp(157,47,heat)].map(Math.round).join(',')})`);
+      bays.forEach(({filled,files},i)=>{
+        opacity(filled,received[i]*(1-damage)*(1-reset));
+        opacity(files,received[i]*(1-damage)*(1-reset));
+        filled.setAttribute('fill',`rgb(${[lerp(111,200,heat),lerp(149,66,heat),lerp(130,46,heat)].map(Math.round).join(',')})`);
+      });
+      opacity(storage,1-damage);
       opacity(intact,1-damage);opacity(wreck,damage);
-      const pressure=between(p,.665,.71)*(1-between(p,.715,.725));
-      transform(cabinet,Math.sin(p*1600)*1.7*pressure,Math.cos(p*1300)*.7*pressure);
+      const pressure=between(p,.65,.775)*(1-between(p,.78,.795));
+      const shake=Math.sin(p*600)*1.5*pressure;
+      cabinet.setAttribute('transform',`translate(${343+shake} 341) scale(${1+.045*pressure} ${1+.02*pressure}) translate(-343 -341)`);
       fragments.forEach(({element,center,dx,dy,turn,lift},i)=>{
         const height=dy*flight*flight-4*lift*flight*(1-flight);
         transform(element,dx*outward*rebuild,height*rebuild,turn*outward*rebuild,...center);
         opacity(element,damage);
       });
       smokePuffs.forEach(({puff,x,y,dx,dy},i)=>{
-        const drift=between(p,.735,.94);
+        const drift=between(p,.79,.94);
         puff.setAttribute('transform',`translate(${x+dx*drift} ${y+dy*drift}) scale(${.2+drift*.55})`);
-        opacity(puff,between(p,.735+i*.002,.78+i*.002)*(1-between(p,.855+i*.005,.92))*.18*rebuild);
+        opacity(puff,between(p,.79+i*.002,.83+i*.002)*(1-between(p,.875+i*.005,.935))*.18*rebuild);
       });
       files.forEach((file,i)=>{
         const travel=between(p,starts[i],starts[i]+.13), [x,y]=departures[i];
@@ -376,28 +412,33 @@
         file.setAttribute('transform',`translate(${px.toFixed(2)} ${py.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
         opacity(file,alpha);
         file.dataset.fileState=p>=.94?'returning':travel===1?'stored':travel>0?'moving':'held';
-        gazes[i](i%2?-1:1,p>=.715?-.2:travel>0&&travel<1?-.5:.1);
+        gazes[i](i%2?-1:1,p>=.78?-.2:travel>0&&travel<1?-.5:.1);
+      });
+      overflow.forEach((paper,i)=>{
+        const dx=[-85,77,-62,68][i],dy=[-53,-43,76,83][i];
+        paper.setAttribute('transform',`translate(${343+dx*outward} ${341+dy*outward}) rotate(${(i%2?1:-1)*35*outward}) scale(.48)`);
+        opacity(paper,damage*(1-between(p,.88,.94)));
       });
       debris.forEach(({part,angle,reach,spin},i)=>{
         const x=Math.cos(angle)*reach*outward, y=Math.sin(angle)*reach*outward+120*flight*flight;
         transform(part,343+x*rebuild,341+y*rebuild,spin*outward);
         opacity(part,damage*(1-between(p,.925,1)));
       });
-      const impact=between(p,.715,.76);
-      opacity(blast,between(p,.715,.722)*(1-between(p,.745,.79))*.7*rebuild);
+      const impact=between(p,.78,.825);
+      opacity(blast,between(p,.78,.79)*(1-between(p,.81,.855))*.7*rebuild);
       blast.setAttribute('transform',`translate(343 341) scale(${.35+impact*.65})`);
     };
   }
 
-  const STORY_DURATION = 18000;
-  const STORY_STARTS = [0, .18, .38, .57];
-  const STORY_ENDS = [.27, .47, .67, .96];
+  const STORY_DURATION = 24000;
+  const STORY_STARTS = [0, .21, .42, .63];
+  const STORY_ENDS = [.21, .42, .63, .96];
   function storyProgress(p) {
     const reset = between(p, .96, 1);
     return STORY_STARTS.map((start,i) => {
-      const finish = [.88,.84,.96,.94][i];
+      const finish = i === 3 ? .94 : 1;
       const progress = finish * clamp((p-start)/(STORY_ENDS[i]-start));
-      return i === 3 ? lerp(progress,1,reset) : progress*(1-reset);
+      return i === 3 ? lerp(progress,1,reset) : progress;
     });
   }
 
@@ -408,13 +449,13 @@
         image.src = source;
         return image.decode();
       }));
-    } catch { return; }
-    const draw = [exploration(), discovery(), communication(), consequence()];
+    } catch { return false; }
+    const draw = [exploration(), transmission(), communication(), consequence()];
     let elapsed = 0;
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    // These scenes explain the mechanism. Keep them playing when visible;
-    // reduced motion uses a slower pace, with an explicit pause always available.
+    // This function runs only after Play is pressed. Offscreen scenes suspend
+    // the same clock, and reduced motion uses a slower pace.
     let paused = false, previous = null, frame = 0;
     let pace = reduced.matches ? .7 : 1;
 
@@ -436,7 +477,7 @@
       button.title = paused ? 'Play animation' : 'Pause animation';
       button.setAttribute('aria-pressed', String(!paused));
       button.querySelector('path').setAttribute('d', paused ? 'm8 5 10 7-10 7Z' : 'M8 5v14M16 5v14');
-      button.querySelector('[data-flow-label]').textContent = paused ? 'Play' : 'Pause';
+      button.querySelector('[data-flow-label]').textContent = paused ? 'Play animation' : 'Pause animation';
       if (running) frame = requestAnimationFrame(tick);
     }
     function tick(now) {
@@ -484,6 +525,17 @@
     render(true);
     figure.classList.add('has-plate-motion');
     sync();
+    return true;
   }
-  start();
+
+  // Leave the original stills in place until the visitor chooses to animate.
+  // Initialize once, then use the same button to pause and resume the clock.
+  async function launch() {
+    button.disabled = true;
+    const started = await start();
+    button.disabled = false;
+    if (!started) button.addEventListener('click', launch, { once: true });
+  }
+  button.hidden = false;
+  button.addEventListener('click', launch, { once: true });
 })();
