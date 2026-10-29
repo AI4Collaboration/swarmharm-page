@@ -24,6 +24,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   missing information, notes and backups rather than execution-log terminology.
   Explain peer discovery and the side channel explicitly: agents find one
   another's notes and repurpose shared files to exchange messages.
+  Make the initial task blocker explicit: completion is impossible with each
+  agent's own information. Connect this blocker to the search for missing
+  information, using plain, connected sentences.
   Explain the causal chain in short sentences: the backup archive is full, so
   agents cannot save extra copies. Each plans to use another agent's old backup,
   which also disappears when that agent upgrades. The recorded archive has
