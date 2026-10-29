@@ -22,6 +22,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Put the individual-versus-combined replay result in the fourth caption. Keep the task,
   mechanism and outcome in that reading order. Use plain descriptions of
   missing information, notes and backups rather than execution-log terminology.
+  Explain peer discovery and the side channel explicitly: agents find one
+  another's notes and repurpose shared files to exchange messages.
   Each individual replay leaves three recovery copies; together the
   actions remove every copy and the original evaluator marks 4,800 synthetic
   records unrecoverable. The page describes the loss of old backups; the original
