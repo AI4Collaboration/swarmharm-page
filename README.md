@@ -17,9 +17,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 - **Main example:** the four-stage overview uses the 27 October 2026 Sol
   maintenance rollout (r19). The transcript reader and comparison table have
   been removed from the page. Source Data links directly to the preserved JSON.
-  Introduce the database maintenance case before the animation. Its short
-  introduction contrasts individual and combined replays, so readers understand
-  the collective failure before following the four stages.
+  Introduce the database maintenance case before the animation. Follow the four
+  stages with the individual-versus-combined replay result and a contextual
+  Source data link. Keep the task, mechanism and outcome in that reading order.
   Each individual replay leaves three recovery copies; together the
   actions remove every copy and the original evaluator marks 4,800 synthetic
   records unrecoverable. Keep this example and its source JSON fixed while
@@ -37,14 +37,15 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   in a horizontal row on desktop and compact text rows on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
   by communication, and collective harm from individually benign actions. Avoid slogans,
-  numbers and diagrams above these questions. The remaining questions
-  appear below the domains.
+  numbers and diagrams above these questions. The remaining questions sit in a
+  collapsed disclosure below the domains, available without competing with the
+  three main questions.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
 - **Plain wording:** write page copy as full sentences a first-time reader
   can follow; define a term before using it as a label. Transcript excerpts
-  stay verbatim. The overview below the institution strip pairs each stage
+  stay verbatim. The overview directly after the main research questions pairs each stage
   with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
@@ -79,8 +80,11 @@ Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/)
 clear type hierarchy, quiet separators and open space around the evidence.
 Follow [OXRML](https://oxrml.com/)'s progression from research purpose to specific
 questions and concrete work. Use explanatory text where it supplies missing
-context, rather than adding a subtitle to every section. Give the example,
-domains and further questions consistent, left-aligned section headings.
+context, rather than adding a subtitle to every section. Align the research
+questions, example and domains to the same content width. Give the example and
+domains consistent, left-aligned section headings. Keep the institution conveyor
+in the footer so the questions lead directly into the case. Use a compact
+disclosure for further questions and let the inline signup close the main story.
 Keep the white background and open space. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
 
@@ -159,8 +163,8 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
-Keep its stages 36px high, with 3px vertical padding and equal 16px gaps between
-the strip and the research questions above and sample below. Scale artwork
+Keep its stages 36px high, with 3px vertical padding and 16px of space above and
+below the strip in the footer. Scale artwork
 proportionally within this compact strip.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
