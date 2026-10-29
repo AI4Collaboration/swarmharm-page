@@ -9,15 +9,39 @@
   window.addEventListener('resize', updateHeaderOffset);
   updateHeaderOffset();
 
+  const menu = header?.querySelector('[data-nav-toggle]');
+  const navigation = header?.querySelector('nav');
+  if (menu && navigation) {
+    header.classList.add('nav-enhanced');
+    menu.hidden = false;
+    function setMenu(open) {
+      header.classList.toggle('nav-open', open);
+      menu.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+      updateHeaderOffset();
+    }
+    menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
+    header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && header.classList.contains('nav-open')) {
+        setMenu(false);
+        menu.focus();
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!header.contains(event.target)) setMenu(false);
+    });
+    matchMedia('(max-width: 900px)').addEventListener('change', () => setMenu(false));
+    updateHeaderOffset();
+  }
+
   function revealTarget(hash, scroll = false) {
     if (!hash || hash === '#') return;
     let id;
     try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
     // Preserve shared links when sections are renamed or consolidated.
     const original = id;
-    if (id === 'incident-goal-drift') id = 'sample-result';
-    else if (id === 'case-study') id = 'sample';
-    else if (id.startsWith('case-')) id = id.replace('case-', 'sample-');
+    if (id === 'sample' || id === 'sample-title' || id === 'sample-result' || id === 'incident-goal-drift' || id.startsWith('case-')) id = 'sample-steps';
     const target = document.getElementById(id);
     if (!target) return;
     if (target instanceof HTMLDetailsElement) target.open = true;

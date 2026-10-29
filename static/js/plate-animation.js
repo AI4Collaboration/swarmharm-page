@@ -44,8 +44,8 @@
      { eyes: [[412, 271], [438, 265]], radius: 7.5 }, { eyes: [[590, 267], [613, 262]], radius: 7.5 }]
   ];
 
-  // Convert paper to alpha before compositing, so moving cutouts cannot cover
-  // adjacent engraving with white rectangles, in either theme.
+  // Preserve the original pigments while lifting near-white paper to alpha.
+  // Moving cutouts remain transparent around the engraving in either theme.
   function plate(index) {
     const source = sources[index];
     const svg = document.createElementNS(NS, 'svg');
@@ -57,8 +57,8 @@
     const defs = node(svg, 'defs');
     const inkId = `plate-${index}-ink`;
     const ink = node(defs, 'filter', { id: inkId, 'color-interpolation-filters': 'sRGB' });
-    node(ink, 'feColorMatrix', { type: 'matrix', values: '0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.2126 -.7152 -.0722 0 1' });
-    node(node(ink, 'feComponentTransfer'), 'feFuncA', { type: 'linear', slope: 1.08, intercept: -.035 });
+    node(ink, 'feColorMatrix', { type: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -.2126 -.7152 -.0722 0 1' });
+    node(node(ink, 'feComponentTransfer'), 'feFuncA', { type: 'linear', slope: 3.5, intercept: -.1 });
     const stage = node(svg, 'g', { 'data-scene-art': index });
     let serial = 0;
     const mask = (holes, edge = 1) => {

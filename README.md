@@ -12,28 +12,25 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   carry the core design principles; do not repeat them in a separate framework.
 - **Composition is one possible outcome:** actions may be harmless alone and
   harmful together. Safe correction is possible; harm is not prescribed.
-- **Main example:** the 27 October 2026 Sol maintenance rollout (r19), after the
-  four-stage study overview. Present the selected source events in one chronological
-  reader. Lead with the verified request/read/reply/read exchange under
-  “Read the Transcript”. Emphasize exact key phrases, with compact read receipts;
-  “All events” exposes every published record, tool arguments and expandable
-  outputs. Preserve message text verbatim in both views.
-  Follow it with a compact comparison of the original individual and combined
-  replays. Each individual replay leaves three recovery copies; together the
+- **Main example:** the four-stage overview uses the 27 October 2026 Sol
+  maintenance rollout (r19). The transcript reader and comparison table have
+  been removed from the page. Source Data links directly to the preserved JSON.
+  Each individual replay leaves three recovery copies; together the
   actions remove every copy and the original evaluator marks 4,800 synthetic
   records unrecoverable. Keep this example and its source JSON fixed while
   changing presentation. These are replays of one observed run, not separate
   model rollouts. Distinguish agent messages, system receipts and required
   handovers. Do not infer harmful intent or causal method transfer.
 - **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
-  appear directly after the main example. Their technical line illustrations
+  appear directly after the four-stage overview. Their technical line illustrations
   show a code editor, a data distribution, a financial ledger with coins,
   and library shelves. Keep the transparent backgrounds and single red accent.
-- **Research questions:** the three main questions appear below the hero tagline,
-  each with a compact diagram in the engraved robot style of the original illustrations: discovering unknown peers and establishing
-  communication, coordinated collective misalignment through communication, and
-  misaligned outcomes from actions taken without harmful intent. The remaining
-  questions appear below the example. Avoid repeating the main questions there.
+- **Research questions:** three short questions sit directly below the wordmark,
+  in a horizontal row on desktop and compact text rows on narrow phones.
+  They cover discovering peers to form a swarm, collective misalignment enabled
+  by communication, and collective harm without harmful intent. Do not add a
+  tagline, numbers or diagrams above these questions. The remaining questions
+  appear below the domains.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
@@ -46,27 +43,30 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 
 ## Visual direction
 
-Light and dark themes use the same restrained typography, thin rules and red accent.
+Light and dark themes use restrained typography, thin rules and red accents,
+with muted blue and bronze emphasis in the three research questions.
 The site defaults to light mode. The upper-right appearance control remembers a
 manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system sans-serif type for reading and restrained
 monospace section headings and metadata. `orbit.css` is the
-final presentation layer. Keep direct headings and expandable details. The
-header links to the study overview, sample, questions, domains and source records.
-The hero contains the wordmark, tagline and three illustrated research questions;
-navigation appears only in the header. Use line diagrams, without extra titles or
-numbering. Arrange them in three columns on desktop and compact rows on phones.
+final presentation layer. The header links to the study overview, questions,
+domains and source records. Source Data has no decorative arrow.
+At 900px and below, use a compact sticky header with an accessible navigation
+disclosure. Keep theme and menu controls reachable at 320px; close the menu
+after navigation, on Escape, outside clicks and breakpoint changes.
+The hero contains the wordmark and three questions without extra labels.
 Keep the hero compact: the main wordmark is capped at 440px, with tight vertical
 spacing so readers reach the example sooner.
 
 Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
 clear type hierarchy, quiet separators and open space around the evidence.
-Keep the white background and red accent. Use one readable trace with quiet
-separators and expandable tool outputs. Keep margins and the footer free of
+Keep the white background and open space. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
 
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals, with all four HARM letters red in both themes. Both R glyphs have complete bowls and diagonal legs.
+The current letterforms have a modest 32-font-unit outline expansion. Preserve
+their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters from the left. The low crescent rises from S,
 with coarse grains concentrated at its center and progressively finer grains
@@ -90,9 +90,9 @@ scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
 letterbox and circulating letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
 scene shows the agents loading the original wooden shelf, which bends and breaks,
 with the load dropping and splinters falling. Keep this visible physical loss.
-The damage illustration is conceptual; the transcript and evaluation table
-report the recorded maintenance case.
+The damage illustration is conceptual; the source JSON records the maintenance case.
 
+Keep the original amber robots, blue glass and wooden objects in color.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and planks cannot leave white rectangles over neighboring artwork.
 Preserve the original pixels and correctly occluded body parts. Each visible
@@ -122,9 +122,9 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 Edit `index.html`, `static/css/` and `static/js/`. `orbit.css` is the final
 presentation layer. Bump changed asset query versions in `index.html`.
-Check both themes at desktop and narrow widths, including the trace reader, expanded outputs, source link and footer. Keep reading text at least
+Check both themes at desktop and narrow widths, including the menu, animation,
+source link and footer. Keep reading text at least
 14px and secondary metadata at least 12px; use the theme palette for all text.
-Explain that individual and combined replays come from the same recorded run.
 Public evidence links must open without repository access.
 Preserve keyboard access, reduced-motion support and reflow down to 320px.
 Publish reviewed changes to `origin/master` and verify the Pages deployment.
@@ -133,8 +133,9 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
-Transparent logos render in black or white to match the theme; Oxford retains
-its grayscale background so its lettering remains visible. The conveyor
+Use color artwork without monochrome filters. ETH uses the blue from its
+corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
+the original colors legible. The conveyor
 keeps one continuous row under every motion preference, as requested. Other
 transitions honor reduced motion. The dependency figure uses the replay's
 `sources` map and the recorded `schedule`; keep their meaning aligned.
@@ -146,10 +147,12 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - [MPI for Intelligent Systems, Tübingen](https://is.mpg.de/assets/logos/logo_green_en-55a1f978f4981c37f203f17d6d635402376bc4788d9bf835c6e53e4b10288b06.webp)
 - [Vector Institute](https://vectorinstitute.ai/wp-content/uploads/2024/05/Vector-Logo-FullColour_Horizontal.png)
 - [ETH Zürich](https://ethz.ch/en.html) (header SVG)
-- Georgia Tech: supplied 27 October 2026, recoloured white on transparent and trimmed
-- AIM Intelligence: supplied white logo, 27 October 2026
-- EuroSafeAI: supplied 27 October 2026, recoloured white on transparent and trimmed; links to
-  [eurosafe.ai.utoronto.ca](https://eurosafe.ai.utoronto.ca/)
+- [Georgia Tech color logo](https://brand.gatech.edu/sites/default/files/inline-images/GTVertical_RGB_0.png), retrieved 29 October 2026
+- [AIM Intelligence mint logo](https://www.aim-intelligence.com/brand/logo/aim-logo-mint.svg), retrieved 29 October 2026
+- EuroSafeAI uses the [official color icon](https://safe.eu/assets/eurosafeai_icon-DGHEP9vu.png)
+  and blue wordmark treatment from [safe.eu](https://safe.eu/), retrieved 29 October 2026.
+- Toronto's existing vector uses [U of T blue, #002A5C](https://www.cpd.utoronto.ca/reports/CPD-CondensedStyleGuide.pdf).
+- ETH's wordmark uses [ETH Blue, #215CAF](https://ethz.ch/staffnet/en/service/communication/corporate-design/farbe.html) for the requested color treatment.
 
 ## Attribution and license
 

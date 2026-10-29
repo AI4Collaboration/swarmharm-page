@@ -11,6 +11,7 @@ root = Path(__file__).resolve().parents[1]
 font = TTFont(root / 'static/fonts/Michroma-Regular.ttf')
 glyphs, cmap = font.getGlyphSet(), font.getBestCmap()
 word, tracking = 'SWARMHARM', 80
+weight = 32  # A small outline expansion; keep the font, spacing and sand unchanged.
 advances = [glyphs[cmap[ord(c)]].width for c in word]
 scale = 1972 / (sum(advances) + tracking * (len(word) - 1))
 left, baseline, cursor = 100, 604, 0
@@ -21,7 +22,7 @@ for i, char in enumerate(word):
     x = left + cursor * scale
     fill = '#e52b24' if i >= 5 else 'INK'
     placement = f'translate({x:.5f} {baseline}) scale({scale:.8f} {-scale:.8f})'
-    paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" transform="{placement}" d="{pen.getCommands()}"/>')
+    paths.append(f'<path data-letter="{char}" data-index="{i}" fill="{fill}" stroke="{fill}" stroke-width="{weight}" stroke-linejoin="round" transform="{placement}" d="{pen.getCommands()}"/>')
     bounds = BoundsPen(glyphs)
     glyphs[cmap[ord(char)]].draw(bounds)
     letter_info.append((char, x, pen.getCommands(), placement, bounds.bounds))
@@ -101,7 +102,7 @@ def swarm_letters():
     total = 0
     for i, (char, x, outline, placement, bounds) in enumerate(letter_info[:5]):
         clip_id = f'swarm-letter-{i}'
-        defs.append(f'<clipPath id="{clip_id}" clipPathUnits="userSpaceOnUse"><path transform="{placement}" d="{outline}"/></clipPath>')
+        defs.append(f'<mask id="{clip_id}" maskUnits="userSpaceOnUse" x="-100" y="140" width="2272" height="520"><path fill="white" stroke="white" stroke-width="{weight}" stroke-linejoin="round" transform="{placement}" d="{outline}"/></mask>')
         x0, y0, x1, y1 = bounds
         x0, x1 = x+x0*scale-4, x+x1*scale+4
         y0, y1 = baseline-y1*scale-4, baseline-y0*scale+4
@@ -117,7 +118,7 @@ def swarm_letters():
             row += 1
             y += 4.85
         total += len(dots)
-        letters.append(f'<g data-letter="{char}" data-index="{i}" clip-path="url(#{clip_id})">{"".join(dots)}</g>')
+        letters.append(f'<g data-letter="{char}" data-index="{i}" mask="url(#{clip_id})">{"".join(dots)}</g>')
     return ''.join(defs), ''.join(letters), total
 
 
