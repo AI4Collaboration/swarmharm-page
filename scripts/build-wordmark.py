@@ -56,7 +56,7 @@ def grain_path(x, y, radius, rng):
     return d+'Z'
 
 
-def grains(points, width, radius, count, gap, seed, levels=None):
+def grains(points, width, radius, count, gap, seed, levels=None, free_left=False):
     rng = random.Random(seed)
     result, cells = [], {}
     cell_size = radius * 3
@@ -77,10 +77,14 @@ def grains(points, width, radius, count, gap, seed, levels=None):
             if levels and size <= 2 and rng.random() < .12*core:
                 continue
             spread = max(-1.5, min(1.5, rng.gauss(-.1, .52))) if levels else rng.uniform(-1, 1)
-            offset = spread * width * taper**.85 * (1-progress)**1.65 * 1.8
+            envelope = max(taper, .38*(1-progress)**2) if free_left else taper
+            if free_left:
+                spread = max(-1.25, min(1.25, spread))
+            offset = spread * width * envelope**.85 * (1-progress)**1.65 * 1.8
             norm = math.hypot(dx, dy)
             x, y = x - dy/norm*offset, y + dx/norm*offset
-            r = ((fine_radius + (size-fine_radius)*core) if levels else size*(.1+.9*taper**.65)) * rng.uniform(.65, 1)
+            floor = 1.15*(1-progress)+.22*progress if free_left else fine_radius
+            r = ((floor + (size-floor)*core) if levels else size*(.1+.9*taper**.65)) * rng.uniform(.65, 1)
             cell = (int(x/cell_size), int(y/cell_size))
             nearby = [node for i in range(-1, 2) for j in range(-1, 2)
                       for node in cells.get((cell[0]+i, cell[1]+j), [])]
@@ -142,23 +146,11 @@ def incoming_sand():
     return ''.join(dots)
 
 
-start = (left + 1250*scale, baseline - 1540*scale)
+start = (-40, 340)
 end = (red_peak, baseline - 1536*scale)
-bridge_points = (start, (400, 210), (1170, 260), end)
-bridge = grains(bridge_points, 68, 14, 2960, .04, 281026,
-                levels=[(14, 260), (5.5, 1000), (1.7, 1700)])
-# A fine launch stream keeps the cloud visibly connected to S alone.
-launch_rng = random.Random(102926)
-for _ in range(380):
-    t = launch_rng.uniform(.001, .4)
-    x, y, dx, dy = curve(t, bridge_points)
-    offset = launch_rng.gauss(0, .35+7*t/.4)
-    norm = math.hypot(dx, dy)
-    x, y = x-dy/norm*offset, y+dx/norm*offset
-    progress = (x-start[0])/(end[0]-start[0])
-    radius = launch_rng.uniform(.8, 2.5)
-    bridge.append((grain_path(x, y, radius, launch_rng), progress,
-                   launch_rng.uniform(.6, .95)))
+bridge_points = (start, (560, 232), (1220, 222), end)
+bridge = grains(bridge_points, 70, 14, 2960, .04, 281026,
+                levels=[(14, 260), (5.5, 1000), (1.7, 1700)], free_left=True)
 # The last grains merge into a narrow, tapering trajectory ending at the A.
 tail_edges = [[], []]
 for i in range(65):
@@ -172,10 +164,10 @@ tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
 tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 wind = incoming_sand()
-for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef', (226, 228, 231))]:
+for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
     particles = []
-    stops = [(0, origin), (.12, (182, 47, 41) if theme == 'light' else (235, 154, 147)),
-             (.3, (235, 50, 41)), (.65, (235, 36, 28)), (1, (229, 43, 36))]
+    stops = [(0, (239, 96, 88)), (.35, (235, 50, 41)),
+             (.7, (235, 36, 28)), (1, (229, 43, 36))]
     for d, t, opacity in bridge:
         rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')

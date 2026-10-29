@@ -103,13 +103,12 @@ SWARMHARM in capitals, with all four HARM letters red in both themes. Both R gly
 The current letterforms use a 140-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
-outlines. A scattered trail enters from the left. The low crescent rises from S,
-with an off-center crest and a longer, fine red taper toward A. Rounded,
-irregular grains form a continuous cloud: dispersed on the left, dense and
-coarser through the middle, then merging into a narrow curved tail on the right.
-Keep the fine stream rising from S and the incoming sand in the letterforms.
-Its color grades from charcoal to red in light mode and white
-to red in dark mode. HARM stays solid red. Preserve the full letterforms.
+outlines. A scattered trail enters the lettering from the left. Above it, a
+separate red plume floats free of S: fine, diffuse grains on the left gather
+into coarser grains through the middle and taper toward A on the right.
+The plume stays red in both themes, with a gentle opacity transition from
+the dispersed left end to the dense center. Preserve the incoming sand and
+full letterforms. HARM stays solid red.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
 imagegen studies informed the direction; the final artwork is native SVG.
 The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
