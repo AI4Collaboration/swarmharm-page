@@ -55,7 +55,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .nav-inner nav a { font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--muted); }
 .nav-inner nav a:hover { color: var(--text); }
 .hero { background: var(--bg); border-bottom: 0; }
-.hero-layout { display: block; padding-block: 30px 36px; text-align: center; }
+.hero-layout { display: block; padding-block: 30px 16px; text-align: center; }
 .hero-copy { width: 100%; max-width: none; margin: auto; }
 .hero-copy h1 { margin: 0 auto 14px; width: min(100%, 440px); line-height: 1; }
 .hero-wordmark { width: 100%; height: auto; display: block; }
@@ -98,8 +98,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .case-outcome p { max-width: 74ch; margin: 0; color: var(--muted); font: 16px/1.6 var(--font); text-wrap: pretty; }
 .case-outcome strong { color: var(--text); font-weight: 600; }
 .case-outcome .outcome-harm { color: var(--risk); }
-.case-outcome a { flex: none; color: var(--muted); font: 14px/1.5 var(--font); text-decoration: underline; text-underline-offset: 4px; }
-.case-outcome a:hover { color: var(--text); }
 .life-arrow { padding-top: min(8vw, 98px); color: var(--subtle); }
 .life-arrow svg { width: 20px; color: var(--subtle); }
 .section { padding-block: 48px; background: var(--bg); border-top: 1px solid var(--line); }
@@ -283,7 +281,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .footer-bottom p:last-child { width: auto; }
 @media (max-width: 900px) {
   .container { width: calc(100% - 48px); }
-  .hero-layout { padding-block: 28px 32px; }
+  .hero-layout { padding-block: 28px 16px; }
   .life-halves { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; }
   .life-pair { grid-template-columns: minmax(0,1fr) 16px minmax(0,1fr); }
   .life-desc { font-size: 14px; }
@@ -327,7 +325,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .site-header { position: static; }
   .nav-inner { gap: 4px; padding-bottom: 15px; }
   .nav-inner nav { width: 100%; gap: 19px; }
-  .hero-layout { padding-block: 22px 30px; }
+  .hero-layout { padding-block: 22px 16px; }
   .hero-copy h1 { width: min(88%, 300px); margin-bottom: 12px; }
   .hero-intro { font-size: 17px; margin-bottom: 20px; }
   .hero-questions { grid-template-columns: 1fr; gap: 0; text-align: left; }

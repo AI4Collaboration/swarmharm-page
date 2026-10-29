@@ -44,7 +44,7 @@
      { eyes: [[412, 271], [438, 265]], radius: 7.5 }, { eyes: [[590, 267], [613, 262]], radius: 7.5 }]
   ];
 
-  // Preserve the original pigments while lifting near-white paper to alpha.
+  // Remove only near-white paper; keep the original pigments fully opaque.
   // Moving cutouts remain transparent around the engraving in either theme.
   function plate(index) {
     const source = sources[index];
@@ -58,7 +58,7 @@
     const inkId = `plate-${index}-ink`;
     const ink = node(defs, 'filter', { id: inkId, 'color-interpolation-filters': 'sRGB' });
     node(ink, 'feColorMatrix', { type: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -.2126 -.7152 -.0722 0 1' });
-    node(node(ink, 'feComponentTransfer'), 'feFuncA', { type: 'linear', slope: 3.5, intercept: -.1 });
+    node(node(ink, 'feComponentTransfer'), 'feFuncA', { type: 'linear', slope: 18, intercept: -.55 });
     const stage = node(svg, 'g', { 'data-scene-art': index });
     let serial = 0;
     const mask = (holes, edge = 1) => {
@@ -241,56 +241,82 @@
 
   function consequence() {
     const scene = plate(3);
-    scene.svg.setAttribute('viewBox', '0 145 720 520');
-    scene.cutout('M42 399L119 403L121 500L89 501L84 455Z');
-    scene.cutout('M612 402L654 399L642 503L608 503Z');
-    const leftShelf = scene.cutout('M23 378L350 399L359 435L25 405Z');
-    const rightShelf = scene.cutout('M365 401L697 381L699 406L355 438L350 425Z');
-    leftShelf.setAttribute('data-rig-part', 'breaking-shelf-left');
-    rightShelf.setAttribute('data-rig-part', 'breaking-shelf-right');
-    const seam = scene.cutout(rect(276, 402, 68, 23));
-    const actorShapes = [rect(37, 204, 161, 179), rect(206, 211, 138, 184), rect(357, 221, 141, 178), rect(507, 219, 182, 174)];
-    const actors = actorShapes.map(shape => scene.cutout(shape));
-    actors.forEach((actor, i) => actor.setAttribute('data-load-actor', i));
-    const gazes = actors.map((actor, i) => scene.eyes(actor, i, i));
-    const splinters = [
-      { shape: 'M325 443L338 447L311 467L309 461Z', x: -63, y: 151 },
-      { shape: 'M371 447L382 469L374 473L364 455Z', x: 58, y: 180 },
-      { shape: 'M335 477L342 485L335 505L327 514L326 506Z', x: -32, y: 153 },
-      { shape: 'M357 496L366 500L363 512L356 509Z', x: 30, y: 130 },
-      { shape: 'M373 514L379 518L375 530L369 525Z', x: 72, y: 104 }
-    ].map(piece => ({ ...piece, element: scene.cutout(piece.shape) }));
-    const draw = cycle => {
-      const p = cycle > .96 ? 0 : cycle;
-      const loaded = between(p, .04, .26), broken = between(p, .3, .43);
-      const falling = between(p, .38, .66);
-      const bend = loaded*3.2 + broken*22;
-      scene.svg.dataset.damageState = p < .3 ? 'loading' : p < .43 ? 'breaking' : 'fallen';
-      transform(leftShelf, -10*broken, 4*broken, -4.2+bend, 26, 391);
-      transform(rightShelf, 10*broken, 4*broken, 4.2-bend, 697, 392);
-      seam.setAttribute('transform', `translate(52 ${-20+5*loaded}) translate(310 402) scale(1 1.4) translate(-310 -402)`);
-      opacity(seam, 1-between(p, .29, .34));
-      actors.forEach((actor, i) => {
-        const middle = i===1 || i===2;
-        const settle = Math.sin(Math.PI*between(p, .01+i*.015, .17+i*.015));
-        const angle = i<2 ? -4.2+bend : 4.2-bend;
-        const anchor = i<2 ? 26 : 697;
-        const direction = i<2 ? 1 : -1;
-        const lean = direction*(2*loaded+(middle?9:2)*falling);
-        const inward = direction*(middle?18:8)*loaded;
-        const drop = middle ? 126*falling*falling : 0;
-        actor.setAttribute('transform', `translate(${inward} ${drop}) rotate(${angle} ${anchor} 391) translate(0 ${-6*settle}) rotate(${lean} ${[125,278,425,598][i]} 390)`);
-        gazes[i]((i<2?1:-1)*(.5+loaded*.5), broken*.9);
-
+    scene.svg.setAttribute('viewBox', '0 60 720 600');
+    // The original four robots stay outside. Only their documents travel.
+    const actorBounds = [[37,204,161,179], [206,211,138,184], [357,221,141,178], [507,219,182,174]];
+    const places = [[115,229], [605,229], [115,479], [605,479]];
+    const gazes = actorBounds.map(([x,y,w,h], i) => {
+      const [cx,cy] = places[i];
+      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-load-actor': i });
+      scene.cutout(rect(x,y,w,h), actor);
+      return scene.eyes(actor, i, i);
+    });
+    const vessel = node(scene.stage, 'g', { 'data-shared-container': '', 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+    const edge = 'M360 247L357 284L344 308L371 336L349 364L363 397L360 472';
+    const halves = [
+      { fill: 'M261 232Q308 248 360 247L357 284L344 308L371 336L349 364L363 397L360 472Q298 471 261 442Z', outer: 'M261 232V442Q298 471 360 472M261 232Q261 202 360 202M261 232Q310 252 360 252', hatch: 'M267 258V436Q300 460 347 464M273 270V426M279 283V421' },
+      { fill: 'M360 247Q413 248 459 232V442Q422 471 360 472L363 397L349 364L371 336L344 308L357 284Z', outer: 'M459 232V442Q422 471 360 472M360 202Q459 202 459 232M360 252Q410 252 459 232', hatch: 'M453 258V436Q420 460 373 464M447 270V426M441 283V421' }
+    ].map((paths, i) => {
+      const part = node(vessel, 'g', { 'data-vessel-half': i });
+      const tint = node(part, 'path', { d: paths.fill, fill: '#dfe9ea', 'fill-opacity': .35 });
+      node(part, 'path', { d: paths.outer, fill: 'none', stroke: 'currentColor', 'stroke-width': 3.3 });
+      node(part, 'path', { d: paths.hatch, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.1, opacity: .65 });
+      const crack = node(part, 'path', { d: edge, fill: 'none', stroke: 'currentColor', 'stroke-width': 3, opacity: 0 });
+      return {part,tint,crack};
+    });
+    function documentGlyph(parent, attrs = {}) {
+      const group = node(parent, 'g', attrs);
+      node(group, 'path', { d: 'M-19-28H8L20-16V28H-19Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.4, 'stroke-linejoin': 'round' });
+      node(group, 'path', { d: 'M8-28V-16H20M-11-7H11M-11 1H11M-11 9H7M-11 17H3', fill: 'none', stroke: '#8e8069', 'stroke-width': 1.7 });
+      return group;
+    }
+    const stored = places.map((_, i) => {
+      const page = documentGlyph(scene.stage, { 'data-stored-file': i });
+      transform(page, 333+(i%2)*45, 325+Math.floor(i/2)*74, i%2?5:-5);
+      return page;
+    });
+    const departures = [[164,257], [558,257], [164,503], [558,503]];
+    const starts = [.035,.21,.385,.56];
+    const files = departures.map((_, i) => documentGlyph(scene.stage, { 'data-incoming-file': i }));
+    const shardShapes = [
+      ['M270 291l-12-13 4 25Z', -32,-14], ['M452 287l16-12-5 27Z', 36,-17],
+      ['M290 430l-17 5 13 13Z', -25,5], ['M430 431l18 8-13 10Z', 28,5],
+      ['M336 207l-8-16 17 7Z', -12,-34], ['M390 209l8-17 8 14Z', 16,-31]
+    ];
+    const shards = shardShapes.map(([d,x,y]) => ({ x,y,element:node(scene.stage,'path',{d,fill:'#df6052','fill-opacity':.4,stroke:'#ce3b31','stroke-width':1.6,opacity:0}) }));
+    return p => {
+      // Files arrive one at a time. The fourth arrival ruptures the vessel.
+      // A short hold and a visible repair lead into the next loop, without a fade.
+      const reset = between(p,.94,1);
+      const deliveries = starts.map(start => between(p,start+.115,start+.13));
+      const load = deliveries.reduce((sum,value)=>sum+value,0)/4*(1-reset);
+      const burst = between(p,.69,.755)*(1-reset);
+      scene.svg.dataset.damageState = p>=.94?'resetting':p>=.755?'ruptured':p>=.69?'rupturing':'loading';
+      scene.svg.dataset.filesReceived = String(deliveries.filter(value=>value===1).length);
+      const rgb = [lerp(150,221,load),lerp(174,48,load),lerp(177,39,load)].map(Math.round);
+      const ink = [lerp(104,191,load),lerp(116,43,load),lerp(117,35,load)].map(Math.round);
+      vessel.setAttribute('color', `rgb(${ink.join(',')})`);
+      halves.forEach(({part,tint,crack}, i) => {
+        tint.setAttribute('fill',`rgb(${rgb.join(',')})`);
+        tint.setAttribute('fill-opacity',(.14+.44*load).toFixed(3));
+        transform(part,(i?1:-1)*23*burst,-5*burst,(i?1:-1)*8*burst,i?459:261,442);
+        opacity(crack,burst);
       });
-      splinters.forEach((piece, i) => {
-        const fall = between(p, .34+i*.012, .71);
-        opacity(piece.element, between(p, .31+i*.012, .37+i*.012));
-        transform(piece.element, piece.x*fall, piece.y*fall*fall, (i%2?35:-30)*fall, 355, 452);
+      files.forEach((file,i) => {
+        const travel = between(p,starts[i],starts[i]+.13);
+        const [x,y] = departures[i];
+        const targetX = 333+(i%2)*45, targetY = 325+Math.floor(i/2)*74;
+        // Rise toward the opening, then descend into the shared container.
+        const route = travel < .72 ? travel/.72 : (travel-.72)/.28;
+        const px = travel<.72 ? lerp(x,360,ease(route)) : lerp(360,targetX,ease(route));
+        const py = travel<.72 ? lerp(y,188,ease(route))-70*Math.sin(Math.PI*route) : lerp(188,targetY,ease(route));
+        transform(file,p>=.94?lerp(targetX,x,reset):px,p>=.94?lerp(targetY,y,reset):py,(i%2?1:-1)*10*Math.sin(Math.PI*travel));
+        opacity(file,p>=.94?1:1-deliveries[i]);
+        opacity(stored[i],deliveries[i]*(1-reset));
+        gazes[i](i%2?-1:1,travel>0&&travel<1?-.7:0);
       });
-      opacity(scene.stage, cycle > .96 ? between(cycle, .96, 1) : 1-between(cycle, .92, .96));
+      shards.forEach(({element,x,y}) => { opacity(element,burst); transform(element,x*burst,y*burst); });
     };
-    return draw;
   }
 
   async function start() {
@@ -302,7 +328,7 @@
       }));
     } catch { return; }
     const draw = [exploration(), discovery(), communication(), consequence()];
-    const durations = [8600, 8200, 9200, 7600];
+    const durations = [8600, 8200, 9200, 10000];
     const elapsed = [350, 1800, 2100, 0];
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -311,12 +337,10 @@
     let paused = false, previous = null, frame = 0;
     let pace = reduced.matches ? .7 : 1;
 
-    function render() {
+    function render(force = false) {
       draw.forEach((paint, i) => {
-        paint(elapsed[i] / durations[i]);
-        steps[i].classList.toggle('is-current', visible[i] && !paused);
+        if (force || visible[i]) paint(elapsed[i] / durations[i]);
       });
-      figure.classList.add('has-plate-motion');
     }
     function sync() {
       cancelAnimationFrame(frame);
@@ -324,6 +348,7 @@
       previous = null;
       const running = !paused && visible.some(Boolean) && !document.hidden;
       figure.dataset.flowRunning = String(running);
+      steps.forEach((step,i) => step.classList.toggle('is-current',visible[i]&&!paused));
       button.setAttribute('aria-label', paused ? 'Play the four-stage animation' : 'Pause the four-stage animation');
       button.title = paused ? 'Play animation' : 'Pause animation';
       button.setAttribute('aria-pressed', String(!paused));
@@ -365,7 +390,8 @@
       }, { threshold: [0, .15] });
       artwork.forEach(svg => observer.observe(svg));
     } else visible.fill(true);
-    render();
+    render(true);
+    figure.classList.add('has-plate-motion');
     sync();
   }
   start();

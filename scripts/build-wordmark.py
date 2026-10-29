@@ -41,28 +41,7 @@ def curve(t, points):
     return x, y, dx, dy
 
 
-def grain_path(x, y, radius, rng, faceted=False, direction=0):
-    if faceted:
-        turn = direction + rng.uniform(-1.4, 1.4)
-        aspect = rng.uniform(.64, 1.12)
-        count = rng.choice([5, 6, 7])
-        points = []
-        for k in range(count):
-            angle = k*2*math.pi/count + rng.uniform(-.15, .15)
-            r = radius*rng.uniform(.68, 1)
-            px, py = math.cos(angle)*r, math.sin(angle)*r*aspect
-            points.append((x+math.cos(turn)*px-math.sin(turn)*py,
-                           y+math.sin(turn)*px+math.cos(turn)*py))
-        corners = []
-        for i, (px, py) in enumerate(points):
-            prev, following = points[i-1], points[(i+1)%count]
-            entry = (px+(prev[0]-px)*.14, py+(prev[1]-py)*.14)
-            leave = (px+(following[0]-px)*.14, py+(following[1]-py)*.14)
-            corners.append((entry, (px, py), leave))
-        d = f'M{corners[-1][2][0]:.2f},{corners[-1][2][1]:.2f}'
-        for entry, corner, leave in corners:
-            d += f'L{entry[0]:.2f},{entry[1]:.2f}Q{corner[0]:.2f},{corner[1]:.2f} {leave[0]:.2f},{leave[1]:.2f}'
-        return d+'Z'
+def grain_path(x, y, radius, rng):
     turn = rng.uniform(0, 2*math.pi)
     verts = []
     for k in range(7):
@@ -82,8 +61,8 @@ def grains(points, width, radius, count, gap, seed, levels=None):
     result, cells = [], {}
     cell_size = radius * 3
     fine_radius = min(.65, max(.1, radius*.035))
-    # Place visible grains first, then let finer sand fill their interstices.
-    # One shared packing map keeps each grain distinct at every size.
+    # Rounded grains overlap into a continuous cloud. The left side disperses
+    # broadly while the right side contracts into the flight path.
     for size, quantity in levels or [(radius, count)]:
         target = len(result) + quantity
         for _ in range(quantity * 100):
@@ -95,22 +74,22 @@ def grains(points, width, radius, count, gap, seed, levels=None):
             taper = math.sin(math.pi*progress)
             ramp = progress/.44 if progress < .44 else (1-progress)/.56
             core = math.sin(math.pi*.5*ramp)**2.15
-            # Fine dust belongs mainly in the taper, leaving the central grains legible.
-            if levels and size <= 2 and rng.random() < .88*core:
+            if levels and size <= 2 and rng.random() < .12*core:
                 continue
-            spread = max(-1.15, min(.85, rng.gauss(-.12, .43))) if levels else rng.uniform(-1, 1)
-            offset = spread * width * taper**1.65 * (1.2-.35*progress)
+            spread = max(-1.5, min(1.5, rng.gauss(-.1, .52))) if levels else rng.uniform(-1, 1)
+            offset = spread * width * taper**.85 * (1-progress)**1.65 * 1.8
             norm = math.hypot(dx, dy)
             x, y = x - dy/norm*offset, y + dx/norm*offset
             r = ((fine_radius + (size-fine_radius)*core) if levels else size*(.1+.9*taper**.65)) * rng.uniform(.65, 1)
             cell = (int(x/cell_size), int(y/cell_size))
             nearby = [node for i in range(-1, 2) for j in range(-1, 2)
                       for node in cells.get((cell[0]+i, cell[1]+j), [])]
-            separation = .96 if levels else 1
+            separation = .38 if levels else 1
             if any(math.hypot(x-nx, y-ny) < separation*(r+nr)+gap for nx, ny, nr in nearby):
                 continue
             cells.setdefault(cell, []).append((x, y, r))
-            result.append((grain_path(x, y, r, rng, faceted=bool(levels), direction=math.atan2(dy, dx)), progress, rng.uniform(.94, 1)))
+            alpha = (.2+.8*min(1, progress/.36))*rng.uniform(.78, 1)
+            result.append((grain_path(x, y, r, rng), progress, alpha))
     return result
 
 
@@ -164,22 +143,46 @@ def incoming_sand():
 
 start = (left + 1250*scale, baseline - 1540*scale)
 end = (red_peak, baseline - 1536*scale)
-bridge = grains((start, (470, 232), (1015, 290), end), 50, 23, 2060, .32, 281026,
-                levels=[(23, 160), (7, 400), (1.7, 1500)])
+bridge_points = (start, (470, 245), (1120, 210), end)
+bridge = grains(bridge_points, 80, 13, 2960, .04, 281026,
+                levels=[(13, 260), (5.5, 1000), (1.7, 1700)])
+# A fine launch stream keeps the cloud visibly connected to S alone.
+launch_rng = random.Random(102926)
+for _ in range(380):
+    t = launch_rng.uniform(.001, .4)
+    x, y, dx, dy = curve(t, bridge_points)
+    offset = launch_rng.gauss(0, .35+7*t/.4)
+    norm = math.hypot(dx, dy)
+    x, y = x-dy/norm*offset, y+dx/norm*offset
+    progress = (x-start[0])/(end[0]-start[0])
+    radius = launch_rng.uniform(.8, 2.5)
+    bridge.append((grain_path(x, y, radius, launch_rng), progress,
+                   launch_rng.uniform(.6, .95)))
+# The last grains merge into a narrow, tapering trajectory ending at the A.
+tail_edges = [[], []]
+for i in range(45):
+    t = .67 + .33*i/44
+    x, y, dx, dy = curve(t, bridge_points)
+    norm = math.hypot(dx, dy)
+    half_width = 4.5*((1-t)/.33)**.8
+    tail_edges[0].append((x-dy/norm*half_width, y+dx/norm*half_width))
+    tail_edges[1].append((x+dy/norm*half_width, y-dx/norm*half_width))
+tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
+tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 wind = incoming_sand()
 for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef', (226, 228, 231))]:
     particles = []
-    stops = [(0, origin), (.22, (86, 24, 26) if theme == 'light' else (221, 169, 165)),
-             (.5, (207, 37, 30)), (.82, (240, 45, 34)), (1, (229, 43, 36))]
+    stops = [(0, origin), (.12, (182, 47, 41) if theme == 'light' else (235, 154, 147)),
+             (.3, (235, 50, 41)), (.65, (235, 36, 28)), (1, (229, 43, 36))]
     for d, t, opacity in bridge:
         rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title desc">
 <title id="title">SWARMHARM</title>
-<desc id="desc">Sand blows in from the left and forms SWARM. An asymmetric flight arc has coarse, faceted grains through its center and fine sand at both tips, with a longer red taper toward solid red HARM.</desc>
+<desc id="desc">Sand blows in from the left and forms SWARM. A rounded sand cloud disperses on the left, thickens through its center and narrows into a fine red flight arc toward solid red HARM.</desc>
 <defs>{letter_defs}</defs>
-<g aria-label="Sand-grain crescent">{''.join(particles)}</g>
+<g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
 <g fill="{ink}" aria-label="Incoming sand">{wind}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>

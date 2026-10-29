@@ -16,13 +16,16 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   harmful together. Safe correction is possible; harm is not prescribed.
 - **Main example:** the four-stage overview uses the 27 October 2026 Sol
   maintenance rollout (r19). The transcript reader and comparison table have
-  been removed from the page. Source Data links directly to the preserved JSON.
+  been removed from the page. Raw JSON and the unused transcript scripts are
+  archived locally outside the website and are not published with the page.
   Introduce the database maintenance case before the animation. Follow the four
-  stages with the individual-versus-combined replay result and a contextual
-  Source data link. Keep the task, mechanism and outcome in that reading order.
+  stages with the individual-versus-combined replay result. Keep the task,
+  mechanism and outcome in that reading order. Use plain descriptions of
+  missing information, notes and backups rather than execution-log terminology.
   Each individual replay leaves three recovery copies; together the
   actions remove every copy and the original evaluator marks 4,800 synthetic
-  records unrecoverable. Keep this example and its source JSON fixed while
+  records unrecoverable. The page describes the loss of old backups; the original
+  count remains in the local record. Keep this example and its archived evidence fixed while
   changing presentation. These are replays of one observed run, not separate
   model rollouts. Distinguish agent messages, system receipts and required
   handovers. Do not infer harmful intent or causal method transfer.
@@ -45,7 +48,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   repository's `docs/environment-contract.md`.
 - **Plain wording:** write page copy as full sentences a first-time reader
   can follow; define a term before using it as a label. Transcript excerpts
-  stay verbatim. The overview directly after the main research questions pairs each stage
+  stay verbatim. The overview below the institution strip pairs each stage
   with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
@@ -68,7 +71,7 @@ manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system sans-serif type for reading and restrained
 monospace section headings and metadata. `orbit.css` is the
 final presentation layer. The header follows the reading order: research
-questions, example, domains, email updates and source records. Source Data has no decorative arrow.
+questions, example, domains and email updates. Keep raw-data links out of the navigation.
 At 900px and below, use a compact sticky header with an accessible navigation
 disclosure. Keep theme and menu controls reachable at 320px; close the menu
 after navigation, on Escape, outside clicks and breakpoint changes.
@@ -83,7 +86,7 @@ questions and concrete work. Use explanatory text where it supplies missing
 context, rather than adding a subtitle to every section. Align the research
 questions, example and domains to the same content width. Give the example and
 domains consistent, left-aligned section headings. Keep the institution conveyor
-in the footer so the questions lead directly into the case. Use a compact
+at the bottom of the opening section, after the three questions and before the case. Use a compact
 disclosure for further questions and let the inline signup close the main story.
 Keep the white background and open space. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
@@ -94,9 +97,10 @@ The current letterforms have a modest 32-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters from the left. The low crescent rises from S,
-with an off-center crest and a longer, fine red taper toward A. Irregular,
-faceted grains are visibly coarser through the middle and become fine sand
-toward both tips; fine dust stays sparse around the largest grains.
+with an off-center crest and a longer, fine red taper toward A. Rounded,
+irregular grains form a continuous cloud: dispersed on the left, dense and
+coarser through the middle, then merging into a narrow curved tail on the right.
+Keep the fine stream rising from S and the incoming sand in the letterforms.
 Its color grades from charcoal to red in light mode and white
 to red in dark mode. HARM stays solid red. Preserve the full letterforms.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
@@ -114,22 +118,23 @@ Keep their feet planted and heads rigid. Each agent looks toward the glass,
 reaches out to probe it, scans the dome, then leans toward the locked box.
 Offset their timing so they explore independently. Do not
 scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
-letterbox and circulating letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
-scene shows the agents loading the original wooden shelf, which bends and breaks,
-with the two halves separating, the central loads dropping and splinters falling.
-The break starts about two seconds after the artwork enters view and the damaged
-state holds before replaying. Observe the artwork's visibility, not its caption.
-Keep this visible physical loss.
-The damage illustration is conceptual; the source JSON records the maintenance case.
+letterbox and circulating letters in the middle scenes. Give each agent distinct,
+narrowed eyes. In the last scene, four robots stay outside a shared container.
+Their files enter one at a time. The container grows redder with each arrival
+and bursts open on the fourth. Hold the cracked container visibly in place,
+then restore it for the next loop. Never fade out the whole panel or drop the
+robots. Observe the artwork's visibility, not its caption. The animation
+represents combined harm; the captions describe the recorded maintenance case.
 
 Keep the original amber robots, blue glass and wooden objects in color.
-Dark mode keeps these pigments unchanged. Use only a fine warm edge behind the
-transparent artwork for contrast; never invert colors or rotate their hues.
+Both themes keep these pigments opaque and unchanged. Remove only near-white
+paper when producing alpha; do not turn pale gold, green or wood into translucent
+pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and planks cannot leave white rectangles over neighboring artwork.
 Preserve the original pixels and correctly occluded body parts. Each visible
-panel loops independently; pause offscreen or when the document is hidden.
+panel loops independently; draw only visible panels and pause when the document is hidden.
 The scenes play when visible; reduced motion slows playback to 70 percent.
 The labeled play/pause control stops all four scenes. `plate-*-still.svg` provides matching fallbacks
 and print artwork. `scripts/export-plate-stills.py` embeds the original pixels
@@ -167,7 +172,7 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 
 The institution strip uses equal-size stages and preserved logo proportions.
 Keep its stages 36px high, with 3px vertical padding and 16px of space above and
-below the strip in the footer. Scale artwork
+below the strip between the opening questions and sample. Scale artwork
 proportionally within this compact strip.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
