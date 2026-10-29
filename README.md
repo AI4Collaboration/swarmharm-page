@@ -37,8 +37,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   active peer discovery, communication channels, swarm formation and their
   collective consequences. Use a Research Questions section heading in the
   same style as the Sample Case heading, with the full name in navigation.
-  Three short questions follow, emphasizing discovery, communication and
-  individually benign actions respectively,
+  Three short questions follow, emphasizing active discovery in blue,
+  collective misalignment and harm in red, and individually benign actions in green,
   in a horizontal row on desktop and compact text rows on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
   by communication, and collective harm from individually benign actions. Avoid slogans,
@@ -70,7 +70,7 @@ editing timestamps and software identifiers without changing pixels or color pro
 ## Visual direction
 
 Light and dark themes use restrained typography, open spacing and red accents,
-with muted blue and bronze emphasis in the three research questions.
+with blue for discovery, green for benign actions and red for collective harm.
 The site defaults to light mode. The upper-right appearance control remembers a
 manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use one system sans-serif family for all page text;

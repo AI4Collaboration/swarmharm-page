@@ -29,6 +29,7 @@
   --risk-wash: #fff4f3;
   --selection: #f8d5d2;
   --discovery: #356e80;
+  --benign: #246d48;
   --coordination: #986127;
 }
 :root[data-theme="dark"], :root[data-theme="dark"] .section {
@@ -47,6 +48,7 @@
   --risk-wash: #2a1c1b;
   --selection: #59302e;
   --discovery: #8ec5d3;
+  --benign: #95d2a8;
   --coordination: #dfb67a;
 }
 body { background: var(--bg); font: 16px/1.65 var(--font); -webkit-font-smoothing: antialiased; }
@@ -75,7 +77,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .hero-question p { margin: 0; color: var(--text); font: 450 17px/1.55 var(--font); text-wrap: pretty; }
 .rq-emphasis { color: var(--risk); }
 #rq1 .rq-emphasis { color: var(--discovery); }
-#rq2 .rq-emphasis { color: var(--coordination); }
+.rq-benign { color: var(--benign); }
 .overview { padding: 0 0 var(--space-8); }
 /* Own both gaps here so the moving row has equal breathing room. */
 .institutions, .sample-section .institutions { width: 100%; margin: 0; padding: var(--space-8) 0; background: var(--bg); border: 0; box-shadow: none; }
