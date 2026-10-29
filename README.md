@@ -31,7 +31,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   handovers. Do not infer harmful intent or causal method transfer.
 - **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
   appear directly after the four-stage overview. Compact line icons show code,
-  a scatter plot, financial candlesticks and library books. Keep each icon beside
+  a regression plot, financial candlesticks and a report page. Keep each icon beside
   its label, with a transparent background and a restrained red accent.
 - **Research questions:** a one-sentence introduction below the wordmark explains
   the testbed contribution, agents' propensity to form swarms, and when and how
@@ -51,7 +51,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   stay verbatim. The overview below the institution strip pairs each stage
   with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
-  visual language; state changes indicate surviving recovery copies.
+  visual language; keep the recorded backup-loss result in the fourth caption.
 - **Stay updated:** an inline email field submits to the existing public Google
   Form without navigating away. Addresses accumulate in the owner's private
   Google Sheet for manual export. No new account authorization is required.
@@ -126,12 +126,14 @@ Offset their timing so they explore independently. Do not
 scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
 letterbox and circulating letters in the middle scenes. The connected-jar scene
 contains four agents, matching the case. Give each agent distinct, narrowed eyes.
-In the last scene, each of the four upgrades removes one old backup. Show four
-recovery-copy icons disappearing in sequence, leaving four empty marked positions.
-Hold the state with no backups, then restore the copies for the next loop.
-Keep all four robots visible. Avoid filling or bursting containers, which suggest
-storage overload rather than loss of recovery copies. Observe the artwork's
-visibility, not its caption. Keep the animation and captions aligned with the case.
+Show old-copy icons beside the jars. Trace one request at a time: A relies on
+B's copy, and B, C and D rely on A's copy, following the recorded plan.
+In the last scene, four files enter one shared container in sequence. Raise its
+visible fill level after each arrival and gradually turn it red. The fourth file
+fills and splits the container. Hold the damage, then visibly reset for the next
+loop. Keep all four robots outside and visible, with their files retained.
+The container is a visual metaphor for the combined outcome; the caption states
+the recorded result, loss of old backups. Do not describe it as measured storage overload.
 
 Keep the original amber robots, blue glass and wooden objects in color.
 Both themes keep these pigments opaque and unchanged. Remove only near-white
@@ -139,9 +141,12 @@ paper when producing alpha; do not turn pale gold, green or wood into translucen
 pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
-letters and planks cannot leave white rectangles over neighboring artwork.
-Preserve the original pixels and correctly occluded body parts. Each visible
-panel loops independently; draw only visible panels and pause when the document is hidden.
+letters and containers cannot leave white rectangles over neighboring artwork.
+Preserve the original pixels and correctly occluded body parts. One 18-second
+clock progresses through exploration, discovery, communication and damage, then
+resets. Keep the explorer heads gently scanning while later stages play.
+Draw only visible panels and pause when the document is hidden. On phones,
+advance the shared clock to the newly visible stage so it starts on entry.
 The scenes play when visible; reduced motion slows playback to 70 percent.
 The labeled play/pause control stops all four scenes. `plate-*-still.svg` provides matching fallbacks
 and print artwork. `scripts/export-plate-stills.py` embeds the original pixels

@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <link rel="stylesheet" href="static/css/orbit.css?v=28">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=8">
-  <script src="static/js/plate-animation.js?v=9" defer></script>
+  <script src="static/js/plate-animation.js?v=10" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -104,7 +104,7 @@
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective harm</h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=6" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents passing notes between their jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">With no room for new backups, each agent <strong>relies on another agent’s old copy</strong> while upgrading its own.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=8" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four old backup copies disappear one by one as the four agents upgrade." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc case-result"><span>Tested separately, each agent’s changes leave <strong>three old backups</strong>.</span> <span>Together, they leave <strong class="outcome-harm">none</strong>.</span></p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=7" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents exchange notes to rely on one another’s old backups." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">With no room for new backups, each agent <strong>relies on another agent’s old copy</strong> while upgrading its own.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=9" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four agents add files to one container. It fills with each file and bursts on the fourth." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc case-result"><span>Tested separately, each agent’s changes leave <strong>three old backups</strong>.</span> <span>Together, they leave <strong class="outcome-harm">none</strong>.</span></p></figure></div>
           </section>
         </div>
       </figure>
@@ -129,12 +129,15 @@
           </li>
           <li>
             <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
-              <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
-              <circle cx="18.5" cy="5.5" r=".5" fill="currentColor" />
-              <circle cx="11.5" cy="11.5" r=".5" fill="currentColor" class="domain-accent" />
-              <circle cx="7.5" cy="16.5" r=".5" fill="currentColor" />
-              <circle cx="17.5" cy="14.5" r=".5" fill="currentColor" />
               <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+              <path d="m6 18 14-13" class="domain-accent" />
+              <g fill="currentColor" stroke="none">
+                <circle cx="7" cy="14" r="1" />
+                <circle cx="10" cy="16" r="1" />
+                <circle cx="12" cy="10" r="1" />
+                <circle cx="16" cy="11" r="1" />
+                <circle cx="18" cy="4" r="1" />
+              </g>
             </svg>
             <span>Data Analysis</span>
           </li>
@@ -152,9 +155,10 @@
           </li>
           <li>
             <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
-              <rect width="8" height="18" x="3" y="3" rx="1" />
-              <path d="M7 3v18" />
-              <path d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z" class="domain-accent" />
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+              <path d="M14 2v6h6" />
+              <path d="M8 10h4" class="domain-accent" />
+              <path d="M8 14h8M8 17h8M8 20h5" />
             </svg>
             <span>Knowledge Work</span>
           </li>

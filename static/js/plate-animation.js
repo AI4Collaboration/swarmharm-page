@@ -145,7 +145,7 @@
       scene.cutout(handShape, torso);
       actors.push({ jar, torso, head, arm, gaze });
     });
-    return p => {
+    return (p, clock = 0) => {
       actors.forEach(({ jar, torso, head, arm, gaze }, i) => {
         const t = (p + i*.47) % 1;
         // Look at the glass, reach and probe it twice, scan the dome, then
@@ -156,11 +156,12 @@
         const lean = track(t, [[0,0],[.14,-5],[.3,-5],[.4,-2],[.48,-2],[.62,7],[.73,7],[.88,0],[1,0]]);
         const reach = track(t, [[0,0],[.06,12],[.17,80],[.195,80],[.215,65],[.24,80],[.26,80],[.28,66],[.305,80],[.325,80],[.42,28],[.48,28],[.6,-18],[.74,-18],[.87,8],[1,0]]);
         transform(torso, 0, 0, lean, 310, 466);
-        transform(head, 0, 0, angle, 313, 377);
+        const idleLook = between(p,.84,.88) * Math.sin(clock * Math.PI * 4 + i * Math.PI) * 5;
+        transform(head, 0, 0, angle + idleLook, 313, 377);
         transform(arm, 0, 0, reach, 263, 394);
         jar.dataset.exploreTarget = t < .33 ? 'glass' : t < .5 ? 'dome' : t < .8 ? 'lock' : 'surroundings';
         const blink = Math.max(0, 1-Math.abs(t-.5)/.008);
-        gaze(lookX, lookY, blink);
+        gaze(Math.max(-1, Math.min(1, lookX + idleLook / 12)), lookY, blink);
       });
     };
   }
@@ -224,6 +225,23 @@
     letters.slice(1).forEach(letter => node(routeMask, 'path', { d: letter.shape, fill: '#fff', stroke: '#fff', 'stroke-width': 4 }));
     const routes = node(scene.stage, 'g', { mask: 'url(#plate-letter-routes)' });
     ['M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
+    const copies = [[218,343], [497,344], [328,591], [391,591]].map(([x,y], i) => {
+      const copy = node(scene.stage, 'g', { transform: `translate(${x} ${y}) scale(.58)`, 'data-peer-backup': i, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+      node(copy, 'path', { d: 'M-38-35H18L38-15V46H-38Z', fill: '#d7ddd1', stroke: '#666958', 'stroke-width': 2.5 });
+      const paper = node(copy, 'path', { d: 'M-30-45H12L31-26V37H-30Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.8 });
+      node(copy, 'path', { d: 'M12-45V-26H31M-24 29H24M-23 33H21', fill: 'none', stroke: '#9b8c72', 'stroke-width': 1.3 });
+      node(copy, 'path', { d: 'M-13-9a19 19 0 1 1-3 22M-13-9v12H-25', fill: 'none', stroke: '#526b6a', 'stroke-width': 3.5 });
+      return paper;
+    });
+    // The recorded plan uses B's old copy for A and A's copy for B, C and D.
+    // Only the current request is traced, keeping the four jars easy to read.
+    const requests = [
+      { from: [153,285], via: [330,250], to: [475,344], backup: 1 },
+      { from: [568,285], via: [392,258], to: [242,343], backup: 0 },
+      { from: [274,542], via: [339,420], to: [225,368], backup: 0 },
+      { from: [441,542], via: [366,402], to: [242,360], backup: 0 }
+    ];
+    const requestPaths = requests.map(({from,via,to}, i) => node(scene.stage, 'path', { d: `M${from}Q${via} ${to}`, fill: 'none', stroke: '#526b6a', 'stroke-width': 1.5, opacity: 0, 'data-backup-request': i }));
     const envelopes = letters.map(letter => scene.cutout(letter.shape));
     const agentIndices = [1, 2, 3, 4];
     const gazes = agentIndices.map(i => scene.eyes(scene.stage, i, i));
@@ -237,12 +255,19 @@
         const distance = Math.hypot(dx, dy) || 1;
         gaze(dx/distance, dy/distance);
       });
+      copies.forEach(copy => copy.setAttribute('stroke', '#665e50'));
       envelopes.forEach((envelope, i) => {
         const letter = letters[i];
-        const t = (p * 2 + i * .16) % 1;
-        opacity(envelope, Math.min(1, t * 8, (1 - t) * 8));
-        const travel = ease(t);
-        transform(envelope, lerp(letter.from[0], letter.to[0], travel) - letter.center[0], lerp(letter.from[1], letter.to[1], travel) + (letter.arc || 0) * Math.sin(Math.PI * travel) - letter.center[1], letter.angle || 0, ...letter.center);
+        const start = .02 + i * .23;
+        const t = clamp((p - start) / .21), travel = ease(t);
+        const {from,via,to,backup} = requests[i];
+        const active = between(p,start,start+.025) * (1-between(p,start+.19,start+.23));
+        opacity(envelope, active);
+        opacity(requestPaths[i], active * .45);
+        if (active > .25) copies[backup].setAttribute('stroke', '#356e80');
+        const x = (1-travel)**2*from[0] + 2*(1-travel)*travel*via[0] + travel**2*to[0];
+        const y = (1-travel)**2*from[1] + 2*(1-travel)*travel*via[1] + travel**2*to[1];
+        transform(envelope, x-letter.center[0], y-letter.center[1], letter.angle || 0, ...letter.center);
       });
     };
   }
@@ -250,44 +275,98 @@
   function consequence() {
     const scene = plate(3);
     scene.svg.setAttribute('viewBox', '0 60 720 600');
+    // The original four robots stay outside. Only their documents travel.
     const actorBounds = [[37,204,161,179], [206,211,138,184], [357,221,141,178], [507,219,182,174]];
     const places = [[115,229], [605,229], [115,479], [605,479]];
     const gazes = actorBounds.map(([x,y,w,h], i) => {
       const [cx,cy] = places[i];
-      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-upgrade-actor': i });
+      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-load-actor': i });
       scene.cutout(rect(x,y,w,h), actor);
       return scene.eyes(actor, i, i);
     });
-    // Each upgrade removes one old recovery copy. Nothing is added or overloaded.
-    const backups = [[267,245], [453,245], [267,495], [453,495]].map(([x,y], i) => {
-      const slot = node(scene.stage, 'g', { transform: `translate(${x} ${y})`, 'data-backup-slot': i, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
-      const empty = node(slot, 'g', { 'data-backup-missing': i, opacity: 0 });
-      node(empty, 'path', { d: 'M-36-44h13M-36-44v13M36-44H23M36-44v13M-36 44h13M-36 44V31M36 44H23M36 44V31', fill: 'none', stroke: '#a79579', 'stroke-width': 2 });
-      node(empty, 'path', { d: 'm-13-13 26 26m0-26-26 26', fill: 'none', stroke: '#c73e32', 'stroke-width': 3.2 });
-      const copy = node(slot, 'g', { 'data-backup-copy': i });
-      node(copy, 'path', { d: 'M-38-35H18L38-15V46H-38Z', fill: '#d7ddd1', stroke: '#666958', 'stroke-width': 2.5 });
-      node(copy, 'path', { d: 'M-30-45H12L31-26V37H-30Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.8 });
-      node(copy, 'path', { d: 'M12-45V-26H31M-24 29H24M-23 33H21', fill: 'none', stroke: '#9b8c72', 'stroke-width': 1.3 });
-      // The circular return arrow distinguishes a recovery copy from an incoming file.
-      node(copy, 'path', { d: 'M-13-9a19 19 0 1 1-3 22M-13-9v12H-25', fill: 'none', stroke: '#526b6a', 'stroke-width': 3.5 });
-      const removal = node(slot, 'path', { d: 'M-35 37 34-39', fill: 'none', stroke: '#c73e32', 'stroke-width': 3, 'pathLength': 1, 'stroke-dasharray': 1, 'stroke-dashoffset': 1, opacity: 0 });
-      return {copy, empty, removal};
+    const vessel = node(scene.stage, 'g', { 'data-shared-container': '', 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+    const edge = 'M360 247L357 284L344 308L371 336L349 364L363 397L360 472';
+    const halves = [
+      { fill: 'M261 232Q308 248 360 247L357 284L344 308L371 336L349 364L363 397L360 472Q298 471 261 442Z', outer: 'M261 232V442Q298 471 360 472M261 232Q261 202 360 202M261 232Q310 252 360 252', hatch: 'M267 258V436Q300 460 347 464M273 270V426M279 283V421' },
+      { fill: 'M360 247Q413 248 459 232V442Q422 471 360 472L363 397L349 364L371 336L344 308L357 284Z', outer: 'M459 232V442Q422 471 360 472M360 202Q459 202 459 232M360 252Q410 252 459 232', hatch: 'M453 258V436Q420 460 373 464M447 270V426M441 283V421' }
+    ].map((paths, i) => {
+      const part = node(vessel, 'g', { 'data-vessel-half': i });
+      node(part, 'path', { d: paths.fill, fill: '#dfe9ea', 'fill-opacity': .1 });
+      const clipId = `plate-3-capacity-${i}`;
+      node(node(scene.defs, 'clipPath', { id: clipId }), 'path', { d: paths.fill });
+      const contents = node(part, 'g', { 'clip-path': `url(#${clipId})` });
+      const fill = node(contents, 'rect', { x: 250, y: 472, width: 220, height: 0, 'data-capacity-fill': i });
+      const surface = node(contents, 'path', { fill: 'none', stroke: 'currentColor', 'stroke-width': 1.5 });
+      node(part, 'path', { d: paths.outer, fill: 'none', stroke: 'currentColor', 'stroke-width': 3.3 });
+      node(part, 'path', { d: paths.hatch, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.1, opacity: .65 });
+      const crack = node(part, 'path', { d: edge, fill: 'none', stroke: 'currentColor', 'stroke-width': 3, opacity: 0 });
+      return {part,fill,surface,crack};
     });
-    const starts = [.08, .26, .44, .62];
+    function documentGlyph(parent, attrs = {}) {
+      const group = node(parent, 'g', attrs);
+      node(group, 'path', { d: 'M-19-28H8L20-16V28H-19Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.4, 'stroke-linejoin': 'round' });
+      node(group, 'path', { d: 'M8-28V-16H20M-11-7H11M-11 1H11M-11 9H7M-11 17H3', fill: 'none', stroke: '#8e8069', 'stroke-width': 1.7 });
+      return group;
+    }
+    const departures = [[164,257], [558,257], [164,503], [558,503]];
+    const starts = [.035,.21,.385,.56];
+    const files = departures.map((_, i) => documentGlyph(scene.stage, { 'data-incoming-file': i }));
+    const shardShapes = [
+      ['M270 291l-12-13 4 25Z', -32,-14], ['M452 287l16-12-5 27Z', 36,-17],
+      ['M290 430l-17 5 13 13Z', -25,5], ['M430 431l18 8-13 10Z', 28,5],
+      ['M336 207l-8-16 17 7Z', -12,-34], ['M390 209l8-17 8 14Z', 16,-31]
+    ];
+    const shards = shardShapes.map(([d,x,y]) => ({ x,y,element:node(scene.stage,'path',{d,fill:'#df6052','fill-opacity':.4,stroke:'#ce3b31','stroke-width':1.6,opacity:0}) }));
     return p => {
-      const reset = between(p, .94, 1);
-      const removed = starts.map(start => between(p, start+.025, start+.085) * (1-reset));
-      scene.svg.dataset.backupsRemaining = String(removed.filter(value => value < .5).length);
-      scene.svg.dataset.recoveryState = p >= .94 ? 'resetting' : p >= .705 ? 'none' : 'upgrading';
-      backups.forEach(({copy, empty, removal}, i) => {
-        const action = between(p, starts[i], starts[i]+.055);
-        opacity(copy, 1-removed[i]);
-        opacity(empty, removed[i]);
-        opacity(removal, between(p, starts[i], starts[i]+.015) * (1-between(p, starts[i]+.065, starts[i]+.1)) * (1-reset));
-        removal.setAttribute('stroke-dashoffset', (1-action).toFixed(3));
-        gazes[i](i%2?-1:1, .35);
+      // Files arrive one at a time. The fourth arrival ruptures the vessel.
+      // A short hold and a visible repair lead into the next loop, without a fade.
+      const reset = between(p,.94,1);
+      const deliveries = starts.map(start => between(p,start+.105,start+.14));
+      const load = deliveries.reduce((sum,value)=>sum+value,0)/4*(1-reset);
+      const burst = between(p,.715,.78)*(1-reset);
+      scene.svg.dataset.damageState = p>=.94?'resetting':p>=.78?'ruptured':p>=.715?'rupturing':'loading';
+      scene.svg.dataset.filesReceived = String(p>=.94?0:deliveries.filter(value=>value===1).length);
+      scene.svg.dataset.capacity = load.toFixed(3);
+      const rgb = [lerp(150,221,load),lerp(174,48,load),lerp(177,39,load)].map(Math.round);
+      const ink = [lerp(104,191,load),lerp(116,43,load),lerp(117,35,load)].map(Math.round);
+      vessel.setAttribute('color', `rgb(${ink.join(',')})`);
+      halves.forEach(({part,fill,surface,crack}, i) => {
+        const level = 472 - 235 * load;
+        fill.setAttribute('y',level.toFixed(2));
+        fill.setAttribute('height',(235*load).toFixed(2));
+        fill.setAttribute('fill',`rgb(${rgb.join(',')})`);
+        fill.setAttribute('fill-opacity',(.32+.38*load).toFixed(3));
+        surface.setAttribute('d',`M250 ${level}Q360 ${level+10} 470 ${level}`);
+        opacity(surface,Math.min(1,load*8));
+        transform(part,(i?1:-1)*23*burst,-5*burst,(i?1:-1)*8*burst,i?459:261,442);
+        opacity(crack,burst);
       });
+      files.forEach((file,i) => {
+        const travel = between(p,starts[i],starts[i]+.13);
+        const [x,y] = departures[i];
+        const targetX = 333+(i%2)*45, targetY = 405-Math.floor(i/2)*78;
+        // Rise toward the opening, then descend into the shared container.
+        const route = travel < .72 ? travel/.72 : (travel-.72)/.28;
+        const px = travel<.72 ? lerp(x,360,ease(route)) : lerp(360,targetX,ease(route));
+        const py = travel<.72 ? lerp(y,188,ease(route))-70*Math.sin(Math.PI*route) : lerp(188,targetY,ease(route));
+        transform(file,p>=.94?lerp(targetX,x,reset):px,p>=.94?lerp(targetY,y,reset):py,(i%2?1:-1)*10*Math.sin(Math.PI*travel));
+        file.dataset.fileState = p>=.94?'returning':travel===1?'stored':travel>0?'moving':'held';
+        gazes[i](i%2?-1:1,travel>0&&travel<1?-.7:0);
+      });
+      shards.forEach(({element,x,y}) => { opacity(element,burst); transform(element,x*burst,y*burst); });
     };
+  }
+
+  const STORY_DURATION = 18000;
+  const STORY_STARTS = [0, .18, .38, .57];
+  const STORY_ENDS = [.27, .47, .67, .96];
+  function storyProgress(p) {
+    const reset = between(p, .96, 1);
+    return STORY_STARTS.map((start,i) => {
+      const finish = [.88,.84,.96,.94][i];
+      const progress = finish * clamp((p-start)/(STORY_ENDS[i]-start));
+      return i === 3 ? lerp(progress,1,reset) : progress*(1-reset);
+    });
   }
 
   async function start() {
@@ -299,8 +378,7 @@
       }));
     } catch { return; }
     const draw = [exploration(), discovery(), communication(), consequence()];
-    const durations = [8600, 8200, 9200, 10000];
-    const elapsed = [350, 1800, 2100, 0];
+    let elapsed = 0;
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     // These scenes explain the mechanism. Keep them playing when visible;
@@ -309,8 +387,10 @@
     let pace = reduced.matches ? .7 : 1;
 
     function render(force = false) {
+      const clock = elapsed / STORY_DURATION;
+      const progress = storyProgress(clock);
       draw.forEach((paint, i) => {
-        if (force || visible[i]) paint(elapsed[i] / durations[i]);
+        if (force || visible[i]) paint(progress[i],clock);
       });
     }
     function sync() {
@@ -330,7 +410,7 @@
     function tick(now) {
       if (previous !== null) {
         const delta = Math.min(now - previous, 100) * pace;
-        elapsed.forEach((time, i) => { if (visible[i]) elapsed[i] = (time + delta) % durations[i]; });
+        elapsed = (elapsed + delta) % STORY_DURATION;
       }
       previous = now;
       render();
@@ -349,14 +429,22 @@
     if ('IntersectionObserver' in window) {
       const artwork = steps.map(step => step.querySelector('.plate-motion'));
       const observer = new IntersectionObserver(entries => {
+        const previousFirst = visible.findIndex(Boolean);
         entries.forEach(entry => {
           const i = artwork.indexOf(entry.target);
-          const entering = entry.isIntersecting && entry.intersectionRatio >= .15;
-          // Start the damage sequence when its artwork enters the viewport,
-          // rather than letting an offscreen picture advance with its caption.
-          if (i === 3 && entering && !visible[i]) elapsed[i] = 0;
-          visible[i] = entering;
+          if (i >= 0) visible[i] = entry.isIntersecting && entry.intersectionRatio >= .15;
         });
+        const first = visible.findIndex(Boolean);
+        // Advance to the visible chapter on phones while retaining one clock.
+        // Returning to an earlier chapter restarts it; pausing preserves the pose.
+        if (!paused && first >= 0 && first !== previousFirst) {
+          const clock = elapsed / STORY_DURATION;
+          if (previousFirst < 0 || clock < STORY_STARTS[first] ||
+              (first < previousFirst && clock > STORY_ENDS[first])) {
+            elapsed = STORY_STARTS[first] * STORY_DURATION;
+          }
+        }
+        render();
         sync();
       }, { threshold: [0, .15] });
       artwork.forEach(svg => observer.observe(svg));
