@@ -275,9 +275,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .updates-form { width: 100%; flex-basis: auto; }
 }
 .site-footer { background: var(--bg); border-color: var(--line); padding-block: 16px 24px; }
-.footer-top .brand img { width: 140px; height: 42px; mix-blend-mode: normal; }
-.back-top { color: var(--muted); font-size: 12px; }
-.footer-bottom { color: var(--subtle); font: 12px/1.8 var(--font); border: 0; padding-top: 14px; margin-top: 12px; gap: 8px 16px; }
+.footer-bottom { color: var(--subtle); font: 12px/1.8 var(--font); border: 0; padding: 0; margin-top: 0; }
 .footer-bottom p:last-child { width: auto; }
 @media (max-width: 900px) {
   .container { width: calc(100% - 48px); }

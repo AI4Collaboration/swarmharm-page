@@ -178,9 +178,8 @@ for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef
     for d, t, opacity in bridge:
         rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title desc">
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title">
 <title id="title">SWARMHARM</title>
-<desc id="desc">Sand blows in from the left and forms SWARM. A rounded sand cloud disperses on the left, thickens through its center and narrows into a fine red flight arc toward solid red HARM.</desc>
 <defs>{letter_defs}</defs>
 <g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
 <g fill="{ink}" aria-label="Incoming sand">{wind}</g>
@@ -193,7 +192,7 @@ for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef
 
 symbol = grains(((4, 47), (12, 9), (39, 15), (60, 45)), 5, 1.3, 380, .01, 8126,
                 levels=[(1.3, 70), (.75, 120), (.3, 190)])
-mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm sand crescent</title>'
+mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm</title>'
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)
 mark += '</svg>\n'
 (root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8')

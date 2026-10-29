@@ -40,9 +40,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   in a horizontal row on desktop and compact text rows on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
   by communication, and collective harm from individually benign actions. Avoid slogans,
-  numbers and diagrams above these questions. The remaining questions sit in a
-  collapsed disclosure below the domains, available without competing with the
-  three main questions.
+  numbers and diagrams above these questions. Keep the page focused on these
+  three questions.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
   repository's `docs/environment-contract.md`.
@@ -61,6 +60,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   "Request sent" rather than claiming a confirmed database write. Check an
   actual submission in the private sheet when changing this integration.
   Keep administrative links and the subscriber sheet out of the public source.
+
+Keep metadata to the page title, description, canonical URL, theme settings and
+link preview. Omit duplicate schema, keyword lists and app manifests. Strip image
+editing timestamps and software identifiers without changing pixels or color profiles.
 
 ## Visual direction
 
@@ -86,8 +89,8 @@ questions and concrete work. Use explanatory text where it supplies missing
 context, rather than adding a subtitle to every section. Align the research
 questions, example and domains to the same content width. Give the example and
 domains consistent, left-aligned section headings. Keep the institution conveyor
-at the bottom of the opening section, after the three questions and before the case. Use a compact
-disclosure for further questions and let the inline signup close the main story.
+at the bottom of the opening section, after the three questions and before the case.
+Let the inline signup close the page after the domains.
 Keep the white background and open space. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
 
@@ -107,7 +110,7 @@ to red in dark mode. HARM stays solid red. Preserve the full letterforms.
 imagegen studies informed the direction; the final artwork is native SVG.
 The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
 Both theme wordmarks are generated together; the social preview uses the light asset.
-Use the same wordmark in the header, hero and footer.
+Use the same wordmark in the header and hero. Keep the footer to the template credit.
 
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
@@ -161,7 +164,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 Edit `index.html`, `static/css/` and `static/js/`. `orbit.css` is the final
 presentation layer. Bump changed asset query versions in `index.html`.
 Check both themes at desktop and narrow widths, including the menu, animation,
-source link and footer. Keep reading text at least
+footer and subscription feedback. Keep reading text at least
 14px and secondary metadata at least 12px; use the theme palette for all text.
 Public evidence links must open without repository access.
 Preserve keyboard access, reduced-motion support and reflow down to 320px.
