@@ -131,11 +131,12 @@ Show old-copy icons beside the jars. Trace one request at a time: A relies on
 B's copy, and B, C and D rely on A's copy, following the recorded plan.
 In the last scene, four files enter one server rack in sequence. Fill its front
 capacity bar after each arrival and gradually turn it red. After the fourth file,
-a brief explosion sends ten cabinet panels, smaller debris and the files outward.
-Panels follow upward-and-downward trajectories and settle beside the damaged rack.
-Hold the wreck after the fire and smoke clear, then visibly reset for the next loop.
-Keep all four robots outside and visible. The server and explosion use transparent
-imagegen assets, with no recoloring or persistent glow. The explosion is a visual
+a restrained mechanical burst breaks open the middle server bays. Four panel
+pieces settle close to the rack, with a small ink-drawn impact puff and faint gray smoke.
+Keep the cabinet recognizable and its capacity bar red. Hold the damaged state,
+then reset for the next loop. Keep all four robots outside and visible. The server
+uses transparent imagegen artwork; effects match its etched style. Avoid realistic
+fireballs, bright flashes, shockwave rings and widely scattered debris. The damage is a visual
 metaphor for the combined outcome; the caption states the recorded loss of old backups.
 Do not describe it as a measured physical explosion or storage overload.
 
