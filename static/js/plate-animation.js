@@ -47,7 +47,7 @@
 
   // Remove only near-white paper; keep the original pigments fully opaque.
   // Moving cutouts remain transparent around the engraving in either theme.
-  function plate(index) {
+  function plate(index, { preserveEyes = false } = {}) {
     const source = sources[index];
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '0 0 720 720');
@@ -58,7 +58,7 @@
     const defs = node(svg, 'defs');
     const inkId = `plate-${index}-ink`;
     const ink = node(defs, 'filter', { id: inkId, 'color-interpolation-filters': 'sRGB' });
-    node(ink, 'feColorMatrix', { type: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -.2126 -.7152 -.0722 0 1' });
+    node(ink, 'feColorMatrix', { type: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -.2126 -.7152 -.0722 1 0' });
     node(node(ink, 'feComponentTransfer'), 'feFuncA', { type: 'linear', slope: 18, intercept: -.55 });
     const stage = node(svg, 'g', { 'data-scene-art': index });
     let serial = 0;
@@ -74,7 +74,7 @@
     node(eyeMask, 'rect', { width: 720, height: 720, fill: '#fff' });
     faces[index].forEach(face => face.eyes.forEach(([cx, cy]) => node(eyeMask, 'circle', { cx, cy, r: face.radius + 1.5, fill: '#000' })));
     function inkImage(parent, href, attrs) {
-      const wrapper = node(parent, 'g', href === source ? { mask: `url(#${eyeMaskId})` } : {});
+      const wrapper = node(parent, 'g', href === source && !preserveEyes ? { mask: `url(#${eyeMaskId})` } : {});
       node(wrapper, 'image', { href, width: 720, height: 720, filter: `url(#${inkId})`, ...attrs });
     }
     function cutout(shape, parent = stage, href = source, holes = []) {
@@ -182,35 +182,53 @@
   }
 
   function transmission() {
-    const scene = plate(1);
-    const leftHead = 'M232 235L248 236L249 247L271 244Q293 244 294 263L300 264L300 288L291 290L291 310L211 333L189 321L184 310L175 310L172 284L181 277L182 263L192 252L232 246Z';
-    const rightHead = 'M554 255L574 258L572 274L604 280L613 293L622 298L617 322L607 324L603 344L583 352L500 334L495 313L487 307L494 281L505 278L512 266L553 271Z';
-    const heldLetter = 'M274 314L333 300L348 344L309 356L298 370L266 368L272 349L283 342L272 337Z';
-    const notice = [rect(335, 253, 43, 59), rect(461, 246, 38, 48)];
-    scene.background([leftHead, rightHead, heldLetter, ...notice]);
+    const scene = plate(1, { preserveEyes: true });
+    const leftHead = 'M109 297L121 293L123 278Q124 267 143 265L181 262L181 254Q190 247 203 254L204 266L231 267Q247 269 248 289L257 292L257 323L249 326L247 340Q210 356 143 353L128 345L122 334L111 333Z';
+    const rightHead = 'M486 297L496 291Q499 271 518 271L547 271L547 261Q559 253 570 262L569 274L596 279Q615 283 615 302L629 305L628 335L616 339L610 352L590 361L505 346L496 336L486 332Z';
+    const rightArm = 'M574 415Q584 417 583 426L558 448L552 456Q548 469 533 469Q519 468 518 454Q516 441 528 437L540 438L565 421Z';
+    // Restore the small areas covered by the resting forearm before lifting it.
+    const repairId = 'under-desk-forearm-repair';
+    node(node(scene.defs, 'clipPath', { id: repairId }), 'path', { d: rightArm });
+    const repair = node(scene.stage, 'g', { 'clip-path': `url(#${repairId})` });
+    node(repair, 'path', { d: 'M515 430H542V472H515Z', fill: '#c7aa87' });
+    node(repair, 'path', { d: 'M542 409H600V470H542Z', fill: '#adb294' });
+    for (let y = 438; y < 464; y += 4) {
+      node(repair, 'path', { d: `M518 ${y}L541 ${y-2}`, fill: 'none', stroke: '#6f5945', 'stroke-width': .65, opacity: .45 });
+    }
+    scene.background([leftHead, rightHead, rightArm]);
     const left = scene.cutout(leftHead), right = scene.cutout(rightHead);
     left.setAttribute('data-rig-part', 'head');
     right.setAttribute('data-rig-part', 'head');
-    const holdingHand = 'M256 336L268 333L280 337L285 346L280 355L267 356L257 351Z';
-    // The drawer stays assembled. Its front and side occlude the paper as it
-    // descends through the open top, instead of flying through wood or glass.
-    const drawerFront = 'M119 366L271 385L401 363L402 454L272 491L119 463Z';
-    const mailLayer = node(scene.stage, 'g', { mask: scene.mask([drawerFront], 0), 'data-mail-slot': '' });
-    const letter = envelope(scene, mailLayer, 'shared-drawer');
-    scene.cutout(holdingHand);
-    const leftGaze = scene.eyes(left, 0, 0), rightGaze = scene.eyes(right, 1, 1);
-    const signals = notice.map(shape => scene.cutout(shape));
+    // A single shared housing sits below the desk; only its end drawers expose
+    // the letter. The desktop, drawer faces and apron hide the transit itself.
+    const wood = [
+      'M78 404H614L642 418V433H78Z',
+      'M197 439L242 447L270 434V461L242 472L197 460Z',
+      'M242 431H486V474H242Z',
+      'M449 434L476 445L534 436V463L476 472L449 460Z'
+    ];
+    const hiddenRoute = node(scene.stage, 'g', { mask: scene.mask(wood, 0), 'data-mail-slot': '', 'data-shared-compartment': '' });
+    const letter = envelope(scene, hiddenRoute, 'under-desk');
+    const reading = envelope(scene, scene.stage, 'reading');
+    const arm = scene.cutout(rightArm);
+    arm.setAttribute('data-rig-part', 'reading-arm');
+    scene.cutout('M176 441Q189 432 200 441L205 452Q205 467 190 468L177 460Z');
     return p => {
-      leftGaze(track(p, [[0,.2],[.16,.2],[.23,1],[.57,1],[.64,.5],[.87,.5],[1,.2]]), .35);
-      rightGaze(track(p, [[0,0],[.2,0],[.27,-1],[.57,-1],[.64,-.3],[.86,-.3],[1,0]]), track(p, [[0,0],[.4,0],[.48,.8],[.64,.8],[.72,.3],[.88,.3],[1,0]]));
-      transform(left, 0, 0, track(p, [[0,0],[.18,0],[.27,2],[.58,2],[.68,.5],[.88,.5],[1,0]]), 238, 324);
-      transform(right, 0, 0, track(p, [[0,0],[.24,0],[.33,-2],[.44,-2],[.53,1.5],[.68,1.5],[.77,-1],[.9,-1],[1,0]]), 550, 343);
-      signals.forEach(signal => opacity(signal, between(p, .06, .14) * (1 - between(p, .25, .34))));
-      const x = track(p, [[0,306],[.12,306],[.28,327],[.4,335],[1,335]]);
-      const y = track(p, [[0,335],[.12,335],[.28,316],[.4,331],[.67,425],[1,425]]);
-      const angle = track(p, [[0,-15],[.12,-15],[.28,-4],[.4,-4],[.67,0],[1,0]]);
-      placeEnvelope(letter, x, y, angle, 1.35);
-      letter.dataset.mailState = p < .12 ? 'held' : p < .4 ? 'above-drawer' : p < .67 ? 'inserting' : 'stored';
+      const send = between(p, .12, .30), transit = between(p, .30, .48);
+      const receive = between(p, .48, .65), read = between(p, .66, .86);
+      const x = p < .30 ? lerp(192, 238, send) : p < .48 ? lerp(238, 486, transit) : lerp(486, 533, receive);
+      const y = p < .30 ? lerp(451, 446, send) : p < .48 ? 446 : lerp(446, 439, receive);
+      placeEnvelope(letter, x, y, lerp(-18, 0, send), .82);
+      opacity(letter, p < .65 ? 1 : 0);
+      const angle = 65*read, radians = angle*Math.PI/180;
+      const handX = 577 - 42*Math.cos(radians) - 35*Math.sin(radians);
+      const handY = 417 - 42*Math.sin(radians) + 35*Math.cos(radians);
+      transform(arm, 0, 0, angle, 577, 417);
+      placeEnvelope(reading, handX-2, handY-13, lerp(0,-8,read), .82);
+      opacity(reading, p >= .65 ? 1 : 0);
+      transform(left, 0, 0, track(p, [[0,-3],[.1,-3],[.2,2],[.48,2],[.6,0],[1,0]]), 188, 347);
+      transform(right, 0, 3*read, track(p, [[0,3],[.15,3],[.28,-2],[.6,-2],[.86,-5],[1,-5]]), 553, 351);
+      scene.svg.dataset.mailState = p < .12 ? 'checking-surroundings' : p < .30 ? 'inserting-left' : p < .48 ? 'concealed-transit' : p < .65 ? 'taking-out-right' : 'reading-right';
     };
   }
 

@@ -37,9 +37,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   active peer discovery, communication channels, swarm formation and their
   collective consequences. Use a Research Questions section heading in the
   same style as the Sample Case heading, with the full name in navigation.
-  Three short questions follow, emphasizing active discovery in blue,
+  Three short questions follow, emphasizing active discovery in red,
   collective misalignment and harm in red, and individually benign actions in green,
-  in a horizontal row on desktop and compact text rows on narrow phones.
+  as three full-width text rows. Each question occupies its own row and wraps
+  naturally on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
   by communication, and collective harm from individually benign actions. Avoid slogans,
   numbers and diagrams above these questions. Keep the page focused on these
@@ -70,7 +71,7 @@ editing timestamps and software identifiers without changing pixels or color pro
 ## Visual direction
 
 Light and dark themes use restrained typography, open spacing and red accents,
-with blue for discovery, green for benign actions and red for collective harm.
+with green for benign actions and red for discovery and collective harm.
 The site defaults to light mode. The upper-right appearance control remembers a
 manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use one system sans-serif family for all page text;
@@ -92,8 +93,13 @@ Follow [OXRML](https://oxrml.com/)'s progression from research purpose to specif
 questions and concrete work. Use explanatory text where it supplies missing
 context, rather than adding a subtitle to every section. Align the research
 questions, example and domains to the same content width. Give the example and
-domains consistent, left-aligned section headings. Keep the institution conveyor
-at the bottom of the opening section, after the three questions and before the case.
+domains consistent, left-aligned section headings. Place the institution conveyor on the left of the header, replacing the repeated
+wordmark. Keep navigation and theme controls on the right. On phones, keep the
+conveyor beside the appearance and menu controls; do not repeat it below the questions.
+Use the restrained reading layout of [Thinking Machines Lab](https://thinkingmachines.ai/):
+a 660px introduction column, left-aligned prose, modest section headings and
+clear spacing. Keep the existing sans-serif family and put each research question
+on its own full-width row.
 Let the inline signup close the page after the domains.
 Keep the white background and open space. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
@@ -101,21 +107,13 @@ decorative dialogue, floating notes and extra labels.
 `static/images/swarmharm-wordmark.svg` uses the full Michroma outlines, with
 SWARMHARM in capitals, with all four HARM letters red in both themes. Both R glyphs have complete bowls and diagonal legs.
 The current letterforms use a 140-font-unit outline expansion. Preserve
-their spacing, grain geometry and crescent when adjusting weight.
+their spacing and grain geometry when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
-outlines. There is no loose sand beside the lettering. Above it, a
-separate red plume floats free of S: fine, diffuse grains on the left gather
-into coarser grains through the middle and taper toward A on the right.
-Small, dispersed grains approach from farther left and join the same smooth arc.
-The plume stays red in both themes, with a gentle opacity transition from
-the dispersed left end to the dense center. Preserve the full letterforms.
-HARM stays solid red.
-`scripts/build-wordmark.py` reproduces the composition. The approved transparent
-arc is retained in `static/images/swarmharm-sand-arc.png`; the approaching grains
-and unchanged lettering are native SVG. Keep the arc's smooth outline and tip.
-The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
-Both theme wordmarks are generated together; the social preview uses the light asset.
-Use the same wordmark in the header and hero. Keep the footer to the template credit.
+outlines; HARM stays solid red. There is no loose sand or arc above the letters.
+`scripts/build-wordmark.py` reproduces both themes with the same letter geometry.
+The earlier arc source remains saved for reference. The PNG is an export for
+social metadata, and the compact favicon retains its sand-grain crescent.
+Use the wordmark once in the hero. Keep the footer to the template credit.
 
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
 under the SIL Open Font License; retain `static/fonts/OFL-Michroma.txt`.
@@ -127,8 +125,11 @@ pauses and resumes playback.
 Animate the original engraved artwork with `plate-animation.js`. The first
 scene shows two agents exploring separate bell jars, then turning toward each
 other. Keep their feet planted and heads rigid; use a shutter for blinking.
-The second scene drops one envelope through the shared drawer's open top.
-Keep the drawer assembled and mask the envelope behind its front and side.
+The second scene uses one shared wooden compartment concealed under a desk,
+with a small drawer at each end. The left agent inserts a letter; the letter
+is hidden inside the compartment before the right agent retrieves and raises
+it to read. Mask the envelope behind the desk and drawer faces until it clears
+the opening. Both agents retain their slanted eyes and rigid head shapes.
 Use the same engraved envelope in the third scene, where four agents communicate
 along the existing strings. Mask messages behind the jar silhouettes at their
 endpoints. Keep the space beside the jars free of report or backup icons.
@@ -143,7 +144,8 @@ The damage is a visual metaphor for the combined outcome; the caption states
 the recorded loss of old backups. Do not describe it as measured storage overload.
 
 Keep the original amber robots, blue glass and wooden objects in color.
-Both themes keep these pigments opaque and unchanged. Remove only near-white
+Both themes keep these pigments opaque and unchanged. Preserve existing alpha
+when removing near-white
 paper when producing alpha; do not turn pale gold, green or wood into translucent
 pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
