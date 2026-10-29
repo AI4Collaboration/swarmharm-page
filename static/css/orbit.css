@@ -77,7 +77,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .hero-question:first-child { padding-left: 0; border-left: 0; }
 .hero-question p { margin: 0; color: var(--text); font: 450 17px/1.55 var(--font); text-wrap: pretty; }
 .rq-emphasis { color: var(--risk); }
-#rq1 .rq-emphasis { color: var(--discovery); }
 .rq-benign { color: var(--benign); }
 .overview { padding: 0 0 var(--space-10); }
 /* Own both gaps here so the moving row has equal breathing room. */

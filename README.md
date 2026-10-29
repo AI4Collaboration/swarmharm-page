@@ -105,8 +105,10 @@ their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters from the left. The crescent rises from S,
 crests near the left quarter, and extends into a long red blade toward A.
-Its lower edge stays sharp while irregular grains disperse above it. Grains
-grow coarser around the left shoulder and become finer toward both tips.
+Individual, slightly faceted sand grains form the entire blade, with visible
+gaps and no solid ribbon underneath. Grains grow coarser around the left
+shoulder and become finer toward both tips. The lower boundary stays sharp
+while the upper boundary disperses naturally.
 Keep the fine stream rising from S and the incoming sand in the letterforms.
 Its color grades from charcoal to red in light mode and white
 to red in dark mode. HARM stays solid red. Preserve the full letterforms.
