@@ -139,21 +139,21 @@ def approaching_swarm():
     rng = random.Random(291026)
     paths = []
     currents = [
-        (((-220, 290), (-40, 235), (140, 125), (510, 85)), 650),
-        (((-190, 145), (-10, 157), (170, 95), (480, 105)), 320),
-        (((-200, 355), (10, 265), (170, 170), (480, 135)), 380),
+        (((-220, 290), (-40, 235), (140, 125), (510, 85)), 820),
+        (((-190, 145), (-10, 157), (170, 95), (480, 105)), 400),
+        (((-200, 355), (10, 265), (170, 170), (480, 135)), 480),
     ]
     for points, count in currents:
         for _ in range(count):
-            t = rng.betavariate(1.3, 1.35)
+            t = rng.betavariate(1.65, 1.1)
             x, y, dx, dy = curve(t, points)
             norm = math.hypot(dx, dy)
-            offset = max(-2, min(2, rng.gauss(0, .7))) * (24 + 13*t)
+            offset = max(-2, min(2, rng.gauss(0, .7))) * (30 - 10*t)
             x, y = x - dy/norm*offset, y + dx/norm*offset
-            radius = (.45 + 3.4*t**.7) * rng.uniform(.65, 1.15)
-            fade = min(1, t/.10, (1-t)/.24)
-            opacity = (.08 + .48*t**1.1) * fade * rng.uniform(.65, 1)
-            rgb = gradient(t, [(0, (239, 117, 108)), (1, (235, 50, 41))])
+            radius = (.75 + 5.4*t**1.25) * rng.uniform(.65, 1.15)
+            fade = min(1, t/.10)
+            opacity = (.24 + .58*t**.8) * fade * rng.uniform(.8, 1)
+            rgb = gradient(t, [(0, (239, 94, 86)), (1, (235, 50, 41))])
             paths.append(f'<path d="{grain_path(x,y,radius,rng)}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.3f}"/>')
     return ''.join(paths), len(paths)
 
