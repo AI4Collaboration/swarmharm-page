@@ -31,19 +31,26 @@ for name, source in zip(names, scenes):
     svg.attrib.pop('class', None)
     svg.set('width', '720')
     svg.set('height', '720')
+    # These are static snapshots; invisible animation layers need no payload.
+    for parent in list(svg.iter()):
+        for child in list(parent):
+            if child.get('opacity') in {'0', '0.000'}:
+                parent.remove(child)
     defs = svg.find(tag('defs'))
     embedded = {}
     for image in list(svg.iter(tag('image'))):
         href = image.get('href')
-        if href not in embedded:
+        dimensions = (image.get('width', '720'), image.get('height', '720'))
+        key = (href, dimensions)
+        if key not in embedded:
             path = (root / href.split('?')[0]).resolve()
             assert root in path.parents and path.suffix == '.webp'
             identifier = f'still-{name}-source-{len(embedded)}'
             uri = 'data:image/webp;base64,' + base64.b64encode(path.read_bytes()).decode()
-            ET.SubElement(defs, tag('image'), {'id': identifier, 'href': uri, 'width': '720', 'height': '720'})
-            embedded[href] = identifier
+            ET.SubElement(defs, tag('image'), {'id': identifier, 'href': uri, 'width': dimensions[0], 'height': dimensions[1]})
+            embedded[key] = identifier
         image.tag = tag('use')
-        image.set('href', '#' + embedded[href])
+        image.set('href', '#' + embedded[key])
     output = root / f'static/images/fieldguide/plate-{name}-still.svg'
     output.write_text(ET.tostring(svg, encoding='unicode') + '\n', encoding='utf-8', newline='\n')
     print(output.name)

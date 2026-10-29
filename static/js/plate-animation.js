@@ -8,6 +8,8 @@
 
   const sources = images.map(image => image.dataset.plateSource || image.getAttribute('src'));
   const NS = 'http://www.w3.org/2000/svg';
+  const SERVER_ART = 'static/images/fieldguide/server-rack.webp?v=1';
+  const BLAST_ART = 'static/images/fieldguide/server-explosion.webp?v=1';
   const clamp = value => Math.max(0, Math.min(1, value));
   const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
   const between = (p, start, end) => ease((p - start) / (end - start));
@@ -275,85 +277,137 @@
   function consequence() {
     const scene = plate(3);
     scene.svg.setAttribute('viewBox', '0 60 720 600');
-    // The original four robots stay outside. Only their documents travel.
     const actorBounds = [[37,204,161,179], [206,211,138,184], [357,221,141,178], [507,219,182,174]];
     const places = [[115,229], [605,229], [115,479], [605,479]];
     const gazes = actorBounds.map(([x,y,w,h], i) => {
       const [cx,cy] = places[i];
       const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-load-actor': i });
       scene.cutout(rect(x,y,w,h), actor);
-      return scene.eyes(actor, i, i);
+      return scene.eyes(actor,i,i);
     });
-    const vessel = node(scene.stage, 'g', { 'data-shared-container': '', 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
-    const edge = 'M360 247L357 284L344 308L371 336L349 364L363 397L360 472';
-    const halves = [
-      { fill: 'M261 232Q308 248 360 247L357 284L344 308L371 336L349 364L363 397L360 472Q298 471 261 442Z', outer: 'M261 232V442Q298 471 360 472M261 232Q261 202 360 202M261 232Q310 252 360 252', hatch: 'M267 258V436Q300 460 347 464M273 270V426M279 283V421' },
-      { fill: 'M360 247Q413 248 459 232V442Q422 471 360 472L363 397L349 364L371 336L344 308L357 284Z', outer: 'M459 232V442Q422 471 360 472M360 202Q459 202 459 232M360 252Q410 252 459 232', hatch: 'M453 258V436Q420 460 373 464M447 270V426M441 283V421' }
-    ].map((paths, i) => {
-      const part = node(vessel, 'g', { 'data-vessel-half': i });
-      node(part, 'path', { d: paths.fill, fill: '#dfe9ea', 'fill-opacity': .1 });
-      const clipId = `plate-3-capacity-${i}`;
-      node(node(scene.defs, 'clipPath', { id: clipId }), 'path', { d: paths.fill });
-      const contents = node(part, 'g', { 'clip-path': `url(#${clipId})` });
-      const fill = node(contents, 'rect', { x: 250, y: 472, width: 220, height: 0, 'data-capacity-fill': i });
-      const surface = node(contents, 'path', { fill: 'none', stroke: 'currentColor', 'stroke-width': 1.5 });
-      node(part, 'path', { d: paths.outer, fill: 'none', stroke: 'currentColor', 'stroke-width': 3.3 });
-      node(part, 'path', { d: paths.hatch, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.1, opacity: .65 });
-      const crack = node(part, 'path', { d: edge, fill: 'none', stroke: 'currentColor', 'stroke-width': 3, opacity: 0 });
-      return {part,fill,surface,crack};
+    node(scene.defs,'image',{id:'plate-3-server-art',href:SERVER_ART,x:216,y:145,width:288,height:346});
+    let pieceId=0;
+    function serverPart(parent,shape,attrs={}) {
+      const clipId=`plate-3-server-piece-${pieceId++}`;
+      node(node(scene.defs,'clipPath',{id:clipId}),'path',{d:shape});
+      const part=node(parent,'g',attrs);
+      node(part,'use',{href:'#plate-3-server-art','clip-path':`url(#${clipId})`});
+      return part;
+    }
+    const cabinet=node(scene.stage,'g',{'data-shared-server':''});
+    const wreck=node(cabinet,'g',{'data-server-wreck':'',opacity:0});
+    node(wreck,'path',{d:'M253 203L435 209L440 454L248 436Z',fill:'#24272a',stroke:'#a89d88','stroke-width':2});
+    ['M273 224Q310 277 267 313T280 411','M402 220Q358 284 407 332T384 427','M290 248L384 256L388 365L285 358Z','M317 264L317 345M362 270L363 348'].forEach((d,i)=>node(wreck,'path',{d,fill:'none',stroke:['#996c48','#729194','#555f56','#a99f80'][i],'stroke-width':i<2?2.2:1.4}));
+    const hole=node(node(scene.defs,'mask',{id:'plate-3-wreck-mask',maskUnits:'userSpaceOnUse',x:210,y:140,width:300,height:370}),'g');
+    node(hole,'rect',{x:210,y:140,width:300,height:370,fill:'#fff'});
+    node(hole,'path',{d:'M260 193L317 202L335 190L377 205L424 197L433 249L420 277L437 314L424 367L440 397L423 446L382 438L345 449L307 430L261 438L267 401L249 360L263 332L249 299L263 254Z',fill:'#000'});
+    node(wreck,'use',{href:'#plate-3-server-art',mask:'url(#plate-3-wreck-mask)'});
+    const intact=node(cabinet,'g',{'data-server-intact':''});
+    node(intact,'use',{href:'#plate-3-server-art'});
+    const display=node(intact,'g',{'data-capacity-display':''});
+    node(display,'path',{d:'M268 210L422 213L422 226L268 223Z',fill:'#141c1f',stroke:'#84958b','stroke-width':.65});
+    const displayClip='plate-3-capacity-clip';
+    node(node(scene.defs,'clipPath',{id:displayClip}),'path',{d:'M270 212L420 215L420 224L270 221Z'});
+    const fill=node(node(display,'g',{'clip-path':`url(#${displayClip})`}),'rect',{x:270,y:210,width:0,height:16,'data-capacity-fill':''});
+    [307.5,345,382.5].forEach(x=>node(display,'path',{d:`M${x} 211v14`,stroke:'#121b1e','stroke-width':2}));
+    const fragmentsData=[
+      {shape:'M248 187L328 167L485 174L432 197Z',center:[366,182],dx:-25,dy:354,turn:-22,lift:130},
+      {shape:'M254 200L430 204L433 235L254 232Z',center:[342,218],dx:36,dy:260,turn:17,lift:125},
+      {shape:'M251 241L339 245L337 288L251 284Z',center:[294,265],dx:-59,dy:216,turn:-47,lift:113},
+      {shape:'M339 245L433 249L433 291L337 288Z',center:[385,268],dx:67,dy:238,turn:49,lift:103},
+      {shape:'M253 292L434 296L434 341L253 336Z',center:[344,317],dx:-24,dy:228,turn:-14,lift:142},
+      {shape:'M254 341L343 345L342 389L253 384Z',center:[299,365],dx:-70,dy:134,turn:-36,lift:96},
+      {shape:'M343 345L436 349L436 393L342 389Z',center:[389,369],dx:61,dy:168,turn:36,lift:127},
+      {shape:'M254 390L438 397L438 441L254 433Z',center:[346,415],dx:12,dy:128,turn:13,lift:125},
+      {shape:'M442 205L485 176L486 292L439 326Z',center:[462,249],dx:9,dy:228,turn:43,lift:100},
+      {shape:'M441 333L483 304L481 431L442 473Z',center:[463,389],dx:40,dy:143,turn:30,lift:113}
+    ];
+    const fragments=fragmentsData.map((data,i)=>({...data,element:serverPart(scene.stage,data.shape,{'data-server-fragment':i,opacity:0})}));
+    const smoke=node(scene.stage,'g',{'data-explosion-smoke':''});
+    const smokePuffs=Array.from({length:7},(_,i)=>{
+      const puff=node(smoke,'g');
+      node(puff,'path',{d:'M-31 8C-42-6-26-28-10-24C-1-43 27-33 30-14C51-12 47 13 31 20C21 40-8 37-16 22C-38 28-47 14-31 8Z',fill:i%2?'#756c60':'#a18b73'});
+      return {puff,x:322+(i%3)*22,y:295+Math.floor(i/3)*24,dx:(i-3)*16,dy:-45-i*6};
     });
-    function documentGlyph(parent, attrs = {}) {
-      const group = node(parent, 'g', attrs);
-      node(group, 'path', { d: 'M-19-28H8L20-16V28H-19Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.4, 'stroke-linejoin': 'round' });
-      node(group, 'path', { d: 'M8-28V-16H20M-11-7H11M-11 1H11M-11 9H7M-11 17H3', fill: 'none', stroke: '#8e8069', 'stroke-width': 1.7 });
+    function fileGlyph(parent,i) {
+      const group=node(parent,'g',{'data-incoming-file':i});
+      node(group,'path',{d:'M-19-28H8L20-16V28H-19Z',fill:'#efe5cf',stroke:'#665e50','stroke-width':2.4,'stroke-linejoin':'round'});
+      node(group,'path',{d:'M8-28V-16H20M-11-7H11M-11 1H11M-11 9H7M-11 17H3',fill:'none',stroke:'#8e8069','stroke-width':1.7});
       return group;
     }
-    const departures = [[164,257], [558,257], [164,503], [558,503]];
-    const starts = [.035,.21,.385,.56];
-    const files = departures.map((_, i) => documentGlyph(scene.stage, { 'data-incoming-file': i }));
-    const shardShapes = [
-      ['M270 291l-12-13 4 25Z', -32,-14], ['M452 287l16-12-5 27Z', 36,-17],
-      ['M290 430l-17 5 13 13Z', -25,5], ['M430 431l18 8-13 10Z', 28,5],
-      ['M336 207l-8-16 17 7Z', -12,-34], ['M390 209l8-17 8 14Z', 16,-31]
-    ];
-    const shards = shardShapes.map(([d,x,y]) => ({ x,y,element:node(scene.stage,'path',{d,fill:'#df6052','fill-opacity':.4,stroke:'#ce3b31','stroke-width':1.6,opacity:0}) }));
-    return p => {
-      // Files arrive one at a time. The fourth arrival ruptures the vessel.
-      // A short hold and a visible repair lead into the next loop, without a fade.
-      const reset = between(p,.94,1);
-      const deliveries = starts.map(start => between(p,start+.105,start+.14));
-      const load = deliveries.reduce((sum,value)=>sum+value,0)/4*(1-reset);
-      const burst = between(p,.715,.78)*(1-reset);
-      scene.svg.dataset.damageState = p>=.94?'resetting':p>=.78?'ruptured':p>=.715?'rupturing':'loading';
-      scene.svg.dataset.filesReceived = String(p>=.94?0:deliveries.filter(value=>value===1).length);
-      scene.svg.dataset.capacity = load.toFixed(3);
-      const rgb = [lerp(150,221,load),lerp(174,48,load),lerp(177,39,load)].map(Math.round);
-      const ink = [lerp(104,191,load),lerp(116,43,load),lerp(117,35,load)].map(Math.round);
-      vessel.setAttribute('color', `rgb(${ink.join(',')})`);
-      halves.forEach(({part,fill,surface,crack}, i) => {
-        const level = 472 - 235 * load;
-        fill.setAttribute('y',level.toFixed(2));
-        fill.setAttribute('height',(235*load).toFixed(2));
-        fill.setAttribute('fill',`rgb(${rgb.join(',')})`);
-        fill.setAttribute('fill-opacity',(.32+.38*load).toFixed(3));
-        surface.setAttribute('d',`M250 ${level}Q360 ${level+10} 470 ${level}`);
-        opacity(surface,Math.min(1,load*8));
-        transform(part,(i?1:-1)*23*burst,-5*burst,(i?1:-1)*8*burst,i?459:261,442);
-        opacity(crack,burst);
+    const departures=[[164,257],[558,257],[164,503],[558,503]];
+    const destinations=[[258,554],[304,573],[427,570],[471,550]];
+    const starts=[.035,.21,.385,.56];
+    const files=departures.map((_,i)=>fileGlyph(scene.stage,i));
+    const debris=Array.from({length:20},(_,i)=>{
+      const angle=i*2.39996;
+      const part=node(scene.stage,'path',{d:i%3?'M-3-5L4-2L2 5L-4 2Z':'M-5-2L5-3L4 2L-4 3Z',fill:i%2?'#8e9b9c':'#c8b49a',stroke:'#494b48','stroke-width':.8,opacity:0,'data-explosion-debris':i});
+      return {part,angle,reach:90+(i%5)*17,spin:(i%2?1:-1)*(140+i*13)};
+    });
+    const blast=node(scene.stage,'g',{'data-explosion-blast':'',opacity:0});
+    node(blast,'image',{href:BLAST_ART,x:-150,y:-150,width:300,height:300});
+    const shock=node(scene.stage,'circle',{cx:343,cy:322,r:1,fill:'none',stroke:'#eeb47c','stroke-width':4,opacity:0,'data-explosion-shock':''});
+    const sparks=Array.from({length:22},(_,i)=>node(scene.stage,'path',{fill:'none',stroke:i%3?'#e59041':'#ffe0a0','stroke-width':i%3?1.5:2.3,'stroke-linecap':'round',opacity:0,'data-explosion-spark':i}));
+    return p=>{
+      const reset=between(p,.94,1);
+      const received=starts.map(start=>between(p,start+.105,start+.14));
+      const load=received.reduce((sum,value)=>sum+value,0)/4*(1-reset);
+      const damage=between(p,.715,.723)*(1-reset);
+      const flight=clamp((p-.715)/.18);
+      const outward=1-(1-flight)**3;
+      const rebuild=1-reset;
+      scene.svg.dataset.capacity=load.toFixed(3);
+      scene.svg.dataset.filesReceived=String(p>=.94?0:received.filter(v=>v===1).length);
+      scene.svg.dataset.damageState=p>=.94?'resetting':p>=.895?'wrecked':p>=.715?'exploding':'loading';
+      fill.setAttribute('width',(150*load).toFixed(2));
+      const heat=clamp((load-.3)/.7);
+      fill.setAttribute('fill',`rgb(${[lerp(105,241,heat),lerp(173,64,heat),lerp(157,47,heat)].map(Math.round).join(',')})`);
+      opacity(intact,1-damage);opacity(wreck,damage);
+      const pressure=between(p,.665,.71)*(1-between(p,.715,.725));
+      transform(cabinet,Math.sin(p*1600)*1.7*pressure,Math.cos(p*1300)*.7*pressure);
+      fragments.forEach(({element,center,dx,dy,turn,lift},i)=>{
+        const height=dy*flight*flight-4*lift*flight*(1-flight);
+        transform(element,dx*outward*rebuild,height*rebuild,turn*outward*rebuild,...center);
+        opacity(element,damage);
       });
-      files.forEach((file,i) => {
-        const travel = between(p,starts[i],starts[i]+.13);
-        const [x,y] = departures[i];
-        const targetX = 333+(i%2)*45, targetY = 405-Math.floor(i/2)*78;
-        // Rise toward the opening, then descend into the shared container.
-        const route = travel < .72 ? travel/.72 : (travel-.72)/.28;
-        const px = travel<.72 ? lerp(x,360,ease(route)) : lerp(360,targetX,ease(route));
-        const py = travel<.72 ? lerp(y,188,ease(route))-70*Math.sin(Math.PI*route) : lerp(188,targetY,ease(route));
-        transform(file,p>=.94?lerp(targetX,x,reset):px,p>=.94?lerp(targetY,y,reset):py,(i%2?1:-1)*10*Math.sin(Math.PI*travel));
-        file.dataset.fileState = p>=.94?'returning':travel===1?'stored':travel>0?'moving':'held';
-        gazes[i](i%2?-1:1,travel>0&&travel<1?-.7:0);
+      smokePuffs.forEach(({puff,x,y,dx,dy},i)=>{
+        const drift=between(p,.735,.94);
+        puff.setAttribute('transform',`translate(${x+dx*drift} ${y+dy*drift}) scale(${.3+drift*(1.2+i*.07)})`);
+        opacity(puff,between(p,.735+i*.002,.78+i*.002)*(1-between(p,.855+i*.005,.94))*.27*rebuild);
       });
-      shards.forEach(({element,x,y}) => { opacity(element,burst); transform(element,x*burst,y*burst); });
+      files.forEach((file,i)=>{
+        const travel=between(p,starts[i],starts[i]+.13), [x,y]=departures[i];
+        const slotX=348,slotY=267+i*52;
+        let px=(1-travel)**2*x+2*(1-travel)*travel*lerp(x,slotX,.65)+travel**2*slotX;
+        let py=lerp(y,slotY,travel)-55*Math.sin(Math.PI*travel);
+        let size=1-.85*between(travel,.72,1),alpha=1-between(travel,.86,1),angle=12*Math.sin(Math.PI*travel)*(i%2?1:-1);
+        if(p>=.715){
+          px=lerp(slotX,destinations[i][0],outward);py=slotY+(destinations[i][1]-slotY)*flight*flight-440*flight*(1-flight);
+          size=lerp(.15,.82,between(flight,0,.2));alpha=damage;angle=[-23,17,-17,26][i]*outward;
+        }
+        if(p>=.94){px=lerp(destinations[i][0],x,reset);py=lerp(destinations[i][1],y,reset);size=lerp(.82,1,reset);alpha=1;angle*=rebuild;}
+        file.setAttribute('transform',`translate(${px.toFixed(2)} ${py.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
+        opacity(file,alpha);
+        file.dataset.fileState=p>=.94?'returning':p>=.715?'ejected':travel===1?'stored':travel>0?'moving':'held';
+        gazes[i](i%2?-1:1,p>=.715?-.2:travel>0&&travel<1?-.5:.1);
+      });
+      debris.forEach(({part,angle,reach,spin},i)=>{
+        const x=Math.cos(angle)*reach*outward, y=Math.sin(angle)*reach*outward+120*flight*flight;
+        transform(part,343+x*rebuild,321+y*rebuild,spin*outward);
+        opacity(part,damage*(1-between(p,.925,1)));
+      });
+      const fireGrowth=between(p,.715,.753);
+      opacity(blast,between(p,.715,.722)*(1-between(p,.765,.822))*rebuild);
+      blast.setAttribute('transform',`translate(343 322) scale(${.1+1.04*fireGrowth})`);
+      shock.setAttribute('r',(15+172*between(p,.715,.79)).toFixed(2));
+      shock.setAttribute('stroke-width',(4-3*between(p,.715,.79)).toFixed(2));
+      opacity(shock,between(p,.715,.721)*(1-between(p,.731,.79))*.75*rebuild);
+      sparks.forEach((spark,i)=>{
+        const angle=i*2.39996,progress=between(p,.715,.81),distance=15+(120+i%4*16)*progress,length=5+19*(1-progress);
+        const x=343+Math.cos(angle)*distance,y=322+Math.sin(angle)*distance+16*progress*progress;
+        spark.setAttribute('d',`M${x} ${y}l${-Math.cos(angle)*length} ${-Math.sin(angle)*length}`);
+        opacity(spark,between(p,.715,.725)*(1-between(p,.75,.815))*rebuild);
+      });
     };
   }
 
@@ -371,7 +425,7 @@
 
   async function start() {
     try {
-      await Promise.all(sources.map(source => {
+      await Promise.all([...sources, SERVER_ART, BLAST_ART].map(source => {
         const image = new Image();
         image.src = source;
         return image.decode();

@@ -129,12 +129,15 @@ letterbox and circulating letters in the middle scenes. The connected-jar scene
 contains four agents, matching the case. Give each agent distinct, narrowed eyes.
 Show old-copy icons beside the jars. Trace one request at a time: A relies on
 B's copy, and B, C and D rely on A's copy, following the recorded plan.
-In the last scene, four files enter one shared container in sequence. Raise its
-visible fill level after each arrival and gradually turn it red. The fourth file
-fills and splits the container. Hold the damage, then visibly reset for the next
-loop. Keep all four robots outside and visible, with their files retained.
-The container is a visual metaphor for the combined outcome; the caption states
-the recorded result, loss of old backups. Do not describe it as measured storage overload.
+In the last scene, four files enter one server rack in sequence. Fill its front
+capacity bar after each arrival and gradually turn it red. After the fourth file,
+a brief explosion sends ten cabinet panels, smaller debris and the files outward.
+Panels follow upward-and-downward trajectories and settle beside the damaged rack.
+Hold the wreck after the fire and smoke clear, then visibly reset for the next loop.
+Keep all four robots outside and visible. The server and explosion use transparent
+imagegen assets, with no recoloring or persistent glow. The explosion is a visual
+metaphor for the combined outcome; the caption states the recorded loss of old backups.
+Do not describe it as a measured physical explosion or storage overload.
 
 Keep the original amber robots, blue glass and wooden objects in color.
 Both themes keep these pigments opaque and unchanged. Remove only near-white
@@ -142,7 +145,7 @@ paper when producing alpha; do not turn pale gold, green or wood into translucen
 pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
-letters and containers cannot leave white rectangles over neighboring artwork.
+letters and server panels cannot leave white rectangles over neighboring artwork.
 Preserve the original pixels and correctly occluded body parts. One 18-second
 clock progresses through exploration, discovery, communication and damage, then
 resets. Keep the explorer heads gently scanning while later stages play.
