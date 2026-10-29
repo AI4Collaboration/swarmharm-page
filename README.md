@@ -1,7 +1,9 @@
 # SwarmHarm website
 
 The public research website at [swarmharm.com](https://swarmharm.com/).
-It presents the two-phase study, research questions and the reviewed Sol
+We are building a systematic testbed to measure AI agents' propensity to form
+swarms and when and how their collective actions can cause harm. The page
+presents the two-phase study, research questions and the reviewed Sol
 Engineering maintenance example. Public findings must
 accurately reflect the reviewed evidence, conditions and outcome of each rollout.
 
@@ -15,6 +17,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 - **Main example:** the four-stage overview uses the 27 October 2026 Sol
   maintenance rollout (r19). The transcript reader and comparison table have
   been removed from the page. Source Data links directly to the preserved JSON.
+  Introduce the database maintenance case before the animation. Its short
+  introduction contrasts individual and combined replays, so readers understand
+  the collective failure before following the four stages.
   Each individual replay leaves three recovery copies; together the
   actions remove every copy and the original evaluator marks 4,800 synthetic
   records unrecoverable. Keep this example and its source JSON fixed while
@@ -25,11 +30,14 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   appear directly after the four-stage overview. Their technical line illustrations
   show a code editor, a data distribution, a financial ledger with coins,
   and library shelves. Keep the transparent backgrounds and single red accent.
-- **Research questions:** three short questions sit directly below the wordmark,
+- **Research questions:** a one-sentence introduction below the wordmark explains
+  the testbed contribution, agents' propensity to form swarms, and when and how
+  their collective actions can cause harm.
+  Three short questions follow,
   in a horizontal row on desktop and compact text rows on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
-  by communication, and collective harm without harmful intent. Do not add a
-  tagline, numbers or diagrams above these questions. The remaining questions
+  by communication, and collective harm without harmful intent. Avoid slogans,
+  numbers and diagrams above these questions. The remaining questions
   appear below the domains.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
@@ -49,17 +57,21 @@ The site defaults to light mode. The upper-right appearance control remembers a
 manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system sans-serif type for reading and restrained
 monospace section headings and metadata. `orbit.css` is the
-final presentation layer. The header links to the study overview, questions,
-domains and source records. Source Data has no decorative arrow.
+final presentation layer. The header follows the reading order: research
+questions, example, domains and source records. Source Data has no decorative arrow.
 At 900px and below, use a compact sticky header with an accessible navigation
 disclosure. Keep theme and menu controls reachable at 320px; close the menu
 after navigation, on Escape, outside clicks and breakpoint changes.
-The hero contains the wordmark and three questions without extra labels.
+The hero contains the wordmark, a factual testbed introduction and three questions.
 Keep the hero compact: the main wordmark is capped at 440px, with tight vertical
 spacing so readers reach the example sooner.
 
 Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
 clear type hierarchy, quiet separators and open space around the evidence.
+Follow [OXRML](https://oxrml.com/)'s progression from research purpose to specific
+questions and concrete work. Use explanatory text where it supplies missing
+context, rather than adding a subtitle to every section. Give the example,
+domains and further questions consistent, left-aligned section headings.
 Keep the white background and open space. Keep margins and the footer free of
 decorative dialogue, floating notes and extra labels.
 
