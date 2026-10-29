@@ -1,5 +1,6 @@
-"""Build the compact wordmark with unchanged Michroma grain lettering."""
+"""Build the hero wordmark with the approved sand arc and unchanged lettering."""
 from pathlib import Path
+import base64
 from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.boundsPen import BoundsPen
@@ -134,11 +135,19 @@ def swarm_letters():
 
 
 
+# Reuse the approved smooth arc. Its tip meets the existing red A;
+# the complete letter geometry below stays unchanged.
+arc_data = base64.b64encode((root/'static/images/swarmharm-sand-arc.png').read_bytes()).decode('ascii')
+arc_width = 1572.06436
+arc_height = arc_width * 669 / 2062
+arc_y = baseline - 1536*scale - arc_height
+arc = f'<svg x="-40" y="{arc_y:.8f}" width="{arc_width}" height="{arc_height:.8f}" viewBox="33 11 2062 669" overflow="visible"><image width="2151" height="731" href="data:image/png;base64,{arc_data}"/></svg>'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2052" height="196" viewBox="60 430 2052 196" role="img" aria-labelledby="title">
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2212" height="726" viewBox="-80 -66 2212 726" role="img" aria-labelledby="title">
 <title id="title">SWARMHARM</title>
 <defs>{letter_defs}</defs>
+<g aria-label="Sand-grain arc">{arc}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>
 </svg>
@@ -151,5 +160,5 @@ symbol = grains(((4, 47), (11, 13), (45, 20), (60, 45)), 5, 1.3, 380, .01, 8126,
 mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm</title>'
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)
 mark += '</svg>\n'
-(root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8')
+(root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8', newline='\n')
 print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'letter_grains_before_clipping': letter_grain_count, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))

@@ -84,8 +84,9 @@ At 900px and below, use a compact sticky header with an accessible navigation
 disclosure. Keep theme and menu controls reachable at 320px; close the menu
 after navigation, on Escape, outside clicks and breakpoint changes.
 The hero contains the wordmark, a factual testbed introduction and three questions.
-Keep the hero compact: the main wordmark is capped at 500px, with tight vertical
-spacing so readers reach the example sooner.
+Cap the hero wordmark at 500px. Separate the introduction from Research Questions
+with 64px on desktop and 48px on phones. Use 96px between the main sections on
+desktop and 80px on phones, with one section owning each gap.
 
 Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
 clear type hierarchy and open space around the evidence.
@@ -109,10 +110,12 @@ SWARMHARM in capitals, with all four HARM letters red in both themes. Both R gly
 The current letterforms use a 140-font-unit outline expansion. Preserve
 their spacing and grain geometry when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
-outlines; HARM stays solid red. There is no loose sand or arc above the letters.
+outlines; HARM stays solid red. The large hero logo includes the approved smooth
+red sand arc, with a dispersed left end, coarse middle grains and a tapered tip
+meeting the red A. Preserve its curve and keep the lettering unchanged.
 `scripts/build-wordmark.py` reproduces both themes with the same letter geometry.
-The earlier arc source remains saved for reference. The PNG is an export for
-social metadata, and the compact favicon retains its sand-grain crescent.
+Reuse `static/images/swarmharm-sand-arc.png` for the hero arc. The PNG wordmark is
+an export for social metadata, and the compact favicon retains its sand-grain crescent.
 Use the wordmark once in the hero. Keep the footer to the template credit.
 
 [Michroma](https://github.com/google/fonts/tree/main/ofl/michroma) is supplied
@@ -150,9 +153,8 @@ the recorded loss of old backups. Do not describe it as measured storage overloa
 
 Keep the original amber robots, blue glass and wooden objects in color.
 Both themes keep these pigments opaque and unchanged. Preserve existing alpha
-when removing near-white
-paper when producing alpha; do not turn pale gold, green or wood into translucent
-pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
+when removing near-white paper; do not turn pale gold, green or wood into
+translucent pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and server panels cannot leave white rectangles over neighboring artwork.
