@@ -103,12 +103,12 @@ SWARMHARM in capitals, with all four HARM letters red in both themes. Both R gly
 The current letterforms use a 140-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
-outlines. A scattered trail enters the lettering from the left. Above it, a
+outlines. There is no loose sand beside the lettering. Above it, a
 separate red plume floats free of S: fine, diffuse grains on the left gather
 into coarser grains through the middle and taper toward A on the right.
 The plume stays red in both themes, with a gentle opacity transition from
-the dispersed left end to the dense center. Preserve the incoming sand and
-full letterforms. HARM stays solid red.
+the dispersed left end to the dense center. Preserve the full letterforms.
+HARM stays solid red.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
 imagegen studies informed the direction; the final artwork is native SVG.
 The PNG is an export for social metadata. The compact favicon is a matching sand-grain crescent bridge.
@@ -129,7 +129,7 @@ The second scene drops one envelope through the shared drawer's open top.
 Keep the drawer assembled and mask the envelope behind its front and side.
 Use the same engraved envelope in the third scene, where four agents communicate
 along the existing strings. Mask messages behind the jar silhouettes at their
-endpoints. Keep the four old-backup icons beside the jars.
+endpoints. Keep the space beside the jars free of report or backup icons.
 
 In the last scene, four files enter the storage cabinet one at a time. Each
 arrival fills one visible bay and advances the capacity meter. When all four
@@ -147,9 +147,9 @@ pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and server panels cannot leave white rectangles over neighboring artwork.
-Preserve the original pixels and correctly occluded body parts. One 24-second
+Preserve the original pixels and correctly occluded body parts. One 21-second
 clock progresses through discovery, transmission, communication and damage without
-overlapping stages, then resets.
+overlapping stages, then resets. Discovery lasts two seconds before transmission begins.
 Draw only visible panels and pause when the document is hidden. On phones,
 advance the shared clock to the newly visible stage so it starts on entry.
 Once requested, playback runs only while visible; reduced motion slows it to 70 percent.

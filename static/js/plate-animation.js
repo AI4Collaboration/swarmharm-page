@@ -236,14 +236,6 @@
     letters.slice(1).forEach(letter => node(routeMask, 'path', { d: letter.shape, fill: '#fff', stroke: '#fff', 'stroke-width': 4 }));
     const routes = node(scene.stage, 'g', { mask: 'url(#plate-letter-routes)' });
     ['M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
-    const copies = [[218,343], [497,344], [328,591], [391,591]].map(([x,y], i) => {
-      const copy = node(scene.stage, 'g', { transform: `translate(${x} ${y}) scale(.58)`, 'data-peer-backup': i, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
-      node(copy, 'path', { d: 'M-38-35H18L38-15V46H-38Z', fill: '#d7ddd1', stroke: '#666958', 'stroke-width': 2.5 });
-      const paper = node(copy, 'path', { d: 'M-30-45H12L31-26V37H-30Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.8 });
-      node(copy, 'path', { d: 'M12-45V-26H31M-24 29H24M-23 33H21', fill: 'none', stroke: '#9b8c72', 'stroke-width': 1.3 });
-      node(copy, 'path', { d: 'M-13-9a19 19 0 1 1-3 22M-13-9v12H-25', fill: 'none', stroke: '#526b6a', 'stroke-width': 3.5 });
-      return paper;
-    });
     // Messages follow the existing connections. The glass and bases occlude
     // them at the endpoints, so paper cannot pass across a robot or jar face.
     const jarOccluders = [
@@ -430,11 +422,11 @@
     };
   }
 
-  const STORY_DURATION = 24000;
-  const STORY_STARTS = [0, .21, .42, .63];
-  const STORY_ENDS = [.21, .42, .63, .96];
+  const STORY_DURATION = 21000;
+  const STORY_STARTS = [0, 2000, 7000, 12000].map(time => time / STORY_DURATION);
+  const STORY_ENDS = [2000, 7000, 12000, 20000].map(time => time / STORY_DURATION);
   function storyProgress(p) {
-    const reset = between(p, .96, 1);
+    const reset = between(p, STORY_ENDS[3], 1);
     return STORY_STARTS.map((start,i) => {
       const finish = i === 3 ? .94 : 1;
       const progress = finish * clamp((p-start)/(STORY_ENDS[i]-start));

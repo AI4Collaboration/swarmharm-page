@@ -133,19 +133,6 @@ def swarm_letters():
     return ''.join(defs), ''.join(letters), total
 
 
-def incoming_sand():
-    rng = random.Random(281028)
-    dots = []
-    for _ in range(270):
-        progress = rng.betavariate(2,1.05)
-        x = -92 + 217*progress
-        lane = rng.choice([467, 527, 590])
-        y = lane - 7*math.sin(progress*math.pi) + rng.gauss(0,14-9*progress)
-        radius = .55 + 2.75*progress**1.35*rng.uniform(.55,1)
-        dots.append(f'<path d="{grain_path(x,y,radius,rng)}" opacity="{.22+.78*progress:.2f}"/>')
-    return ''.join(dots)
-
-
 start = (-40, 340)
 end = (red_peak, baseline - 1536*scale)
 bridge_points = (start, (560, 232), (1220, 222), end)
@@ -163,7 +150,6 @@ for i in range(65):
 tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
 tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
-wind = incoming_sand()
 for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
     particles = []
     stops = [(0, (239, 96, 88)), (.35, (235, 50, 41)),
@@ -175,7 +161,6 @@ for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
 <title id="title">SWARMHARM</title>
 <defs>{letter_defs}</defs>
 <g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
-<g fill="{ink}" aria-label="Incoming sand">{wind}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>
 </svg>
@@ -189,4 +174,4 @@ mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Swarm
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)
 mark += '</svg>\n'
 (root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8')
-print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'crescent_grains': len(bridge), 'letter_grains_before_clipping': letter_grain_count, 'incoming_grains': 270, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))
+print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'crescent_grains': len(bridge), 'letter_grains_before_clipping': letter_grain_count, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))
