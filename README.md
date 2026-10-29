@@ -103,12 +103,10 @@ SWARMHARM in capitals, with all four HARM letters red in both themes. Both R gly
 The current letterforms use a 140-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
-outlines. A scattered trail enters from the left. The crescent rises from S,
-crests near the left quarter, and extends into a long red blade toward A.
-Individual, slightly faceted sand grains form the entire blade, with visible
-gaps and no solid ribbon underneath. Grains grow coarser around the left
-shoulder and become finer toward both tips. The lower boundary stays sharp
-while the upper boundary disperses naturally.
+outlines. A scattered trail enters from the left. The low crescent rises from S,
+with an off-center crest and a longer, fine red taper toward A. Rounded,
+irregular grains form a continuous cloud: dispersed on the left, dense and
+coarser through the middle, then merging into a narrow curved tail on the right.
 Keep the fine stream rising from S and the incoming sand in the letterforms.
 Its color grades from charcoal to red in light mode and white
 to red in dark mode. HARM stays solid red. Preserve the full letterforms.
