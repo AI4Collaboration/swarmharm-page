@@ -18,7 +18,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   maintenance rollout (r19). The transcript reader and comparison table have
   been removed from the page. Raw JSON and the unused transcript scripts are
   archived locally outside the website and are not published with the page.
-  Use the heading "Case Study: From Swarm Formation to Collective Harm".
+  Use the heading "Case Study: Database Upgrades Under Storage Constraints".
   Put the individual-versus-combined replay result in the fourth caption. Keep the task,
   mechanism and outcome in that reading order. Use plain descriptions of
   missing information, notes and backups rather than execution-log terminology.
