@@ -69,7 +69,9 @@
       const id = `plate-${index}-mask-${serial++}`;
       const m = node(defs, 'mask', { id, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: 720, height: 720 });
       node(m, 'rect', { width: 720, height: 720, fill: '#fff' });
-      holes.forEach(d => node(m, 'path', { d, fill: '#000', stroke: '#000', 'stroke-width': edge }));
+      holes.forEach(hole => node(m, 'path', typeof hole === 'string'
+        ? { d: hole, fill: '#000', stroke: '#000', 'stroke-width': edge }
+        : { ...hole, fill: 'none', stroke: '#000' }));
       return `url(#${id})`;
     };
     const eyeMaskId = `plate-${index}-eye-mask`;
@@ -233,51 +235,78 @@
     const scene = plate(2);
     // Keep four jars from the original plate and connect them in one ring.
     transform(scene.stage, 0, -70);
-    const removedTop = [rect(188, 0, 353, 281), 'M146 280L320 143L326 153L152 288Z', 'M393 164L572 280L567 289L389 173Z'];
-    const oldTopLetters = ['M222 210L264 190L276 219L242 240Z', 'M441 198L486 215L476 245L440 228Z'];
-    const letters = [
-      { shape: oldTopLetters[0], center: [249, 216], from: [174, 286], to: [548, 286], arc: 13, angle: 26 },
-      { shape: 'M540 418L568 437L551 469L527 458Z', center: [548, 444], from: [568, 378], to: [519, 518] },
-      { shape: 'M330 541L374 535L380 567L337 573Z', center: [355, 554], from: [423, 542], to: [292, 552] },
-      { shape: 'M151 427L179 415L193 450L165 465Z', center: [172, 440], from: [201, 511], to: [150, 387] }
+    const removedTop = [rect(188, 0, 353, 281)];
+    const oldLetters = [
+      'M222 210L264 190L276 219L242 240Z',
+      'M441 198L486 215L476 245L440 228Z',
+      'M540 418L568 437L551 469L527 458Z',
+      'M330 541L374 535L380 567L337 573Z',
+      'M151 427L179 415L193 450L165 465Z'
+    ];
+    // Remove the original five-agent wiring from both the glass and actor cutouts.
+    const oldWires = [
+      { d: 'M157 279L321 151', 'stroke-width': 8, 'stroke-linecap': 'round' },
+      { d: 'M393 164L563 278', 'stroke-width': 8, 'stroke-linecap': 'round' },
+      { d: 'M154 302Q161 420 209 531', 'stroke-width': 8, 'stroke-linecap': 'round' },
+      { d: 'M568 302Q562 424 509 532', 'stroke-width': 8, 'stroke-linecap': 'round' },
+      { d: 'M279 551Q353 557 435 541', 'stroke-width': 7, 'stroke-linecap': 'round' }
     ];
     const agentFrames = [
-      { box: [56, 252, 105, 142], pivot: [109, 390], scale: 1.22 },
-      { box: [551, 266, 108, 130], pivot: [612, 392], scale: 1.22 },
-      { box: [180, 510, 103, 137], pivot: [229, 642], scale: 1.22 },
-      { box: [442, 520, 113, 133], pivot: [495, 650], scale: 1.18 }
+      { shape: 'M92 255H112V274L139 276L141 281L157 276L162 286L158 307L144 327L135 333V359L143 376L136 390H78L75 369L56 366V345L63 327L66 315L59 307V286L71 274H92Z', pivot: [109, 390], scale: 1.22, hand: [153, 282] },
+      { shape: 'M610 260H632V278L651 284L662 295V320L655 331L661 346L660 365L650 369L642 356V367L648 387L636 397H590L583 388L588 369V343L570 331L557 313L553 292L558 280L568 278L578 298L581 301V288L590 281H610Z', pivot: [612, 392], scale: 1.22, hand: [567, 282] },
+      { shape: 'M214 502H235V526L259 531L263 542L271 540L282 545L282 557L275 572L263 584L258 593V615L265 635L253 649H202L194 638L197 629L175 628L171 617L174 596L184 576L182 564V541L193 530H214Z', pivot: [229, 642], scale: 1.22, hand: [273, 550] },
+      { shape: 'M482 512H504V532L524 538L531 549V574L524 585L545 599L553 621L549 639L536 643L526 631L524 625L535 645L523 660H470L458 649L464 626V593L451 580L435 559L433 542L440 533L451 538L456 552L456 543L464 536H482Z', pivot: [495, 650], scale: 1.18, hand: [441, 541] }
     ];
-    scene.background([...removedTop, ...oldTopLetters, ...letters.slice(1).map(letter => letter.shape), ...agentFrames.map(({box}) => rect(...box))], 1);
-    // Preserve the glass edges where the old upper connections crossed them.
-    scene.cutout(rect(170, 242, 8, 55));
-    scene.cutout(rect(541, 249, 8, 54));
-    node(scene.stage, 'path', { d: 'M153 285Q360 310 568 285', fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 });
-    const routeMask = node(node(scene.svg, 'defs'), 'mask', { id: 'plate-letter-routes', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: 720, height: 720 });
-    node(routeMask, 'rect', { width: 720, height: 720, fill: '#000' });
-    letters.slice(1).forEach(letter => node(routeMask, 'path', { d: letter.shape, fill: '#fff', stroke: '#fff', 'stroke-width': 4 }));
-    const routes = node(scene.stage, 'g', { mask: 'url(#plate-letter-routes)' });
-    ['M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
-    // Messages follow the existing connections. The glass and bases occlude
-    // them at the endpoints, so paper cannot pass across a robot or jar face.
     const jarOccluders = [
       'M27 422V389L39 375V279Q40 212 93 198V180H121V199Q173 215 177 279V389L185 397V422Z',
       'M530 423V396L541 386V280Q545 212 599 198V180H625V199Q680 214 680 280V390L692 398V423Z',
       'M145 679V649L157 637V547Q161 480 210 461V443H241V463Q290 480 296 547V640L307 650V679Z',
       'M415 680V649L427 637V546Q432 480 480 463V443H508V463Q558 480 562 549V641L570 650V680Z'
     ];
-    const messages = node(scene.stage, 'g', { mask: scene.mask(jarOccluders, 3), 'data-message-route': '' });
+    const jarMask = node(scene.defs, 'mask', { id: 'plate-2-jars-only', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: 720, height: 720 });
+    node(jarMask, 'rect', { width: 720, height: 720, fill: '#000' });
+    jarOccluders.forEach(d => node(jarMask, 'path', { d, fill: '#fff', stroke: '#fff', 'stroke-width': 4 }));
+    const jarArt = node(scene.stage, 'g', { mask: 'url(#plate-2-jars-only)' });
+    const backgroundWires = oldWires.map(wire => ({ ...wire, 'stroke-width': 14 }));
+    scene.background([...removedTop, ...oldLetters, ...backgroundWires, ...agentFrames.map(({shape}) => shape)], 1, jarArt);
+    // Restore the narrow glass/base crossings from the clean opposite side of
+    // the same jar, leaving its etched edges and wood grain continuous.
+    const repairMask = node(scene.defs, 'mask', { id: 'plate-2-wire-repairs', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: 720, height: 720 });
+    node(repairMask, 'rect', { width: 720, height: 720, fill: '#000' });
+    backgroundWires.forEach(wire => node(repairMask, 'path', { ...wire, fill: 'none', stroke: '#fff' }));
+    oldLetters.forEach(d => node(repairMask, 'path', { d, fill: '#fff', stroke: '#fff', 'stroke-width': 1 }));
+    agentFrames.forEach(({shape}) => node(repairMask, 'path', { d: shape, fill: '#000', stroke: '#000', 'stroke-width': 1 }));
+    const repairs = node(jarArt, 'g', { mask: 'url(#plate-2-wire-repairs)' });
+    [
+      { center: 106, box: [22, 176, 170, 252] },
+      { center: 613.5, box: [526, 176, 172, 252] },
+      { center: 226, box: [140, 439, 174, 246] },
+      { center: 495, box: [410, 439, 168, 248] }
+    ].forEach(({center,box}) => {
+      const mirror = node(repairs, 'g', { transform: `translate(${center*2} 0) scale(-1 1)` });
+      scene.cutout(rect(...box), mirror);
+    });
+    const hands = agentFrames.map(({ hand, pivot, scale }) => hand.map((value, axis) => pivot[axis] + (value-pivot[axis])*scale));
+    // A single curve definition keeps the visible cord and its envelope aligned.
     const conversations = [
-      { from: [153,285], via: [360,310], to: [568,285] },
-      { from: [567,360], via: [540,449], to: [512,538] },
-      { from: [442,539], via: [359,545], to: [276,551] },
-      { from: [208,533], via: [176,451], to: [143,369] }
+      { from: hands[0], via: [360, 306], to: hands[1] },
+      { from: hands[1], via: [426, 382], to: hands[3] },
+      { from: hands[3], via: [356, 561], to: hands[2] },
+      { from: hands[2], via: [294, 382], to: hands[0] }
     ];
+    const routes = node(scene.stage, 'g', { 'data-conversation-cords': '', fill: 'none', stroke: '#786b58', 'stroke-width': 2.2, 'stroke-linecap': 'round' });
+    conversations.forEach(({ from, via, to }, i) => node(routes, 'path', {
+      d: `M${from.join(' ')}Q${via.join(' ')} ${to.join(' ')}`, 'data-conversation-cord': i
+    }));
+    // Glass and bases hide a letter until it clears the sending jar, and again
+    // as it reaches the receiving jar. The actors remain in the foreground.
+    const messages = node(scene.stage, 'g', { mask: scene.mask(jarOccluders, 3), 'data-message-route': '' });
     const envelopes = conversations.map((_, i) => envelope(scene, messages, `conversation-${i}`));
     const agentIndices = [1, 2, 3, 4];
     const gazes = agentIndices.map((i, j) => {
-      const { box, pivot: [x, y], scale } = agentFrames[j];
+      const { shape, pivot: [x, y], scale } = agentFrames[j];
       const actor = node(scene.stage, 'g', { transform: `translate(${x} ${y}) scale(${scale}) translate(${-x} ${-y})`, 'data-conversation-agent': i });
-      scene.cutout(rect(...box), actor);
+      scene.cutout(shape, actor, sources[2], oldWires);
       return scene.eyes(actor, i, i);
     });
     const positions = agentIndices.map(i => faces[2][i].eyes.map((_, axis) => (faces[2][i].eyes[0][axis] + faces[2][i].eyes[1][axis])/2));

@@ -151,9 +151,12 @@ with a small drawer at each end. Only the letter moves: it enters on the left, d
 then emerges on the right and rises beside the receiver. Both robots and their
 hands remain still. Mask the envelope behind the desk and drawer faces until it
 clears the opening. Preserve the slanted eyes in the static artwork.
-Use the same engraved envelope in the third scene, where four agents communicate
-along the existing strings. Mask messages behind the jar silhouettes at their
-endpoints. Keep the space beside the jars free of report or backup icons.
+Use the same engraved envelope in the third scene. Draw four continuous curves
+from the agents' scaled hand positions, and use those exact curves for envelope
+motion. Remove the old wires and restore their crossings from clean portions of
+the original jars. Trim actor layers to their silhouettes so enlarged glass
+edges do not appear beside them. Mask messages behind the jars at their endpoints.
+Keep the space beside the jars free of report or backup icons.
 
 In the last scene, four files enter the storage cabinet one at a time. Each
 arrival fills one visible bay and advances the capacity meter. When all four
