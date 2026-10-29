@@ -39,11 +39,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   same style as the Sample Case heading, with the full name in navigation.
   Three short questions follow, emphasizing active discovery in red,
   collective misalignment and harm in red, and individually benign actions in green,
-  as three full-width rows with simple bullet points. Each question occupies its own row and wraps
+  as three full-width rows numbered 1, 2 and 3, without circles or badges. Each question occupies its own row and wraps
   naturally on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
-  by communication, and collective harm from individually benign actions. Avoid slogans,
-  numbers and diagrams above these questions. Keep the page focused on these
+  by communication, and collective harm from individually benign actions. Avoid slogans
+  and diagrams above these questions. Keep the page focused on these
   three questions.
 - Keep website wording here; do not change technical prompts or context to
   match presentation copy. Technical principles live in the research
@@ -170,7 +170,8 @@ and print artwork. `scripts/export-plate-stills.py` embeds the original pixels
 in paused SVG scenes captured during visual QA. Keep the two phase columns,
 institution conveyor, and captions beneath the illustrations.
 
-Use no decorative section numbers, phase numbers, numbered steps or RQ badges.
+Use plain decimal numbering for the three research questions. Keep other section
+and phase headings unnumbered; use no circles or badges.
 Avoid subtitles, eyebrow labels and headings that repeat the text directly below.
 Keep data values, dates, source identifiers and functional navigation labels.
 
