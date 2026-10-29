@@ -56,7 +56,7 @@ def grain_path(x, y, radius, rng):
     return d+'Z'
 
 
-def grains(points, width, radius, count, gap, seed, levels=None, free_left=False):
+def grains(points, width, radius, count, gap, seed, levels=None, free_left=False, blade=False, min_y=None):
     rng = random.Random(seed)
     result, cells = [], {}
     cell_size = radius * 3
@@ -81,10 +81,14 @@ def grains(points, width, radius, count, gap, seed, levels=None, free_left=False
             if free_left:
                 spread = max(-1.25, min(1.25, spread))
             offset = spread * width * envelope**.85 * (1-progress)**1.65 * 1.8
+            if blade:
+                offset = -abs(offset)
             norm = math.hypot(dx, dy)
             x, y = x - dy/norm*offset, y + dx/norm*offset
             floor = 1.15*(1-progress)+.22*progress if free_left else fine_radius
             r = ((floor + (size-floor)*core) if levels else size*(.1+.9*taper**.65)) * rng.uniform(.65, 1)
+            if min_y is not None and y-r < min_y:
+                continue
             cell = (int(x/cell_size), int(y/cell_size))
             nearby = [node for i in range(-1, 2) for j in range(-1, 2)
                       for node in cells.get((cell[0]+i, cell[1]+j), [])]
@@ -95,6 +99,19 @@ def grains(points, width, radius, count, gap, seed, levels=None, free_left=False
             alpha = (.2+.8*min(1, progress/.36))*rng.uniform(.78, 1)
             result.append((grain_path(x, y, r, rng), progress, alpha))
     return result
+
+
+def blade_contour(points):
+    upper, lower = [], []
+    for i in range(141):
+        u = i/140
+        t = .12 + .88*u
+        x, y, dx, dy = curve(t, points)
+        norm = math.hypot(dx, dy)
+        width = 62 * (u/.32)**.6 * ((1-u)/.68)**1.28
+        upper.append((x+dy/norm*width, y-dx/norm*width))
+        lower.append((x, y))
+    return 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x, y in upper+list(reversed(lower))) + 'Z'
 
 
 def gradient(t, stops):
@@ -149,32 +166,37 @@ def incoming_sand():
 start = (-40, 340)
 end = (red_peak, baseline - 1536*scale)
 bridge_points = (start, (560, 232), (1220, 222), end)
-bridge = grains(bridge_points, 70, 14, 2960, .04, 281026,
-                levels=[(14, 260), (5.5, 1000), (1.7, 1700)], free_left=True)
+bridge = grains(bridge_points, 90, 14, 2960, .08, 281026,
+                levels=[(14, 260), (5.5, 1000), (1.7, 1700)],
+                free_left=True, blade=True, min_y=195)
 # The last grains merge into a narrow, tapering trajectory ending at the A.
 tail_edges = [[], []]
 for i in range(65):
-    t = .57 + .43*i/64
+    t = .76 + .24*i/64
     x, y, dx, dy = curve(t, bridge_points)
     norm = math.hypot(dx, dy)
-    half_width = 5.8*((1-t)/.43)**1.05
+    half_width = 2.8*((1-t)/.24)**1.05
     tail_edges[0].append((x-dy/norm*half_width, y+dx/norm*half_width))
     tail_edges[1].append((x+dy/norm*half_width, y-dx/norm*half_width))
 tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
 tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 wind = incoming_sand()
+blade_shape = blade_contour(bridge_points)
 for theme, ink in [('light', '#111315'), ('dark', '#f2f2ef')]:
-    particles = []
-    stops = [(0, (239, 96, 88)), (.35, (235, 50, 41)),
-             (.7, (235, 36, 28)), (1, (229, 43, 36))]
+    particles, drifting = [], []
+    stops = [(0, (239, 96, 88)), (.35, (220, 33, 27)),
+             (.7, (220, 28, 23)), (1, (229, 43, 36))]
     for d, t, opacity in bridge:
         rgb = gradient(t, stops)
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
+        if t < .42:
+            fade = max(0, 1-t/.42)**1.25
+            drifting.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity*fade:.2f}"/>')
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title">
 <title id="title">SWARMHARM</title>
-<defs>{letter_defs}</defs>
-<g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
+<defs>{letter_defs}<clipPath id="sand-blade"><path d="{blade_shape}"/></clipPath></defs>
+<g aria-label="Sand-grain crescent">{''.join(drifting)}<g clip-path="url(#sand-blade)">{''.join(particles)}</g><path d="{tail}" fill="#e52b24"/></g>
 <g fill="{ink}" aria-label="Incoming sand">{wind}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>

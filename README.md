@@ -106,6 +106,8 @@ SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters the lettering from the left. Above it, a
 separate red plume floats free of S: fine, diffuse grains on the left gather
 into coarser grains through the middle and taper toward A on the right.
+Its grain-filled blade has a defined cutting edge and a long needle point.
+Only the last narrow tip is solid; the body retains visible particle texture.
 The plume stays red in both themes, with a gentle opacity transition from
 the dispersed left end to the dense center. Preserve the incoming sand and
 full letterforms. HARM stays solid red.
