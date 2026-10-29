@@ -56,7 +56,7 @@ def grain_path(x, y, radius, rng):
     return d+'Z'
 
 
-def grains(points, width, radius, count, gap, seed, levels=None):
+def grains(points, width, radius, count, gap, seed, levels=None, crest=.44, cutting_edge=False):
     rng = random.Random(seed)
     result, cells = [], {}
     cell_size = radius * 3
@@ -72,12 +72,14 @@ def grains(points, width, radius, count, gap, seed, levels=None):
             x, y, dx, dy = curve(t, points)
             progress = (x-points[0][0])/(points[-1][0]-points[0][0])
             taper = math.sin(math.pi*progress)
-            ramp = progress/.44 if progress < .44 else (1-progress)/.56
+            ramp = progress/crest if progress < crest else (1-progress)/(1-crest)
             core = math.sin(math.pi*.5*ramp)**2.15
             if levels and size <= 2 and rng.random() < .12*core:
                 continue
             spread = max(-1.5, min(1.5, rng.gauss(-.1, .52))) if levels else rng.uniform(-1, 1)
             offset = spread * width * taper**.85 * (1-progress)**1.65 * 1.8
+            if cutting_edge:
+                offset = -abs(offset)
             norm = math.hypot(dx, dy)
             x, y = x - dy/norm*offset, y + dx/norm*offset
             r = ((fine_radius + (size-fine_radius)*core) if levels else size*(.1+.9*taper**.65)) * rng.uniform(.65, 1)
@@ -91,6 +93,28 @@ def grains(points, width, radius, count, gap, seed, levels=None):
             alpha = (.2+.8*min(1, progress/.36))*rng.uniform(.78, 1)
             result.append((grain_path(x, y, r, rng), progress, alpha))
     return result
+
+
+def blade_edge(points, begin=.22, width=27):
+    """A broad left shoulder resolves into one uninterrupted, pointed edge."""
+    upper, lower = [], []
+    for i in range(121):
+        u = i/120
+        t = begin + (1-begin)*u
+        x, y, dx, dy = curve(t, points)
+        norm = math.hypot(dx, dy)
+        thickness = width * (u/(1/3))**.55 * ((1-u)/(2/3))**1.1
+        upper.append((x+dy/norm*thickness, y-dx/norm*thickness))
+        lower.append((x, y))
+    contour = upper + list(reversed(lower))
+    return 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x, y in contour) + 'Z'
+
+
+def above_edge_clip(points, left=-100, top=100, right=2172, bottom=700):
+    start, p1, p2, end = points
+    return (f'M{left},{top}H{right}V{bottom}H{end[0]:.2f}V{end[1]:.2f}'
+            f'C{p2[0]:.2f},{p2[1]:.2f} {p1[0]:.2f},{p1[1]:.2f} '
+            f'{start[0]:.2f},{start[1]:.2f}H{left}Z')
 
 
 def gradient(t, stops):
@@ -144,9 +168,10 @@ def incoming_sand():
 
 start = (left + 1250*scale, baseline - 1540*scale)
 end = (red_peak, baseline - 1536*scale)
-bridge_points = (start, (400, 210), (1170, 260), end)
-bridge = grains(bridge_points, 68, 14, 2960, .04, 281026,
-                levels=[(14, 260), (5.5, 1000), (1.7, 1700)])
+bridge_points = (start, (300, 175), (610, 245), end)
+bridge = grains(bridge_points, 46, 14, 2960, .04, 281026,
+                levels=[(14, 260), (5.5, 1000), (1.7, 1700)],
+                crest=.30, cutting_edge=True)
 # A fine launch stream keeps the cloud visibly connected to S alone.
 launch_rng = random.Random(102926)
 for _ in range(380):
@@ -159,17 +184,9 @@ for _ in range(380):
     radius = launch_rng.uniform(.8, 2.5)
     bridge.append((grain_path(x, y, radius, launch_rng), progress,
                    launch_rng.uniform(.6, .95)))
-# The last grains merge into a narrow, tapering trajectory ending at the A.
-tail_edges = [[], []]
-for i in range(65):
-    t = .57 + .43*i/64
-    x, y, dx, dy = curve(t, bridge_points)
-    norm = math.hypot(dx, dy)
-    half_width = 5.8*((1-t)/.43)**1.05
-    tail_edges[0].append((x-dy/norm*half_width, y+dx/norm*half_width))
-    tail_edges[1].append((x+dy/norm*half_width, y-dx/norm*half_width))
-tail_points = tail_edges[0] + list(reversed(tail_edges[1]))
-tail = 'M' + 'L'.join(f'{x:.2f},{y:.2f}' for x,y in tail_points) + 'Z'
+# Grains merge into a sharp lower edge and a long right-hand point.
+tail = blade_edge(bridge_points)
+edge_clip = above_edge_clip(bridge_points)
 letter_defs, letter_grains, letter_grain_count = swarm_letters()
 wind = incoming_sand()
 for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef', (226, 228, 231))]:
@@ -181,8 +198,9 @@ for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef
         particles.append(f'<path d="{d}" fill="rgb({rgb[0]},{rgb[1]},{rgb[2]})" opacity="{opacity:.2f}"/>')
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="2272" height="480" viewBox="-100 180 2272 480" role="img" aria-labelledby="title">
 <title id="title">SWARMHARM</title>
-<defs>{letter_defs}</defs>
-<g aria-label="Sand-grain crescent"><path d="{tail}" fill="#e52b24"/>{''.join(particles)}</g>
+<defs>{letter_defs}<clipPath id="blade-cut"><path d="{edge_clip}"/></clipPath>
+<linearGradient id="blade-red" gradientUnits="userSpaceOnUse" x1="320" y1="0" x2="850" y2="0"><stop stop-color="#e52b24" stop-opacity="0"/><stop offset=".22" stop-color="#e52b24" stop-opacity=".6"/><stop offset=".62" stop-color="#e52b24"/><stop offset="1" stop-color="#e52b24"/></linearGradient></defs>
+<g aria-label="Sand-grain blade crescent" clip-path="url(#blade-cut)"><path d="{tail}" fill="url(#blade-red)"/>{''.join(particles)}</g>
 <g fill="{ink}" aria-label="Incoming sand">{wind}</g>
 <g fill="{ink}" aria-label="SWARM formed from sand">{letter_grains}</g>
 <g aria-label="HARM">{''.join(paths[5:])}</g>
@@ -191,10 +209,14 @@ for theme, ink, origin in [('light', '#111315', (20, 23, 27)), ('dark', '#f2f2ef
     suffix = '-dark' if theme == 'dark' else ''
     (root/f'static/images/swarmharm-wordmark{suffix}.svg').write_text(svg, encoding='utf-8', newline='\n')
 
-symbol = grains(((4, 47), (11, 13), (45, 20), (60, 45)), 5, 1.3, 380, .01, 8126,
-                levels=[(1.3, 70), (.75, 120), (.3, 190)])
+symbol_points = ((4, 47), (8, 12), (21, 20), (60, 47))
+symbol = grains(symbol_points, 4.1, 1.3, 380, .01, 8126,
+                levels=[(1.3, 70), (.75, 120), (.3, 190)],
+                crest=.30, cutting_edge=True)
 mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>SwarmHarm</title>'
+mark += f'<defs><clipPath id="mark-cut"><path d="{above_edge_clip(symbol_points, 0, 0, 64, 64)}"/></clipPath></defs>'
+mark += f'<g clip-path="url(#mark-cut)"><path d="{blade_edge(symbol_points, width=3.1)}" fill="#d92b24"/>'
 mark += ''.join(f'<path d="{d}" fill="#d92b24" opacity="{opacity:.2f}"/>' for d, _, opacity in symbol)
-mark += '</svg>\n'
+mark += '</g></svg>\n'
 (root/'static/images/swarmharm-mark.svg').write_text(mark, encoding='utf-8')
 print(json.dumps({'wordmark': word, 'glyphs': len(paths), 'crescent_grains': len(bridge), 'letter_grains_before_clipping': letter_grain_count, 'incoming_grains': 270, 'favicon_grains': len(symbol), 'themes': ['light', 'dark']}))
