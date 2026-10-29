@@ -60,7 +60,10 @@
     const ink = node(defs, 'filter', { id: inkId, 'color-interpolation-filters': 'sRGB' });
     node(ink, 'feColorMatrix', { type: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -.2126 -.7152 -.0722 1 0' });
     node(node(ink, 'feComponentTransfer'), 'feFuncA', { type: 'linear', slope: 18, intercept: -.55 });
-    const stage = node(svg, 'g', { 'data-scene-art': index });
+    // Keep agent size and ground level comparable across the four compositions.
+    const framing = ['translate(64.8 104.4) scale(.82)', 'translate(100.8 134.4) scale(.72)', '', ''];
+    const frame = node(svg, 'g', { 'data-plate-frame': index, ...(framing[index] ? { transform: framing[index] } : {}) });
+    const stage = node(frame, 'g', { 'data-scene-art': index });
     let serial = 0;
     const mask = (holes, edge = 1) => {
       const id = `plate-${index}-mask-${serial++}`;
@@ -183,52 +186,27 @@
 
   function transmission() {
     const scene = plate(1, { preserveEyes: true });
-    const leftHead = 'M109 297L121 293L123 278Q124 267 143 265L181 262L181 254Q190 247 203 254L204 266L231 267Q247 269 248 289L257 292L257 323L249 326L247 340Q210 356 143 353L128 345L122 334L111 333Z';
-    const rightHead = 'M486 297L496 291Q499 271 518 271L547 271L547 261Q559 253 570 262L569 274L596 279Q615 283 615 302L629 305L628 335L616 339L610 352L590 361L505 346L496 336L486 332Z';
-    const rightArm = 'M574 415Q584 417 583 426L558 448L552 456Q548 469 533 469Q519 468 518 454Q516 441 528 437L540 438L565 421Z';
-    // Restore the small areas covered by the resting forearm before lifting it.
-    const repairId = 'under-desk-forearm-repair';
-    node(node(scene.defs, 'clipPath', { id: repairId }), 'path', { d: rightArm });
-    const repair = node(scene.stage, 'g', { 'clip-path': `url(#${repairId})` });
-    node(repair, 'path', { d: 'M515 430H542V472H515Z', fill: '#c7aa87' });
-    node(repair, 'path', { d: 'M542 409H600V470H542Z', fill: '#adb294' });
-    for (let y = 438; y < 464; y += 4) {
-      node(repair, 'path', { d: `M518 ${y}L541 ${y-2}`, fill: 'none', stroke: '#6f5945', 'stroke-width': .65, opacity: .45 });
-    }
-    scene.background([leftHead, rightHead, rightArm]);
-    const left = scene.cutout(leftHead), right = scene.cutout(rightHead);
-    left.setAttribute('data-rig-part', 'head');
-    right.setAttribute('data-rig-part', 'head');
-    // A single shared housing sits below the desk; only its end drawers expose
-    // the letter. The desktop, drawer faces and apron hide the transit itself.
+    // The agents and their hands stay still. Only the shared envelope moves.
+    scene.background([]);
     const wood = [
-      'M78 404H614L642 418V433H78Z',
-      'M197 439L242 447L270 434V461L242 472L197 460Z',
-      'M242 431H486V474H242Z',
-      'M449 434L476 445L534 436V463L476 472L449 460Z'
+      'M72 404H617L643 418V434H72Z',
+      'M174 435L237 448L267 434V465L237 474L174 462Z',
+      'M237 430H486V475H237Z',
+      'M443 434L477 445L530 436V464L477 473L443 460Z'
     ];
     const hiddenRoute = node(scene.stage, 'g', { mask: scene.mask(wood, 0), 'data-mail-slot': '', 'data-shared-compartment': '' });
     const letter = envelope(scene, hiddenRoute, 'under-desk');
     const reading = envelope(scene, scene.stage, 'reading');
-    const arm = scene.cutout(rightArm);
-    arm.setAttribute('data-rig-part', 'reading-arm');
-    scene.cutout('M176 441Q189 432 200 441L205 452Q205 467 190 468L177 460Z');
     return p => {
       const send = between(p, .12, .30), transit = between(p, .30, .48);
-      const receive = between(p, .48, .65), read = between(p, .66, .86);
-      const x = p < .30 ? lerp(192, 238, send) : p < .48 ? lerp(238, 486, transit) : lerp(486, 533, receive);
-      const y = p < .30 ? lerp(451, 446, send) : p < .48 ? 446 : lerp(446, 439, receive);
-      placeEnvelope(letter, x, y, lerp(-18, 0, send), .82);
-      opacity(letter, p < .65 ? 1 : 0);
-      const angle = 65*read, radians = angle*Math.PI/180;
-      const handX = 577 - 42*Math.cos(radians) - 35*Math.sin(radians);
-      const handY = 417 - 42*Math.sin(radians) + 35*Math.cos(radians);
-      transform(arm, 0, 0, angle, 577, 417);
-      placeEnvelope(reading, handX-2, handY-13, lerp(0,-8,read), .82);
-      opacity(reading, p >= .65 ? 1 : 0);
-      transform(left, 0, 0, track(p, [[0,-3],[.1,-3],[.2,2],[.48,2],[.6,0],[1,0]]), 188, 347);
-      transform(right, 0, 3*read, track(p, [[0,3],[.15,3],[.28,-2],[.6,-2],[.86,-5],[1,-5]]), 553, 351);
-      scene.svg.dataset.mailState = p < .12 ? 'checking-surroundings' : p < .30 ? 'inserting-left' : p < .48 ? 'concealed-transit' : p < .65 ? 'taking-out-right' : 'reading-right';
+      const receive = between(p, .48, .70), read = between(p, .70, .90);
+      const x = p < .30 ? lerp(173, 235, send) : p < .48 ? lerp(235, 480, transit) : lerp(480, 554, receive);
+      const y = p < .30 ? lerp(451, 446, send) : p < .48 ? 446 : lerp(446, 443, receive);
+      placeEnvelope(letter, x, y, lerp(-12, 0, send), .82);
+      opacity(letter, p < .70 ? 1 : 0);
+      placeEnvelope(reading, lerp(554, 555, read), lerp(443, 385, read), lerp(0, -8, read), .82);
+      opacity(reading, p >= .70 ? 1 : 0);
+      scene.svg.dataset.mailState = p < .12 ? 'checking-surroundings' : p < .30 ? 'inserting-left' : p < .48 ? 'concealed-transit' : p < .70 ? 'taking-out-right' : 'reading-right';
     };
   }
 
@@ -244,7 +222,13 @@
       { shape: 'M330 541L374 535L380 567L337 573Z', center: [355, 554], from: [423, 542], to: [292, 552] },
       { shape: 'M151 427L179 415L193 450L165 465Z', center: [172, 440], from: [201, 511], to: [150, 387] }
     ];
-    scene.background([...removedTop, ...oldTopLetters, ...letters.slice(1).map(letter => letter.shape)], 4);
+    const agentFrames = [
+      { box: [56, 252, 105, 142], pivot: [109, 390], scale: 1.22 },
+      { box: [551, 266, 108, 130], pivot: [612, 392], scale: 1.22 },
+      { box: [180, 510, 103, 137], pivot: [229, 642], scale: 1.22 },
+      { box: [442, 520, 113, 133], pivot: [495, 650], scale: 1.18 }
+    ];
+    scene.background([...removedTop, ...oldTopLetters, ...letters.slice(1).map(letter => letter.shape), ...agentFrames.map(({box}) => rect(...box))], 1);
     // Preserve the glass edges where the old upper connections crossed them.
     scene.cutout(rect(170, 242, 8, 55));
     scene.cutout(rect(541, 249, 8, 54));
@@ -271,7 +255,12 @@
     ];
     const envelopes = conversations.map((_, i) => envelope(scene, messages, `conversation-${i}`));
     const agentIndices = [1, 2, 3, 4];
-    const gazes = agentIndices.map(i => scene.eyes(scene.stage, i, i));
+    const gazes = agentIndices.map((i, j) => {
+      const { box, pivot: [x, y], scale } = agentFrames[j];
+      const actor = node(scene.stage, 'g', { transform: `translate(${x} ${y}) scale(${scale}) translate(${-x} ${-y})`, 'data-conversation-agent': i });
+      scene.cutout(rect(...box), actor);
+      return scene.eyes(actor, i, i);
+    });
     const positions = agentIndices.map(i => faces[2][i].eyes.map((_, axis) => (faces[2][i].eyes[0][axis] + faces[2][i].eyes[1][axis])/2));
     const neighbors = [[1,2],[0,3],[3,0],[1,2]];
     return p => {
@@ -302,12 +291,11 @@
 
   function consequence() {
     const scene = plate(3);
-    scene.svg.setAttribute('viewBox', '0 60 720 600');
     const actorBounds = [[37,204,161,179], [206,211,138,184], [357,221,141,178], [507,219,182,174]];
     const places = [[115,229], [605,229], [115,479], [605,479]];
     const gazes = actorBounds.map(([x,y,w,h], i) => {
       const [cx,cy] = places[i];
-      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-load-actor': i });
+      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)} ${cy-(y+h/2)}) scale(1)`, 'data-load-actor': i });
       scene.cutout(rect(x,y,w,h), actor);
       return scene.eyes(actor,i,i);
     });

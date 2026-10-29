@@ -54,7 +54,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; keep the recorded backup-loss result in the fourth caption.
-- **Stay updated:** an inline email field submits to the existing public Google
+- **Stay tuned to our progress!**: an inline email field submits to the existing public Google
   Form without navigating away. Addresses accumulate in the owner's private
   Google Sheet for manual export. No new account authorization is required.
   New-response notifications and automatic response copies remain off.
@@ -125,11 +125,16 @@ pauses and resumes playback.
 Animate the original engraved artwork with `plate-animation.js`. The first
 scene shows two agents exploring separate bell jars, then turning toward each
 other. Keep their feet planted and heads rigid; use a shutter for blinking.
+Keep apparent robot sizes and ground levels comparable across the four panels.
+The first two compositions use fixed framing; figures in the four-agent scenes
+are sized within their jars or around the cabinet. Apply the same framing to
+static fallbacks and playback. Use fine etched contours, stippling, amber and
+sage pigments, pale blue glass and natural wood throughout.
 The second scene uses one shared wooden compartment concealed under a desk,
-with a small drawer at each end. The left agent inserts a letter; the letter
-is hidden inside the compartment before the right agent retrieves and raises
-it to read. Mask the envelope behind the desk and drawer faces until it clears
-the opening. Both agents retain their slanted eyes and rigid head shapes.
+with a small drawer at each end. Only the letter moves: it enters on the left, disappears inside the compartment,
+then emerges on the right and rises beside the receiver. Both robots and their
+hands remain still. Mask the envelope behind the desk and drawer faces until it
+clears the opening. Preserve the slanted eyes in the static artwork.
 Use the same engraved envelope in the third scene, where four agents communicate
 along the existing strings. Mask messages behind the jar silhouettes at their
 endpoints. Keep the space beside the jars free of report or backup icons.
