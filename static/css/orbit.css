@@ -9,6 +9,7 @@
   --space-12: 3rem;
   --space-16: 4rem;
   --section-gap: 6rem;
+  --sample-gap: 3.5rem;
 }
 :root, .section {
   color-scheme: light;
@@ -74,13 +75,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .hero-wordmark { width: 100%; height: auto; display: block; }
 .hero-intro { max-width: 660px; margin: 0 auto var(--space-16); color: var(--text); font: 400 18px/1.65 var(--font); text-align: left; text-wrap: pretty; }
 .hero-intro strong { color: var(--text); font-weight: 500; }
-.hero-questions { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); margin: 0 auto; text-align: left; }
-.hero-question { min-width: 0; padding-left: 0; border-left: 0; }
+.hero-questions { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); margin: 0 auto; padding: 0 0 0 1.2em; list-style: disc outside; text-align: left; }
+.hero-question { display: list-item; min-width: 0; padding-left: 0; border-left: 0; }
+.hero-question::marker { color: var(--muted); font-size: .75em; }
 .hero-question:first-child { padding-left: 0; border-left: 0; }
 .hero-question p { margin: 0; color: var(--text); font: 400 17px/1.6 var(--font); text-wrap: pretty; }
 .rq-emphasis { color: var(--risk); }
 .rq-benign { color: var(--benign); }
-.overview { padding: var(--section-gap) 0 0; }
+.overview { padding: var(--sample-gap) 0 0; }
 /* Own both gaps here so the moving row has equal breathing room. */
 .institutions, .sample-section .institutions { width: 100%; margin: 0; padding: var(--space-10) 0; background: var(--bg); border: 0; box-shadow: none; }
 .institution-track { animation-duration: 45s; }
@@ -286,7 +288,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .recovery-replay { padding: 0; }
 }
 @media (max-width: 760px) {
-  :root { --section-gap: 5rem; }
+  :root { --section-gap: 5rem; --sample-gap: 3rem; }
   .nav-inner { min-height: 74px; flex-wrap: wrap; justify-content: center; gap: 0; padding-block: 10px; }
   .brand img { width: 164px; height: auto; }
   .nav-inner nav { justify-content: center; gap: 24px; }

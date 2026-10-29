@@ -39,7 +39,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   same style as the Sample Case heading, with the full name in navigation.
   Three short questions follow, emphasizing active discovery in red,
   collective misalignment and harm in red, and individually benign actions in green,
-  as three full-width text rows. Each question occupies its own row and wraps
+  as three full-width rows with simple bullet points. Each question occupies its own row and wraps
   naturally on narrow phones.
   They cover discovering peers to form a swarm, collective misalignment enabled
   by communication, and collective harm from individually benign actions. Avoid slogans,
@@ -86,7 +86,8 @@ after navigation, on Escape, outside clicks and breakpoint changes.
 The hero contains the wordmark, a factual testbed introduction and three questions.
 Cap the hero wordmark at 500px. Separate the introduction from Research Questions
 with 64px on desktop and 48px on phones. Use 96px between the main sections on
-desktop and 80px on phones, with one section owning each gap.
+desktop and 80px on phones, with one section owning each gap. Keep the transition
+from Research Questions to Sample Case tighter: 56px on desktop and 48px on phones.
 
 Follow the minimalist direction of [PostTrainBench](https://posttrainbench.com/): a consistent content width,
 clear type hierarchy and open space around the evidence.
