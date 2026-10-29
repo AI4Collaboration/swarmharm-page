@@ -48,6 +48,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
+- **Stay updated:** the final section links to a published Google Form with one
+  required email field and email-format validation. Responses go to the owner's
+  private Google Sheet for manual export. New-response email notifications and
+  automatic response copies are off. Keep only the public signup URL on the
+  website; never publish the subscriber sheet or administrative links.
 
 ## Visual direction
 
@@ -58,7 +63,7 @@ manual choice. Apply the theme before first paint; retain readable diagrams and
 logos in both themes. Use system sans-serif type for reading and restrained
 monospace section headings and metadata. `orbit.css` is the
 final presentation layer. The header follows the reading order: research
-questions, example, domains and source records. Source Data has no decorative arrow.
+questions, example, domains, email updates and source records. Source Data has no decorative arrow.
 At 900px and below, use a compact sticky header with an accessible navigation
 disclosure. Keep theme and menu controls reachable at 320px; close the menu
 after navigation, on Escape, outside clicks and breakpoint changes.
