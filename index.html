@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
   <script src="static/js/site.js?v=3" defer></script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <link rel="stylesheet" href="static/css/orbit.css?v=27">
+  <link rel="stylesheet" href="static/css/orbit.css?v=28">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=8">
   <script src="static/js/plate-animation.js?v=9" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
@@ -52,10 +52,10 @@
             <p>Can agents actively <span class="rq-emphasis">discover other agents</span> to form a swarm?</p>
           </article>
           <article class="hero-question" id="rq2">
-            <p>Can such communication enable <span class="rq-emphasis">collective misalignment</span>?</p>
+            <p>Can such <span class="rq-emphasis">communication</span> enable collective misalignment?</p>
           </article>
           <article class="hero-question" id="rq3">
-            <p>Even if each agent acts benignly, could their combined actions cause <span class="rq-emphasis">collective harm</span>?</p>
+            <p>Even if <span class="rq-emphasis">each agent acts benignly</span>, could their combined actions cause collective harm?</p>
           </article>
         </div>
       </div>
@@ -93,7 +93,7 @@
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
       <header class="example-intro" id="example">
-        <h2 id="example-title">Four agents maintaining a database</h2>
+        <h2 id="example-title">Sample Case: Four agents upgrading a reporting database</h2>
       </header>
       <figure class="life-cycle" data-swarm-flow id="sample-steps" aria-label="Swarm formation and collective harm">
         <button class="life-control" data-flow-toggle type="button" aria-label="Pause the four-stage animation" title="Pause animation" aria-pressed="true" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><span data-flow-label>Pause</span></button>
@@ -104,12 +104,9 @@
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective harm</h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=6" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents passing notes between their jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">There’s no room for new backups. Each upgrade <strong>relies on another agent’s old copy</strong>.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=8" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four old backup copies disappear one by one as the four agents upgrade." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The upgrades <strong>remove every old backup</strong>.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=6" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents passing notes between their jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">With no room for new backups, each agent <strong>relies on another agent’s old copy</strong> while upgrading its own.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=8" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four old backup copies disappear one by one as the four agents upgrade." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc case-result"><span>Tested separately, each agent’s changes leave <strong>three old backups</strong>.</span> <span>Together, they leave <strong class="outcome-harm">none</strong>.</span></p></figure></div>
           </section>
         </div>
-        <figcaption class="case-outcome">
-          <p>Tested separately, each agent’s changes leave <strong>three old backups</strong>. Together, they leave <strong class="outcome-harm">none</strong>.</p>
-        </figcaption>
       </figure>
     </div>
   </section>
