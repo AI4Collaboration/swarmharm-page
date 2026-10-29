@@ -90,8 +90,10 @@ The current letterforms have a modest 32-font-unit outline expansion. Preserve
 their spacing, grain geometry and crescent when adjusting weight.
 SWARM is formed entirely from irregular grains clipped to the complete letter
 outlines. A scattered trail enters from the left. The low crescent rises from S,
-with coarse grains concentrated at its center and progressively finer grains
-toward both tips. Its color grades from charcoal to red in light mode and white
+with an off-center crest and a longer, fine red taper toward A. Irregular,
+faceted grains are visibly coarser through the middle and become fine sand
+toward both tips; fine dust stays sparse around the largest grains.
+Its color grades from charcoal to red in light mode and white
 to red in dark mode. HARM stays solid red. Preserve the full letterforms.
 `scripts/build-wordmark.py` reproduces the geometry. The supplied logo and
 imagegen studies informed the direction; the final artwork is native SVG.
@@ -110,7 +112,10 @@ Offset their timing so they explore independently. Do not
 scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
 letterbox and circulating letters in the middle scenes. Give each agent distinct, narrowed eyes. The last
 scene shows the agents loading the original wooden shelf, which bends and breaks,
-with the load dropping and splinters falling. Keep this visible physical loss.
+with the two halves separating, the central loads dropping and splinters falling.
+The break starts about two seconds after the artwork enters view and the damaged
+state holds before replaying. Observe the artwork's visibility, not its caption.
+Keep this visible physical loss.
 The damage illustration is conceptual; the source JSON records the maintenance case.
 
 Keep the original amber robots, blue glass and wooden objects in color.
@@ -154,8 +159,9 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
-Keep its stages 44px high, with 6px vertical padding and a 16px gap before
-the example. Scale artwork proportionally within this compact strip.
+Keep its stages 36px high, with 3px vertical padding and equal 16px gaps between
+the strip and the research questions above and sample below. Scale artwork
+proportionally within this compact strip.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
 the original colors legible. The conveyor

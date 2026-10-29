@@ -241,45 +241,54 @@
 
   function consequence() {
     const scene = plate(3);
+    scene.svg.setAttribute('viewBox', '0 145 720 520');
     scene.cutout('M42 399L119 403L121 500L89 501L84 455Z');
     scene.cutout('M612 402L654 399L642 503L608 503Z');
     const leftShelf = scene.cutout('M23 378L350 399L359 435L25 405Z');
     const rightShelf = scene.cutout('M365 401L697 381L699 406L355 438L350 425Z');
+    leftShelf.setAttribute('data-rig-part', 'breaking-shelf-left');
+    rightShelf.setAttribute('data-rig-part', 'breaking-shelf-right');
     const seam = scene.cutout(rect(276, 402, 68, 23));
     const actorShapes = [rect(37, 204, 161, 179), rect(206, 211, 138, 184), rect(357, 221, 141, 178), rect(507, 219, 182, 174)];
     const actors = actorShapes.map(shape => scene.cutout(shape));
+    actors.forEach((actor, i) => actor.setAttribute('data-load-actor', i));
     const gazes = actors.map((actor, i) => scene.eyes(actor, i, i));
     const splinters = [
-      { shape: 'M325 443L338 447L311 467L309 461Z', x: -30, y: 70 },
-      { shape: 'M371 447L382 469L374 473L364 455Z', x: 23, y: 94 },
-      { shape: 'M335 477L342 485L335 505L327 514L326 506Z', x: -15, y: 105 },
-      { shape: 'M357 496L366 500L363 512L356 509Z', x: 14, y: 80 },
-      { shape: 'M373 514L379 518L375 530L369 525Z', x: 29, y: 77 }
+      { shape: 'M325 443L338 447L311 467L309 461Z', x: -63, y: 151 },
+      { shape: 'M371 447L382 469L374 473L364 455Z', x: 58, y: 180 },
+      { shape: 'M335 477L342 485L335 505L327 514L326 506Z', x: -32, y: 153 },
+      { shape: 'M357 496L366 500L363 512L356 509Z', x: 30, y: 130 },
+      { shape: 'M373 514L379 518L375 530L369 525Z', x: 72, y: 104 }
     ].map(piece => ({ ...piece, element: scene.cutout(piece.shape) }));
     const draw = cycle => {
-      const p = cycle > .955 ? 0 : cycle;
-      const loaded = between(p, .18, .48), broken = between(p, .5, .66);
-      const bend = loaded*1.4 + broken*8;
-      transform(leftShelf, 0, 0, -4.2+bend, 26, 391);
-      transform(rightShelf, 0, 0, 4.2-bend, 697, 392);
+      const p = cycle > .96 ? 0 : cycle;
+      const loaded = between(p, .04, .26), broken = between(p, .3, .43);
+      const falling = between(p, .38, .66);
+      const bend = loaded*3.2 + broken*22;
+      scene.svg.dataset.damageState = p < .3 ? 'loading' : p < .43 ? 'breaking' : 'fallen';
+      transform(leftShelf, -10*broken, 4*broken, -4.2+bend, 26, 391);
+      transform(rightShelf, 10*broken, 4*broken, 4.2-bend, 697, 392);
       seam.setAttribute('transform', `translate(52 ${-20+5*loaded}) translate(310 402) scale(1 1.4) translate(-310 -402)`);
-      opacity(seam, 1-between(p, .48, .55));
+      opacity(seam, 1-between(p, .29, .34));
       actors.forEach((actor, i) => {
         const middle = i===1 || i===2;
-        const settle = Math.sin(Math.PI*between(p, .02+i*.025, .22+i*.025));
+        const settle = Math.sin(Math.PI*between(p, .01+i*.015, .17+i*.015));
         const angle = i<2 ? -4.2+bend : 4.2-bend;
         const anchor = i<2 ? 26 : 697;
-        const lean = (i<2?1:-1)*(2*loaded+(middle?3:1)*broken);
-        actor.setAttribute('transform', `rotate(${angle} ${anchor} 391) translate(0 ${-4*settle}) rotate(${lean} ${[125,278,425,598][i]} 390)`);
+        const direction = i<2 ? 1 : -1;
+        const lean = direction*(2*loaded+(middle?9:2)*falling);
+        const inward = direction*(middle?18:8)*loaded;
+        const drop = middle ? 126*falling*falling : 0;
+        actor.setAttribute('transform', `translate(${inward} ${drop}) rotate(${angle} ${anchor} 391) translate(0 ${-6*settle}) rotate(${lean} ${[125,278,425,598][i]} 390)`);
         gazes[i]((i<2?1:-1)*(.5+loaded*.5), broken*.9);
 
       });
       splinters.forEach((piece, i) => {
-        const fall = between(p, .55+i*.014, .83);
-        opacity(piece.element, between(p, .53+i*.014, .59+i*.014));
+        const fall = between(p, .34+i*.012, .71);
+        opacity(piece.element, between(p, .31+i*.012, .37+i*.012));
         transform(piece.element, piece.x*fall, piece.y*fall*fall, (i%2?35:-30)*fall, 355, 452);
       });
-      opacity(scene.stage, cycle > .955 ? between(cycle, .965, 1) : 1-between(cycle, .9, .955));
+      opacity(scene.stage, cycle > .96 ? between(cycle, .96, 1) : 1-between(cycle, .92, .96));
     };
     return draw;
   }
@@ -293,7 +302,7 @@
       }));
     } catch { return; }
     const draw = [exploration(), discovery(), communication(), consequence()];
-    const durations = [8600, 8200, 9200, 9800];
+    const durations = [8600, 8200, 9200, 7600];
     const elapsed = [350, 1800, 2100, 0];
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -342,11 +351,19 @@
     });
     document.addEventListener('visibilitychange', sync);
     if ('IntersectionObserver' in window) {
+      const artwork = steps.map(step => step.querySelector('.plate-motion'));
       const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => { visible[steps.indexOf(entry.target)] = entry.isIntersecting; });
+        entries.forEach(entry => {
+          const i = artwork.indexOf(entry.target);
+          const entering = entry.isIntersecting && entry.intersectionRatio >= .15;
+          // Start the damage sequence when its artwork enters the viewport,
+          // rather than letting an offscreen picture advance with its caption.
+          if (i === 3 && entering && !visible[i]) elapsed[i] = 0;
+          visible[i] = entering;
+        });
         sync();
-      }, { threshold: 0 });
-      steps.forEach(step => observer.observe(step));
+      }, { threshold: [0, .15] });
+      artwork.forEach(svg => observer.observe(svg));
     } else visible.fill(true);
     render();
     sync();

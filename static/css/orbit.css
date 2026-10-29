@@ -55,13 +55,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .nav-inner nav a { font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--muted); }
 .nav-inner nav a:hover { color: var(--text); }
 .hero { background: var(--bg); border-bottom: 0; }
-.hero-layout { display: block; padding-block: 30px 24px; text-align: center; }
+.hero-layout { display: block; padding-block: 30px 16px; text-align: center; }
 .hero-copy { width: 100%; max-width: 920px; margin: auto; }
 .hero-copy h1 { margin: 0 auto 14px; width: min(100%, 440px); line-height: 1; }
 .hero-wordmark { width: 100%; height: auto; display: block; }
 .hero-intro { max-width: 700px; margin: 0 auto 28px; color: var(--muted); font: 400 20px/1.5 var(--font); text-wrap: balance; }
 .hero-intro strong { color: var(--text); font-weight: 600; }
-.hero-questions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin: 0 auto 8px; text-align: left; }
+.hero-questions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin: 0 auto; text-align: left; }
 .hero-question { min-width: 0; padding-left: 18px; border-left: 1px solid var(--line); }
 .hero-question:first-child { padding-left: 0; border-left: 0; }
 .hero-question p { margin: 0; color: var(--text); font: 450 17px/1.55 var(--font); text-wrap: pretty; }
@@ -69,17 +69,17 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 #rq1 .rq-emphasis { color: var(--discovery); }
 #rq2 .rq-emphasis { color: var(--coordination); }
 .overview { padding: 0 0 32px; }
-.institutions, .sample-section .institutions { width: 100%; margin: 0 0 16px; padding: 6px 0; background: var(--bg); border: 0; box-shadow: none; }
+.institutions, .sample-section .institutions { width: 100%; margin: 0 0 16px; padding: 3px 0; background: var(--bg); border: 0; box-shadow: none; }
 .institution-track { animation-duration: 45s; }
 .institution-list { gap: 54px; padding-inline: 27px; }
-.institution-list li { width: 150px; flex-basis: 150px; height: 44px; }
-.institution-list a { width: 150px; height: 44px; }
-.institution-list img { width: 100%; max-width: 148px; height: 36px; filter: none; opacity: 1; }
-.institution-list .institution-aim img { height: 30px; }
+.institution-list li { width: 150px; flex-basis: 150px; height: 36px; }
+.institution-list a { width: 150px; height: 36px; }
+.institution-list img { width: 100%; max-width: 140px; height: 30px; filter: none; opacity: 1; }
+.institution-list .institution-aim img { height: 26px; }
 .institution-list .institution-eurosafe a { display: flex; align-items: center; justify-content: center; gap: 5px; }
-.institution-list .institution-eurosafe img { width: 30px; height: 30px; flex: 0 0 30px; }
-.institution-eurosafe span { color: #022583; font: 700 17px/1.1 var(--font); letter-spacing: -.035em; }
-.institution-list .institution-oxford img, .institution-list .institution-georgia-tech img { height: 40px; }
+.institution-list .institution-eurosafe img { width: 26px; height: 26px; flex: 0 0 26px; }
+.institution-eurosafe span { color: #022583; font: 700 15px/1.1 var(--font); letter-spacing: -.035em; }
+.institution-list .institution-oxford img, .institution-list .institution-georgia-tech img { height: 34px; }
 .institution-list .institution-oxford img { filter: none; }
 .institution-list a:hover img, .institution-list a:focus-visible img { opacity: 1; }
 .example-intro { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start; margin: 0 0 24px; }
@@ -270,7 +270,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .footer-bottom p:last-child { width: auto; }
 @media (max-width: 900px) {
   .container { width: calc(100% - 48px); }
-  .hero-layout { padding-block: 28px 24px; }
+  .hero-layout { padding-block: 28px 16px; }
   .life-halves { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; }
   .life-pair { grid-template-columns: minmax(0,1fr) 16px minmax(0,1fr); }
   .life-desc { font-size: 14px; }
@@ -290,7 +290,7 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .hero-question p { max-width: none; }
   .section { padding-block: 50px; }
   .overview { padding-bottom: 28px; }
-  .institutions { margin-bottom: 16px; padding-block: 6px; }
+  .institutions { margin-bottom: 16px; padding-block: 3px; }
   .example-intro { grid-template-columns: 1fr; gap: 10px; margin-bottom: 22px; }
   .example-intro h2, .section-heading h2, .domain-coverage h2 { font-size: 21px; }
   .life-halves { grid-template-columns: 1fr; gap: 34px; }
@@ -312,11 +312,12 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
   .site-header { position: static; }
   .nav-inner { gap: 4px; padding-bottom: 15px; }
   .nav-inner nav { width: 100%; gap: 19px; }
-  .hero-layout { padding-block: 22px; }
+  .hero-layout { padding-block: 22px 16px; }
   .hero-copy h1 { width: min(88%, 300px); margin-bottom: 12px; }
   .hero-intro { font-size: 17px; margin-bottom: 20px; }
   .hero-questions { grid-template-columns: 1fr; gap: 0; text-align: left; }
   .hero-question, .hero-question:first-child { padding: 13px 0; border-left: 0; border-top: 1px solid var(--line); }
+  .hero-question:last-child { padding-bottom: 0; }
   .hero-question p { font-size: 16px; }
   .institution-list { gap: 32px; padding-inline: 16px; }
   .institution-list li, .institution-list a { flex-basis: 130px; width: 130px; }
