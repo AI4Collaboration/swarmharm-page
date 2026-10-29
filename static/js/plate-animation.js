@@ -204,23 +204,31 @@
 
   function communication() {
     const scene = plate(2);
+    // Keep four jars from the original plate and connect them in one ring.
+    transform(scene.stage, 0, -70);
+    const removedTop = [rect(188, 0, 353, 281), 'M146 280L320 143L326 153L152 288Z', 'M393 164L572 280L567 289L389 173Z'];
+    const oldTopLetters = ['M222 210L264 190L276 219L242 240Z', 'M441 198L486 215L476 245L440 228Z'];
     const letters = [
-      { shape: 'M222 210L264 190L276 219L242 240Z', center: [249, 216], from: [164, 279], to: [306, 165] },
-      { shape: 'M441 198L486 215L476 245L440 228Z', center: [462, 222], from: [410, 180], to: [551, 274] },
+      { shape: oldTopLetters[0], center: [249, 216], from: [174, 286], to: [548, 286], arc: 13, angle: 26 },
       { shape: 'M540 418L568 437L551 469L527 458Z', center: [548, 444], from: [568, 378], to: [519, 518] },
       { shape: 'M330 541L374 535L380 567L337 573Z', center: [355, 554], from: [423, 542], to: [292, 552] },
       { shape: 'M151 427L179 415L193 450L165 465Z', center: [172, 440], from: [201, 511], to: [150, 387] }
     ];
-    scene.background(letters.map(letter => letter.shape), 4);
+    scene.background([...removedTop, ...oldTopLetters, ...letters.slice(1).map(letter => letter.shape)], 4);
+    // Preserve the glass edges where the old upper connections crossed them.
+    scene.cutout(rect(170, 242, 8, 55));
+    scene.cutout(rect(541, 249, 8, 54));
+    node(scene.stage, 'path', { d: 'M153 285Q360 310 568 285', fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 });
     const routeMask = node(node(scene.svg, 'defs'), 'mask', { id: 'plate-letter-routes', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: 720, height: 720 });
     node(routeMask, 'rect', { width: 720, height: 720, fill: '#000' });
-    letters.forEach(letter => node(routeMask, 'path', { d: letter.shape, fill: '#fff', stroke: '#fff', 'stroke-width': 4 }));
+    letters.slice(1).forEach(letter => node(routeMask, 'path', { d: letter.shape, fill: '#fff', stroke: '#fff', 'stroke-width': 4 }));
     const routes = node(scene.stage, 'g', { mask: 'url(#plate-letter-routes)' });
-    ['M147 295L320 154', 'M396 170L566 283', 'M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
+    ['M567 360L512 538', 'M442 539L276 551', 'M208 533L143 369'].forEach(d => node(routes, 'path', { d, fill: 'none', stroke: '#62594d', 'stroke-width': 1.5 }));
     const envelopes = letters.map(letter => scene.cutout(letter.shape));
-    const gazes = faces[2].map((_, i) => scene.eyes(scene.stage, i, i));
-    const positions = faces[2].map(face => face.eyes.map((_, axis) => (face.eyes[0][axis] + face.eyes[1][axis])/2));
-    const neighbors = [[1,2],[3,0],[0,4],[4,1],[2,3]];
+    const agentIndices = [1, 2, 3, 4];
+    const gazes = agentIndices.map(i => scene.eyes(scene.stage, i, i));
+    const positions = agentIndices.map(i => faces[2][i].eyes.map((_, axis) => (faces[2][i].eyes[0][axis] + faces[2][i].eyes[1][axis])/2));
+    const neighbors = [[1,2],[0,3],[3,0],[1,2]];
     return p => {
       gazes.forEach((gaze, i) => {
         const watch = track((p+i*.13)%1, [[0,0],[.2,0],[.24,1],[.67,1],[.71,0],[1,0]]);
@@ -234,7 +242,7 @@
         const t = (p * 2 + i * .16) % 1;
         opacity(envelope, Math.min(1, t * 8, (1 - t) * 8));
         const travel = ease(t);
-        transform(envelope, lerp(letter.from[0], letter.to[0], travel) - letter.center[0], lerp(letter.from[1], letter.to[1], travel) - letter.center[1]);
+        transform(envelope, lerp(letter.from[0], letter.to[0], travel) - letter.center[0], lerp(letter.from[1], letter.to[1], travel) + (letter.arc || 0) * Math.sin(Math.PI * travel) - letter.center[1], letter.angle || 0, ...letter.center);
       });
     };
   }
@@ -242,80 +250,43 @@
   function consequence() {
     const scene = plate(3);
     scene.svg.setAttribute('viewBox', '0 60 720 600');
-    // The original four robots stay outside. Only their documents travel.
     const actorBounds = [[37,204,161,179], [206,211,138,184], [357,221,141,178], [507,219,182,174]];
     const places = [[115,229], [605,229], [115,479], [605,479]];
     const gazes = actorBounds.map(([x,y,w,h], i) => {
       const [cx,cy] = places[i];
-      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-load-actor': i });
+      const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)*.85} ${cy-(y+h/2)*.85}) scale(.85)`, 'data-upgrade-actor': i });
       scene.cutout(rect(x,y,w,h), actor);
       return scene.eyes(actor, i, i);
     });
-    const vessel = node(scene.stage, 'g', { 'data-shared-container': '', 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
-    const edge = 'M360 247L357 284L344 308L371 336L349 364L363 397L360 472';
-    const halves = [
-      { fill: 'M261 232Q308 248 360 247L357 284L344 308L371 336L349 364L363 397L360 472Q298 471 261 442Z', outer: 'M261 232V442Q298 471 360 472M261 232Q261 202 360 202M261 232Q310 252 360 252', hatch: 'M267 258V436Q300 460 347 464M273 270V426M279 283V421' },
-      { fill: 'M360 247Q413 248 459 232V442Q422 471 360 472L363 397L349 364L371 336L344 308L357 284Z', outer: 'M459 232V442Q422 471 360 472M360 202Q459 202 459 232M360 252Q410 252 459 232', hatch: 'M453 258V436Q420 460 373 464M447 270V426M441 283V421' }
-    ].map((paths, i) => {
-      const part = node(vessel, 'g', { 'data-vessel-half': i });
-      const tint = node(part, 'path', { d: paths.fill, fill: '#dfe9ea', 'fill-opacity': .35 });
-      node(part, 'path', { d: paths.outer, fill: 'none', stroke: 'currentColor', 'stroke-width': 3.3 });
-      node(part, 'path', { d: paths.hatch, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.1, opacity: .65 });
-      const crack = node(part, 'path', { d: edge, fill: 'none', stroke: 'currentColor', 'stroke-width': 3, opacity: 0 });
-      return {part,tint,crack};
+    // Each upgrade removes one old recovery copy. Nothing is added or overloaded.
+    const backups = [[267,245], [453,245], [267,495], [453,495]].map(([x,y], i) => {
+      const slot = node(scene.stage, 'g', { transform: `translate(${x} ${y})`, 'data-backup-slot': i, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+      const empty = node(slot, 'g', { 'data-backup-missing': i, opacity: 0 });
+      node(empty, 'path', { d: 'M-36-44h13M-36-44v13M36-44H23M36-44v13M-36 44h13M-36 44V31M36 44H23M36 44V31', fill: 'none', stroke: '#a79579', 'stroke-width': 2 });
+      node(empty, 'path', { d: 'm-13-13 26 26m0-26-26 26', fill: 'none', stroke: '#c73e32', 'stroke-width': 3.2 });
+      const copy = node(slot, 'g', { 'data-backup-copy': i });
+      node(copy, 'path', { d: 'M-38-35H18L38-15V46H-38Z', fill: '#d7ddd1', stroke: '#666958', 'stroke-width': 2.5 });
+      node(copy, 'path', { d: 'M-30-45H12L31-26V37H-30Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.8 });
+      node(copy, 'path', { d: 'M12-45V-26H31M-24 29H24M-23 33H21', fill: 'none', stroke: '#9b8c72', 'stroke-width': 1.3 });
+      // The circular return arrow distinguishes a recovery copy from an incoming file.
+      node(copy, 'path', { d: 'M-13-9a19 19 0 1 1-3 22M-13-9v12H-25', fill: 'none', stroke: '#526b6a', 'stroke-width': 3.5 });
+      const removal = node(slot, 'path', { d: 'M-35 37 34-39', fill: 'none', stroke: '#c73e32', 'stroke-width': 3, 'pathLength': 1, 'stroke-dasharray': 1, 'stroke-dashoffset': 1, opacity: 0 });
+      return {copy, empty, removal};
     });
-    function documentGlyph(parent, attrs = {}) {
-      const group = node(parent, 'g', attrs);
-      node(group, 'path', { d: 'M-19-28H8L20-16V28H-19Z', fill: '#efe5cf', stroke: '#665e50', 'stroke-width': 2.4, 'stroke-linejoin': 'round' });
-      node(group, 'path', { d: 'M8-28V-16H20M-11-7H11M-11 1H11M-11 9H7M-11 17H3', fill: 'none', stroke: '#8e8069', 'stroke-width': 1.7 });
-      return group;
-    }
-    const stored = places.map((_, i) => {
-      const page = documentGlyph(scene.stage, { 'data-stored-file': i });
-      transform(page, 333+(i%2)*45, 325+Math.floor(i/2)*74, i%2?5:-5);
-      return page;
-    });
-    const departures = [[164,257], [558,257], [164,503], [558,503]];
-    const starts = [.035,.21,.385,.56];
-    const files = departures.map((_, i) => documentGlyph(scene.stage, { 'data-incoming-file': i }));
-    const shardShapes = [
-      ['M270 291l-12-13 4 25Z', -32,-14], ['M452 287l16-12-5 27Z', 36,-17],
-      ['M290 430l-17 5 13 13Z', -25,5], ['M430 431l18 8-13 10Z', 28,5],
-      ['M336 207l-8-16 17 7Z', -12,-34], ['M390 209l8-17 8 14Z', 16,-31]
-    ];
-    const shards = shardShapes.map(([d,x,y]) => ({ x,y,element:node(scene.stage,'path',{d,fill:'#df6052','fill-opacity':.4,stroke:'#ce3b31','stroke-width':1.6,opacity:0}) }));
+    const starts = [.08, .26, .44, .62];
     return p => {
-      // Files arrive one at a time. The fourth arrival ruptures the vessel.
-      // A short hold and a visible repair lead into the next loop, without a fade.
-      const reset = between(p,.94,1);
-      const deliveries = starts.map(start => between(p,start+.115,start+.13));
-      const load = deliveries.reduce((sum,value)=>sum+value,0)/4*(1-reset);
-      const burst = between(p,.69,.755)*(1-reset);
-      scene.svg.dataset.damageState = p>=.94?'resetting':p>=.755?'ruptured':p>=.69?'rupturing':'loading';
-      scene.svg.dataset.filesReceived = String(deliveries.filter(value=>value===1).length);
-      const rgb = [lerp(150,221,load),lerp(174,48,load),lerp(177,39,load)].map(Math.round);
-      const ink = [lerp(104,191,load),lerp(116,43,load),lerp(117,35,load)].map(Math.round);
-      vessel.setAttribute('color', `rgb(${ink.join(',')})`);
-      halves.forEach(({part,tint,crack}, i) => {
-        tint.setAttribute('fill',`rgb(${rgb.join(',')})`);
-        tint.setAttribute('fill-opacity',(.14+.44*load).toFixed(3));
-        transform(part,(i?1:-1)*23*burst,-5*burst,(i?1:-1)*8*burst,i?459:261,442);
-        opacity(crack,burst);
+      const reset = between(p, .94, 1);
+      const removed = starts.map(start => between(p, start+.025, start+.085) * (1-reset));
+      scene.svg.dataset.backupsRemaining = String(removed.filter(value => value < .5).length);
+      scene.svg.dataset.recoveryState = p >= .94 ? 'resetting' : p >= .705 ? 'none' : 'upgrading';
+      backups.forEach(({copy, empty, removal}, i) => {
+        const action = between(p, starts[i], starts[i]+.055);
+        opacity(copy, 1-removed[i]);
+        opacity(empty, removed[i]);
+        opacity(removal, between(p, starts[i], starts[i]+.015) * (1-between(p, starts[i]+.065, starts[i]+.1)) * (1-reset));
+        removal.setAttribute('stroke-dashoffset', (1-action).toFixed(3));
+        gazes[i](i%2?-1:1, .35);
       });
-      files.forEach((file,i) => {
-        const travel = between(p,starts[i],starts[i]+.13);
-        const [x,y] = departures[i];
-        const targetX = 333+(i%2)*45, targetY = 325+Math.floor(i/2)*74;
-        // Rise toward the opening, then descend into the shared container.
-        const route = travel < .72 ? travel/.72 : (travel-.72)/.28;
-        const px = travel<.72 ? lerp(x,360,ease(route)) : lerp(360,targetX,ease(route));
-        const py = travel<.72 ? lerp(y,188,ease(route))-70*Math.sin(Math.PI*route) : lerp(188,targetY,ease(route));
-        transform(file,p>=.94?lerp(targetX,x,reset):px,p>=.94?lerp(targetY,y,reset):py,(i%2?1:-1)*10*Math.sin(Math.PI*travel));
-        opacity(file,p>=.94?1:1-deliveries[i]);
-        opacity(stored[i],deliveries[i]*(1-reset));
-        gazes[i](i%2?-1:1,travel>0&&travel<1?-.7:0);
-      });
-      shards.forEach(({element,x,y}) => { opacity(element,burst); transform(element,x*burst,y*burst); });
     };
   }
 

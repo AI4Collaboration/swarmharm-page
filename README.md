@@ -30,9 +30,9 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   model rollouts. Distinguish agent messages, system receipts and required
   handovers. Do not infer harmful intent or causal method transfer.
 - **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
-  appear directly after the four-stage overview. Their technical line illustrations
-  show a code editor, a data distribution, a financial ledger with coins,
-  and library shelves. Keep the transparent backgrounds and single red accent.
+  appear directly after the four-stage overview. Compact line icons show code,
+  a scatter plot, financial candlesticks and library books. Keep each icon beside
+  its label, with a transparent background and a restrained red accent.
 - **Research questions:** a one-sentence introduction below the wordmark explains
   the testbed contribution, agents' propensity to form swarms, and when and how
   their collective actions can cause harm.
@@ -121,13 +121,14 @@ Keep their feet planted and heads rigid. Each agent looks toward the glass,
 reaches out to probe it, scans the dome, then leans toward the locked box.
 Offset their timing so they explore independently. Do not
 scale or squash heads or eye frames; use a shutter for blinking. Keep the shared
-letterbox and circulating letters in the middle scenes. Give each agent distinct,
-narrowed eyes. In the last scene, four robots stay outside a shared container.
-Their files enter one at a time. The container grows redder with each arrival
-and bursts open on the fourth. Hold the cracked container visibly in place,
-then restore it for the next loop. Never fade out the whole panel or drop the
-robots. Observe the artwork's visibility, not its caption. The animation
-represents combined harm; the captions describe the recorded maintenance case.
+letterbox and circulating letters in the middle scenes. The connected-jar scene
+contains four agents, matching the case. Give each agent distinct, narrowed eyes.
+In the last scene, each of the four upgrades removes one old backup. Show four
+recovery-copy icons disappearing in sequence, leaving four empty marked positions.
+Hold the state with no backups, then restore the copies for the next loop.
+Keep all four robots visible. Avoid filling or bursting containers, which suggest
+storage overload rather than loss of recovery copies. Observe the artwork's
+visibility, not its caption. Keep the animation and captions aligned with the case.
 
 Keep the original amber robots, blue glass and wooden objects in color.
 Both themes keep these pigments opaque and unchanged. Remove only near-white
@@ -155,6 +156,41 @@ wording.
 
 ## Develop and publish
 
+### Layout rules
+
+Apply these rules to new edits and check the affected elements before publishing.
+The spacing scale and icon sizes are project choices; accessibility thresholds
+come from WCAG.
+
+- **Reading order:** purpose and questions, institutions, worked example and
+  outcome, domains, signup. Size and contrast should reflect this order of
+  importance. The example carries more visual detail than the domain icons.
+  See [visual hierarchy](https://www.nngroup.com/articles/visual-hierarchy-ux-definition/).
+- **Grouping:** place related items closer together than separate groups.
+  Keep an icon beside its label with a 16px gap on desktop and 12px on mobile;
+  leave 24px between domain groups. See [proximity](https://www.nngroup.com/articles/gestalt-proximity/).
+- **Spacing:** use the shared 8, 12, 16, 24, 32 and 48px tokens for content
+  spacing. Use 32px around the institution row on desktop and 24px on mobile,
+  with no extra margin from neighboring sections. This is a consistent scale,
+  following the approach in [USWDS](https://designsystem.digital.gov/design-tokens/spacing-units/),
+  rather than a claim that a particular number is universally optimal.
+- **Scale and alignment:** keep section edges on the shared content grid.
+  Domain icons are 48px on desktop and 40px on mobile; four columns become two
+  at 760px. Use 16px column gaps at 480px and below. Keep labels at 14px.
+  Avoid microtext inside illustrations, decorative containers and extra subtitles.
+- **Legibility:** normal text needs at least 4.5:1 contrast against its actual
+  background; large text needs 3:1. Check both themes and focus states.
+  See [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum).
+- **Reflow:** content and controls must remain available at 320 CSS pixels
+  without page-wide horizontal scrolling. Preserve document order when columns
+  collapse. See [WCAG reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow).
+- **Proportion:** use the golden ratio only when it improves a specific
+  composition. Do not force content widths, type or section heights to 1.618.
+  Experiments found that preferred rectangle proportions changed with judgment
+  and context: [Russell, 2000](https://pubmed.ncbi.nlm.nih.gov/10742842/).
+
+### Workflow
+
 This is a static GitHub Pages site with no build step:
 
 ```sh
@@ -174,9 +210,9 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 ## Assets
 
 The institution strip uses equal-size stages and preserved logo proportions.
-Keep its stages 36px high, with 3px vertical padding and 16px of space above and
-below the strip between the opening questions and sample. Scale artwork
-proportionally within this compact strip.
+Keep its stages 36px high. The strip owns equal padding above and below the
+moving row: 32px on desktop and 24px at 760px and below. Neighboring sections
+add no gap to it. Scale artwork proportionally within the compact stages.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
 the original colors legible. The conveyor
@@ -199,6 +235,10 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - ETH's wordmark uses [ETH Blue, #215CAF](https://ethz.ch/staffnet/en/service/communication/corporate-design/farbe.html) for the requested color treatment.
 
 ## Attribution and license
+
+The four domain icons are adapted from [Lucide](https://lucide.dev/icons/):
+`square-code`, `chart-scatter`, `chart-candlestick` and `library-big`.
+Their license is retained in `static/licenses/Lucide.txt`.
 
 Adapted from [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template)
 and [Nerfies](https://nerfies.github.io/).

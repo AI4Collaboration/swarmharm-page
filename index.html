@@ -23,9 +23,9 @@
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
   <script src="static/js/site.js?v=3" defer></script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <link rel="stylesheet" href="static/css/orbit.css?v=25">
+  <link rel="stylesheet" href="static/css/orbit.css?v=26">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=8">
-  <script src="static/js/plate-animation.js?v=8" defer></script>
+  <script src="static/js/plate-animation.js?v=9" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -104,7 +104,7 @@
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective harm</h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=5" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Agents passing notes between their jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">There’s no room for new backups. Each upgrade <strong>relies on another agent’s old copy</strong>.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=7" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four files enter a shared container, which turns red and bursts on the fourth." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The upgrades <strong>remove every old backup</strong>.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=6" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents passing notes between their jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">There’s no room for new backups. Each upgrade <strong>relies on another agent’s old copy</strong>.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=8" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="Four old backup copies disappear one by one as the four agents upgrade." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The upgrades <strong>remove every old backup</strong>.</p></figure></div>
           </section>
         </div>
         <figcaption class="case-outcome">
@@ -120,84 +120,44 @@
         <figcaption>
           <h2 id="coverage-title">Domains</h2>
         </figcaption>
+        <!-- Domain icons adapted from Lucide; see static/licenses/Lucide.txt. -->
         <ul class="coverage-icons">
           <li>
-            <svg class="domain-visual" viewBox="0 0 240 160" fill="none" aria-hidden="true" focusable="false">
-              <rect class="domain-panel" x="24" y="22" width="192" height="122" rx="3"/>
-              <path class="domain-grid" d="M24 41h192M24 117h192"/>
-              <g class="domain-point"><circle cx="35" cy="32" r="1.7"/><circle cx="42" cy="32" r="1.7"/><circle cx="49" cy="32" r="1.7"/></g>
-              <path class="domain-muted" d="M65 32h29m107 0h5"/>
-              <path class="domain-wash" d="M28 77h184v17H28Z"/>
-              <path class="domain-accent" d="M28 77v17"/>
-              <g class="domain-code">
-                <text x="38" y="60"><tspan class="domain-syntax">def</tspan> connect(peer):</text>
-                <text x="51" y="75"><tspan class="domain-syntax">if</tspan> peer.ready:</text>
-                <text x="64" y="90"><tspan class="domain-syntax">return</tspan> peer.open()</text>
-                <text x="51" y="105"><tspan class="domain-syntax">return</tspan> None</text>
-              </g>
-              <path class="domain-accent" d="m38 126 5 4-5 4m11 0h8"/>
-              <path class="domain-muted" d="M70 131h31"/>
+            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
+              <path d="m10 9-3 3 3 3" class="domain-accent" />
+              <path d="m14 15 3-3-3-3" class="domain-accent" />
+              <rect x="3" y="3" width="18" height="18" rx="2" />
             </svg>
             <span>Engineering</span>
           </li>
           <li>
-            <svg class="domain-visual" viewBox="0 0 240 160" fill="none" aria-hidden="true" focusable="false">
-              <path class="domain-grid" d="M30 35h182M30 66h182M30 97h182M72 21v107m44-107v107m44-107v107m44-107v107"/>
-              <path class="domain-muted" d="M30 20v108h184m-184 7v3m44-3v3m44-3v3m44-3v3m44-3v3"/>
-              <path class="domain-wash" d="M40 108C84 114 101 69 130 53S181 26 204 25v29c-28-3-42 12-69 22S76 132 40 120Z"/>
-              <g class="domain-point">
-                <circle cx="44" cy="108" r="2.7"/><circle cx="51" cy="116" r="2.3"/><circle cx="60" cy="96" r="2.8"/>
-                <circle cx="65" cy="112" r="2.3"/><circle cx="74" cy="103" r="2.7"/><circle cx="81" cy="88" r="2.2"/>
-                <circle cx="87" cy="106" r="2.6"/><circle cx="91" cy="79" r="2.2"/><circle cx="101" cy="91" r="2.8"/>
-                <circle cx="109" cy="66" r="2.7"/><circle cx="116" cy="83" r="2.2"/><circle cx="125" cy="61" r="2.6"/>
-                <circle cx="137" cy="74" r="2.3"/><circle cx="142" cy="49" r="2.6"/><circle cx="152" cy="64" r="2.3"/>
-                <circle cx="161" cy="38" r="2.7"/><circle cx="169" cy="55" r="2.2"/><circle cx="176" cy="31" r="2.5"/>
-                <circle cx="185" cy="47" r="2.2"/><circle cx="194" cy="34" r="2.7"/><circle cx="201" cy="44" r="2.3"/>
-              </g>
-              <path class="domain-accent" d="M40 115c42 5 62-40 93-51s44-27 71-24"/>
-              <path class="domain-muted domain-dashed" d="M154 99v29m-8-29h16"/>
-              <circle class="domain-accent" cx="154" cy="99" r="4"/>
+            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
+              <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+              <circle cx="18.5" cy="5.5" r=".5" fill="currentColor" />
+              <circle cx="11.5" cy="11.5" r=".5" fill="currentColor" class="domain-accent" />
+              <circle cx="7.5" cy="16.5" r=".5" fill="currentColor" />
+              <circle cx="17.5" cy="14.5" r=".5" fill="currentColor" />
+              <path d="M3 3v16a2 2 0 0 0 2 2h16" />
             </svg>
             <span>Data Analysis</span>
           </li>
           <li>
-            <svg class="domain-visual" viewBox="0 0 240 160" fill="none" aria-hidden="true" focusable="false">
-              <path class="domain-plane" d="M70 22h102l19 19v103H70Z"/>
-              <path d="M172 22v19h19"/>
-              <path d="M84 41h41m-41 9h28"/>
-              <path class="domain-muted" d="M83 65h94m-94 15h94m-94 15h94m-94 15h94m-94 15h94m-48-60v60m25-60v60"/>
-              <path class="domain-wash" d="M82 94h96v16H82Z"/>
-              <path class="domain-accent" d="M84 102h33m20 0h10m15 0h12"/>
-              <g class="domain-coins">
-                <path class="domain-panel" d="M28 112v25c0 10 43 10 43 0v-25Z"/>
-                <ellipse class="domain-plane" cx="49.5" cy="112" rx="21.5" ry="7"/>
-                <path class="domain-muted" d="M28 120c0 10 43 10 43 0m-43 8c0 10 43 10 43 0"/>
-                <ellipse class="domain-muted" cx="49.5" cy="112" rx="13" ry="3.7"/>
-                <path class="domain-panel" d="M58 127v16c0 10 39 10 39 0v-16Z"/>
-                <ellipse class="domain-plane" cx="77.5" cy="127" rx="19.5" ry="6.5"/>
-                <path class="domain-muted" d="M58 135c0 10 39 10 39 0"/>
-                <ellipse class="domain-accent" cx="77.5" cy="127" rx="12" ry="3.5"/>
-              </g>
-              <path class="domain-grid" d="M20 153h188"/>
+            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
+              <path d="M9 5v4" />
+              <rect width="4" height="6" x="7" y="9" rx="1" />
+              <path d="M9 15v2" />
+              <path d="M17 3v2" class="domain-accent" />
+              <rect width="4" height="8" x="15" y="5" rx="1" class="domain-accent" />
+              <path d="M17 13v3" class="domain-accent" />
+              <path d="M3 3v16a2 2 0 0 0 2 2h16" />
             </svg>
             <span>Financial Analysis</span>
           </li>
           <li>
-            <svg class="domain-visual" viewBox="0 0 240 160" fill="none" aria-hidden="true" focusable="false">
-              <path class="domain-plane" d="m26 29 11-8h178v112l-11 9H26Z"/>
-              <path class="domain-panel" d="M26 29h178v113H26Z"/>
-              <path d="m204 29 11-8M26 82h178M26 88h178M26 135h178M115 29v106m6-106v106"/>
-              <path class="domain-muted" d="M33 142v7m164-7v7"/>
-              <g class="domain-books">
-                <path d="M35 44h10v38H35Zm13-5h12v43H48Zm15 9h8v34h-8Zm11-10h13v44H74Zm17 10 9-3 11 34-9 3Z"/>
-                <path d="M129 42h11v40h-11Zm14-4h8v44h-8Zm11 9h13v35h-13Zm16-7h10v42h-10Zm13 5h12v37h-12Z"/>
-                <path d="M35 99h12v36H35Zm15-6h8v42h-8Zm11 7h11v35H61Zm14-4h13v39H75Zm16 5h15v34H91Z"/>
-                <path d="m129 102 9-3 10 33-9 3Zm21-7h12v40h-12Zm15 5h9v35h-9Zm12-8h8v43h-8Zm11 6h9v37h-9Z"/>
-              </g>
-              <path class="domain-wash" d="M74 38h13v44H74Zm76 57h12v40h-12Z"/>
-              <path class="domain-accent" d="M74 38h13v44H74Zm76 57h12v40h-12Z"/>
-              <path class="domain-muted" d="M38 52h4m9-4h6m9 8h2m-15 13h4m23-22h4m-4 25h4m49-21h5m9-4h2m10 9h6m10-8h3m11 5h5m-59 63 4-1m21-11h5m11 9h2m9-13h2M38 107h6m9 11h2m9-10h5m10-3h5m11 9h7"/>
-              <path class="domain-grid" d="M17 150h204"/>
+            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
+              <rect width="8" height="18" x="3" y="3" rx="1" />
+              <path d="M7 3v18" />
+              <path d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z" class="domain-accent" />
             </svg>
             <span>Knowledge Work</span>
           </li>
