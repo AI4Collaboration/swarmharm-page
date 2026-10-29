@@ -123,6 +123,9 @@ Keep this visible physical loss.
 The damage illustration is conceptual; the source JSON records the maintenance case.
 
 Keep the original amber robots, blue glass and wooden objects in color.
+Dark mode keeps these pigments unchanged. Use only a fine warm edge behind the
+transparent artwork for contrast; never invert colors or rotate their hues.
+Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and planks cannot leave white rectangles over neighboring artwork.
 Preserve the original pixels and correctly occluded body parts. Each visible
