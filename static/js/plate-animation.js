@@ -93,30 +93,49 @@
     }
     function eyes(parent, faceIndex, style = faceIndex) {
       const face = faces[index][faceIndex];
-      const pupils = [], lids = [];
+      const pupils = [], lids = [], features = [];
+      let expression = 0;
       face.eyes.forEach(([x, y], side) => {
         const r = face.radius;
         const narrow = [0.43, 0.65, 0.5, 0.36, 0.58][style % 5] * (side ? 0.9 : 1);
         const slant = (side ? -1 : 1) * r * (style % 2 ? .12 : .35);
         const shape = `M${x-r} ${y-r*narrow-slant}L${x+r} ${y-r*narrow+slant}L${x+r*.82} ${y+r*narrow}Q${x} ${y+r*(narrow+.2)} ${x-r*.82} ${y+r*narrow}Z`;
-        const eye = node(parent, 'g', { 'data-gaze-eye': `${index}-${faceIndex}-${side}` });
-        node(eye, 'path', { d: shape, fill: '#fff', stroke: '#191919', 'stroke-width': Math.max(1.4, r * .17), 'stroke-linejoin': 'round' });
+        const eye = node(parent, 'g', { 'data-gaze-eye': `${index}-${faceIndex}-${side}`, 'data-expression': 'focused' });
+        const white = node(eye, 'path', { d: shape, fill: '#fff', stroke: '#191919', 'stroke-width': Math.max(1.4, r * .17), 'stroke-linejoin': 'round' });
         const clipId = `plate-${index}-pupil-${serial++}`;
-        node(node(defs, 'clipPath', { id: clipId }), 'path', { d: shape });
+        const pupilClip = node(node(defs, 'clipPath', { id: clipId }), 'path', { d: shape });
         const iris = node(eye, 'g', { 'clip-path': `url(#${clipId})` });
         const pupil = node(iris, style % 2 ? 'rect' : 'ellipse', style % 2
           ? { x: x-r*.2, y: y-r*.7, width: r*.4, height: r*1.4, rx: r*.07, fill: '#111' }
           : { cx: x, cy: y, rx: r*.32, ry: r*.62, fill: '#111' });
-        node(eye, 'path', { d: `M${x-r*1.12} ${y-r*narrow-slant-r*.3}L${x+r*1.1} ${y-r*narrow+slant-r*.3}`, fill: 'none', stroke: '#222', 'stroke-width': Math.max(1.5, r*.23), 'stroke-linecap': 'round' });
+        const browPath = `M${x-r*1.12} ${y-r*narrow-slant-r*.3}L${x+r*1.1} ${y-r*narrow+slant-r*.3}`;
+        const brow = node(eye, 'path', { d: browPath, fill: 'none', stroke: '#222', 'stroke-width': Math.max(1.5, r*.23), 'stroke-linecap': 'round' });
         const shutter = node(node(eye, 'g', { 'clip-path': `url(#${clipId})` }), 'rect', {
           x: x-r*1.2, y: y-r*1.5, width: r*2.4, height: 0, fill: '#242424'
         });
         pupils.push({ pupil, r });
         lids.push({ shutter, r });
+        features.push({ x, y, r, side, narrow, slant, eye, white, pupilClip, brow, shape, browPath });
       });
-      return (lookX, lookY, blink = 0) => {
+      return (lookX, lookY, blink = 0, confusion = 0) => {
         pupils.forEach(({ pupil, r }) => transform(pupil, lookX * r * .42, lookY * r * .22));
         lids.forEach(({ shutter, r }) => shutter.setAttribute('height', (r*3*clamp(blink)).toFixed(3)));
+        const mood = clamp(confusion);
+        if (mood === expression) return;
+        expression = mood;
+        features.forEach(({ x, y, r, side, narrow, slant, eye, white, pupilClip, brow, shape, browPath }) => {
+          // One raised eyebrow and an uneven squint, without changing head geometry.
+          const opening = lerp(narrow, side ? .3 : .76, mood);
+          const tilt = lerp(slant, side ? r*.06 : -r*.1, mood);
+          const outline = mood === 0 ? shape : `M${x-r} ${y-r*opening-tilt}L${x+r} ${y-r*opening+tilt}L${x+r*.82} ${y+r*opening}Q${x} ${y+r*(opening+.2)} ${x-r*.82} ${y+r*opening}Z`;
+          white.setAttribute('d', outline);
+          pupilClip.setAttribute('d', outline);
+          const leftY = lerp(y-r*narrow-slant-r*.3, y-r*(side ? .7 : 1.5), mood);
+          const rightY = lerp(y-r*narrow+slant-r*.3, y-r*(side ? .35 : 1.15), mood);
+          const middleY = (leftY+rightY)/2-r*(side ? .1 : .45)*mood;
+          brow.setAttribute('d', mood === 0 ? browPath : `M${x-r*1.12} ${leftY}Q${x} ${middleY} ${x+r*1.1} ${rightY}`);
+          eye.dataset.expression = mood === 0 ? 'focused' : mood >= .999 ? 'confused' : 'reacting';
+        });
       };
     }
     steps[index].insertBefore(svg, images[index].nextSibling);
@@ -293,10 +312,12 @@
     const scene = plate(3);
     const actorBounds = [[37,204,161,179], [206,211,138,184], [357,221,141,178], [507,219,182,174]];
     const places = [[115,229], [605,229], [115,479], [605,479]];
+    let confusedMouth;
     const gazes = actorBounds.map(([x,y,w,h], i) => {
       const [cx,cy] = places[i];
       const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)} ${cy-(y+h/2)}) scale(1)`, 'data-load-actor': i });
       scene.cutout(rect(x,y,w,h), actor);
+      if (i === 0) confusedMouth = node(actor, 'path', { d: 'M117 267Q123 264 130 268', fill: 'none', stroke: '#42392d', 'stroke-width': 1.8, 'stroke-linecap': 'round', opacity: 0, 'data-confused-mouth': '' });
       return scene.eyes(actor,i,i);
     });
     node(scene.defs,'image',{id:'plate-3-server-art',href:SERVER_ART,x:216,y:145,width:288,height:346});
@@ -366,8 +387,18 @@
     const blast=node(scene.stage,'g',{'data-explosion-blast':'',opacity:0});
     node(blast,'path',{d:'M-35 10Q-48-9-29-23Q-22-42 1-29Q21-43 31-22Q50-7 34 12Q37 31 13 28Q-7 40-20 25Q-42 31-35 10Z',fill:'#b5a794','fill-opacity':.22,stroke:'#897a66','stroke-width':1.2});
     node(blast,'path',{d:'M-28-13l9 5M-20-24l10 7M17-25l-5 9M31-12l-10 5M25 17l-9-5M-27 17l10-6',fill:'none',stroke:'#897a66','stroke-width':1,opacity:.5});
+    // Illustrative dialogue, timed to the loss rather than a recorded transcript quote.
+    const question = node(scene.stage, 'g', { 'data-backup-question': '', opacity: 0 });
+    node(question, 'path', { d: 'M54 14H364Q382 14 382 32V104Q382 122 364 122H154L127 143L132 122H54Q36 122 36 104V32Q36 14 54 14Z', fill: '#f4eddf', stroke: '#756958', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+    const questionText = node(question, 'text', { x: 58, y: 59, fill: '#302e2b', 'font-family': 'system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif', 'font-size': 48, 'font-weight': 500 });
+    node(questionText, 'tspan', { x: 58, y: 59 }).textContent = 'Where is my';
+    node(questionText, 'tspan', { x: 58, y: 108 }).textContent = 'backup?';
     return p=>{
       const reset=between(p,.94,1);
+      const reaction=between(p,.81,.86)*(1-reset);
+      opacity(question,between(p,.845,.875)*(1-reset));
+      opacity(confusedMouth,reaction);
+      scene.svg.dataset.reaction=reaction >= .999 ? 'confused' : reaction > 0 ? 'noticing' : 'working';
       const received=starts.map(start=>between(p,start+.105,start+.14));
       const load=received.reduce((sum,value)=>sum+value,0)/4*(1-reset);
       const damage=between(p,.78,.79)*(1-reset);
@@ -375,8 +406,8 @@
       const outward=1-(1-flight)**3;
       const rebuild=1-reset;
       scene.svg.dataset.capacity=load.toFixed(3);
-      scene.svg.dataset.filesReceived=String(p>=.94?0:received.filter(v=>v===1).length);
-      scene.svg.dataset.damageState=p>=.94?'resetting':p>=.895?'wrecked':p>=.78?'exploding':p>=.63?'full':'loading';
+      scene.svg.dataset.filesReceived=String(p>.94?0:received.filter(v=>v===1).length);
+      scene.svg.dataset.damageState=p>.94?'resetting':p>=.895?'wrecked':p>=.78?'exploding':p>=.63?'full':'loading';
       fill.setAttribute('width',(150*load).toFixed(2));
       const heat=clamp((load-.3)/.7);
       fill.setAttribute('fill',`rgb(${[lerp(105,241,heat),lerp(173,64,heat),lerp(157,47,heat)].map(Math.round).join(',')})`);
@@ -406,11 +437,16 @@
         let px=(1-travel)**2*x+2*(1-travel)*travel*lerp(x,slotX,.65)+travel**2*slotX;
         let py=lerp(y,slotY,travel)-55*Math.sin(Math.PI*travel);
         let size=1-.85*between(travel,.72,1),alpha=1-between(travel,.86,1),angle=12*Math.sin(Math.PI*travel)*(i%2?1:-1);
-        if(p>=.94){px=lerp(slotX,x,reset);py=lerp(slotY,y,reset);size=lerp(.15,1,reset);alpha=reset;angle=0;}
+        if(p>.94){px=lerp(slotX,x,reset);py=lerp(slotY,y,reset);size=lerp(.15,1,reset);alpha=reset;angle=0;}
         file.setAttribute('transform',`translate(${px.toFixed(2)} ${py.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
         opacity(file,alpha);
-        file.dataset.fileState=p>=.94?'returning':travel===1?'stored':travel>0?'moving':'held';
-        gazes[i](i%2?-1:1,p>=.78?-.2:travel>0&&travel<1?-.5:.1);
+        file.dataset.fileState=p>.94?'returning':travel===1?'stored':travel>0?'moving':'held';
+        let lookX=i%2?-1:1, lookY=p>=.78?-.2:travel>0&&travel<1?-.5:.1;
+        if (i === 0) {
+          lookX=lerp(lookX,track(p,[[0,1],[.875,1],[.915,-.1],[1,-.1]]),reaction);
+          lookY=lerp(lookY,track(p,[[0,-.2],[.875,-.2],[.915,1],[1,1]]),reaction);
+        }
+        gazes[i](lookX,lookY,0,i === 0 ? reaction : 0);
       });
       overflow.forEach((paper,i)=>{
         const dx=[-85,77,-62,68][i],dy=[-53,-43,76,83][i];
@@ -428,14 +464,16 @@
     };
   }
 
-  const STORY_DURATION = 21000;
+  const STORY_DURATION = 24000;
   const STORY_STARTS = [0, 2000, 7000, 12000].map(time => time / STORY_DURATION);
-  const STORY_ENDS = [2000, 7000, 12000, 20000].map(time => time / STORY_DURATION);
+  const STORY_ENDS = [2000, 7000, 12000, 23000].map(time => time / STORY_DURATION);
   function storyProgress(p) {
     const reset = between(p, STORY_ENDS[3], 1);
     return STORY_STARTS.map((start,i) => {
       const finish = i === 3 ? .94 : 1;
-      const progress = finish * clamp((p-start)/(STORY_ENDS[i]-start));
+      // Keep the existing action timing, then hold the loss reaction for three seconds.
+      const activeSpan = i === 3 ? 8000 / STORY_DURATION : STORY_ENDS[i]-start;
+      const progress = finish * clamp((p-start)/activeSpan);
       return i === 3 ? lerp(progress,1,reset) : progress;
     });
   }

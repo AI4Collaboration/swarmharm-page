@@ -158,8 +158,12 @@ endpoints. Keep the space beside the jars free of report or backup icons.
 In the last scene, four files enter the storage cabinet one at a time. Each
 arrival fills one visible bay and advances the capacity meter. When all four
 bays are full, hold the red state before the cabinet bulges and bursts open.
-The files and panel pieces escape from the overloaded cabinet; hold the damage,
-then reset for the next loop. Keep all four robots outside and visible. Use
+The files and panel pieces escape from the overloaded cabinet. The upper-left
+agent then raises one eyebrow, looks down at its empty crate and asks
+"Where is my backup?" Hold this puzzled reaction for three seconds before the
+reset. The question is illustrative dialogue, not a quotation from the run.
+Include the same face and question in the static fallback. Keep all four robots
+outside and visible. Use
 transparent cream-and-sage pen-and-ink artwork matching the original plates.
 The damage is a visual metaphor for the combined outcome; the caption states
 the recorded loss of old backups. Do not describe it as measured storage overload.
@@ -171,7 +175,7 @@ translucent pixels. Use no glow, drop shadow, inversion or hue rotation on the a
 Apply the same treatment to the animation and its static fallbacks.
 Paper pixels become transparent before layers are composed, so moving heads,
 letters and server panels cannot leave white rectangles over neighboring artwork.
-Preserve the original pixels and correctly occluded body parts. One 21-second
+Preserve the original pixels and correctly occluded body parts. One 24-second
 clock progresses through discovery, transmission, communication and damage without
 overlapping stages, then resets. Discovery lasts two seconds before transmission begins.
 Draw only visible panels and pause when the document is hidden. On phones,
