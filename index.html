@@ -46,9 +46,10 @@
   }
   </script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <link rel="stylesheet" href="static/css/orbit.css?v=19">
+  <link rel="stylesheet" href="static/css/orbit.css?v=20">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=5">
   <script src="static/js/plate-animation.js?v=6" defer></script>
+  <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -253,7 +254,15 @@
         <h2 id="updates-title">Stay updated</h2>
         <p>Get SwarmHarm research updates by email.</p>
       </div>
-      <a class="updates-link" href="https://docs.google.com/forms/d/e/1FAIpQLScPzp2jZc6cTnmtEzc8kFDS1t1OQXAv7QcVZtDTVvDwG0fNJA/viewform" target="_blank" rel="noopener noreferrer">Join the mailing list</a>
+      <form class="updates-form" data-signup data-endpoint="https://docs.google.com/forms/d/e/1FAIpQLScPzp2jZc6cTnmtEzc8kFDS1t1OQXAv7QcVZtDTVvDwG0fNJA/formResponse" aria-label="Subscribe to SwarmHarm updates">
+        <div class="updates-fields">
+          <input type="email" name="email" placeholder="Your email" aria-label="Email address" autocomplete="email" inputmode="email" maxlength="254" required>
+          <button type="submit" disabled>Subscribe</button>
+        </div>
+        <div class="updates-trap" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <p class="updates-status" role="status" aria-live="polite" tabindex="-1"></p>
+        <noscript><p class="updates-status">Enable JavaScript to subscribe.</p></noscript>
+      </form>
     </div>
   </section>
 </main>

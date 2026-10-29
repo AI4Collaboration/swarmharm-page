@@ -245,11 +245,23 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .updates-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .updates-copy { margin: 0; }
 .updates-copy p { margin: 8px 0 0; color: var(--muted); font: 400 16px/1.6 var(--font); }
-.updates-link { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; min-height: 44px; padding: 10px 18px; border: 1px solid var(--text); border-radius: 3px; background: var(--text); color: var(--bg); font: 500 14px/1.4 var(--font); white-space: nowrap; }
-.updates-link:hover { background: var(--risk); border-color: var(--risk); color: var(--bg); }
-@media (max-width: 640px) {
+.updates-form { position: relative; width: min(100%, 420px); flex: 0 1 420px; min-width: 0; }
+.updates-fields { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.updates-fields[hidden] { display: none; }
+.updates-fields input { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 3px; background: var(--bg); color: var(--text); font: 400 16px/1.4 var(--font); }
+.updates-fields input::placeholder { color: var(--muted); opacity: 1; }
+.updates-fields input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.updates-fields button { min-height: 44px; padding: 10px 18px; border: 1px solid var(--text); border-radius: 3px; background: var(--text); color: var(--bg); font: 500 14px/1.4 var(--font); white-space: nowrap; cursor: pointer; }
+.updates-fields button:hover { background: var(--risk); border-color: var(--risk); }
+.updates-fields button:disabled { opacity: .65; cursor: wait; }
+.updates-status { margin: 10px 0 0; color: var(--muted); font: 400 14px/1.5 var(--font); }
+.updates-status:empty { display: none; }
+.updates-form[data-state="error"] .updates-status { color: var(--risk); }
+.updates-form[data-state="success"] .updates-status { margin: 0; color: var(--text); }
+.updates-trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 760px) {
   .updates-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
-  .updates-link { width: 100%; }
+  .updates-form { width: 100%; flex-basis: auto; }
 }
 .site-footer { background: var(--bg); border-color: var(--line); padding-block: 30px; }
 .footer-top .brand img { width: 140px; height: 42px; mix-blend-mode: normal; }

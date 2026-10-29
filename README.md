@@ -48,11 +48,15 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   with the corresponding action in the recorded main example. Sections open with their substantive content.
   Main-case excerpts must match the source JSON. All agents use the same
   visual language; state changes indicate surviving recovery copies.
-- **Stay updated:** the final section links to a published Google Form with one
-  required email field and email-format validation. Responses go to the owner's
-  private Google Sheet for manual export. New-response email notifications and
-  automatic response copies are off. Keep only the public signup URL on the
-  website; never publish the subscriber sheet or administrative links.
+- **Stay updated:** an inline email field submits to the existing public Google
+  Form without navigating away. Addresses accumulate in the owner's private
+  Google Sheet for manual export. No new account authorization is required.
+  New-response notifications and automatic response copies remain off.
+  `signup.js` validates the email and prevents duplicate clicks while sending.
+  Google Forms returns an opaque cross-origin response, so the page says
+  "Request sent" rather than claiming a confirmed database write. Check an
+  actual submission in the private sheet when changing this integration.
+  Keep administrative links and the subscriber sheet out of the public source.
 
 ## Visual direction
 
