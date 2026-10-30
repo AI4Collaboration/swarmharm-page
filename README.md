@@ -76,6 +76,13 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   The notes link to Anthropic's agentic-misalignment experiments, the LessWrong
   report on encoded coordination, and Omohundro's *The Basic AI Drives*. These
   sources motivate test conditions; they are not SwarmHarm findings.
+- **Interface materials:** a translucent navigation shell, rounded playback
+  controls and a compact frosted hover card provide a shared interaction style.
+  Following [Apple's material guidance](https://developer.apple.com/design/human-interface-guidelines/materials),
+  glass is limited to navigation and controls. Main content, figures and full
+  records keep an opaque, flat reading surface. Text remains opaque; browsers
+  without backdrop blur and reduced-transparency or increased-contrast settings
+  receive solid surfaces. No moving blur, glow or new animation is added.
 - **Research questions:** a short introduction below the wordmark explains
   active peer discovery, communication channels, swarm formation and their
   collective consequences. Use a Research Questions section heading in the

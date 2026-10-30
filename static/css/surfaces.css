@@ -1,0 +1,107 @@
+/* Glass is reserved for navigation and transient controls. Content stays flat. */
+:root {
+  --glass-fill: rgba(255, 255, 255, .86);
+  --glass-popover: rgba(255, 255, 255, .94);
+  --glass-edge: rgba(34, 42, 54, .1);
+  --glass-highlight: rgba(255, 255, 255, .95);
+  --glass-sheen: linear-gradient(135deg, rgba(255, 255, 255, .3), transparent 45%, rgba(255, 255, 255, .12));
+  --glass-shadow: 0 6px 24px rgba(24, 34, 48, .055), 0 1px 3px rgba(24, 34, 48, .035);
+  --glass-hover: rgba(58, 69, 84, .06);
+}
+:root[data-theme="dark"] {
+  --glass-fill: rgba(25, 28, 32, .91);
+  --glass-popover: rgba(25, 28, 32, .94);
+  --glass-edge: rgba(224, 232, 242, .14);
+  --glass-highlight: rgba(255, 255, 255, .1);
+  --glass-sheen: linear-gradient(135deg, rgba(255, 255, 255, .04), transparent 45%, rgba(255, 255, 255, .015));
+  --glass-shadow: 0 6px 24px rgba(0, 0, 0, .15), 0 1px 3px rgba(0, 0, 0, .1);
+  --glass-hover: rgba(232, 238, 246, .07);
+}
+
+.site-header { padding-block: 8px; background: transparent; border: 0; }
+.site-header .nav-inner {
+  box-sizing: border-box;
+  width: min(1120px, calc(100% - 48px));
+  min-height: 68px;
+  padding: 6px 16px;
+  gap: 16px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 24px;
+  background: var(--glass-sheen), var(--bg);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow);
+}
+.site-header .header-institutions { background: transparent; }
+.site-header .nav-inner nav { gap: 4px; }
+.site-header .nav-inner nav a { padding-inline: 11px; border-radius: 14px; }
+.site-header :is(.theme-toggle, .nav-toggle) { border-radius: 50%; }
+.site-header .nav-inner nav a:hover,
+.site-header :is(.theme-toggle, .nav-toggle):hover { background: var(--glass-hover); color: var(--text); }
+
+.life-control, .traj-play {
+  min-height: 44px;
+  padding-inline: 16px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 999px;
+  background: var(--glass-sheen), var(--bg);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 2px 6px rgba(24, 34, 48, .035);
+  transition: background-color .16s, border-color .16s, box-shadow .16s;
+}
+.life-control:hover, .traj-play:hover {
+  background: var(--glass-sheen), var(--surface);
+  border-color: color-mix(in srgb, var(--text) 20%, transparent);
+}
+.life-control[aria-pressed="true"], .traj-play[aria-pressed="true"] {
+  background: var(--surface);
+  box-shadow: inset 0 1px 3px rgba(24, 34, 48, .07);
+}
+.traj-popup {
+  border-color: var(--glass-edge);
+  border-radius: 16px;
+  background: var(--glass-sheen), var(--bg);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow);
+}
+.traj-close { border-radius: 50%; }
+.updates-fields input { border-radius: 12px; }
+.updates-fields button { border-radius: 12px; }
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header .nav-inner, .life-control, .traj-play {
+    background: var(--glass-sheen), var(--glass-fill);
+    -webkit-backdrop-filter: blur(18px) saturate(1.08);
+    backdrop-filter: blur(18px) saturate(1.08);
+  }
+  .traj-popup {
+    background: var(--glass-sheen), var(--glass-popover);
+    -webkit-backdrop-filter: blur(14px) saturate(1.05);
+    backdrop-filter: blur(14px) saturate(1.05);
+  }
+  .life-control:hover, .traj-play:hover,
+  .life-control[aria-pressed="true"], .traj-play[aria-pressed="true"] {
+    background: var(--glass-sheen), var(--surface);
+  }
+}
+@media (max-width: 900px) {
+  .site-header { padding-block: 6px; }
+  .site-header .nav-inner { width: calc(100% - 24px); gap: 0 6px; padding: 6px 8px; border-radius: 22px; }
+  .site-header .nav-inner > nav { gap: 2px 8px; padding: 8px 2px 4px; max-height: calc(100svh - 100px); }
+  .site-header .nav-inner nav a { padding-inline: 12px; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .site-header .nav-inner, .life-control, .traj-play, .traj-popup {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more), (forced-colors: active) {
+  .site-header .nav-inner, .life-control, .traj-play, .traj-popup {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    border-color: var(--muted);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .life-control, .traj-play { transition: none; }
+}
