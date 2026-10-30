@@ -261,9 +261,10 @@ shrink to a thin line. Keep the same artwork size on phones and in both
 themes. Use 28px between stages on desktop and 22px on phones. A 67-second
 loop on desktop and a 65-second loop on phones preserve the slow conveyor speed.
 On phones, give the header 12px side margins and use 44px menu/theme buttons.
-Use color artwork without monochrome filters. ETH uses the blue from its
-corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
-the original colors legible. The conveyor
+Use each institution's original colors without filters. ETH uses its standard
+black wordmark. EuroSafeAI uses a 36px icon with 19px text so its combined mark
+has comparable visual weight to the other logos. On dark pages, provide white
+logo stages to keep the original colors legible. The conveyor
 keeps one continuous row under every motion preference, as requested. Other
 transitions honor reduced motion. The dependency figure uses the replay's
 `sources` map and the recorded `schedule`; keep their meaning aligned.
@@ -282,7 +283,7 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 - EuroSafeAI uses the [official color icon](https://safe.eu/assets/eurosafeai_icon-DGHEP9vu.png)
   and blue wordmark treatment from [safe.eu](https://safe.eu/), retrieved 29 October 2026.
 - Toronto's existing vector uses [U of T blue, #002A5C](https://www.cpd.utoronto.ca/reports/CPD-CondensedStyleGuide.pdf).
-- ETH's wordmark uses [ETH Blue, #215CAF](https://ethz.ch/staffnet/en/service/communication/corporate-design/farbe.html) for the requested color treatment.
+- ETH's wordmark uses black on the white logo stage, following the [official logo guidelines](https://ethz.ch/staffnet/en/service/communication/corporate-design/logo.html).
 
 ## Attribution and license
 

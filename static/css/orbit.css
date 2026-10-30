@@ -425,8 +425,9 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 .header-institutions .institution-vector { --institution-logo-width: 156px; }
 .header-institutions .institution-eth { --institution-logo-width: 144px; }
 .header-institutions .institution-georgia-tech { --institution-logo-width: 144px; }
-.header-institutions .institution-list .institution-eurosafe img { width: 28px; height: 28px; flex-basis: 28px; }
-.header-institutions .institution-eurosafe span { font-size: 15px; }
+.header-institutions .institution-list .institution-eurosafe a { gap: 6px; }
+.header-institutions .institution-list .institution-eurosafe img { width: 36px; height: 36px; flex-basis: 36px; }
+.header-institutions .institution-eurosafe span { font-size: 19px; }
 .header-institutions .institution-marquee:hover .institution-track,
 .header-institutions .institution-marquee:focus-within .institution-track { animation-play-state: paused; }
 @media (max-width: 900px) {
