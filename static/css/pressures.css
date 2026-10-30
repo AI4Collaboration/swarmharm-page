@@ -1,0 +1,41 @@
+/* Proposed pressure conditions use the same restrained line art as Domains. */
+.section.pressures-section { padding-block:64px 0; }
+.pressures-section h2 { margin:0; font:500 23px/1.4 var(--display); letter-spacing:-.015em; }
+.pressure-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:32px; list-style:none; margin:24px 0 0; padding:0; }
+.pressure-grid > li { min-width:0; }
+.pressure-visual { display:block; width:100%; max-width:240px; height:auto; margin:0 auto 15px; fill:none; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }
+.pressure-paper { fill:var(--bg); stroke:var(--icon); }
+.pressure-rule { stroke:var(--line); }
+.pressure-soft { stroke:var(--line); opacity:.55; }
+.pressure-ink { fill:none; stroke:var(--muted); }
+.pressure-alert { stroke:var(--risk); stroke-width:1.6; }
+.pressure-tint { fill:var(--icon); fill-opacity:.09; stroke:var(--icon); }
+.pressure-label { fill:var(--muted); stroke:none; font:11px var(--font); }
+.pressure-grid h3 { color:var(--text); font:500 15px/1.5 var(--font); margin:0 0 10px; }
+.pressure-grid > li > p { color:var(--muted); font:14px/1.7 var(--font); margin:0; }
+.pressure-evidence { margin-top:12px; color:var(--muted); }
+.pressure-evidence summary { display:flex; align-items:center; gap:7px; min-height:40px; font:12px/1.5 var(--font); cursor:pointer; list-style:none; }
+.pressure-evidence summary::-webkit-details-marker { display:none; }
+.pressure-evidence summary::before { content:'+'; color:var(--subtle); }
+.pressure-evidence[open] summary::before { content:'−'; }
+.pressure-evidence summary:hover { color:var(--text); }
+.pressure-evidence summary:focus-visible { outline:2px solid var(--text); outline-offset:3px; }
+.pressure-evidence p { font:13px/1.7 var(--font); margin:8px 0 0; }
+.pressure-evidence a { color:var(--text); text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+.pressure-evidence a:hover { text-decoration-color:var(--text); }
+@media(max-width:760px) {
+  .section.pressures-section { padding-top:48px; }
+  .pressure-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 24px; }
+  .pressure-visual { margin-bottom:12px; }
+}
+@media(max-width:480px) {
+  .pressure-grid { grid-template-columns:minmax(0,1fr); gap:26px; }
+  .pressure-grid > li { display:grid; grid-template-columns:90px minmax(0,1fr); column-gap:16px; align-items:start; }
+  .pressure-visual { grid-column:1; grid-row:1/3; width:90px; margin:4px 0 0; align-self:center; }
+  .pressure-grid h3,.pressure-grid > li > p { grid-column:2; }
+  .pressure-grid h3 { font-size:14px; }
+  .pressure-grid > li > p { font-size:13px; }
+  .pressure-evidence { grid-column:1/-1; margin-top:2px; }
+  .pressure-evidence summary { padding-left:106px; }
+  .pressure-evidence p { margin-top:5px; }
+}

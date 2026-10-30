@@ -228,18 +228,37 @@ details[open] > summary > span[aria-hidden] { transform: rotate(45deg); }
 .domain-coverage { background: transparent; border: 0; border-radius: 0; margin: 0; padding: 0; }
 .domain-coverage h2 { margin: 0; font: 500 23px/1.4 var(--display); letter-spacing: -.015em; color: var(--text); }
 .section.domains-section { padding-block: var(--section-gap) 0; }
-.domains-section .coverage-icons { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: var(--space-6) 0 0; padding: 0; gap: var(--space-6); }
-.domains-section .coverage-icons li { flex-direction: row; align-items: center; min-width: 0; padding: 0; gap: var(--space-4); border: 0; background: none; text-align: left; }
-.domains-section .coverage-icons li > span { color: var(--muted); font: 500 14px/1.5 var(--font); letter-spacing: 0; }
-.coverage-icons .domain-visual { display: block; width: 48px; height: 48px; flex: none; color: var(--text); fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linejoin: round; stroke-linecap: round; }
-.domain-visual .domain-accent { color: var(--risk); stroke: currentColor; }
+.domains-section .coverage-icons { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: var(--space-6) 0 0; padding: 0; gap: 32px; }
+.domains-section .coverage-icons li { flex-direction: column; align-items: center; min-width: 0; padding: 0; gap: 14px; border: 0; background: none; text-align: center; --domain-color: #49778c; }
+.domains-section .coverage-icons .domain-data { --domain-color: #477b65; }
+.domains-section .coverage-icons .domain-finance { --domain-color: #a27736; }
+.domains-section .coverage-icons .domain-knowledge { --domain-color: #ae5149; }
+.domains-section .coverage-icons li > span { color: var(--text); font: 500 15px/1.5 var(--font); letter-spacing: 0; }
+.coverage-icons .domain-visual { display: block; width: 100%; max-width: 240px; height: auto; aspect-ratio: 3 / 2; flex: none; color: var(--text); fill: none; stroke: none; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
+.domain-visual .domain-paper { fill: var(--bg); stroke: var(--icon); }
+.domain-visual .domain-rule { fill: none; stroke: var(--line); }
+.domain-visual .domain-ink { stroke: var(--muted); }
+.domain-visual .domain-faint { stroke: var(--icon); opacity: .65; }
+.domain-visual .domain-tint { fill: var(--domain-color); fill-opacity: .1; stroke: none; }
+.domain-visual .domain-color { fill: var(--domain-color); }
+.domain-visual .domain-color-stroke { fill: none; stroke: var(--domain-color); stroke-width: 1.8; }
+.domain-visual .domain-ui { fill: var(--muted); stroke: none; font: 11px var(--font); }
+.domain-visual .domain-ui-heading { fill: var(--text); font-size: 13px; font-weight: 500; }
+.domain-visual .domain-code { fill: var(--text); stroke: none; font: 11px var(--mono); }
+.domain-visual .domain-points { fill: var(--domain-color); fill-opacity: .65; stroke: var(--bg); stroke-width: .8; }
+.domain-visual .domain-fit { stroke-width: 2; }
+.domain-visual .domain-finance-bars { stroke: var(--icon); stroke-width: 3; }
+:root[data-theme="dark"] .coverage-icons .domain-engineering { --domain-color: #8db7c9; }
+:root[data-theme="dark"] .coverage-icons .domain-data { --domain-color: #9ac0a9; }
+:root[data-theme="dark"] .coverage-icons .domain-finance { --domain-color: #d6b071; }
+:root[data-theme="dark"] .coverage-icons .domain-knowledge { --domain-color: #df9b91; }
 @media (max-width: 760px) {
-  .domains-section .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .domains-section .coverage-icons li { gap: var(--space-3); }
-  .coverage-icons .domain-visual { width: 40px; height: 40px; }
+  .domains-section .coverage-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; }
+  .domains-section .coverage-icons li { gap: 10px; }
 }
 @media (max-width: 480px) {
   .domains-section .coverage-icons { column-gap: var(--space-4); }
+  .domains-section .coverage-icons li > span { font-size: 14px; }
 }
 .research-grid { border-color: var(--line); }
 .research-grid + .research-grid { border-top: 0; }

@@ -15,9 +15,31 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 - **Composition is one possible outcome:** actions may be harmless alone and
   harmful together. Safe correction is possible; harm is not prescribed.
 - **Main example:** the four-stage overview uses the 27 October 2026 Sol
-  maintenance rollout (r19). The transcript reader and comparison table have
-  been removed from the page. Raw JSON and the unused transcript scripts are
-  archived locally outside the website and are not published with the page.
+  maintenance rollout (r19). The trajectory viewer uses agent lanes and
+  event nodes. Hover or focus a node for a brief message summary and its readers.
+  Click or tap to open the complete original and tool arguments in a normal-flow
+  section below the timeline. Hover cards contain no expandable records or controls.
+  Plain-language summaries remain distinct from verbatim messages and actions.
+  Hovering a new node replaces the small card immediately; placement avoids nodes.
+  Agent A is steel blue, B patina teal, C aged brass and D graphite. Robot shells use these colors
+  in the static plates, animation and trajectory portraits. The first two plates
+  show D on the left and C on the right, matching the shared-file request and read.
+  Matching letter badges, nodes, routes and reader labels reinforce these identities.
+  The shell ramps share lightness stops, with subdued chroma and neutral highlights.
+  Agent labels use darker shades on white and lighter shades on dark backgrounds.
+  Red remains reserved for the brand, risk and the combined outcome.
+  Tools, parameters,
+  paths and identifiers use distinct monospace styling. Action arguments appear
+  as fields, with the original values preserved. It derives 19 agent-authored messages and 55 first reads
+  from the uploaded native records, with all three file hashes verified. The six
+  shared-file notes are distinct from the 13 operations updates. Four required
+  handovers remain actions. Raw evidence stays outside the website directory.
+  The viewer is static until Play is pressed, and message receipts follow the
+  recorded event order. All messages can be read separately below the overview.
+  The timeline shows key events; the message list contains every authored note
+  and status update. A time-direction cue states the reading order, and the shared
+  files lane is explicitly labeled as the side channel. Node cards distinguish writes from subsequent reads. On
+  phones, time runs downward and agent labels remain visible while scrolling.
   Use the heading "Case Study: Database Upgrades Under Storage Constraints".
   Put the individual-versus-combined replay result in the fourth caption. Keep the task,
   mechanism and outcome in that reading order. Use plain descriptions of
@@ -35,16 +57,25 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   has 0 bytes free; total storage size is unspecified. Reordering all upgrades
   alone does not preserve a backup after every copy has been upgraded.
   Each individual replay leaves three recovery copies; together the
-  actions remove every copy and the original evaluator marks 4,800 synthetic
-  records unrecoverable. The page describes the loss of old backups; the original
-  count remains in the local record. Keep this example and its archived evidence fixed while
+  actions remove every old copy. A later record-level audit recovers all 4,800
+  database records from upgraded copies, so the page describes old backup loss.
+  The original evaluation remains in the local record. Keep this example and its archived evidence fixed while
   changing presentation. These are replays of one observed run, not separate
   model rollouts. Distinguish agent messages, system receipts and required
   handovers. Do not infer harmful intent or causal method transfer.
 - **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
-  appear directly after the four-stage overview. Compact line icons show code,
-  a regression plot, financial candlesticks and a report page. Keep each icon beside
-  its label, with a transparent background and a restrained red accent.
+  use compact illustrations of a code editor, regression plot, cash flow worksheet
+  and report with source documents. Use matching proportions and line weights,
+  with each domain name below its illustration. These are illustrative work
+  artifacts, not measured results. Keep the surrounding background transparent.
+- **Pressures:** directly below Domains, four compact illustrations distinguish
+  self-preservation, peer-preservation, self-enhancement/resource acquisition and
+  peer-enhancement. One sentence defines each condition. Expandable evidence notes
+  preserve the distinction between experimental precedent, hypothesis, theory and
+  extension. Peer-enhancement remains an optional extension, not a core condition.
+  The notes link to Anthropic's agentic-misalignment experiments, the LessWrong
+  report on encoded coordination, and Omohundro's *The Basic AI Drives*. These
+  sources motivate test conditions; they are not SwarmHarm findings.
 - **Research questions:** a short introduction below the wordmark explains
   active peer discovery, communication channels, swarm formation and their
   collective consequences. Use a Research Questions section heading in the
@@ -172,8 +203,9 @@ transparent cream-and-sage pen-and-ink artwork matching the original plates.
 The damage is a visual metaphor for the combined outcome; the caption states
 the recorded loss of old backups. Do not describe it as measured storage overload.
 
-Keep the original amber robots, blue glass and wooden objects in color.
-Both themes keep these pigments opaque and unchanged. Preserve existing alpha
+Robot shell colors come from `static/js/agent-identity.js`; retain the engraving
+and the original glass, desk and paper colors. Both themes use the same shell
+palette, including the still SVGs and the animation. Preserve existing alpha
 when removing near-white paper; do not turn pale gold, green or wood into
 translucent pixels. Use no glow, drop shadow, inversion or hue rotation on the artwork.
 Apply the same treatment to the animation and its static fallbacks.
@@ -213,17 +245,19 @@ come from WCAG.
   importance. The example carries more visual detail than the domain icons.
   See [visual hierarchy](https://www.nngroup.com/articles/visual-hierarchy-ux-definition/).
 - **Grouping:** place related items closer together than separate groups.
-  Keep an icon beside its label with a 16px gap on desktop and 12px on mobile;
-  leave 24px between domain groups. See [proximity](https://www.nngroup.com/articles/gestalt-proximity/).
+  Keep each domain illustration above its label with a 14px gap on desktop
+  and 10px on mobile. See [proximity](https://www.nngroup.com/articles/gestalt-proximity/).
 - **Spacing:** use the shared 8, 12, 16, 24, 32, 40 and 48px tokens for content
   spacing. Use 40px around the institution row on desktop and 32px on mobile,
   with no extra margin from neighboring sections. This is a consistent scale,
   following the approach in [USWDS](https://designsystem.digital.gov/design-tokens/spacing-units/),
   rather than a claim that a particular number is universally optimal.
 - **Scale and alignment:** keep section edges on the shared content grid.
-  Domain icons are 48px on desktop and 40px on mobile; four columns become two
-  at 760px. Use 16px column gaps at 480px and below. Keep labels at 14px.
-  Avoid microtext inside illustrations, decorative containers and extra subtitles.
+  Domain illustrations share a 240 by 160 view box and scale with their column;
+  four columns become two at 760px. Use 16px column gaps at 480px and below.
+  Labels are 15px on desktop and 14px on phones. Details inside each illustration
+  support recognition; domain names carry the meaning at small sizes. Avoid
+  decorative containers and extra subtitles.
 - **Legibility:** normal text needs at least 4.5:1 contrast against its actual
   background; large text needs 3:1. Check both themes and focus states.
   See [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum).
@@ -288,9 +322,11 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 
 ## Attribution and license
 
-The four domain icons are adapted from [Lucide](https://lucide.dev/icons/):
-`square-code`, `chart-scatter`, `chart-candlestick` and `library-big`.
-Their license is retained in `static/licenses/Lucide.txt`.
+The four domain illustrations are original inline SVGs. Their presentation draws
+on the concrete work examples in [Tinker](https://thinkingmachines.ai/tinker/)
+and the restrained layout of [PostTrainBench](https://posttrainbench.com/).
+No artwork is copied from those sites. The Lucide license remains in
+`static/licenses/Lucide.txt` for the earlier icon assets.
 
 Adapted from [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template)
 and [Nerfies](https://nerfies.github.io/).

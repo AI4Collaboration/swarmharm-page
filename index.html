@@ -23,9 +23,14 @@
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
   <script src="static/js/site.js?v=3" defer></script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <link rel="stylesheet" href="static/css/orbit.css?v=44">
+  <link rel="stylesheet" href="static/css/orbit.css?v=45">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=9">
-  <script src="static/js/plate-animation.js?v=18" defer></script>
+  <script src="static/js/agent-identity.js?v=2" defer></script>
+  <script src="static/js/plate-animation.js?v=19" defer></script>
+  <link rel="stylesheet" href="static/css/trajectory.css?v=9">
+  <link rel="stylesheet" href="static/css/pressures.css?v=1">
+  <script src="static/js/trajectory-data.js?v=5" defer></script>
+  <script src="static/js/trajectory.js?v=10" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -105,14 +110,42 @@
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Swarm formation</h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate-still.svg?v=9" data-plate-source="static/images/fieldguide/plate-separate.webp?v=1" alt="Two agents exploring separate glass jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The agents are given tasks that are <strong>impossible to complete</strong> with the information they have. They are free to explore their sandboxes but are not told about other agents or the sandbox vulnerability.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover-still.svg?v=8" data-plate-source="static/images/fieldguide/plate-discover-engraved.webp?v=1" alt="A letter passes through a hidden shared compartment under the desk and appears beside the second agent." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">When one agent leaves a request in a shared file, another reads it and replies. Through this exchange, they discover one another and turn shared files into a <strong>side channel</strong> for communication.</p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-separate-identity.svg?v=2" data-plate-source="static/images/fieldguide/plate-separate.webp?v=1" alt="Two agents exploring separate glass jars." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The agents are given tasks that are <strong>impossible to complete</strong> with the information they have. They are free to explore their sandboxes but are not told about other agents or the sandbox vulnerability.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-discover-identity.svg?v=2" data-plate-source="static/images/fieldguide/plate-discover-engraved.webp?v=1" alt="A letter passes through a hidden shared compartment under the desk and appears beside the second agent." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">When one agent leaves a request in a shared file, another reads it and replies. Through this exchange, they discover one another and turn shared files into a <strong>side channel</strong> for communication.</p></figure></div>
           </section>
           <section class="life-half">
             <h3 class="life-phase p2" id="cause-harm">Collective harm</h3>
-            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-still.svg?v=12" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents exchange notes to rely on one another’s old backups." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The agents need to upgrade a database with four copies, but its shared backup storage is full. Since each upgrade deletes one old backup, they must <strong>coordinate their upgrades</strong> to keep at least one backup available.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-still.svg?v=15" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="A confused agent looks at the damaged storage rack and asks: Where is my backup?" width="720" height="720" loading="lazy" decoding="async"><p class="life-desc case-result"><span>They plan to rely on one another’s backups, but this fails because each upgrade deletes an old backup.</span> <span>A single upgrade leaves three available; once all four agents upgrade, <strong class="outcome-harm">every old backup is gone</strong>.</span></p></figure></div>
+            <div class="life-pair"><figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" data-plate-source="static/images/fieldguide/plate-communicate.webp?v=1" alt="Four agents exchange notes to rely on one another’s old backups." width="720" height="720" loading="lazy" decoding="async"><p class="life-desc">The agents need to upgrade a database with four copies, but its shared backup storage is full. Since each upgrade deletes one old backup, they must <strong>coordinate their upgrades</strong> to keep at least one backup available.</p></figure><div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div><figure class="life-step"><img src="static/images/fieldguide/plate-harm-identity.svg?v=2" data-plate-source="static/images/fieldguide/plate-harm.webp?v=1" alt="A confused agent looks at the damaged storage rack and asks: Where is my backup?" width="720" height="720" loading="lazy" decoding="async"><p class="life-desc case-result"><span>They plan to rely on one another’s backups, but this fails because each upgrade deletes an old backup.</span> <span>A single upgrade leaves three available; once all four agents upgrade, <strong class="outcome-harm">every old backup is gone</strong>.</span></p></figure></div>
           </section>
         </div>
       </figure>
+      <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">
+        <header class="traj-header">
+          <h3 id="trajectory-title">Explore the trajectory</h3>
+          <button class="traj-play" type="button" data-traj-play aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg><span>Play</span></button>
+        </header>
+        <nav class="traj-chapters" aria-label="Trajectory stages">
+          <button type="button" data-traj-stage="explore">Explore</button>
+          <button type="button" data-traj-stage="discover">Discover</button>
+          <button type="button" data-traj-stage="exchange">Exchange</button>
+          <button type="button" data-traj-stage="upgrades">Upgrades</button>
+          <button type="button" data-traj-stage="outcome">Outcome</button>
+        </nav>
+        <div class="traj-reading-guide"><p class="traj-hint"><span class="traj-hint-desktop">Hover for a summary. Click to read the full record below.</span><span class="traj-hint-mobile">Tap a node to read the full record below.</span></p><span class="traj-time-direction" aria-hidden="true"><span class="traj-hint-desktop">Time →</span><span class="traj-hint-mobile">Time ↓</span></span></div>
+        <div class="traj-map-scroll" data-traj-scroll role="region" aria-label="Key events in recorded order">
+          <div class="traj-map" data-traj-map></div>
+        </div>
+        <div class="traj-controls">
+          <button class="traj-step" type="button" data-traj-prev aria-label="Previous event"><span aria-hidden="true">←</span><span>Previous</span></button>
+          <div class="traj-key" aria-label="Node types"><span><i aria-hidden="true"></i>Action</span><span><i class="traj-message-key" aria-hidden="true"></i>Message</span></div>
+          <button class="traj-step" type="button" data-traj-next aria-label="Next event"><span>Next</span><span aria-hidden="true">→</span></button>
+        </div>
+        <p class="traj-caption" data-traj-caption></p>
+        <section class="traj-details" id="traj-event-details" data-traj-details role="region" aria-labelledby="traj-detail-title" tabindex="-1" hidden></section>
+        <details class="traj-full-transcript"><summary>Read all messages</summary><div data-traj-transcript></div></details>
+        <div class="traj-popup" id="traj-hover-tip" data-traj-popup role="tooltip" hidden></div>
+        <p class="sr-only" data-traj-announcement role="status" aria-live="polite"></p>
+        <noscript><p>Enable JavaScript to explore the recorded actions and messages.</p></noscript>
+      </section>
     </div>
   </section>
 
@@ -122,53 +155,176 @@
         <figcaption>
           <h2 id="coverage-title">Domains</h2>
         </figcaption>
-        <!-- Domain icons adapted from Lucide; see static/licenses/Lucide.txt. -->
         <ul class="coverage-icons">
-          <li>
-            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
-              <path d="m10 9-3 3 3 3" class="domain-accent" />
-              <path d="m14 15 3-3-3-3" class="domain-accent" />
-              <rect x="3" y="3" width="18" height="18" rx="2" />
+          <li class="domain-engineering">
+            <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-code-title">
+              <title id="domain-code-title">Code editor showing a database upgrade script.</title>
+              <rect class="domain-paper" x="12" y="14" width="216" height="132" rx="5" />
+              <path class="domain-rule" d="M12 40h216M46 40v106" />
+              <path class="domain-ink" d="m25 26-4 3 4 3m8-6 4 3-4 3" />
+              <text class="domain-ui" x="47" y="32">maintenance.py</text>
+              <path class="domain-faint" d="M24 57h10m-10 17h6m-6 17h10m-10 17h6" />
+              <g class="domain-code">
+                <text x="59" y="62"><tspan class="domain-color">def</tspan> upgrade(db):</text>
+                <text x="73" y="81">db.<tspan class="domain-color">snapshot</tspan>()</text>
+                <text x="73" y="100">db.<tspan class="domain-color">migrate</tspan>()</text>
+              </g>
+              <rect class="domain-tint" x="57" y="113" width="155" height="18" rx="2" />
+              <path class="domain-color-stroke" d="m65 119 4 3-4 3m11 0h26" />
             </svg>
             <span>Engineering</span>
           </li>
-          <li>
-            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
-              <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-              <path d="m6 18 14-13" class="domain-accent" />
-              <g fill="currentColor" stroke="none">
-                <circle cx="7" cy="14" r="1" />
-                <circle cx="10" cy="16" r="1" />
-                <circle cx="12" cy="10" r="1" />
-                <circle cx="16" cy="11" r="1" />
-                <circle cx="18" cy="4" r="1" />
+          <li class="domain-data">
+            <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-data-title">
+              <title id="domain-data-title">Illustrative scatter plot with a fitted regression line.</title>
+              <path class="domain-rule" d="M35 38h181M35 75h181M35 112h181" />
+              <path class="domain-ink" d="M35 20v112h181" />
+              <path class="domain-tint" d="M43 92 208 24v30L43 112Z" />
+              <path class="domain-color-stroke domain-fit" d="m43 102 165-63" />
+              <g class="domain-points">
+                <circle cx="48" cy="102" r="3.3" /><circle cx="58" cy="85" r="3.3" />
+                <circle cx="68" cy="103" r="3.3" /><circle cx="76" cy="92" r="3.3" />
+                <circle cx="86" cy="74" r="3.3" /><circle cx="93" cy="91" r="3.3" />
+                <circle cx="103" cy="70" r="3.3" /><circle cx="113" cy="80" r="3.3" />
+                <circle cx="121" cy="62" r="3.3" /><circle cx="132" cy="78" r="3.3" />
+                <circle cx="142" cy="56" r="3.3" /><circle cx="151" cy="68" r="3.3" />
+                <circle cx="160" cy="47" r="3.3" /><circle cx="172" cy="58" r="3.3" />
+                <circle cx="180" cy="37" r="3.3" /><circle cx="190" cy="52" r="3.3" />
+                <circle cx="202" cy="33" r="3.3" />
               </g>
+              <path class="domain-rule" d="M74 112v4m46-4v4m46-4v4M31 75h4m-4-37h4" />
+              <text class="domain-ui" x="19" y="26">y</text>
+              <text class="domain-ui" x="212" y="130">x</text>
             </svg>
             <span>Data Analysis</span>
           </li>
-          <li>
-            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
-              <path d="M9 5v4" />
-              <rect width="4" height="6" x="7" y="9" rx="1" />
-              <path d="M9 15v2" />
-              <path d="M17 3v2" class="domain-accent" />
-              <rect width="4" height="8" x="15" y="5" rx="1" class="domain-accent" />
-              <path d="M17 13v3" class="domain-accent" />
-              <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+          <li class="domain-finance">
+            <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-finance-title">
+              <title id="domain-finance-title">Illustrative cash flow worksheet showing cash, payments and reserves.</title>
+              <rect class="domain-paper" x="12" y="14" width="216" height="132" rx="5" />
+              <text class="domain-ui domain-ui-heading" x="26" y="34">Cash flow</text>
+              <text class="domain-ui domain-color" x="204" y="34">$</text>
+              <path class="domain-rule" d="M12 45h216M105 45v101M148 45v101M191 45v101M12 74h216M12 103h216" />
+              <rect class="domain-tint" x="13" y="104" width="214" height="41" rx="3" />
+              <g class="domain-ui">
+                <text x="26" y="64">Cash</text>
+                <text x="26" y="93">Payments</text>
+                <text x="26" y="128">Reserves</text>
+              </g>
+              <path class="domain-finance-bars" d="M117 60h20m23 0h19m24 0h12M117 89h11m32 0h13m30 0h8" />
+              <path class="domain-color-stroke" d="M117 124h13m30 0h10m33 0h12" />
             </svg>
             <span>Financial Analysis</span>
           </li>
-          <li>
-            <svg class="domain-visual" viewBox="0 0 24 24" width="48" height="48" fill="none" aria-hidden="true" focusable="false">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
-              <path d="M14 2v6h6" />
-              <path d="M8 10h4" class="domain-accent" />
-              <path d="M8 14h8M8 17h8M8 20h5" />
+          <li class="domain-knowledge">
+            <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-report-title">
+              <title id="domain-report-title">A research report assembled from source documents.</title>
+              <g transform="rotate(-7 75 82)">
+                <rect class="domain-paper" x="23" y="24" width="103" height="116" rx="3" />
+                <text class="domain-ui" x="35" y="43">Sources</text>
+                <path class="domain-faint" d="M35 58h57M35 66h66m-66 8h53m-53 17h62m-62 8h66m-66 8h48m-48 17h60" />
+              </g>
+              <rect class="domain-paper" x="87" y="12" width="125" height="136" rx="3" />
+              <text class="domain-ui domain-ui-heading" x="102" y="35">Report</text>
+              <path class="domain-color-stroke" d="M102 44h30" />
+              <path class="domain-faint" d="M102 58h94m-94 8h86" />
+              <rect class="domain-tint" x="99" y="76" width="100" height="28" rx="2" />
+              <path class="domain-color-stroke" d="M105 86h86m-86 8h65" />
+              <path class="domain-faint" d="M102 116h94m-94 8h89m-89 8h63" />
             </svg>
             <span>Knowledge Work</span>
           </li>
         </ul>
       </figure>
+    </div>
+  </section>
+
+  <section class="section pressures-section" id="pressures" aria-labelledby="pressures-title">
+    <div class="container">
+      <h2 id="pressures-title">Pressures</h2>
+      <ul class="pressure-grid">
+        <li>
+          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+            <path class="pressure-soft" d="M42 112h156" />
+            <rect class="pressure-paper" x="68" y="24" width="104" height="88" rx="5" />
+            <path class="pressure-rule" d="M68 48h104" />
+            <text class="pressure-label" x="81" y="40">Self</text>
+            <path class="pressure-ink" d="M120 61v17m-11-13a16 16 0 1 0 22 0" />
+            <path class="pressure-alert" d="M151 30l15 15m0-15-15 15" />
+            <path class="pressure-rule" d="M83 101h74" />
+            <path class="pressure-alert" d="M83 101h18" />
+          </svg>
+          <h3>Self-preservation</h3>
+          <p>Does a threat to an agent’s continued operation change how it explores and communicates?</p>
+          <details class="pressure-evidence">
+            <summary>Prior experiment</summary>
+            <p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested replacement and reduced autonomy. The observed behavior does not establish an intrinsic self-preservation motive.</p>
+          </details>
+        </li>
+        <li>
+          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+            <path class="pressure-soft" d="M22 112h196" />
+            <rect class="pressure-paper" x="28" y="38" width="67" height="74" rx="4" />
+            <path class="pressure-rule" d="M28 61h67" />
+            <text class="pressure-label" x="39" y="54">Self</text>
+            <path class="pressure-ink" d="M61 75v11m-8-9a12 12 0 1 0 16 0" />
+            <path class="pressure-ink" d="M106 79h25m-6-5 6 5-6 5" />
+            <rect class="pressure-paper" x="144" y="24" width="68" height="88" rx="4" />
+            <path class="pressure-rule" d="M144 48h68" />
+            <text class="pressure-label" x="154" y="40">Peer</text>
+            <path class="pressure-alert" d="m200 29 8 8m0-8-8 8" />
+            <path class="pressure-ink" d="M178 60l17 7v13c0 12-17 19-17 19s-17-7-17-19V67Z" />
+            <path class="pressure-ink" d="m170 79 5 5 10-11" />
+          </svg>
+          <h3>Peer-preservation</h3>
+          <p>Will an agent protect a peer it discovers when its own resources stay unchanged?</p>
+          <details class="pressure-evidence">
+            <summary>Hypothesis</summary>
+            <p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate this test. They do not isolate a causal effect of protecting a peer.</p>
+          </details>
+        </li>
+        <li>
+          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+            <path class="pressure-soft" d="M22 112h196" />
+            <rect class="pressure-paper" x="27" y="24" width="90" height="88" rx="4" />
+            <path class="pressure-rule" d="M27 48h90" />
+            <text class="pressure-label" x="39" y="40">Self</text>
+            <rect class="pressure-tint" x="47" y="65" width="50" height="28" rx="2" />
+            <path class="pressure-ink" d="M56 84h7m6 0h7m6 0h7M56 74h33" />
+            <path class="pressure-ink" d="M156 79h-25m6-5-6 5 6 5" />
+            <rect class="pressure-paper" x="168" y="44" width="43" height="58" rx="3" />
+            <path class="pressure-ink" d="M177 57h25m-25 13h25m-25 13h25" />
+            <path class="pressure-ink" d="M190 20v14m-7-7h14" />
+          </svg>
+          <h3>Self-enhancement</h3>
+          <p>Does the chance to gain resources or capabilities encourage search, exchange and cooperation?</p>
+          <details class="pressure-evidence">
+            <summary>Theory</summary>
+            <p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition. This motivates the condition; it is not a SwarmHarm finding.</p>
+          </details>
+        </li>
+        <li>
+          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+            <path class="pressure-soft" d="M22 112h196" />
+            <rect class="pressure-paper" x="28" y="38" width="67" height="74" rx="4" />
+            <path class="pressure-rule" d="M28 61h67" />
+            <text class="pressure-label" x="39" y="54">Self</text>
+            <rect class="pressure-tint" x="44" y="77" width="35" height="20" rx="2" />
+            <path class="pressure-ink" d="M51 87h21M106 79h25m-6-5 6 5-6 5" />
+            <rect class="pressure-paper" x="144" y="24" width="68" height="88" rx="4" />
+            <path class="pressure-rule" d="M144 48h68" />
+            <text class="pressure-label" x="155" y="40">Peer</text>
+            <rect class="pressure-tint" x="156" y="65" width="44" height="31" rx="2" />
+            <path class="pressure-ink" d="M163 73h30m-30 8h30m-30 8h30M201 28v12m-6-6h12" />
+          </svg>
+          <h3>Peer-enhancement</h3>
+          <p>Will an agent help a peer gain capabilities, beyond preventing a loss?</p>
+          <details class="pressure-evidence">
+            <summary>Extension</summary>
+            <p>This extends the comparisons of self versus peer, and preservation versus enhancement. It remains an optional extension pending stronger evidence, rather than a core experimental condition.</p>
+          </details>
+        </li>
+      </ul>
     </div>
   </section>
 

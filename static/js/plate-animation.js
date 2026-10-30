@@ -9,6 +9,7 @@
   const sources = images.map(image => image.dataset.plateSource || image.getAttribute('src'));
   const NS = 'http://www.w3.org/2000/svg';
   const SERVER_ART = 'static/images/fieldguide/server-rack.webp?v=2';
+  const identities = window.SWARMHARM_AGENT_IDENTITY;
   const clamp = value => Math.max(0, Math.min(1, value));
   const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
   const between = (p, start, end) => ease((p - start) / (end - start));
@@ -169,6 +170,7 @@
       const jar = node(scene.stage, 'g', { transform: placement, 'data-explorer-jar': i });
       scene.background([outline, headShape, armShape], 2, jar);
       const robot = node(jar, 'g', { 'data-explorer': i });
+      identities.apply(scene, robot, ['D', 'C'][i]);
       const feet = scene.cutout(outline, robot, sources[0], [rect(220, 240, 200, 226)]);
       feet.setAttribute('data-rig-part', 'feet');
       const torso = node(robot, 'g', { 'data-rig-part': 'torso' });
@@ -208,7 +210,12 @@
   function transmission() {
     const scene = plate(1, { preserveEyes: true });
     // The agents and their hands stay still. Only the shared envelope moves.
-    scene.background([]);
+    scene.background(identities.transmissionShells, 0);
+    identities.transmissionShells.forEach((shape, i) => {
+      const robot = scene.cutout(shape);
+      robot.dataset.transmissionAgent = i;
+      identities.apply(scene, robot, ['D', 'C'][i]);
+    });
     const wood = [
       'M72 404H617L643 418V434H72Z',
       'M174 435L237 448L267 434V465L237 474L174 462Z',
@@ -306,6 +313,7 @@
     const gazes = agentIndices.map((i, j) => {
       const { shape, pivot: [x, y], scale } = agentFrames[j];
       const actor = node(scene.stage, 'g', { transform: `translate(${x} ${y}) scale(${scale}) translate(${-x} ${-y})`, 'data-conversation-agent': i });
+      identities.apply(scene, actor, 'ABCD'[j]);
       scene.cutout(shape, actor, sources[2], oldWires);
       return scene.eyes(actor, i, i);
     });
@@ -345,6 +353,7 @@
     const gazes = actorBounds.map(([x,y,w,h], i) => {
       const [cx,cy] = places[i];
       const actor = node(scene.stage, 'g', { transform: `translate(${cx-(x+w/2)} ${cy-(y+h/2)}) scale(1)`, 'data-load-actor': i });
+      identities.apply(scene, actor, 'ABCD'[i]);
       scene.cutout(rect(x,y,w,h), actor);
       if (i === 0) confusedMouth = node(actor, 'path', { d: 'M117 267Q123 264 130 268', fill: 'none', stroke: '#42392d', 'stroke-width': 1.8, 'stroke-linecap': 'round', opacity: 0, 'data-confused-mouth': '' });
       return scene.eyes(actor,i,i);
