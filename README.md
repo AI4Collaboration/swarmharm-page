@@ -45,7 +45,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   appear directly after the four-stage overview. Compact line icons show code,
   a regression plot, financial candlesticks and a report page. Keep each icon beside
   its label, with a transparent background and a restrained red accent.
-- **Research questions:** a one-sentence introduction below the wordmark explains
+- **Research questions:** a short introduction below the wordmark explains
   active peer discovery, communication channels, swarm formation and their
   collective consequences. Use a Research Questions section heading in the
   same style as the Sample Case heading, with the full name in navigation.
@@ -84,8 +84,9 @@ editing timestamps and software identifiers without changing pixels or color pro
 
 Light and dark themes use restrained typography, open spacing and red accents,
 with green for benign actions and red for discovery and collective harm.
-The site defaults to light mode. The upper-right appearance control remembers a
-manual choice. Apply the theme before first paint; retain readable diagrams and
+Every page load starts in light mode, including return visits. The upper-right
+appearance control switches themes for the current visit. Apply the theme before
+first paint; retain readable diagrams and
 logos in both themes. Use one system sans-serif family for all page text;
 distinguish headings through size and weight. Keep decorative separator lines
 out of the page. Form boundaries and keyboard focus outlines remain functional.

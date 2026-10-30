@@ -1,8 +1,5 @@
 (() => {
   const root = document.documentElement;
-  let preference;
-  try { preference = localStorage.getItem('swarmharm-theme'); } catch {}
-  const valid = value => value === 'dark' || value === 'light';
 
   function apply(theme) {
     root.dataset.theme = theme;
@@ -21,13 +18,11 @@
     }
   }
 
-  apply(valid(preference) ? preference : 'light');
+  apply('light');
   document.addEventListener('DOMContentLoaded', () => {
     apply(root.dataset.theme);
     document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
-      preference = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      try { localStorage.setItem('swarmharm-theme', preference); } catch {}
-      apply(preference);
+      apply(root.dataset.theme === 'dark' ? 'light' : 'dark');
     });
   });
 })();
