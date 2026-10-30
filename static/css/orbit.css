@@ -416,6 +416,7 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 .header-institutions .institution-list img { max-width: 108px; height: 25px; }
 .header-institutions .institution-list .institution-aim img { height: 25px; }
 .header-institutions .institution-list .institution-oxford img,
+.header-institutions .institution-list .institution-stanford img,
 .header-institutions .institution-list .institution-georgia-tech img { height: 34px; }
 .header-institutions .institution-list .institution-eurosafe img { width: 24px; height: 24px; flex-basis: 24px; }
 .header-institutions .institution-eurosafe span { font-size: 13px; }
