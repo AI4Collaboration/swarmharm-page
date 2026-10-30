@@ -236,7 +236,7 @@
     const width=map.clientWidth;if(!width)return;
     const mobile=narrow(),height=mobile?1000:334;map.style.height=`${height}px`;
     const plot=map.querySelector('.traj-map-lines');plot.setAttribute('viewBox',`0 0 ${width} ${height}`);
-    let paths='<defs><marker id="traj-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="m1 1 4 2.5L1 6" fill="none" stroke="context-stroke" stroke-width="1.3"/></marker></defs>';
+    let paths='';
     lanes.forEach((lane,i)=>{
       const position=mobile?width*(i+.5)/5:52+i*59;
       paths+=`<path class="traj-lane-line ${lane==='files'?'is-files':''}" d="${mobile?`M${position} 76V${height-28}`:`M108 ${position}H${width-12}`}"/>`;
@@ -246,12 +246,23 @@
     const byKey=key=>nodes.find(node=>node.key===key);
     const route=(fromKey,toKey,messageId)=>{
       const from=byKey(fromKey),to=byKey(toKey),[x,y]=coordinates(from),[ex,ey]=coordinates(to);
-      const via=mobile?[width/2,y+25]:[x+22,170],finish=mobile?[ex,ey-23]:[ex-22,ey];
-      const path=mobile
-        ?`M${x} ${y+18}Q${via[0]} ${y+18} ${via[0]} ${via[1]}C${via[0]} ${(via[1]+finish[1])/2} ${finish[0]} ${(via[1]+finish[1])/2} ${finish[0]} ${finish[1]}`
-        :`M${x+18} ${y}Q${via[0]} ${y} ${via[0]} ${via[1]}C${(via[0]+finish[0])/2} ${via[1]} ${(via[0]+finish[0])/2} ${finish[1]} ${finish[0]} ${finish[1]}`;
+      // One continuous curve; the endpoint tangent and arrow use the same axis.
+      // On phones, leave from the side so routes do not run through node labels.
+      const direction=Math.sign(ex-x)||1;
+      const rise=!mobile&&y-ey>90;
+      const topArrival=mobile?fromKey!=='reply':ey-y>90;
+      const start=mobile?[x+direction*18,y]:rise?[x,y-18]:[x+18,y];
+      const finish=topArrival?[ex,ey-20]:[ex-20,ey];
+      const handle=Math.max(0,Math.min(64,Math.abs(finish[0]-start[0])*.5));
+      const path=mobile&&topArrival
+        ?`M${start[0]} ${start[1]}C${start[0]+direction*handle} ${y} ${ex} ${finish[1]-Math.min(48,(finish[1]-y)*.5)} ${finish[0]} ${finish[1]}`
+        :rise?`M${start[0]} ${start[1]}C${x} ${start[1]-(y-ey)*.5} ${finish[0]-handle} ${ey} ${finish[0]} ${finish[1]}`
+        :topArrival?`M${start[0]} ${start[1]}C${start[0]+handle} ${y} ${ex} ${finish[1]-(ey-y)*.45} ${finish[0]} ${finish[1]}`
+        :`M${start[0]} ${start[1]}C${start[0]+handle} ${y} ${finish[0]-handle} ${ey} ${finish[0]} ${finish[1]}`;
+      const [ax,ay]=finish;
+      const arrow=topArrival?`M${ax-3} ${ay-5}L${ax} ${ay}L${ax+3} ${ay-5}`:`M${ax-5} ${ay-3}L${ax} ${ay}L${ax-5} ${ay+3}`;
       const active=nodes[selected]===from||nodes[selected]===to;
-      paths+=`<path class="traj-message-route ${active?'is-active':''}" data-agent="${from.actor}" data-message-route="${messageId}" d="${path}" marker-end="url(#traj-arrow)"/>`;
+      paths+=`<g class="traj-message-route ${active?'is-active':''}" data-agent="${from.actor}" data-message-route="${messageId}"><path class="traj-route-line" d="${path}"/><path class="traj-route-arrow" d="${arrow}"/></g>`;
     };
     route('request','read-c',64);route('request','read-a',64);route('reply','read-d',77);route('ask','read-d',79);plot.innerHTML=paths;
   }
