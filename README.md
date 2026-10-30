@@ -268,6 +268,7 @@ transitions honor reduced motion. The dependency figure uses the replay's
 Official assets are stored locally; sources retrieved 26 October 2026:
 
 - [Oxford](https://www.maths.ox.ac.uk/themes/custom/maths/images/header/oxford-logo.svg)
+- [Stanford Cardinal red wordmark](https://identity.stanford.edu/wp-content/uploads/sites/3/2020/06/wordmark-nospace-red.png), retrieved 30 October 2026
 - [Toronto](https://www.utoronto.ca/themes/custom/bootstrap_uoft/logo.svg)
 - [MPI for Intelligent Systems, Tübingen](https://is.mpg.de/assets/logos/logo_green_en-55a1f978f4981c37f203f17d6d635402376bc4788d9bf835c6e53e4b10288b06.webp)
 - [Vector Institute](https://vectorinstitute.ai/wp-content/uploads/2024/05/Vector-Logo-FullColour_Horizontal.png)
