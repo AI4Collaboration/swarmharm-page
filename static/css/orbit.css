@@ -410,16 +410,21 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 .site-header .nav-inner { grid-template-columns: minmax(0, 1fr) auto auto; gap: 24px; }
 .site-header .header-institutions { grid-column: 1; grid-row: 1; min-width: 0; padding: 0; margin: 0; align-self: center; }
 .header-institutions .institution-marquee { width: 100%; }
+.header-institutions .institution-track { animation-duration: 60s; }
 .header-institutions .institution-list { gap: 28px; padding-inline: 14px; }
-.header-institutions .institution-list li { width: 112px; flex-basis: 112px; height: 40px; }
-.header-institutions .institution-list a { width: 112px; height: 40px; }
-.header-institutions .institution-list img { max-width: 108px; height: 25px; }
-.header-institutions .institution-list .institution-aim img { height: 25px; }
-.header-institutions .institution-list .institution-oxford img,
-.header-institutions .institution-list .institution-stanford img,
-.header-institutions .institution-list .institution-georgia-tech img { height: 34px; }
-.header-institutions .institution-list .institution-eurosafe img { width: 24px; height: 24px; flex-basis: 24px; }
-.header-institutions .institution-eurosafe span { font-size: 13px; }
+.header-institutions .institution-list li { width: 160px; flex-basis: 160px; height: 44px; }
+.header-institutions .institution-list a { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: 160px; height: 44px; padding: 2px 8px; overflow: hidden; }
+/* Balance the visible marks, including the clear space inside source images. */
+.header-institutions .institution-list img { width: var(--institution-logo-width, 128px); max-width: none; height: auto; }
+.header-institutions .institution-aim { --institution-logo-width: 100px; }
+.header-institutions .institution-stanford { --institution-logo-width: 124px; }
+.header-institutions .institution-toronto { --institution-logo-width: 112px; }
+.header-institutions .institution-mpi { --institution-logo-width: 144px; }
+.header-institutions .institution-vector { --institution-logo-width: 156px; }
+.header-institutions .institution-eth { --institution-logo-width: 132px; }
+.header-institutions .institution-georgia-tech { --institution-logo-width: 152px; }
+.header-institutions .institution-list .institution-eurosafe img { width: 30px; height: 30px; flex-basis: 30px; }
+.header-institutions .institution-eurosafe span { font-size: 15px; }
 .header-institutions .institution-marquee:hover .institution-track,
 .header-institutions .institution-marquee:focus-within .institution-track { animation-play-state: paused; }
 @media (max-width: 900px) {
@@ -427,7 +432,6 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
   .site-header .header-institutions { max-width: 470px; }
 }
 @media (max-width: 480px) {
+  .header-institutions .institution-track { animation-duration: 58s; }
   .header-institutions .institution-list { gap: 22px; padding-inline: 11px; }
-  .header-institutions .institution-list li { width: 108px; flex-basis: 108px; }
-  .header-institutions .institution-list a { width: 108px; }
 }

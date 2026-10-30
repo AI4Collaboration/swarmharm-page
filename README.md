@@ -254,10 +254,11 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 
 ## Assets
 
-The institution strip uses equal-size stages and preserved logo proportions.
-Keep its stages 40px high. The strip owns equal padding above and below the
-moving row: 40px on desktop and 32px at 760px and below. Neighboring sections
-add no gap to it. Scale artwork proportionally within the compact stages.
+Use horizontal institution logos in 160px by 44px header stages. Preserve each
+logo's proportions and balance its visible artwork, accounting for whitespace
+inside the source image. Keep the same artwork size on phones and in both
+themes. Use 28px between stages on desktop and 22px on phones. A 60-second
+loop on desktop and a 58-second loop on phones preserve the slow conveyor speed.
 Use color artwork without monochrome filters. ETH uses the blue from its
 corporate palette for this page's color treatment. On dark pages, provide white logo stages to keep
 the original colors legible. The conveyor
@@ -267,13 +268,13 @@ transitions honor reduced motion. The dependency figure uses the replay's
 
 Official assets are stored locally; sources retrieved 26 October 2026:
 
-- [Oxford](https://www.maths.ox.ac.uk/themes/custom/maths/images/header/oxford-logo.svg)
+- [Oxford horizontal logo with white keyline](https://www.hsm.ox.ac.uk/sites/all/themes/custom/oxtheme/images/brandmark/svg/oxlogo-rect-border.svg), retrieved 30 October 2026
 - [Stanford tree and University wordmark](https://logodownload.org/wp-content/uploads/2021/04/stanford-university-logo-4.png), retrieved 30 October 2026
 - [Toronto](https://www.utoronto.ca/themes/custom/bootstrap_uoft/logo.svg)
 - [MPI for Intelligent Systems, Tübingen](https://is.mpg.de/assets/logos/logo_green_en-55a1f978f4981c37f203f17d6d635402376bc4788d9bf835c6e53e4b10288b06.webp)
 - [Vector Institute](https://vectorinstitute.ai/wp-content/uploads/2024/05/Vector-Logo-FullColour_Horizontal.png)
 - [ETH Zürich](https://ethz.ch/en.html) (header SVG)
-- [Georgia Tech color logo](https://brand.gatech.edu/sites/default/files/inline-images/GTVertical_RGB_0.png), retrieved 29 October 2026
+- [Georgia Tech horizontal color logo](https://brand.gatech.edu/sites/default/files/inline-images/GeorgiaTech_RGB_1.png), retrieved 30 October 2026
 - [AIM Intelligence mint logo](https://www.aim-intelligence.com/brand/logo/aim-logo-mint.svg), retrieved 29 October 2026
 - EuroSafeAI uses the [official color icon](https://safe.eu/assets/eurosafeai_icon-DGHEP9vu.png)
   and blue wordmark treatment from [safe.eu](https://safe.eu/), retrieved 29 October 2026.
