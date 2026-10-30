@@ -412,14 +412,15 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 .header-institutions .institution-marquee { width: 100%; }
 .header-institutions .institution-track { animation-duration: 67s; }
 .header-institutions .institution-list { gap: 28px; padding-inline: 14px; }
-.header-institutions .institution-list li { width: 160px; flex-basis: 160px; height: 44px; }
-.header-institutions .institution-list a { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: 160px; height: 44px; padding: 2px 8px; overflow: hidden; }
+.header-institutions .institution-list li { width: 160px; flex-basis: 160px; height: 52px; }
+.header-institutions .institution-list a { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: 160px; height: 52px; padding: 2px 8px; overflow: hidden; }
 /* Balance the visible marks, including the clear space inside source images. */
 .header-institutions .institution-list img { width: var(--institution-logo-width, 128px); max-width: none; height: auto; }
 .header-institutions .institution-aim { --institution-logo-width: 96px; }
 .header-institutions .institution-oxford { --institution-logo-width: 123px; }
 .header-institutions .institution-stanford { --institution-logo-width: 114px; }
-.header-institutions .institution-cmu { --institution-logo-width: 152px; }
+.header-institutions .institution-cmu { --institution-logo-width: 52px; }
+.header-institutions .institution-cmu a { padding-block: 0; }
 .header-institutions .institution-toronto { --institution-logo-width: 104px; }
 .header-institutions .institution-mpi { --institution-logo-width: 144px; }
 .header-institutions .institution-vector { --institution-logo-width: 156px; }
