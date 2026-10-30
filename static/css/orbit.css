@@ -416,23 +416,27 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 .header-institutions .institution-list a { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: 160px; height: 44px; padding: 2px 8px; overflow: hidden; }
 /* Balance the visible marks, including the clear space inside source images. */
 .header-institutions .institution-list img { width: var(--institution-logo-width, 128px); max-width: none; height: auto; }
-.header-institutions .institution-aim { --institution-logo-width: 100px; }
-.header-institutions .institution-stanford { --institution-logo-width: 124px; }
-.header-institutions .institution-cmu { --institution-logo-width: 152px; }
-.header-institutions .institution-toronto { --institution-logo-width: 112px; }
+.header-institutions .institution-aim { --institution-logo-width: 96px; }
+.header-institutions .institution-oxford { --institution-logo-width: 123px; }
+.header-institutions .institution-stanford { --institution-logo-width: 114px; }
+.header-institutions .institution-cmu { --institution-logo-width: 84px; }
+.header-institutions .institution-toronto { --institution-logo-width: 104px; }
 .header-institutions .institution-mpi { --institution-logo-width: 144px; }
 .header-institutions .institution-vector { --institution-logo-width: 156px; }
-.header-institutions .institution-eth { --institution-logo-width: 132px; }
-.header-institutions .institution-georgia-tech { --institution-logo-width: 152px; }
-.header-institutions .institution-list .institution-eurosafe img { width: 30px; height: 30px; flex-basis: 30px; }
+.header-institutions .institution-eth { --institution-logo-width: 144px; }
+.header-institutions .institution-georgia-tech { --institution-logo-width: 144px; }
+.header-institutions .institution-list .institution-eurosafe img { width: 28px; height: 28px; flex-basis: 28px; }
 .header-institutions .institution-eurosafe span { font-size: 15px; }
 .header-institutions .institution-marquee:hover .institution-track,
 .header-institutions .institution-marquee:focus-within .institution-track { animation-play-state: paused; }
 @media (max-width: 900px) {
   .site-header .nav-inner { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0 8px; }
   .site-header .header-institutions { max-width: 470px; }
+  .site-header .theme-toggle, .site-header .nav-toggle { width: 44px; height: 44px; }
 }
 @media (max-width: 480px) {
+  .site-header .nav-inner { width: calc(100% - 24px); }
+  .header-institutions .institution-marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
   .header-institutions .institution-track { animation-duration: 65s; }
   .header-institutions .institution-list { gap: 22px; padding-inline: 11px; }
 }
