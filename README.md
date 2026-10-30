@@ -256,8 +256,8 @@ Publish reviewed changes to `origin/master` and verify the Pages deployment.
 
 Use horizontal institution logos in 160px by 44px header stages. Preserve each
 logo's proportions and balance its visible artwork, accounting for whitespace
-inside the source image. Use the compact CMU lettermark so its name does not
-shrink to a thin line. Keep the same artwork size on phones and in both
+inside the source image. Use the full Carnegie Mellon University horizontal
+wordmark. Keep the same artwork size on phones and in both
 themes. Use 28px between stages on desktop and 22px on phones. A 67-second
 loop on desktop and a 65-second loop on phones preserve the slow conveyor speed.
 On phones, give the header 12px side margins and use 44px menu/theme buttons.
@@ -273,7 +273,7 @@ Official assets are stored locally; sources retrieved 26 October 2026:
 
 - [Oxford horizontal logo with white keyline](https://www.hsm.ox.ac.uk/sites/all/themes/custom/oxtheme/images/brandmark/svg/oxlogo-rect-border.svg), retrieved 30 October 2026
 - [Stanford tree and University wordmark](https://logodownload.org/wp-content/uploads/2021/04/stanford-university-logo-4.png), retrieved 30 October 2026
-- [CMU lettermark](https://brand.cmu.edu/visual-identity/carnegie-mellon-trademarks/lettermark), extracted from the [university homepage](https://www.cmu.edu/) SVG, retrieved 30 October 2026, using [Carnegie Red, #C41230](https://brand.cmu.edu/visual-identity/colors).
+- [Carnegie Mellon University horizontal wordmark](https://brand.cmu.edu/visual-identity/carnegie-mellon-trademarks/wordmarks), extracted from the [university homepage](https://www.cmu.edu/) SVG, retrieved 30 October 2026, using [Carnegie Red, #C41230](https://brand.cmu.edu/visual-identity/colors).
 - [Toronto](https://www.utoronto.ca/themes/custom/bootstrap_uoft/logo.svg)
 - [MPI for Intelligent Systems, Tübingen](https://is.mpg.de/assets/logos/logo_green_en-55a1f978f4981c37f203f17d6d635402376bc4788d9bf835c6e53e4b10288b06.webp)
 - [Vector Institute](https://vectorinstitute.ai/wp-content/uploads/2024/05/Vector-Logo-FullColour_Horizontal.png)

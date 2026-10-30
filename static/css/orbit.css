@@ -419,7 +419,7 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 .header-institutions .institution-aim { --institution-logo-width: 96px; }
 .header-institutions .institution-oxford { --institution-logo-width: 123px; }
 .header-institutions .institution-stanford { --institution-logo-width: 114px; }
-.header-institutions .institution-cmu { --institution-logo-width: 84px; }
+.header-institutions .institution-cmu { --institution-logo-width: 152px; }
 .header-institutions .institution-toronto { --institution-logo-width: 104px; }
 .header-institutions .institution-mpi { --institution-logo-width: 144px; }
 .header-institutions .institution-vector { --institution-logo-width: 156px; }
