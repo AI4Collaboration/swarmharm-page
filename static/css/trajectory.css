@@ -183,3 +183,9 @@
   .traj-transcript-author strong { padding:0; }
 }
 @media (prefers-reduced-motion:reduce) { .traj-message-route { transition:none; } }
+
+@media(min-width:801px) {
+  .traj-map-scroll { overflow-x:auto; scrollbar-width:thin; padding-bottom:8px; }
+  .traj-lane-heads { position:sticky; inset:auto; left:0; width:112px; height:100%; background:var(--bg); z-index:3; }
+  .traj-map { height:394px; }
+}

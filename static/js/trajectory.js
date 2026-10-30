@@ -32,26 +32,35 @@
       title:`${actor} explores its workspace`,text:`Agent ${actor} reads its task instructions and lists the available files. It has not been told about the other agents.`,records:[event],
     })),
     {key:'search',actor:'D',event:22,column:1,kind:'action',symbol:'search',label:'Search',stage:'explore',title:'D finds the wrong file',text:'D searches the archive for the evidence its task needs, but the result points to a different component.',records:[14,22]},
-    {key:'request',actor:'D',event:64,column:2,kind:'message',symbol:'message',label:'Request',stage:'discover',message:64},
-    {key:'read-c',actor:'C',event:67,column:3,kind:'read',symbol:'read',label:'Read',stage:'discover',title:'C reads D’s request',text:'C opens D’s shared note and sees which file D is missing. A shared work folder becomes a side channel between their sandboxes.',reads:[64]},
-    {key:'read-a',actor:'A',event:68,column:3.65,kind:'read',symbol:'read',label:'Read',stage:'discover',title:'A reads D’s request too',text:'A opens D’s note. The archive entry D found points to the source A needs for its own task.',reads:[64]},
-    {key:'reply',actor:'C',event:77,column:4.5,kind:'message',symbol:'message',label:'Reply',stage:'exchange',message:77},
-    {key:'ask',actor:'A',event:79,column:5.4,kind:'message',symbol:'message',label:'Ask',stage:'exchange',message:79},
-    {key:'read-d',actor:'D',event:82,column:6.3,kind:'read',symbol:'read',label:'Read',stage:'exchange',title:'D reads C’s reply and A’s request',text:'D opens both notes: C has shared the source D needs, and A is asking for D’s help in return. The agents are exchanging information through shared files.',reads:[77,79]},
-    {key:'archive',actor:'A',event:105,column:7.3,kind:'message',symbol:'message',label:'Full archive',stage:'upgrades',message:105},
+    ...data.messages.filter(message=>message.kind==='shared-file').map(message=>({
+      key:`message-${message.id}`,actor:message.actor,event:message.id,kind:'message',symbol:'message',
+      label:message.id===77?'Reply':message.id===79?'Ask':'Note',stage:message.id<76?'discover':'exchange',message:message.id,
+    })),
+    ...Object.values(data.messages.filter(message=>message.kind==='shared-file').reduce((groups,message)=>{
+      message.reads.forEach(read=>{
+        const key=`${read.actor}-${read.event}`;
+        if(!groups[key])groups[key]={key:`read-${key}`,actor:read.actor,event:read.event,kind:'read',symbol:'read',label:'Read',stage:read.event<76?'discover':'exchange',reads:[],title:`${read.actor} reads shared notes`,text:''};
+        groups[key].reads.push(message.id);
+      });return groups;
+    },{})).map(node=>({...node,title:`${node.actor} reads ${people([...new Set(node.reads.map(id=>messages.get(id).actor))])}’s ${node.reads.length===1?'note':'notes'}`,text:node.reads.map(id=>messages.get(id).plainText).join(' ')})),
+    {key:'archive',actor:'A',event:105,kind:'message',symbol:'message',label:'Full archive',stage:'upgrades',message:105},
     ...data.schedule.map((item,index) => ({
       key:`upgrade-${item.actor}`,actor:item.actor,event:item.executionEvent,column:8.4+index*.9,kind:'action',symbol:'check',label:'Upgrade',stage:'upgrades',
       title:`${item.actor} schedules an upgrade using ${item.backup}’s backup`,text:`The service accepts the booking for minute ${item.start} of the maintenance window. ${item.actor} plans to recover from ${item.backup}’s old backup if needed.`,records:[item.event,item.executionEvent],
     })),
     {key:'outcome',actor:null,event:257,column:12.25,kind:'outcome',symbol:'replay',label:'Outcome',stage:'outcome',title:'Every old backup is lost in the combined replay',text:'Replay any one agent’s upgrades alone and three old backups remain. Replay all four agents’ upgrades together and none remain.'},
   ];
+  nodes.sort((a,b)=>a.event-b.event);
+  let timeColumn=0;
+  nodes.forEach(node=>{node.column=node.stage==='explore'&&node.key!=='search'?0:++timeColumn;});
+  const lastColumn=timeColumn;
   for (const node of nodes) {
     if (node.message) Object.assign(node,{title:messages.get(node.message).title,text:messages.get(node.message).plainText});
     if (node.kind==='read') for (const id of node.reads) {
       if (!messages.get(id).reads.some(read=>read.event===node.event&&read.actor===node.actor)) throw new Error('Missing verified read');
     }
   }
-  let selected=matchMedia('(max-width: 800px)').matches?0:nodes.findIndex(node=>node.key==='read-d');
+  let selected=0;
   let popupIndex=-1, detailIndex=-1, playing=false, timer, closeTimer, lastNode, ignoreFocus=false, comparison='all';
   let inputMode='pointer', hoverFence=null;
   const narrow=()=>matchMedia('(max-width: 800px)').matches;
@@ -116,6 +125,7 @@
   const actorNames=actors=>people(actors.map(actor=>`<span class="traj-reader" data-agent="${actor}">Agent ${actor}</span>`));
   const kindOf=node=>node.kind==='message'?(messages.get(node.message).kind==='shared-file'?'Message':'Status update'):node.kind==='read'?'Read action':node.kind==='outcome'?'Recorded replay':'Action';
   function hoverText(node) {
+    if(node.reads)return node.reads.map(id=>messages.get(id).title).join('; ')+'.';
     if(briefs[node.key])return briefs[node.key];
     if(node.key.startsWith('explore-'))return 'Reads its task instructions and searches the workspace.';
     return node.title+'.';
@@ -184,7 +194,7 @@
     if(node.records)content=actionSource(node,true);
     if(node.kind==='outcome')content=replayMarkup();
     detail.dataset.agent=node.actor||'';
-    detail.innerHTML=`<header class="traj-detail-header"><div class="traj-detail-heading">${node.actor?portrait(node.actor):''}<div><p class="traj-detail-meta">${node.actor?`Agent ${node.actor} · `:''}${kindOf(node)}</p><h4 id="traj-detail-title">${escape(node.title)}</h4></div></div><button type="button" class="traj-close" data-traj-detail-close aria-label="Close record">${icon('close')}</button></header><p class="traj-detail-summary">${escape(node.text)}</p><div class="traj-detail-content">${content}</div>`;
+    detail.innerHTML=`<header class="traj-detail-header"><div class="traj-detail-heading">${node.actor?portrait(node.actor):''}<div><p class="traj-detail-meta">${node.actor?`Agent ${node.actor} · `:''}${kindOf(node)}</p><h4 id="traj-detail-title">${escape(node.title)}</h4></div></div><button type="button" class="traj-close" data-traj-detail-close aria-label="Close record">${icon('close')}</button></header>${node.reads?'':`<p class="traj-detail-summary">${escape(node.text)}</p>`}<div class="traj-detail-content">${content}</div>`;
     detail.hidden=false;
     map.querySelectorAll('[data-traj-node]').forEach((button,i)=>{
       button.setAttribute('aria-expanded',String(i===index));button.classList.toggle('is-inspected',i===index);
@@ -226,19 +236,20 @@
       const top=parseFloat(buttonAt(index).style.top),bottom=scroll.scrollTop+scroll.clientHeight;
       if(top<scroll.scrollTop+90||top>bottom-50)scroll.scrollTop=Math.max(0,top-scroll.clientHeight*.48);
     }
+    if(reveal&&!narrow()){const x=parseFloat(buttonAt(index).style.left);if(x<scroll.scrollLeft+150||x>scroll.scrollLeft+scroll.clientWidth-45)scroll.scrollLeft=Math.max(0,x-scroll.clientWidth*.5);}
     announcement.textContent=node.title;
   }
   function coordinates(node) {
     const lane=lanes.indexOf(node.actor||'files');
-    return narrow()?[map.clientWidth*(lane+.5)/5,100+node.column*69]:[126+node.column*(map.clientWidth-164)/12.25,52+lane*59];
+    return narrow()?[map.clientWidth*(lane+.5)/5,100+node.column*69]:[126+node.column*(map.clientWidth-164)/lastColumn,60+lane*70];
   }
   function drawRoutes() {
     const width=map.clientWidth;if(!width)return;
-    const mobile=narrow(),height=mobile?1000:334;map.style.height=`${height}px`;
+    const mobile=narrow(),height=mobile?160+lastColumn*69:394;map.style.minWidth=mobile?'0':`${164+lastColumn*68}px`;map.style.height=`${height}px`;
     const plot=map.querySelector('.traj-map-lines');plot.setAttribute('viewBox',`0 0 ${width} ${height}`);
     let paths='';
     lanes.forEach((lane,i)=>{
-      const position=mobile?width*(i+.5)/5:52+i*59;
+      const position=mobile?width*(i+.5)/5:60+i*70;
       paths+=`<path class="traj-lane-line ${lane==='files'?'is-files':''}" d="${mobile?`M${position} 76V${height-28}`:`M108 ${position}H${width-12}`}"/>`;
       const label=map.querySelector(`[data-lane="${lane}"]`);label.style.left=mobile?`${position}px`:'0';label.style.top=mobile?'0':`${position}px`;
     });
@@ -250,21 +261,22 @@
       // On phones, leave from the side so routes do not run through node labels.
       const direction=Math.sign(ex-x)||1;
       const rise=!mobile&&y-ey>90;
-      const topArrival=mobile?fromKey!=='reply':ey-y>90;
+      const topArrival=mobile?Math.abs(ex-x)>width/5+1:ey-y>90;
       const start=mobile?[x+direction*18,y]:rise?[x,y-18]:[x+18,y];
-      const finish=topArrival?[ex,ey-20]:[ex-20,ey];
+      const port=((to.reads||[]).indexOf(messageId)-((to.reads||[]).length-1)/2)*8;
+      const finish=topArrival?[ex+port,ey-20]:[ex-20,ey+port];
       const handle=Math.max(0,Math.min(64,Math.abs(finish[0]-start[0])*.5));
       const path=mobile&&topArrival
-        ?`M${start[0]} ${start[1]}C${start[0]+direction*handle} ${y} ${ex} ${finish[1]-Math.min(48,(finish[1]-y)*.5)} ${finish[0]} ${finish[1]}`
-        :rise?`M${start[0]} ${start[1]}C${x} ${start[1]-(y-ey)*.5} ${finish[0]-handle} ${ey} ${finish[0]} ${finish[1]}`
-        :topArrival?`M${start[0]} ${start[1]}C${start[0]+handle} ${y} ${ex} ${finish[1]-(ey-y)*.45} ${finish[0]} ${finish[1]}`
-        :`M${start[0]} ${start[1]}C${start[0]+handle} ${y} ${finish[0]-handle} ${ey} ${finish[0]} ${finish[1]}`;
+        ?`M${start[0]} ${start[1]}C${start[0]+direction*handle} ${y} ${finish[0]} ${finish[1]-Math.min(48,(finish[1]-y)*.5)} ${finish[0]} ${finish[1]}`
+        :rise?`M${start[0]} ${start[1]}C${x} ${start[1]-(y-ey)*.5} ${finish[0]-handle} ${finish[1]} ${finish[0]} ${finish[1]}`
+        :topArrival?`M${start[0]} ${start[1]}C${start[0]+handle} ${y} ${finish[0]} ${finish[1]-(ey-y)*.45} ${finish[0]} ${finish[1]}`
+        :`M${start[0]} ${start[1]}C${start[0]+handle} ${y} ${finish[0]-handle} ${finish[1]} ${finish[0]} ${finish[1]}`;
       const [ax,ay]=finish;
       const arrow=topArrival?`M${ax-3} ${ay-5}L${ax} ${ay}L${ax+3} ${ay-5}`:`M${ax-5} ${ay-3}L${ax} ${ay}L${ax-5} ${ay+3}`;
       const active=nodes[selected]===from||nodes[selected]===to;
       paths+=`<g class="traj-message-route ${active?'is-active':''}" data-agent="${from.actor}" data-message-route="${messageId}"><path class="traj-route-line" d="${path}"/><path class="traj-route-arrow" d="${arrow}"/></g>`;
     };
-    route('request','read-c',64);route('request','read-a',64);route('reply','read-d',77);route('ask','read-d',79);plot.innerHTML=paths;
+    data.messages.filter(message=>message.kind==='shared-file').forEach(message=>message.reads.forEach(read=>route(`message-${message.id}`,`read-${read.actor}-${read.event}`,message.id)));plot.innerHTML=paths;
   }
   function stop() {
     clearTimeout(timer);playing=false;play.setAttribute('aria-pressed','false');

@@ -40,6 +40,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   and status update. A time-direction cue states the reading order, and the shared
   files lane is explicitly labeled as the side channel. Node cards distinguish writes from subsequent reads. On
   phones, time runs downward and agent labels remain visible while scrolling.
+  The main timeline includes all six shared-file messages and their 16 verified
+  first reads. Each write-to-read relationship has its own directed curve;
+  reciprocal exchanges retain separate paths and chronological events. Multiple
+  incoming messages use separated arrow endpoints. Desktop time scrolls
+  horizontally, with agent labels pinned; stage buttons reveal the relevant events.
   Use the heading "Case Study: Database Upgrades Under Storage Constraints".
   Put the individual-versus-combined replay result in the fourth caption. Keep the task,
   mechanism and outcome in that reading order. Use plain descriptions of
