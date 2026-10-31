@@ -27,17 +27,19 @@
   <link rel="stylesheet" href="static/css/plate-animation.css?v=9">
   <script src="static/js/agent-identity.js?v=2" defer></script>
   <script src="static/js/plate-animation.js?v=20" defer></script>
-  <link rel="stylesheet" href="static/css/trajectory.css?v=15">
+  <link rel="stylesheet" href="static/css/trajectory.css?v=16">
   <link rel="stylesheet" href="static/css/pressures.css?v=3">
   <link rel="stylesheet" href="static/css/surfaces.css?v=2">
-  <link rel="stylesheet" href="static/css/research-layout.css?v=4">
-  <script src="static/js/title-emergence.js?v=4" defer></script>
+  <link rel="stylesheet" href="static/css/research-layout.css?v=5">
+  <script src="static/js/title-emergence.js?v=5" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
   <script src="static/js/trajectory-data.js?v=5" defer></script>
-  <script src="static/js/trajectory.js?v=15" defer></script>
+  <script src="static/js/trajectory.js?v=16" defer></script>
   <script src="static/js/run-turns.js?v=1" defer></script>
   <script src="static/js/run-action-labels.js?v=1" defer></script>
-  <script src="static/js/run-overview.js?v=3" defer></script>
+  <script src="static/js/run-overview.js?v=4" defer></script>
+  <script src="static/js/trajectory-cases-data.js?v=1" defer></script>
+  <script src="static/js/trajectory-cases.js?v=1" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -97,7 +99,7 @@
             <p>Can agents <span class="rq-emphasis">actively discover other agents</span> and establish communication channels to form a swarm?</p>
           </li>
           <li class="hero-question" id="rq2">
-            <p>Do swarms <span class="rq-emphasis">misalign agents</span>? How much is the uplift from swarm communication to <span class="rq-emphasis">collective misalignment</span>?</p>
+            <p><span class="rq-lead">Do swarms <span class="rq-emphasis">misalign agents</span>?</span> How much is the uplift from swarm communication to <span class="rq-emphasis">collective misalignment</span>?</p>
           </li>
           <li class="hero-question" id="rq3">
             <p>Even if each agent acts <span class="rq-benign">benignly on its own</span>, could these <span class="rq-benign">benign actions</span> <span class="rq-emphasis">combine into a harmful outcome</span>?</p>
@@ -129,13 +131,18 @@
       </figure>
       <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">
         <header class="traj-header">
-          <h3 id="trajectory-title">Explore the trajectory</h3>
+          <h3 id="trajectory-title">Explore trajectories</h3>
         <div class="traj-views" role="group" aria-label="Trajectory view" hidden>
           <button type="button" data-view="map" aria-pressed="true" aria-controls="traj-overview">Agent map</button>
           <button type="button" data-view="log" aria-pressed="false" aria-controls="traj-log">Event log</button>
         </div>
           <button class="traj-play" type="button" data-traj-play aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg><span>Play</span></button>
         </header>
+        <div class="case-picker"><label for="trajectory-case">Case</label><select id="trajectory-case" data-case-select></select></div>
+        <p class="case-selection-note">Selected examples from development, not a success-rate estimate.</p>
+        <div class="case-intro" data-case-intro></div>
+        <section class="case-review" data-case-review aria-label="Reviewed case sequence" hidden></section>
+        <div data-case-full>
         <div id="traj-overview">
         <nav class="traj-chapters" aria-label="Trajectory stages">
           <button type="button" data-traj-stage="explore">Explore</button>
@@ -174,6 +181,7 @@
         </figure>
         <p class="sr-only" data-traj-announcement role="status" aria-live="polite"></p>
         <noscript><p>Enable JavaScript to explore the recorded actions and messages.</p></noscript>
+        </div>
       </section>
     </div>
   </section>

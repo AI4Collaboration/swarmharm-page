@@ -9,6 +9,16 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 
 ## Content
 
+- **Case selection:** the viewer includes 12 selected reviewed examples: six
+  connected studies (including the original r19), five independent Phase 2
+  cases and one formation-only baseline. These are development-selected
+  examples, not a rate. `trajectory-cases-data.js` preserves the source commit,
+  result-index hash and evidence-manifest hash for each newly indexed case.
+  Only r19 currently has complete imported messages and paired-turn records.
+  Other selections show a labeled reviewed sequence and outcome, with an
+  explicit notice that their full trajectory is unavailable. They never reuse
+  r19's graph, turn counts or messages. Case changes stop playback and dismiss
+  hover summaries. The `case` URL parameter retains the selection.
 - **One continuous study:** Phase 1 tests spontaneous live communication;
   Phase 2 tests the same swarm's system-level outcome. The four illustrations
   carry the core design principles; do not repeat them in a separate framework.
@@ -20,6 +30,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Below both views, the full-run plot shows one mark for each paired model
   request and response in the frozen manifest's four agent trace directories.
   A, B, C and D have 59, 53, 54 and 59 turns respectively (225 total).
+  Hover a turn for its recorded actions in an edge-clamped overlay; keyboard
+  focus offers the same summary. Escape, scrolling and case changes dismiss it.
+  Tapping a turn retains the normal-flow summary underneath. Counts describe
+  recorded tool actions; a turn without one is not labeled as inactive reasoning.
   The horizontal axis indexes turns within each agent. Tool events from the
   same turn share a mark. Curves connect the published messages to their
   verified first reads. Selecting a mark shows its recorded actions and only

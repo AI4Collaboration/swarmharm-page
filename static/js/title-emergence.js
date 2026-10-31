@@ -74,10 +74,11 @@
     }
     transfers = targets(harmPath,step).map((p,i) => {
       const source = grains[pool[i % pool.length]];
-      const start = 1200 + source.x/W*900 + random()*650;
-      const stream = Math.floor(random()*5);
-      const particle = {x:p.x,y:p.y,source,start,travel:1550+random()*1050,
-        lift:(10+random()*12)*scale, stream, wave:stream*1.7+(random()-.5)*.6,
+      const stream = i%7;
+      const start = 1100 + stream*110 + random()*260;
+      const particle = {x:p.x,y:p.y,source,start,travel:2400+random()*550,
+        stream, wave:random()*Math.PI*2, orbit:4+random()*10,
+        flockX:(238+stream*17)*scale, flockY:(29+(stream%3)*8)*scale,
         r:dot*(.55+random()*.85), early:i<grains.length*.048};
       if (source.mover === -1) source.mover = i;
       return particle;
@@ -93,10 +94,16 @@
     ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
   }
   function windPosition(p,at) {
-    const t=1-Math.pow(1-at,1.5), envelope=Math.sin(Math.PI*at);
-    const gust=Math.sin(at*10+p.wave), eddy=Math.cos(at*10+p.wave);
-    return [mix(p.source.x,p.x,t)+envelope*scale*(9*gust+3*Math.sin(at*23+p.wave*2)),
-      mix(p.source.y,p.y,t)-p.lift*envelope+envelope*scale*(6*eddy+2*Math.sin(at*21+p.wave))];
+    // Particles share a moving flock centre, while keeping individual orbits.
+    // Gathering and dispersal are smooth, so no grain jumps onto a common path.
+    const gather=smooth(at/.3), settle=smooth((at-.56)/.44);
+    const clock=elapsed/620, phase=p.stream*.87;
+    const cx=p.flockX+scale*(19*Math.sin(clock+phase)+6*Math.sin(clock*2.1+phase));
+    const cy=p.flockY+scale*(10*Math.cos(clock*1.3+phase)+3*Math.sin(clock*2.8));
+    const orbit=p.orbit*scale*Math.sin(Math.PI*at);
+    const ox=orbit*Math.cos(clock*2.5+p.wave), oy=orbit*.65*Math.sin(clock*3+p.wave);
+    return [mix(mix(p.source.x,cx+ox,gather),p.x,settle),
+      mix(mix(p.source.y,cy+oy,gather),p.y,settle)];
   }
   function draw() {
     ctx.clearRect(0,0,W,H);
@@ -117,7 +124,7 @@
     for (const p of transfers) {
       if (elapsed < p.start) continue;
       const u=clamp((elapsed-p.start)/p.travel);
-      // Cohesive eddies plus smaller ripples, with no motion at the destination.
+      // Local milling makes each group visible before it settles into the word.
       const [x,y]=windPosition(p,u), alpha=(1-solid)*smooth((elapsed-p.start)/110);
       if (u>.02 && u<.92 && p.r>scale*.5) {
         const [px,py]=windPosition(p,Math.max(0,u-.012));

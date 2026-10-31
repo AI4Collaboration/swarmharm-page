@@ -30,6 +30,28 @@
     if(readers.has(id))return `Reads messages from Agent ${[...readers.get(id)].join(', Agent ')}`;
     return actions[id]?.description||'Recorded tool action';
   }
+  function turnContent(actor,turn){
+    const descriptions=new Map();
+    lanes[actor][turn-1].forEach(([id])=>{const text=description(id);descriptions.set(text,(descriptions.get(text)||0)+1);});
+    return `<strong>Agent ${actor} · Turn ${turn}</strong>${descriptions.size?`<ul>${[...descriptions].map(([text,count])=>`<li>${count>1?`${count} × `:''}${escape(text)}</li>`).join('')}</ul>`:'<p>No tool call was recorded in this model turn.</p>'}`;
+  }
+  const tip=document.createElement('div');tip.className='run-hover';tip.id='run-turn-tooltip';tip.role='tooltip';tip.hidden=true;document.body.append(tip);
+  let hoverButton=null,hideTimer,keyboardInput=false;
+  function hideTip(){clearTimeout(hideTimer);tip.hidden=true;hoverButton?.removeAttribute('aria-describedby');hoverButton=null;}
+  function deferHide(){clearTimeout(hideTimer);hideTimer=setTimeout(hideTip,100);}
+  function showTip(button,actor,turn){
+    clearTimeout(hideTimer);hoverButton?.removeAttribute('aria-describedby');hoverButton=button;
+    tip.innerHTML=turnContent(actor,turn);tip.hidden=false;button.setAttribute('aria-describedby',tip.id);
+    const b=button.getBoundingClientRect(),box=tip.getBoundingClientRect(),pad=12;
+    const x=Math.max(pad,Math.min(innerWidth-box.width-pad,b.left+b.width/2-box.width/2));
+    const above=b.top+b.height/2-16-box.height;
+    const y=Math.max(pad,Math.min(innerHeight-box.height-pad,above>=pad?above:b.top+b.height/2+16));
+    tip.style.left=`${x}px`;tip.style.top=`${y}px`;
+  }
+  tip.addEventListener('pointerenter',()=>clearTimeout(hideTimer));tip.addEventListener('pointerleave',deferHide);
+  document.addEventListener('pointerdown',event=>{keyboardInput=false;if(!tip.contains(event.target))hideTip();});
+  document.addEventListener('keydown',event=>{keyboardInput=true;if(event.key==='Escape')hideTip();});
+  window.addEventListener('resize',hideTip);window.addEventListener('scroll',hideTip,{passive:true});
   const scroller=document.createElement('div');scroller.className='run-scroll';scroller.tabIndex=0;
   scroller.setAttribute('role','region');scroller.setAttribute('aria-label','Full trajectory, scroll horizontally to inspect every turn');
   chart.before(scroller);scroller.append(chart);
@@ -53,8 +75,11 @@
       button.tabIndex=i===0?0:-1;
       button.dataset.kind=events.some(([id])=>messages.get(id)?.kind==='shared-file')?'message':events.some(([id])=>sharedReads.has(id))?'read':events.some(([,op])=>op==='book_replica_upgrade')?'upgrade':'ordinary';
       button.setAttribute('aria-label',`Agent ${actor}, turn ${turn}: ${text}`);
-      button.title=text;
       button.innerHTML='<i class="run-turn-dot" aria-hidden="true"></i>';
+      button.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse')showTip(button,actor,turn);});
+      button.addEventListener('pointerleave',deferHide);
+      button.addEventListener('focus',()=>{if(keyboardInput)showTip(button,actor,turn);});
+      button.addEventListener('blur',deferHide);
       button.addEventListener('click',()=>selectTurn(actor,turn));
       button.addEventListener('keydown',event=>{
         const next={ArrowRight:turn+1,ArrowLeft:turn-1,Home:1,End:lanes[actor].length}[event.key];
@@ -73,9 +98,7 @@
     selectedButton=buttons.get(`${actor}-${turn}`);selectedButton.classList.add('is-selected');selectedButton.setAttribute('aria-current','true');
     for(const [key,button] of buttons)if(key.startsWith(`${actor}-`))button.tabIndex=button===selectedButton?0:-1;
     const events=lanes[actor][turn-1],ids=new Set(events.map(([id])=>id));
-    const descriptions=new Map();
-    events.forEach(([id])=>{const text=description(id);descriptions.set(text,(descriptions.get(text)||0)+1);});
-    summary.innerHTML=`<strong>Agent ${actor} · Turn ${turn}</strong>${descriptions.size?`<ul>${[...descriptions].map(([text,count])=>`<li>${count>1?`${count} × `:''}${escape(text)}</li>`).join('')}</ul>`:'<p>No tool call was recorded in this model turn.</p>'}`;
+    summary.innerHTML=turnContent(actor,turn);
     const related=connections.filter(({to,id})=>ids.has(id)||(to.actor===actor&&to.turn===turn));
     legend.hidden=!related.length;
     const routes=related.map(({from,to,shared})=>{
@@ -88,5 +111,7 @@
   figure.closest('.trajectory-viewer').addEventListener('trajectory-event',event=>{
     const found=positions.get(event.detail);if(found)selectTurn(found.actor,found.turn,true);
   });
+  scroller.addEventListener('scroll',hideTip,{passive:true});
+  figure.closest('.trajectory-viewer').addEventListener('trajectory-case-change',hideTip);
   selectTurn(actors[0],1);figure.hidden=false;
 })();

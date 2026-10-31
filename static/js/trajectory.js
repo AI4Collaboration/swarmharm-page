@@ -263,6 +263,7 @@
     clearTimeout(timer);playing=false;play.setAttribute('aria-pressed','false');
     play.innerHTML=`${icon('play')}<span>${selected===nodes.length-1?'Replay':'Play'}</span>`;
   }
+  root.addEventListener('trajectory-case-change',()=>{stop();closePopup();});
   function advance() {
     if(!playing)return;if(selected===nodes.length-1){stop();return;}
     select(selected+1,true);timer=setTimeout(advance,nodes[selected].stage==='explore'?1100:2500);
