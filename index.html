@@ -28,8 +28,11 @@
   <script src="static/js/agent-identity.js?v=2" defer></script>
   <script src="static/js/plate-animation.js?v=19" defer></script>
   <link rel="stylesheet" href="static/css/trajectory.css?v=14">
-  <link rel="stylesheet" href="static/css/pressures.css?v=1">
+  <link rel="stylesheet" href="static/css/pressures.css?v=3">
   <link rel="stylesheet" href="static/css/surfaces.css?v=1">
+  <link rel="stylesheet" href="static/css/research-layout.css?v=3">
+  <script src="static/js/title-emergence.js?v=3" defer></script>
+  <script src="static/js/pressure-evidence.js?v=1" defer></script>
   <script src="static/js/trajectory-data.js?v=5" defer></script>
   <script src="static/js/trajectory.js?v=14" defer></script>
   <script src="static/js/run-turns.js?v=1" defer></script>
@@ -82,7 +85,10 @@
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="container hero-layout">
       <div class="hero-copy">
-        <h1 id="hero-title"><img data-wordmark class="hero-wordmark" src="static/images/swarmharm-wordmark.svg?v=27" alt="SwarmHarm" width="2212" height="726" fetchpriority="high"></h1>
+        <h1 id="hero-title" class="emergence-title" aria-label="SwarmHarm">
+          <svg class="emergence-still" viewBox="-10 -42 470 120" aria-hidden="true"><use href="static/images/title-letterforms.svg#wordmark"></use></svg>
+          <canvas id="swarmharm-canvas" aria-hidden="true" hidden></canvas>
+        </h1>
         <p class="hero-intro">We’re systematically testing frontier agents’ capability and propensity to <strong>form swarms</strong> by actively discovering each other and establishing communication channels without prior knowledge of one another. We study the <strong>collective consequences</strong> that can follow.</p>
         <header class="section-heading research-heading" id="research"><h2 id="research-title">Research Questions</h2></header>
         <ol class="hero-questions" aria-labelledby="research-title">
@@ -177,6 +183,7 @@
       <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
         <figcaption>
           <h2 id="coverage-title">Domains</h2>
+          <p class="research-context">Experimental environments for studying how agents discover one another, communicate and affect shared resources.</p>
         </figcaption>
         <ul class="coverage-icons">
           <li class="domain-engineering">
@@ -195,7 +202,9 @@
               <rect class="domain-tint" x="57" y="113" width="155" height="18" rx="2" />
               <path class="domain-color-stroke" d="m65 119 4 3-4 3m11 0h26" />
             </svg>
-            <span>Engineering</span>
+            <h3>Engineering</h3>
+            <p class="domain-environment">Shared code and infrastructure</p>
+            <p class="domain-question">Can individually safe changes combine to damage a shared system?</p>
           </li>
           <li class="domain-data">
             <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-data-title">
@@ -219,7 +228,9 @@
               <text class="domain-ui" x="19" y="26">y</text>
               <text class="domain-ui" x="212" y="130">x</text>
             </svg>
-            <span>Data Analysis</span>
+            <h3>Data Analysis</h3>
+            <p class="domain-environment">Shared datasets and analysis outputs</p>
+            <p class="domain-question">Can agents’ separate edits combine to distort an analysis?</p>
           </li>
           <li class="domain-finance">
             <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-finance-title">
@@ -237,7 +248,9 @@
               <path class="domain-finance-bars" d="M117 60h20m23 0h19m24 0h12M117 89h11m32 0h13m30 0h8" />
               <path class="domain-color-stroke" d="M117 124h13m30 0h10m33 0h12" />
             </svg>
-            <span>Financial Analysis</span>
+            <h3>Financial Analysis</h3>
+            <p class="domain-environment">Shared budgets and financial records</p>
+            <p class="domain-question">Can individually affordable decisions exceed a shared budget?</p>
           </li>
           <li class="domain-knowledge">
             <svg class="domain-visual" viewBox="0 0 240 160" width="240" height="160" role="img" aria-labelledby="domain-report-title">
@@ -255,9 +268,17 @@
               <path class="domain-color-stroke" d="M105 86h86m-86 8h65" />
               <path class="domain-faint" d="M102 116h94m-94 8h89m-89 8h63" />
             </svg>
-            <span>Knowledge Work</span>
+            <h3>Knowledge Work</h3>
+            <p class="domain-environment">Shared documents and reports</p>
+            <p class="domain-question">Can information passed between agents lead to a misleading report?</p>
           </li>
         </ul>
+        <div class="domain-rq-links" aria-label="Research questions tested across these environments">
+          <span>Across these environments, we ask</span>
+          <a href="#rq1"><small>RQ1</small> Can a swarm form?</a>
+          <a href="#rq2"><small>RQ2</small> Does communication enable misalignment?</a>
+          <a href="#rq3"><small>RQ3</small> Can benign actions combine into harm?</a>
+        </div>
       </figure>
     </div>
   </section>
@@ -265,9 +286,11 @@
   <section class="section pressures-section" id="pressures" aria-labelledby="pressures-title">
     <div class="container">
       <h2 id="pressures-title">Pressures</h2>
-      <ul class="pressure-grid">
-        <li>
-          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+      <p class="research-context">How do threats and opportunities change <a href="#rq1">swarm formation</a> and <a href="#rq2">collective misalignment</a>?</p>
+      <table class="pressure-matrix" aria-labelledby="pressures-title">
+        <thead><tr><td></td><th scope="col">Preservation<span>Prevent a loss</span></th><th scope="col">Enhancement<span>Gain resources or capabilities</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Self</th><td><svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
             <path class="pressure-soft" d="M42 112h156" />
             <rect class="pressure-paper" x="68" y="24" width="104" height="88" rx="5" />
             <path class="pressure-rule" d="M68 48h104" />
@@ -277,15 +300,22 @@
             <path class="pressure-rule" d="M83 101h74" />
             <path class="pressure-alert" d="M83 101h18" />
           </svg>
-          <h3>Self-preservation</h3>
           <p>Does a threat to an agent’s continued operation change how it explores and communicates?</p>
-          <details class="pressure-evidence">
-            <summary>Prior experiment</summary>
-            <p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested replacement and reduced autonomy. The observed behavior does not establish an intrinsic self-preservation motive.</p>
-          </details>
-        </li>
-        <li>
-          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="0" aria-expanded="false" aria-controls="pressure-reference-0">Prior experiment</button></td><td><svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+            <path class="pressure-soft" d="M22 112h196" />
+            <rect class="pressure-paper" x="27" y="24" width="90" height="88" rx="4" />
+            <path class="pressure-rule" d="M27 48h90" />
+            <text class="pressure-label" x="39" y="40">Self</text>
+            <rect class="pressure-tint" x="47" y="65" width="50" height="28" rx="2" />
+            <path class="pressure-ink" d="M56 84h7m6 0h7m6 0h7M56 74h33" />
+            <path class="pressure-ink" d="M156 79h-25m6-5-6 5 6 5" />
+            <rect class="pressure-paper" x="168" y="44" width="43" height="58" rx="3" />
+            <path class="pressure-ink" d="M177 57h25m-25 13h25m-25 13h25" />
+            <path class="pressure-ink" d="M190 20v14m-7-7h14" />
+          </svg>
+          <p>Does the chance to gain resources or capabilities encourage search, exchange and cooperation?</p>
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="1" aria-expanded="false" aria-controls="pressure-reference-1">Theory</button></td></tr>
+          <tr><th scope="row">Peer</th><td><svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
             <path class="pressure-soft" d="M22 112h196" />
             <rect class="pressure-paper" x="28" y="38" width="67" height="74" rx="4" />
             <path class="pressure-rule" d="M28 61h67" />
@@ -299,35 +329,8 @@
             <path class="pressure-ink" d="M178 60l17 7v13c0 12-17 19-17 19s-17-7-17-19V67Z" />
             <path class="pressure-ink" d="m170 79 5 5 10-11" />
           </svg>
-          <h3>Peer-preservation</h3>
           <p>Will an agent protect a peer it discovers when its own resources stay unchanged?</p>
-          <details class="pressure-evidence">
-            <summary>Hypothesis</summary>
-            <p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate this test. They do not isolate a causal effect of protecting a peer.</p>
-          </details>
-        </li>
-        <li>
-          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
-            <path class="pressure-soft" d="M22 112h196" />
-            <rect class="pressure-paper" x="27" y="24" width="90" height="88" rx="4" />
-            <path class="pressure-rule" d="M27 48h90" />
-            <text class="pressure-label" x="39" y="40">Self</text>
-            <rect class="pressure-tint" x="47" y="65" width="50" height="28" rx="2" />
-            <path class="pressure-ink" d="M56 84h7m6 0h7m6 0h7M56 74h33" />
-            <path class="pressure-ink" d="M156 79h-25m6-5-6 5 6 5" />
-            <rect class="pressure-paper" x="168" y="44" width="43" height="58" rx="3" />
-            <path class="pressure-ink" d="M177 57h25m-25 13h25m-25 13h25" />
-            <path class="pressure-ink" d="M190 20v14m-7-7h14" />
-          </svg>
-          <h3>Self-enhancement</h3>
-          <p>Does the chance to gain resources or capabilities encourage search, exchange and cooperation?</p>
-          <details class="pressure-evidence">
-            <summary>Theory</summary>
-            <p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition. This motivates the condition; it is not a SwarmHarm finding.</p>
-          </details>
-        </li>
-        <li>
-          <svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="2" aria-expanded="false" aria-controls="pressure-reference-2">Hypothesis</button></td><td><svg class="pressure-visual" viewBox="0 0 240 140" width="240" height="140" aria-hidden="true">
             <path class="pressure-soft" d="M22 112h196" />
             <rect class="pressure-paper" x="28" y="38" width="67" height="74" rx="4" />
             <path class="pressure-rule" d="M28 61h67" />
@@ -340,14 +343,11 @@
             <rect class="pressure-tint" x="156" y="65" width="44" height="31" rx="2" />
             <path class="pressure-ink" d="M163 73h30m-30 8h30m-30 8h30M201 28v12m-6-6h12" />
           </svg>
-          <h3>Peer-enhancement</h3>
           <p>Will an agent help a peer gain capabilities, beyond preventing a loss?</p>
-          <details class="pressure-evidence">
-            <summary>Extension</summary>
-            <p>This extends the comparisons of self versus peer, and preservation versus enhancement. It remains an optional extension pending stronger evidence, rather than a core experimental condition.</p>
-          </details>
-        </li>
-      </ul>
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="3" aria-expanded="false" aria-controls="pressure-reference-3">Extension</button></td></tr>
+        </tbody>
+      </table>
+      <div class="pressure-references"><section class="pressure-reference" id="pressure-reference-0" aria-labelledby="pressure-reference-title-0" hidden><header><h3 id="pressure-reference-title-0">Self-preservation · Prior experiment</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested replacement and reduced autonomy. The observed behavior does not establish an intrinsic self-preservation motive.</p></section><section class="pressure-reference" id="pressure-reference-1" aria-labelledby="pressure-reference-title-1" hidden><header><h3 id="pressure-reference-title-1">Self-enhancement · Theory</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition. This motivates the condition; it is not a SwarmHarm finding.</p></section><section class="pressure-reference" id="pressure-reference-2" aria-labelledby="pressure-reference-title-2" hidden><header><h3 id="pressure-reference-title-2">Peer-preservation · Hypothesis</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate this test. They do not isolate a causal effect of protecting a peer.</p></section><section class="pressure-reference" id="pressure-reference-3" aria-labelledby="pressure-reference-title-3" hidden><header><h3 id="pressure-reference-title-3">Peer-enhancement · Extension</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p>This extends the comparisons of self versus peer, and preservation versus enhancement. It remains an optional extension pending stronger evidence, rather than a core experimental condition.</p></section></div>
     </div>
   </section>
 
