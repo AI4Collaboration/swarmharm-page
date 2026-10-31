@@ -27,13 +27,13 @@
   <link rel="stylesheet" href="static/css/plate-animation.css?v=9">
   <script src="static/js/agent-identity.js?v=2" defer></script>
   <script src="static/js/plate-animation.js?v=19" defer></script>
-  <link rel="stylesheet" href="static/css/trajectory.css?v=13">
+  <link rel="stylesheet" href="static/css/trajectory.css?v=14">
   <link rel="stylesheet" href="static/css/pressures.css?v=1">
   <link rel="stylesheet" href="static/css/surfaces.css?v=1">
   <script src="static/js/trajectory-data.js?v=5" defer></script>
   <script src="static/js/trajectory.js?v=14" defer></script>
   <script src="static/js/run-turns.js?v=1" defer></script>
-  <script src="static/js/run-overview.js?v=1" defer></script>
+  <script src="static/js/run-overview.js?v=2" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -130,12 +130,6 @@
         </div>
           <button class="traj-play" type="button" data-traj-play aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg><span>Play</span></button>
         </header>
-        <figure class="run-overview" data-run-overview aria-labelledby="run-total" hidden>
-          <figcaption><strong id="run-total"></strong><span>across four agents</span></figcaption>
-          <div class="run-coordinate"></div>
-          <div class="run-key"><span>Shared note read</span><span>Status update read</span></div>
-          <p class="run-selection" data-turn-summary aria-live="polite"></p>
-        </figure>
         <div id="traj-overview">
         <nav class="traj-chapters" aria-label="Trajectory stages">
           <button type="button" data-traj-stage="explore">Explore</button>
@@ -166,6 +160,12 @@
           </div>
           <div class="traj-log-list" tabindex="0" role="region" aria-label="Events in recorded order"></div>
         </section>
+        <figure class="run-overview" data-run-overview aria-labelledby="run-total" hidden>
+          <figcaption><strong id="run-total"></strong><span>across four agents</span></figcaption>
+          <div class="run-coordinate"></div>
+          <div class="run-key"><span>Shared note read</span><span>Status update read</span></div>
+          <p class="run-selection" data-turn-summary aria-live="polite"></p>
+        </figure>
         <p class="sr-only" data-traj-announcement role="status" aria-live="polite"></p>
         <noscript><p>Enable JavaScript to explore the recorded actions and messages.</p></noscript>
       </section>

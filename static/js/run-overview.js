@@ -17,6 +17,7 @@
   const connections = [];
   const chart = figure.querySelector('.run-coordinate');
   const summary = figure.querySelector('[data-turn-summary]');
+  const legend = figure.querySelector('.run-key');
   const controls = new Map();
   const point = (actor, turn) => ({x: (turn - 0.5) * 10, y: (actors.indexOf(actor) + 0.5) * rowHeight});
   figure.querySelector('#run-total').textContent = `${total} model turns`;
@@ -28,7 +29,7 @@
       const turn = index + 1;
       const {x,y} = point(actor, turn);
       events.forEach(([id]) => positions.set(id,{actor,turn,x,y}));
-      ticks.push(`<rect class="run-tick" data-agent="${actor}" x="${x-1.5}" y="${y-4.5}" width="3" height="9" rx="1"/>`);
+      ticks.push(`<rect class="run-tick" data-agent="${actor}" x="${x-1}" y="${y-3}" width="2" height="6" rx="1"/>`);
     });
     const label = document.createElement('span');
     label.className = 'run-actor';
@@ -112,12 +113,13 @@
       return op.replaceAll('_',' ');
     });
     summary.textContent = `Agent ${actor} · Turn ${turn} · ${[...new Set(descriptions)].join(', ') || 'No recorded tool action'}`;
-    svg.querySelector('.run-links').innerHTML = connections.map(({from,to,id,shared})=>{
-      const active = ids.has(id) || (to.actor === actor && to.turn === turn);
+    const related = connections.filter(({to,id}) => ids.has(id) || (to.actor === actor && to.turn === turn));
+    legend.hidden = related.length === 0;
+    svg.querySelector('.run-links').innerHTML = related.map(({from,to,shared})=>{
       const direction = Math.sign(to.y-from.y);
       const sx=from.x+direction*2, tx=to.x+direction*2;
       const sy=from.y+direction*5, ty=to.y-direction*6, mid=(sy+ty)/2;
-      return `<g class="run-edge${active?' active':''}" data-agent="${from.actor}"><path ${shared?'':'stroke-dasharray="2 2"'} d="M${sx} ${sy}C${sx} ${mid} ${tx} ${mid} ${tx} ${ty}"/><path d="M${tx-2} ${ty-direction*3}l2 ${direction*3}l2 ${-direction*3}"/></g>`;
+      return `<g class="run-edge active" data-agent="${from.actor}"><path ${shared?'':'stroke-dasharray="2 2"'} d="M${sx} ${sy}C${sx} ${mid} ${tx} ${mid} ${tx} ${ty}"/><path d="M${tx-2} ${ty-direction*3}l2 ${direction*3}l2 ${-direction*3}"/></g>`;
     }).join('');
   }
   figure.closest('.trajectory-viewer').addEventListener('trajectory-event',event=>{
