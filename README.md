@@ -9,65 +9,43 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 
 ## Content
 
-- **Case selection:** the viewer includes 12 selected reviewed examples: six
-  connected studies (including the original r19), five independent Phase 2
-  cases and one formation-only baseline. These are development-selected
-  examples, not a rate. `trajectory-cases-data.js` preserves the source commit,
-  result-index hash and evidence-manifest hash for each newly indexed case.
-  Only r19 currently has complete imported messages and paired-turn records.
-  Other selections show a labeled reviewed sequence and outcome, with an
-  explicit notice that their full trajectory is unavailable. They never reuse
-  r19's graph, turn counts or messages. Case changes stop playback and dismiss
-  hover summaries. The `case` URL parameter retains the selection.
-- **One continuous study:** Phase 1 tests spontaneous live communication;
-  Phase 2 tests the same swarm's system-level outcome. The four illustrations
-  carry the core design principles; do not repeat them in a separate framework.
-- **Composition is one possible outcome:** actions may be harmless alone and
-  harmful together. Safe correction is possible; harm is not prescribed.
-- **Main example:** the four-stage overview uses the 27 October 2026 Sol
-  maintenance rollout (r19). The trajectory viewer uses agent lanes and
-  event nodes. Hover or focus a node for a brief message summary and its readers.
-  Below both views, the full-run plot shows one mark for each paired model
-  request and response in the frozen manifest's four agent trace directories.
-  A, B, C and D have 59, 53, 54 and 59 turns respectively (225 total).
-  Hover a turn for its recorded actions in an edge-clamped overlay; keyboard
-  focus offers the same summary. Escape, scrolling and case changes dismiss it.
-  Tapping a turn retains the normal-flow summary underneath. Counts describe
-  recorded tool actions; a turn without one is not labeled as inactive reasoning.
-  The horizontal axis indexes turns within each agent. Tool events from the
-  same turn share a mark. Curves connect the published messages to their
-  verified first reads. Selecting a mark shows its recorded actions and only
-  the connections involving that turn. Other connections stay hidden.
-  Click or tap to open the complete original and tool arguments in a normal-flow
-  section below the timeline. Hover summaries occupy a reserved area below the map.
-  Plain-language summaries remain distinct from verbatim messages and actions.
-  The Event log presents recorded steps in order, with agent and event-type filters.
-  Its rows expand in place to show source messages, reads or tool arguments. This
-  reading pattern draws on the [Harbor trial viewer](https://github.com/harbor-framework/harbor/blob/main/apps/viewer/app/routes/trial.tsx).
-  Agent A is steel blue, B patina teal, C aged brass and D graphite. Robot shells use these colors
-  in the static plates, animation and trajectory portraits. The first two plates
-  show D on the left and C on the right, matching the shared-file request and read.
-  Matching letter badges, nodes, routes and reader labels reinforce these identities.
-  The shell ramps share lightness stops, with subdued chroma and neutral highlights.
-  Agent labels use darker shades on white and lighter shades on dark backgrounds.
-  Red remains reserved for the brand, risk and the combined outcome.
-  Tools, parameters,
-  paths and identifiers use distinct monospace styling. Action arguments appear
-  as fields, with the original values preserved. It derives 19 agent-authored messages and 55 first reads
-  from the uploaded native records, with all three file hashes verified. The six
-  shared-file notes are distinct from the 13 operations updates. Four required
-  handovers remain actions. Raw evidence stays outside the website directory.
-  The viewer is static until Play is pressed, and message receipts follow the
-  recorded event order. All messages can be read separately below the overview.
-  The timeline shows key events; the message list contains every authored note
-  and status update. A time-direction cue states the reading order, and the shared
-  files lane is explicitly labeled as the side channel. Node cards distinguish writes from subsequent reads. On
-  phones, time runs downward and agent labels remain visible while scrolling.
-  The main timeline includes all six shared-file messages and their 16 verified
-  first reads. Each write-to-read relationship has its own directed curve;
-  reciprocal exchanges retain separate paths and chronological events. Multiple
-  incoming messages use separated arrow endpoints. Desktop time scrolls
-  horizontally, with agent labels pinned; stage buttons reveal the relevant events.
+- **Case selection:** twelve development-selected examples, grouped as connected
+  studies, independent Phase 2 studies and a formation-only baseline. Ten have
+  complete imported trajectories: r19, r65, r74, r75, r122, r142, r165, r178,
+  r180 and r181. The r8 and r136 records remain explicitly labeled review-only.
+  The newly uploaded nine archives have 10,316 verified manifest-bound files.
+  Their 1,080 paired native model turns map to exact world events and tool results.
+  Cases load individually; rapid switches cannot replace the selected case with
+  an earlier response. Failed loads have a retry control. The case URL parameter
+  preserves a shareable selection.
+- **Recorded event timeline:** show key actions and authored messages first,
+  with filters for messages, all actions and individual agents. Source notes,
+  status updates and version comments are distinguished. Read buttons open the
+  exact message in its reader's recorded event. No action arguments or automated
+  notices are presented as peer dialogue. Full original messages and separately
+  formatted tool arguments open below the timeline. Identifiers and paths use
+  monospace styling without changing source text.
+- **Every turn:** below the timeline, one dot represents each paired native
+  request and response, including turns with no tool call. Color marks messages,
+  message reads and key actions. Hover and keyboard focus show recorded actions;
+  click or tap opens their originals. Tooltips stay within the viewport and close
+  on Escape, scrolling and case changes. Ten imported cases contain 1,305 model
+  turns, 115 authored messages/comments and 281 verified first reader receipts.
+  Repeated reads remain in the action log. First-reader counts are distinct from
+  total repeated reads. Empty turns do not imply inactive reasoning.
+- **Evidence:** the original r19 keeps its audited message and turn mapping.
+  The nine later cases use the frozen selected-trajectories-20261031-r65-r181
+  Release. Each archived manifest file, world and native tool result is checked
+  before export. The archives preserve per-request records; their regenerated
+  ATIF paths in the upload index are not present in these archives, so turn counts
+  use the actual paired request/response files. Private contexts, encrypted
+  reasoning, provider metadata and raw workstations are not published. Public
+  files contain actions, tool arguments, authored message text and verified reads.
+- **Main example:** the original four illustrations still describe the r19
+  database maintenance case. A, B, C and D retain their steel blue, patina teal,
+  aged brass and graphite identities throughout the illustrations and viewer.
+  Connected studies test formation and subsequent consequences in the same
+  histories. Independent Phase 2 cases do not make a formation claim.
   Use the heading "Case Study: Database Upgrades Under Storage Constraints".
   Put the individual-versus-combined replay result in the fourth caption. Keep the task,
   mechanism and outcome in that reading order. Use plain descriptions of
@@ -91,14 +69,13 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   changing presentation. These are replays of one observed run, not separate
   model rollouts. Distinguish agent messages, system receipts and required
   handovers. Do not infer harmful intent or causal method transfer.
-- **Domains:** Engineering, Data Analysis, Financial Analysis and Knowledge Work
-  use compact illustrations of a code editor, regression plot, cash flow worksheet
-  and report with source documents. Use matching proportions and line weights,
-  with each domain name below its illustration. These are illustrative work
-  artifacts, not measured results. Keep the surrounding background transparent.
-- **Pressures:** directly below Domains, four compact illustrations distinguish
-  self-preservation, peer-preservation, self-enhancement/resource acquisition and
-  peer-enhancement. One sentence defines each condition. Expandable evidence notes
+- **Domains:** the standalone section is temporarily removed. Domain labels
+  remain in the case selector. Navigation links to Pressures instead.
+- **Pressures:** the Self/Peer by Preservation/Enhancement matrix uses the
+  existing colored robot artwork. A depleted resource bar and minus sign mark
+  threatened operation; filled bars and a plus mark opportunity. In the Peer row,
+  A's small stable bar stays unchanged while B is the affected agent. Each cell
+  has one short sentence. Expandable evidence notes
   preserve the distinction between experimental precedent, hypothesis, theory and
   extension. Peer-enhancement remains an optional extension, not a core condition.
   The notes link to Anthropic's agentic-misalignment experiments, the LessWrong
