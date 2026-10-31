@@ -31,7 +31,7 @@
     document.addEventListener('click', event => {
       if (!header.contains(event.target)) setMenu(false);
     });
-    matchMedia('(max-width: 900px)').addEventListener('change', () => setMenu(false));
+    matchMedia('(max-width: 1100px)').addEventListener('change', () => setMenu(false));
     updateHeaderOffset();
   }
 
