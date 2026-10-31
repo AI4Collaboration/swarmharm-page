@@ -195,6 +195,7 @@
   }
   function select(index,reveal=false) {
     selected=index;const node=nodes[index];
+    root.dispatchEvent(new CustomEvent('trajectory-event',{detail:node.event}));
     caption.innerHTML=`<strong>${escape(node.title)}.</strong>`;
     map.querySelectorAll('[data-traj-node]').forEach((button,i)=>{
       button.classList.toggle('is-selected',i===index);button.setAttribute('aria-current',String(i===index));
@@ -342,6 +343,7 @@
   }
   list.addEventListener('toggle',event=>{
     const row=event.target;if(!row.matches('.traj-log-row[open]'))return;
+    root.dispatchEvent(new CustomEvent('trajectory-event',{detail:Number(row.dataset.logEvent)}));
     const body=row.querySelector('.traj-log-body');if(!body.childElementCount)body.innerHTML=logContent(events.get(Number(row.dataset.logEvent)));
   },true);
   list.addEventListener('click',event=>{

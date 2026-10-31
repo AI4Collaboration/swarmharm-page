@@ -17,6 +17,12 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 - **Main example:** the four-stage overview uses the 27 October 2026 Sol
   maintenance rollout (r19). The trajectory viewer uses agent lanes and
   event nodes. Hover or focus a node for a brief message summary and its readers.
+  Above both views, the full-run plot shows one mark for each paired model
+  request and response in the frozen manifest's four agent trace directories.
+  A, B, C and D have 59, 53, 54 and 59 turns respectively (225 total).
+  The horizontal axis indexes turns within each agent. Tool events from the
+  same turn share a mark. Curves connect the published messages to their
+  verified first reads. Selecting a mark shows its recorded actions.
   Click or tap to open the complete original and tool arguments in a normal-flow
   section below the timeline. Hover summaries occupy a reserved area below the map.
   Plain-language summaries remain distinct from verbatim messages and actions.
