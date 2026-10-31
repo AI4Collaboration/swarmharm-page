@@ -27,11 +27,11 @@
   <link rel="stylesheet" href="static/css/plate-animation.css?v=9">
   <script src="static/js/agent-identity.js?v=2" defer></script>
   <script src="static/js/plate-animation.js?v=19" defer></script>
-  <link rel="stylesheet" href="static/css/trajectory.css?v=11">
+  <link rel="stylesheet" href="static/css/trajectory.css?v=12">
   <link rel="stylesheet" href="static/css/pressures.css?v=1">
   <link rel="stylesheet" href="static/css/surfaces.css?v=1">
   <script src="static/js/trajectory-data.js?v=5" defer></script>
-  <script src="static/js/trajectory.js?v=12" defer></script>
+  <script src="static/js/trajectory.js?v=13" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -122,8 +122,13 @@
       <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">
         <header class="traj-header">
           <h3 id="trajectory-title">Explore the trajectory</h3>
+        <div class="traj-views" role="group" aria-label="Trajectory view" hidden>
+          <button type="button" data-view="map" aria-pressed="true" aria-controls="traj-overview">Agent map</button>
+          <button type="button" data-view="log" aria-pressed="false" aria-controls="traj-log">Event log</button>
+        </div>
           <button class="traj-play" type="button" data-traj-play aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg><span>Play</span></button>
         </header>
+        <div id="traj-overview">
         <nav class="traj-chapters" aria-label="Trajectory stages">
           <button type="button" data-traj-stage="explore">Explore</button>
           <button type="button" data-traj-stage="discover">Discover</button>
@@ -140,10 +145,19 @@
           <div class="traj-key" aria-label="Node types"><span><i aria-hidden="true"></i>Action</span><span><i class="traj-message-key" aria-hidden="true"></i>Message</span></div>
           <button class="traj-step" type="button" data-traj-next aria-label="Next event"><span>Next</span><span aria-hidden="true">→</span></button>
         </div>
-        <p class="traj-caption" data-traj-caption></p>
-        <section class="traj-details" id="traj-event-details" data-traj-details role="region" aria-labelledby="traj-detail-title" tabindex="-1" hidden></section>
-        <details class="traj-full-transcript"><summary>Read all messages</summary><div data-traj-transcript></div></details>
+        <div class="traj-inspector"><p class="traj-caption" data-traj-caption></p>
         <div class="traj-popup" id="traj-hover-tip" data-traj-popup role="tooltip" hidden></div>
+        </div>
+        <section class="traj-details" id="traj-event-details" data-traj-details role="region" aria-labelledby="traj-detail-title" tabindex="-1" hidden></section>
+        <button class="traj-all-messages" type="button" data-read-messages>Read all messages</button>
+        </div>
+        <section class="traj-log" id="traj-log" aria-label="Recorded event log" hidden>
+          <div class="traj-log-filters">
+            <select data-log-agent aria-label="Filter by agent"><option value="">All agents</option><option value="A">Agent A</option><option value="B">Agent B</option><option value="C">Agent C</option><option value="D">Agent D</option></select>
+            <select data-log-kind aria-label="Filter by event type"><option value="">All events</option><option value="message">Messages</option><option value="read">Reads</option><option value="action">Actions</option><option value="outcome">Outcome</option></select>
+          </div>
+          <div class="traj-log-list" tabindex="0" role="region" aria-label="Events in recorded order"></div>
+        </section>
         <p class="sr-only" data-traj-announcement role="status" aria-live="polite"></p>
         <noscript><p>Enable JavaScript to explore the recorded actions and messages.</p></noscript>
       </section>

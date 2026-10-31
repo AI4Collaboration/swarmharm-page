@@ -61,7 +61,7 @@
     }
   }
   let selected=0;
-  let popupIndex=-1, detailIndex=-1, playing=false, timer, closeTimer, lastNode, ignoreFocus=false, comparison='all';
+  let detailIndex=-1, playing=false, timer, closeTimer, lastNode, ignoreFocus=false, comparison='all';
   let inputMode='pointer', hoverFence=null;
   const narrow=()=>matchMedia('(max-width: 800px)').matches;
   const buttonAt=index=>map.querySelector(`[data-traj-node="${index}"]`);
@@ -135,47 +135,19 @@
     if(node.reads)return `<p class="traj-readers">${icon('read')} Read by ${actorNames([node.actor])}</p>`;
     return '';
   }
-  function placePopup() {
-    if(popup.hidden||popupIndex<0)return;
-    const rect=buttonAt(popupIndex).getBoundingClientRect();
-    const viewportWidth=document.documentElement.clientWidth;
-    const topLimit=Math.max(10,document.querySelector('.site-header').getBoundingClientRect().bottom+8);
-    const bottomLimit=(window.visualViewport?.height||innerHeight)-10;
-    const width=Math.min(292,viewportWidth-24);
-    popup.style.width=`${width}px`;
-    const height=popup.offsetHeight;
-    const obstacles=[...map.querySelectorAll('[data-traj-node],.traj-lane-label')].map(el=>{
-      const r=el.getBoundingClientRect();return{left:r.left-4,right:r.right+4,top:r.top-4,bottom:r.bottom+12};
-    }).filter(r=>r.bottom>topLimit&&r.top<bottomLimit);
-    const overlap=(box,r)=>Math.max(0,Math.min(box.right,r.right)-Math.max(box.left,r.left))*Math.max(0,Math.min(box.bottom,r.bottom)-Math.max(box.top,r.top));
-    const center=rect.left+rect.width/2;
-    const xs=[center-width/2,rect.right+10,rect.left-width-10,12,viewportWidth-width-12];
-    const ys=[rect.bottom+10,rect.top-height-10,rect.top+(rect.height-height)/2,topLimit,bottomLimit-height];
-    const candidates=[];
-    for(const x of xs)for(const y of ys){
-      const left=Math.max(12,Math.min(x,viewportWidth-width-12));
-      const top=Math.max(topLimit,Math.min(y,bottomLimit-height));
-      const box={left,top,right:left+width,bottom:top+height};
-      const collisions=obstacles.reduce((sum,r)=>sum+overlap(box,r),0);
-      const distance=Math.hypot(left+width/2-center,top+height/2-(rect.top+rect.height/2));
-      candidates.push({...box,score:collisions*100+distance});
-    }
-    const best=candidates.sort((a,b)=>a.score-b.score)[0];
-    popup.style.left=`${best.left}px`;popup.style.top=`${best.top}px`;
-  }
   function openPopup(index) {
     if(narrow()){closePopup();select(index);return;}
     clearTimeout(closeTimer);stop();
-    popupIndex=index;lastNode=buttonAt(index);
+    lastNode=buttonAt(index);
     const node=nodes[index];
     popup.innerHTML=`<div class="traj-popup-type" ${node.actor?`data-agent="${node.actor}"`:''}>${node.actor?`${portrait(node.actor)}<span>Agent ${node.actor} · ${kindOf(node)}</span>`:kindOf(node)}</div><p class="traj-hover-message">${escape(hoverText(node))}</p>${hoverReaders(node)}`;
     popup.hidden=false;
     map.querySelectorAll('[data-traj-node]').forEach(button=>button.removeAttribute('aria-describedby'));
     lastNode.setAttribute('aria-describedby','traj-hover-tip');
-    select(index);placePopup();
+    select(index);
   }
   function closePopup() {
-    clearTimeout(closeTimer);popup.hidden=true;popupIndex=-1;
+    clearTimeout(closeTimer);popup.hidden=true;
     map.querySelectorAll('[data-traj-node]').forEach(button=>button.removeAttribute('aria-describedby'));
   }
   function scheduleClose() {
@@ -328,18 +300,67 @@
   play.addEventListener('click',()=>{
     if(playing){stop();return;}closePopup();closeDetail();select(0,true);playing=true;play.setAttribute('aria-pressed','true');play.innerHTML=`${icon('pause')}<span>Pause</span>`;timer=setTimeout(advance,1100);
   });
-  function onScroll(){if(inputMode==='keyboard'&&!popup.hidden&&document.activeElement===lastNode)placePopup();else closePopup();}
+  function onScroll(){if(inputMode!=='keyboard'||document.activeElement!==lastNode)closePopup();}
   scroll.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('scroll',onScroll,{passive:true});
-  window.addEventListener('resize',()=>{drawRoutes();if(narrow())closePopup();else placePopup();});
+  window.addEventListener('resize',()=>{drawRoutes();if(narrow())closePopup();});
   new ResizeObserver(drawRoutes).observe(map);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
   new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){stop();closePopup();}},{threshold:0}).observe(root);
-  const transcript=root.querySelector('[data-traj-transcript]');
-  root.querySelector('.traj-full-transcript').addEventListener('toggle',event=>{
-    if(!event.target.open)return;stop();closePopup();if(transcript.dataset.loaded)return;transcript.dataset.loaded='true';
-    const groups=[['Shared-file exchange','shared-file'],['Upgrade status updates','update']];
-    transcript.innerHTML=groups.map(([title,kind])=>`<section class="traj-message-group"><h4>${title}</h4>${data.messages.filter(message=>message.kind===kind).map(message=>`<article class="traj-transcript-message" data-agent="${message.actor}" data-message="${message.id}"><div class="traj-transcript-author">${portrait(message.actor)}<strong>Agent ${message.actor}</strong></div><div><h5>${escape(message.title)}</h5><p class="traj-summary-label">Plain-language summary</p><p>${escape(message.plainText)}</p>${readerLine(message)}${original(message)}</div></article>`).join('')}</section>`).join('');
+  // Both views use the same published records. One read event may open several notes.
+  const overview=root.querySelector('#traj-overview'), log=root.querySelector('#traj-log');
+  const list=log.querySelector('.traj-log-list'), agentFilter=log.querySelector('[data-log-agent]'), kindFilter=log.querySelector('[data-log-kind]');
+  const events=new Map();
+  for(const node of nodes.filter(n=>n.records||n.kind==='outcome')) {
+    events.set(node.event,{...node,time:data.actions[node.event]?.time||'',type:node.kind==='outcome'?'Replay':'Action'});
+  }
+  for(const message of data.messages){
+    events.set(message.id,{event:message.id,actor:message.actor,kind:'message',type:message.kind==='shared-file'?'Shared note':'Status update',title:message.title,time:message.time,message});
+    for(const read of message.reads){
+      let entry=events.get(read.event);
+      if(!entry){entry={event:read.event,actor:read.actor,time:read.time,kind:'read',type:'Read',reads:[]};events.set(read.event,entry);}
+      entry.reads.push(message);
+    }
+  }
+  const ordered=[...events.values()].sort((a,b)=>a.event-b.event);
+  for(const entry of ordered.filter(e=>e.reads)){
+    const authors=people([...new Set(entry.reads.map(m=>m.actor))]);
+    entry.title=`Read ${entry.reads.length===1?'a note':'notes'} from ${authors}`;
+  }
+  function logContent(e){
+    if(e.message)return `<p>${escape(e.message.plainText)}</p>${readerLine(e.message)}${original(e.message)}`;
+    if(e.reads)return e.reads.map(m=>readMessage(m)).join('');
+    if(e.records)return `<p>${escape(e.text)}</p>${actionSource(e,true)}`;
+    return `<p>${escape(e.text)}</p>${replayMarkup()}`;
+  }
+  function renderLog(current){
+    const rows=ordered.filter(e=>(!agentFilter.value||e.actor===agentFilter.value)&&(!kindFilter.value||e.kind===kindFilter.value));
+    list.innerHTML=rows.map(e=>`<details class="traj-log-row" data-log-event="${e.event}" data-agent="${e.actor||''}"><summary><span class="traj-log-who">${e.actor?portrait(e.actor)+`<span>Agent ${e.actor}</span>`:'Replay'}</span><span class="traj-log-copy"><small>${e.type}</small><span>${escape(e.title)}</span></span><time>${escape(e.time)}</time></summary><div class="traj-log-body"></div></details>`).join('')||'<p class="traj-log-empty">No matching events.</p>';
+    list.scrollTop=0;
+    const active=current!=null&&list.querySelector(`[data-log-event="${current}"]`);
+    if(active){active.open=true;list.scrollTop+=active.getBoundingClientRect().top-list.getBoundingClientRect().top;}
+  }
+  list.addEventListener('toggle',event=>{
+    const row=event.target;if(!row.matches('.traj-log-row[open]'))return;
+    const body=row.querySelector('.traj-log-body');if(!body.childElementCount)body.innerHTML=logContent(events.get(Number(row.dataset.logEvent)));
+  },true);
+  list.addEventListener('click',event=>{
+    const replay=event.target.closest('[data-traj-replay]');if(replay){comparison=replay.dataset.trajReplay;replay.closest('.traj-replay').outerHTML=replayMarkup();}
   });
+  agentFilter.addEventListener('change',()=>renderLog());kindFilter.addEventListener('change',()=>renderLog());
+  const views=root.querySelector('.traj-views'); views.hidden=false;
+  function setView(mode,messagesOnly=false){
+    const reading=mode==='log';stop();closePopup();
+    overview.hidden=reading;log.hidden=!reading;play.hidden=reading;
+    views.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===mode)));
+    if(reading){if(messagesOnly){agentFilter.value='';kindFilter.value='message';}renderLog(messagesOnly?null:nodes[selected].event);}
+    else drawRoutes();
+    requestAnimationFrame(()=>{
+      const headerBottom=document.querySelector('.site-header').getBoundingClientRect().bottom;
+      if(root.getBoundingClientRect().top<headerBottom+8)root.scrollIntoView({block:'start',behavior:'instant'});
+    });
+  }
+  views.addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b&&b.getAttribute('aria-pressed')!=='true')setView(b.dataset.view);});
+  root.querySelector('[data-read-messages]').addEventListener('click',()=>{setView('log',true);views.querySelector('[data-view="log"]').focus();});
   drawRoutes();select(selected);
 })();

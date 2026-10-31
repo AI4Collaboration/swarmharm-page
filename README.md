@@ -18,9 +18,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   maintenance rollout (r19). The trajectory viewer uses agent lanes and
   event nodes. Hover or focus a node for a brief message summary and its readers.
   Click or tap to open the complete original and tool arguments in a normal-flow
-  section below the timeline. Hover cards contain no expandable records or controls.
+  section below the timeline. Hover summaries occupy a reserved area below the map.
   Plain-language summaries remain distinct from verbatim messages and actions.
-  Hovering a new node replaces the small card immediately; placement avoids nodes.
+  The Event log presents recorded steps in order, with agent and event-type filters.
+  Its rows expand in place to show source messages, reads or tool arguments. This
+  reading pattern draws on the [Harbor trial viewer](https://github.com/harbor-framework/harbor/blob/main/apps/viewer/app/routes/trial.tsx).
   Agent A is steel blue, B patina teal, C aged brass and D graphite. Robot shells use these colors
   in the static plates, animation and trajectory portraits. The first two plates
   show D on the left and C on the right, matching the shared-file request and read.
@@ -82,7 +84,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   report on encoded coordination, and Omohundro's *The Basic AI Drives*. These
   sources motivate test conditions; they are not SwarmHarm findings.
 - **Interface materials:** a translucent navigation shell, rounded playback
-  controls and a compact frosted hover card provide a shared interaction style.
+  controls keep navigation distinct from the flat event-reading surface.
   Following [Apple's material guidance](https://developer.apple.com/design/human-interface-guidelines/materials),
   glass is limited to navigation and controls. Main content, figures and full
   records keep an opaque, flat reading surface. Text remains opaque; browsers
