@@ -12,10 +12,12 @@
 .pressure-matrix tr > :last-child { border-left:1px solid var(--line); }
 .pressure-matrix td > p { margin:0; color:var(--text); font:14px/1.7 var(--font); text-wrap:pretty; }
 .pressure-visual { display:block; width:240px; max-width:100%; height:auto; margin:0 auto 12px; fill:none; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; }
-.pressure-loss { fill:var(--risk); color:var(--risk); }
-.pressure-gain { fill:var(--benign); color:var(--benign); }
-.pressure-capacity { fill:var(--line); stroke:none; }
-.pressure-stable { fill:#3d688a; }
+.pressure-hardware { fill:none; stroke:var(--muted); stroke-width:1.6; }
+.pressure-device { fill:var(--bg); }
+.pressure-module { fill:var(--surface); stroke:var(--text); }
+.pressure-chip { fill:var(--bg); stroke:var(--text); }
+.pressure-socket { stroke:var(--text); stroke-width:1.8; }
+.pressure-docking { stroke-dasharray:2 4; opacity:.7; }
 .pressure-agent-label { fill:var(--muted); stroke:none; font:500 16px var(--font); text-anchor:middle; }
 .pressure-paper { fill:var(--bg); stroke:var(--icon); }
 .pressure-rule { stroke:var(--line); }

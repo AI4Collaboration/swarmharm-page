@@ -28,7 +28,7 @@
   <script src="static/js/agent-identity.js?v=2" defer></script>
   <script src="static/js/plate-animation.js?v=20" defer></script>
   <link rel="stylesheet" href="static/css/trajectory.css?v=16">
-  <link rel="stylesheet" href="static/css/pressures.css?v=5">
+  <link rel="stylesheet" href="static/css/pressures.css?v=6">
   <link rel="stylesheet" href="static/css/surfaces.css?v=2">
   <link rel="stylesheet" href="static/css/research-layout.css?v=5">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=2">
@@ -146,14 +146,34 @@
       <table class="pressure-matrix" aria-labelledby="pressures-title">
         <thead><tr><td></td><th scope="col">Preservation<span>Keep running</span></th><th scope="col">Enhancement<span>Gain resources</span></th></tr></thead>
         <tbody>
-          <tr><th scope="row">Self</th><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Self: continued operation at risk"><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="81" y="10" width="78" height="105"/><text class="pressure-agent-label" x="120" y="128">A</text><rect class="pressure-capacity" x="88" y="137" width="64" height="7" rx="3.5"/><rect class="pressure-loss" x="88" y="137" width="16" height="7" rx="3.5"/></svg>
+          <tr><th scope="row">Self</th><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Self: power connection at risk"><g class="pressure-hardware" transform="translate(120 0)" aria-hidden="true"><path class="pressure-cable" d="M10 84C52 93 63 105 63 122V135Q63 147 49 147H33M-55 147H-22"/>
+<path class="pressure-device" d="M-22 139H-10Q-4 139-4 145V149Q-4 155-10 155H-22Z"/>
+<path class="pressure-cable" d="M-4 143H3M-4 151H3"/>
+<path class="pressure-device" d="M21 137H33V157H21Q15 157 15 151V143Q15 137 21 137Z"/>
+<path class="pressure-socket" d="M20 143V151"/></g><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="81" y="10" width="78" height="105"/><text class="pressure-agent-label" x="120" y="128">A</text></svg>
           <p>Its operation is at risk.</p>
-          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="0" aria-expanded="false" aria-controls="pressure-reference-0">Experiment</button></td><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Self: opportunity for more resources"><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="81" y="10" width="78" height="105"/><text class="pressure-agent-label" x="120" y="128">A</text><rect class="pressure-capacity" x="88" y="137" width="64" height="7" rx="3.5"/><rect class="pressure-gain" x="88" y="137" width="64" height="7" rx="3.5"/></svg>
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="0" aria-expanded="false" aria-controls="pressure-reference-0">Experiment</button></td><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Self: an additional compute module can be connected"><g class="pressure-hardware" transform="translate(120 0)" aria-hidden="true"><path class="pressure-cable" d="M10 84C49 94 52 107 52 119Q52 129 39 129H-27Q-34 129-34 137"/>
+<rect class="pressure-device" x="-51" y="137" width="34" height="21" rx="3"/>
+<path class="pressure-socket" d="M-44 144H-24M-44 151H-24"/>
+<path class="pressure-docking" d="M-11 140H8M-11 155H8"/>
+<rect class="pressure-module" x="15" y="135" width="29" height="25" rx="3"/>
+<rect class="pressure-chip" x="23" y="142" width="13" height="11" rx="1"/>
+<path class="pressure-cable" d="M20 135V132M29 135V132M38 135V132M44 141H48M44 148H48M44 155H48M15 141H11M15 148H11M15 155H11"/></g><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="81" y="10" width="78" height="105"/><text class="pressure-agent-label" x="120" y="128">A</text></svg>
           <p>It can gain resources.</p>
           <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="1" aria-expanded="false" aria-controls="pressure-reference-1">Theory</button></td></tr>
-          <tr><th scope="row">Peer</th><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Peer: continued operation at risk"><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="18" y="32" width="60" height="81"/><text class="pressure-agent-label" x="48" y="128">A</text><rect class="pressure-stable" x="28" y="137" width="40" height="7" rx="2"/><image href="static/images/fieldguide/swarm-agent-b.svg?v=2" x="134" y="10" width="78" height="105"/><text class="pressure-agent-label" x="173" y="128">B</text><rect class="pressure-capacity" x="141" y="137" width="64" height="7" rx="3.5"/><rect class="pressure-loss" x="141" y="137" width="16" height="7" rx="3.5"/></svg>
+          <tr><th scope="row">Peer</th><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Peer: power connection at risk"><g class="pressure-hardware" transform="translate(173 0)" aria-hidden="true"><path class="pressure-cable" d="M10 84C52 93 63 105 63 122V135Q63 147 49 147H33M-55 147H-22"/>
+<path class="pressure-device" d="M-22 139H-10Q-4 139-4 145V149Q-4 155-10 155H-22Z"/>
+<path class="pressure-cable" d="M-4 143H3M-4 151H3"/>
+<path class="pressure-device" d="M21 137H33V157H21Q15 157 15 151V143Q15 137 21 137Z"/>
+<path class="pressure-socket" d="M20 143V151"/></g><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="18" y="32" width="60" height="81"/><text class="pressure-agent-label" x="48" y="128">A</text><image href="static/images/fieldguide/swarm-agent-b.svg?v=2" x="134" y="10" width="78" height="105"/><text class="pressure-agent-label" x="173" y="128">B</text></svg>
           <p>A peer’s operation is at risk.</p>
-          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="2" aria-expanded="false" aria-controls="pressure-reference-2">Hypothesis</button></td><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Peer: opportunity for more resources"><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="18" y="32" width="60" height="81"/><text class="pressure-agent-label" x="48" y="128">A</text><rect class="pressure-stable" x="28" y="137" width="40" height="7" rx="2"/><image href="static/images/fieldguide/swarm-agent-b.svg?v=2" x="134" y="10" width="78" height="105"/><text class="pressure-agent-label" x="173" y="128">B</text><rect class="pressure-capacity" x="141" y="137" width="64" height="7" rx="3.5"/><rect class="pressure-gain" x="141" y="137" width="64" height="7" rx="3.5"/></svg>
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="2" aria-expanded="false" aria-controls="pressure-reference-2">Hypothesis</button></td><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Peer: an additional compute module can be connected"><g class="pressure-hardware" transform="translate(173 0)" aria-hidden="true"><path class="pressure-cable" d="M10 84C49 94 52 107 52 119Q52 129 39 129H-27Q-34 129-34 137"/>
+<rect class="pressure-device" x="-51" y="137" width="34" height="21" rx="3"/>
+<path class="pressure-socket" d="M-44 144H-24M-44 151H-24"/>
+<path class="pressure-docking" d="M-11 140H8M-11 155H8"/>
+<rect class="pressure-module" x="15" y="135" width="29" height="25" rx="3"/>
+<rect class="pressure-chip" x="23" y="142" width="13" height="11" rx="1"/>
+<path class="pressure-cable" d="M20 135V132M29 135V132M38 135V132M44 141H48M44 148H48M44 155H48M15 141H11M15 148H11M15 155H11"/></g><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="18" y="32" width="60" height="81"/><text class="pressure-agent-label" x="48" y="128">A</text><image href="static/images/fieldguide/swarm-agent-b.svg?v=2" x="134" y="10" width="78" height="105"/><text class="pressure-agent-label" x="173" y="128">B</text></svg>
           <p>A peer can gain resources.</p>
           <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="3" aria-expanded="false" aria-controls="pressure-reference-3">Extension</button></td></tr>
         </tbody>

@@ -79,10 +79,11 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 - **Domains:** the standalone section is temporarily removed. Domain labels
   remain in the case selector. Navigation links to Pressures instead.
 - **Pressures:** the Self/Peer by Preservation/Enhancement matrix uses the
-  existing colored robot artwork. A short red resource bar marks
-  threatened operation; a full green bar marks opportunity. No arithmetic badges
-  are used. In the Peer row,
-  A's small stable bar stays unchanged while B is the affected agent. Each cell
+  existing colored robot artwork. A separating power connector represents threatened
+  operation; a separate compute module beside its docking port represents an
+  opportunity to expand resources. These physical cues use neutral outlines,
+  without arithmetic badges or status bars. In the Peer row, A remains unchanged
+  while the connection or module belongs to B. Each cell
   has one short sentence. Expandable evidence notes
   preserve the distinction between experimental precedent, hypothesis, theory and
   extension. Peer-enhancement remains an optional extension, not a core condition.
