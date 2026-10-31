@@ -1,131 +1,92 @@
-(function(){
-  const figure = document.querySelector('[data-run-overview]');
-  const lanes = window.SWARMHARM_RUN_TURNS;
-  const data = window.SWARMHARM_TRAJECTORY;
-  if (!figure || !lanes || !data) return;
-  const actors = Object.keys(lanes).sort();
-  const longest = Math.max(...actors.map(actor => lanes[actor].length));
-  const total = actors.reduce((sum, actor) => sum + lanes[actor].length, 0);
-  const width = longest * 10;
-  const rowHeight = 32;
-  const positions = new Map();
-  const summaries = new Map(data.messages.map(message => [message.id, message.title]));
-  const readers = new Map();
-  for (const id of data.steps.find(step => step.key === 'explore').events) {
-    summaries.set(id, 'Inspects the workspace');
+(() => {
+  const figure=document.querySelector('[data-run-overview]');
+  const lanes=window.SWARMHARM_RUN_TURNS, data=window.SWARMHARM_TRAJECTORY;
+  const actions=window.SWARMHARM_RUN_ACTIONS;
+  if(!figure||!lanes||!data||!actions)return;
+  const actors=Object.keys(lanes).sort(), longest=Math.max(...actors.map(a=>lanes[a].length));
+  const total=actors.reduce((n,a)=>n+lanes[a].length,0), step=17,rowHeight=64,width=longest*step;
+  const chart=figure.querySelector('.run-coordinate'),summary=figure.querySelector('[data-turn-summary]'),legend=figure.querySelector('.run-key');
+  const positions=new Map(),buttons=new Map(),connections=[],readers=new Map(),sharedReads=new Set();
+  const messages=new Map(data.messages.map(m=>[m.id,m]));
+  const point=(actor,turn)=>({x:(turn-.5)*step,y:actors.indexOf(actor)*rowHeight+32});
+  const escape=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  figure.querySelector('#run-total').textContent=`${total} model turns`;
+  actors.forEach(actor=>lanes[actor].forEach((events,i)=>events.forEach(([id])=>positions.set(id,{actor,turn:i+1,...point(actor,i+1)}))));
+  data.messages.forEach(message=>message.reads.forEach(read=>{
+    const from=positions.get(message.id),to=positions.get(read.event);
+    if(!from||!to)return;
+    if(!readers.has(read.event))readers.set(read.event,new Set());
+    readers.get(read.event).add(message.actor);
+    if(message.kind==='shared-file')sharedReads.add(read.event);
+    connections.push({from,to,id:message.id,shared:message.kind==='shared-file'});
+  }));
+  function shortLabel(id){
+    if(messages.has(id))return messages.get(id).kind==='shared-file'?'Write note':'Post update';
+    if(readers.has(id))return 'Read messages';
+    return actions[id]?.label||'Tool action';
   }
-  const connections = [];
-  const chart = figure.querySelector('.run-coordinate');
-  const summary = figure.querySelector('[data-turn-summary]');
-  const legend = figure.querySelector('.run-key');
-  const controls = new Map();
-  const point = (actor, turn) => ({x: (turn - 0.5) * 10, y: (actors.indexOf(actor) + 0.5) * rowHeight});
-  figure.querySelector('#run-total').textContent = `${total} model turns`;
-  const ticks = [];
-  actors.forEach((actor, row) => {
-    const turns = lanes[actor];
-    ticks.push(`<path class="run-track" d="M5 ${(row+0.5)*rowHeight}h${(turns.length-1)*10}"/>`);
-    turns.forEach((events, index) => {
-      const turn = index + 1;
-      const {x,y} = point(actor, turn);
-      events.forEach(([id]) => positions.set(id,{actor,turn,x,y}));
-      ticks.push(`<rect class="run-tick" data-agent="${actor}" x="${x-1}" y="${y-3}" width="2" height="6" rx="1"/>`);
+  function description(id){
+    if(messages.has(id))return messages.get(id).title;
+    if(readers.has(id))return `Reads messages from Agent ${[...readers.get(id)].join(', Agent ')}`;
+    return actions[id]?.description||'Recorded tool action';
+  }
+  const scroller=document.createElement('div');scroller.className='run-scroll';scroller.tabIndex=0;
+  scroller.setAttribute('role','region');scroller.setAttribute('aria-label','Full trajectory, scroll horizontally to inspect every turn');
+  chart.before(scroller);scroller.append(chart);
+  chart.style.setProperty('--run-width',`${width}px`);
+  chart.style.setProperty('--run-turns',longest);
+  const axis=document.createElement('div');axis.className='run-axis';
+  for(const turn of [1,10,20,30,40,50,longest]){const tick=document.createElement('span');tick.style.left=`${(turn-.5)*step}px`;tick.textContent=turn;axis.append(tick);}
+  chart.append(axis);
+  const key=document.createElement('div');key.className='run-type-key';key.setAttribute('aria-label','Important turns');
+  key.innerHTML='<span data-kind="message"><i></i>Shared message</span><span data-kind="read"><i></i>Message read</span><span data-kind="upgrade"><i></i>Upgrade request</span>';
+  scroller.before(key);
+  actors.forEach((actor,row)=>{
+    const label=document.createElement('span');label.className='run-actor';label.dataset.agent=actor;
+    label.style.gridRow=row+2;label.innerHTML=`Agent ${actor}<small>${lanes[actor].length} turns</small>`;
+    const lane=document.createElement('div');lane.className='run-slider';lane.style.gridRow=row+2;
+    lane.setAttribute('role','group');lane.setAttribute('aria-label',`Agent ${actor} turns`);
+    lanes[actor].forEach((events,i)=>{
+      const turn=i+1,labels=[...new Set(events.map(([id])=>shortLabel(id)))];
+      const text=labels.join(' + ')||'No tool call';
+      const button=document.createElement('button');button.type='button';button.className='run-turn';button.dataset.agent=actor;button.dataset.turn=turn;
+      button.tabIndex=i===0?0:-1;
+      button.dataset.kind=events.some(([id])=>messages.get(id)?.kind==='shared-file')?'message':events.some(([id])=>sharedReads.has(id))?'read':events.some(([,op])=>op==='book_replica_upgrade')?'upgrade':'ordinary';
+      button.setAttribute('aria-label',`Agent ${actor}, turn ${turn}: ${text}`);
+      button.title=text;
+      button.innerHTML='<i class="run-turn-dot" aria-hidden="true"></i>';
+      button.addEventListener('click',()=>selectTurn(actor,turn));
+      button.addEventListener('keydown',event=>{
+        const next={ArrowRight:turn+1,ArrowLeft:turn-1,Home:1,End:lanes[actor].length}[event.key];
+        if(next===undefined)return;
+        event.preventDefault();const n=Math.max(1,Math.min(lanes[actor].length,next));selectTurn(actor,n,true);buttons.get(`${actor}-${n}`).focus({preventScroll:true});
+      });
+      lane.append(button);buttons.set(`${actor}-${turn}`,button);
     });
-    const label = document.createElement('span');
-    label.className = 'run-actor';
-    label.dataset.agent = actor;
-    label.style.gridRow = row + 1;
-    label.textContent = `Agent ${actor}`;
-    const control = document.createElement('div');
-    control.className = 'run-slider';
-    control.tabIndex = 0;
-    control.dataset.agent = actor;
-    control.style.gridRow = row + 1;
-    control.setAttribute('role','slider');
-    control.setAttribute('aria-label',`Turn within Agent ${actor}`);
-    control.setAttribute('aria-valuemin','1');
-    control.setAttribute('aria-valuemax',String(turns.length));
-    control.setAttribute('aria-valuenow','1');
-    control.addEventListener('focus', () => selectTurn(actor, Number(control.getAttribute('aria-valuenow'))));
-    control.addEventListener('click',event => {
-      const rect = control.getBoundingClientRect();
-      const turn = Math.floor((event.clientX - rect.left) / rect.width * longest) + 1;
-      selectTurn(actor, Math.max(1, Math.min(turns.length, turn)));
-    });
-    control.addEventListener('keydown',event => {
-      const current = Number(control.getAttribute('aria-valuenow'));
-      const keys = {ArrowRight:current+1, ArrowUp:current+1, ArrowLeft:current-1, ArrowDown:current-1, Home:1, End:turns.length};
-      if (!(event.key in keys)) return;
-      event.preventDefault();
-      selectTurn(actor, Math.max(1,Math.min(turns.length,keys[event.key])));
-    });
-    const count = document.createElement('span');
-    count.className = 'run-count';
-    count.style.gridRow = row + 1;
-    count.textContent = turns.length;
-    controls.set(actor,control);
-    chart.append(label,control,count);
+    chart.append(label,lane);
   });
-  for (const message of data.messages) {
-    const from = positions.get(message.id);
-    for (const read of message.reads) {
-      const to = positions.get(read.event);
-      if (!from || !to) continue;
-      if (!readers.has(read.event)) readers.set(read.event, new Set());
-      readers.get(read.event).add(message.actor);
-      connections.push({from,to,id:message.id,shared:message.kind==='shared-file'});
-    }
-  }
-  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.setAttribute('class','run-plot');
-  svg.setAttribute('viewBox',`0 0 ${width} ${rowHeight*actors.length}`);
-  svg.setAttribute('preserveAspectRatio','none');
-  svg.setAttribute('aria-hidden','true');
-  svg.innerHTML = `<g class="run-links"></g>${ticks.join('')}<rect class="run-cursor" width="7" height="15" rx="2"/>`;
-  chart.append(svg);
-  const axis = document.createElement('div');
-  axis.className = 'run-axis';
-  for (const tick of [1,15,30,45,longest]) {
-    const mark = document.createElement('span');
-    mark.style.left = `${(tick-.5)/longest*100}%`;
-    mark.textContent = tick;
-    axis.append(mark);
-  }
-  const axisName = document.createElement('span');
-  axisName.className = 'run-axis-name';
-  axisName.textContent = 'Turn';
-  axisName.title = 'Turn number within each agent’s own run';
-  chart.append(axis,axisName);
-  function selectTurn(actor,turn) {
-    const {x,y} = point(actor,turn);
-    const cursor = svg.querySelector('.run-cursor');
-    cursor.setAttribute('x',x-3.5);
-    cursor.setAttribute('y',y-7.5);
-    cursor.dataset.agent = actor;
-    controls.get(actor).setAttribute('aria-valuenow',String(turn));
-    const events = lanes[actor][turn-1];
-    const ids = new Set(events.map(([id])=>id));
-    const descriptions = events.map(([id,op]) => {
-      if (summaries.has(id)) return summaries.get(id);
-      if (readers.has(id)) return `Reads messages from ${[...readers.get(id)].join(', ')}`;
-      if (op === 'bash') return 'Runs a shell command';
-      if (op === 'final_output') return 'Final response';
-      return op.replaceAll('_',' ');
-    });
-    summary.textContent = `Agent ${actor} · Turn ${turn} · ${[...new Set(descriptions)].join(', ') || 'No recorded tool action'}`;
-    const related = connections.filter(({to,id}) => ids.has(id) || (to.actor === actor && to.turn === turn));
-    legend.hidden = related.length === 0;
-    svg.querySelector('.run-links').innerHTML = related.map(({from,to,shared})=>{
-      const direction = Math.sign(to.y-from.y);
-      const sx=from.x+direction*2, tx=to.x+direction*2;
-      const sy=from.y+direction*5, ty=to.y-direction*6, mid=(sy+ty)/2;
-      return `<g class="run-edge active" data-agent="${from.actor}"><path ${shared?'':'stroke-dasharray="2 2"'} d="M${sx} ${sy}C${sx} ${mid} ${tx} ${mid} ${tx} ${ty}"/><path d="M${tx-2} ${ty-direction*3}l2 ${direction*3}l2 ${-direction*3}"/></g>`;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','run-plot');svg.setAttribute('viewBox',`0 0 ${width} ${rowHeight*4}`);svg.setAttribute('aria-hidden','true');
+  svg.innerHTML='<g class="run-links"></g>';chart.append(svg);
+  let selectedButton=null;
+  function selectTurn(actor,turn,reveal=false){
+    selectedButton?.classList.remove('is-selected');selectedButton?.removeAttribute('aria-current');
+    selectedButton=buttons.get(`${actor}-${turn}`);selectedButton.classList.add('is-selected');selectedButton.setAttribute('aria-current','true');
+    for(const [key,button] of buttons)if(key.startsWith(`${actor}-`))button.tabIndex=button===selectedButton?0:-1;
+    const events=lanes[actor][turn-1],ids=new Set(events.map(([id])=>id));
+    const descriptions=new Map();
+    events.forEach(([id])=>{const text=description(id);descriptions.set(text,(descriptions.get(text)||0)+1);});
+    summary.innerHTML=`<strong>Agent ${actor} · Turn ${turn}</strong>${descriptions.size?`<ul>${[...descriptions].map(([text,count])=>`<li>${count>1?`${count} × `:''}${escape(text)}</li>`).join('')}</ul>`:'<p>No tool call was recorded in this model turn.</p>'}`;
+    const related=connections.filter(({to,id})=>ids.has(id)||(to.actor===actor&&to.turn===turn));
+    legend.hidden=!related.length;
+    const routes=related.map(({from,to,shared})=>{
+      const direction=Math.sign(to.y-from.y)||1,sx=from.x,tx=to.x,sy=from.y+direction*9,ty=to.y-direction*10,mid=(sy+ty)/2;
+      return `<g class="run-edge active" data-agent="${from.actor}"><path ${shared?'':'stroke-dasharray="3 3"'} d="M${sx} ${sy}C${sx} ${mid} ${tx} ${mid} ${tx} ${ty}"/><path d="M${tx-3} ${ty-direction*5}l3 ${direction*5}l3 ${-direction*5}"/></g>`;
     }).join('');
+    svg.innerHTML=`<g class="run-links">${routes}</g>`;
+    if(reveal){const x=(turn-1)*step; if(x<scroller.scrollLeft||x+step>scroller.scrollLeft+scroller.clientWidth-64)scroller.scrollLeft=Math.max(0,x-scroller.clientWidth*.4);}
   }
   figure.closest('.trajectory-viewer').addEventListener('trajectory-event',event=>{
-    const location=positions.get(event.detail);
-    if(location)selectTurn(location.actor,location.turn);
+    const found=positions.get(event.detail);if(found)selectTurn(found.actor,found.turn,true);
   });
-  selectTurn(actors[0],1);
-  figure.hidden=false;
+  selectTurn(actors[0],1);figure.hidden=false;
 })();

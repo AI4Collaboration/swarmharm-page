@@ -19,10 +19,6 @@
   const clamp = (t, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, t));
   const smooth = t => { t = clamp(t); return t * t * (3 - 2 * t); };
   const mix = (a, b, t) => a + (b - a) * t;
-  const bezier = (a, b, c, d, t) => {
-    const u = 1 - t;
-    return u*u*u*a + 3*u*u*t*b + 3*u*t*t*c + t*t*t*d;
-  };
   function fillPath(context, path, color) {
     context.save();
     context.translate(x0, y0);
@@ -45,7 +41,7 @@
       const stagger = (Math.round(y / step) % 2) * step * .5;
       for (let x = stagger; x < W; x += step) {
         if (pixels[(Math.floor(y)*mask.width+Math.floor(x))*4+3] > 128) {
-          points.push({x:x+(random()-.5)*step*.18, y:y+(random()-.5)*step*.18});
+          points.push({x:x+(random()-.5)*step*.72, y:y+(random()-.5)*step*.72});
         }
       }
     }
@@ -63,13 +59,14 @@
     const dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.width = Math.round(W*dpr); canvas.height = Math.round(H*dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    scale = W / 470; x0 = 10 * scale; y0 = 42 * scale;
+    scale = W / 470; x0 = 10 * scale; y0 = 30 * scale;
     seed = 7919;
     const step = clamp(1.35*scale, .9, 2.4);
     const dot = clamp(.56*scale, .4, 1.12);
     grains = targets(swarmPath,step).map(p => ({
-      x:p.x, y:p.y, sx:p.x+(random()-.5)*48*scale,
-      sy:p.y+(random()-.5)*46*scale, r:dot*(.8+random()*.4), mover:-1
+      x:p.x, y:p.y, sx:p.x-(28+random()*65)*scale,
+      sy:p.y+(random()-.5)*38*scale, r:dot*(.55+random()*.85), mover:-1,
+      arrival:590+random()*520, delay:random()*180, wave:random()*Math.PI*2
     }));
     const pool = grains.map((_,i) => i);
     for (let i=pool.length-1;i>0;i--) {
@@ -77,12 +74,11 @@
     }
     transfers = targets(harmPath,step).map((p,i) => {
       const source = grains[pool[i % pool.length]];
-      const progress = clamp((p.x/scale-263)/180);
-      const start = 1150 + progress*1530 + random()*470;
-      const particle = {x:p.x,y:p.y,source,start,travel:1570+random()*760,
-        c1x:source.x+(30+random()*40)*scale, c1y:Math.max(5,y0-H*(.17+random()*.16)),
-        c2x:p.x-(20+random()*50)*scale, c2y:Math.max(5,y0-H*(.17+random()*.16)),
-        r:dot*(.8+random()*.4), early:i<grains.length*.048};
+      const start = 1200 + source.x/W*900 + random()*650;
+      const stream = Math.floor(random()*5);
+      const particle = {x:p.x,y:p.y,source,start,travel:1550+random()*1050,
+        lift:(10+random()*12)*scale, stream, wave:stream*1.7+(random()-.5)*.6,
+        r:dot*(.55+random()*.85), early:i<grains.length*.048};
       if (source.mover === -1) source.mover = i;
       return particle;
     });
@@ -96,11 +92,20 @@
     ctx.globalAlpha = alpha; ctx.fillStyle = color;
     ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
   }
+  function windPosition(p,at) {
+    const t=1-Math.pow(1-at,1.5), envelope=Math.sin(Math.PI*at);
+    const gust=Math.sin(at*10+p.wave), eddy=Math.cos(at*10+p.wave);
+    return [mix(p.source.x,p.x,t)+envelope*scale*(9*gust+3*Math.sin(at*23+p.wave*2)),
+      mix(p.source.y,p.y,t)-p.lift*envelope+envelope*scale*(6*eddy+2*Math.sin(at*21+p.wave))];
+  }
   function draw() {
     ctx.clearRect(0,0,W,H);
-    const assembled = 1-Math.pow(1-clamp(elapsed/1100),3);
     for (const p of grains) {
-      const x=mix(p.sx,p.x,assembled), y=mix(p.sy,p.y,assembled);
+      const u=clamp((elapsed-p.delay)/p.arrival);
+      const assembled=1-Math.pow(1-u,2);
+      const ripple=Math.sin(Math.PI*u)*(1-u);
+      const x=mix(p.sx,p.x,assembled)+Math.sin(u*11+p.wave)*5*scale*ripple;
+      const y=mix(p.sy,p.y,assembled)+Math.sin(u*15+p.wave)*9*scale*ripple;
       const transfer=transfers[p.mover];
       if (!transfer) { dot(x,y,p.r,ink,.96); continue; }
       if (elapsed < transfer.start) {
@@ -111,9 +116,14 @@
     const solid = smooth((elapsed-5100)/900);
     for (const p of transfers) {
       if (elapsed < p.start) continue;
-      const t=smooth((elapsed-p.start)/p.travel);
-      dot(bezier(p.source.x,p.c1x,p.c2x,p.x,t),bezier(p.source.y,p.c1y,p.c2y,p.y,t),
-        p.r,red,(1-solid)*smooth((elapsed-p.start)/100));
+      const u=clamp((elapsed-p.start)/p.travel);
+      // Cohesive eddies plus smaller ripples, with no motion at the destination.
+      const [x,y]=windPosition(p,u), alpha=(1-solid)*smooth((elapsed-p.start)/110);
+      if (u>.02 && u<.92 && p.r>scale*.5) {
+        const [px,py]=windPosition(p,Math.max(0,u-.012));
+        dot(px,py,p.r*.7,red,alpha*.2);
+      }
+      dot(x,y,p.r,red,alpha);
     }
     if (solid) { ctx.globalAlpha=solid; fillPath(ctx,harmPath,red); }
     ctx.globalAlpha=1;

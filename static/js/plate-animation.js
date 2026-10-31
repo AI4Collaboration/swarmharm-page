@@ -3,8 +3,7 @@
   if (!figure) return;
   const steps = [...figure.querySelectorAll('.life-step')];
   const images = steps.map(step => step.querySelector('img'));
-  const button = figure.querySelector('[data-flow-toggle]');
-  if (images.length !== 4 || images.some(image => !image) || !button) return;
+  if (images.length !== 4 || images.some(image => !image)) return;
 
   const sources = images.map(image => image.dataset.plateSource || image.getAttribute('src'));
   const NS = 'http://www.w3.org/2000/svg';
@@ -528,9 +527,8 @@
     let elapsed = 0;
     const visible = [false, false, false, false];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    // This function runs only after Play is pressed. Offscreen scenes suspend
-    // the same clock, and reduced motion uses a slower pace.
-    let paused = false, previous = null, frame = 0;
+    // Start automatically. Offscreen scenes suspend the shared story clock.
+    let previous = null, frame = 0;
     let pace = reduced.matches ? .7 : 1;
 
     function render(force = false) {
@@ -544,14 +542,9 @@
       cancelAnimationFrame(frame);
       frame = 0;
       previous = null;
-      const running = !paused && visible.some(Boolean) && !document.hidden;
+      const running = visible.some(Boolean) && !document.hidden;
       figure.dataset.flowRunning = String(running);
-      steps.forEach((step,i) => step.classList.toggle('is-current',visible[i]&&!paused));
-      button.setAttribute('aria-label', paused ? 'Play the four-stage animation' : 'Pause the four-stage animation');
-      button.title = paused ? 'Play animation' : 'Pause animation';
-      button.setAttribute('aria-pressed', String(!paused));
-      button.querySelector('path').setAttribute('d', paused ? 'm8 5 10 7-10 7Z' : 'M8 5v14M16 5v14');
-      button.querySelector('[data-flow-label]').textContent = paused ? 'Play animation' : 'Pause animation';
+      steps.forEach((step,i) => step.classList.toggle('is-current',visible[i]));
       if (running) frame = requestAnimationFrame(tick);
     }
     function tick(now) {
@@ -563,12 +556,6 @@
       render();
       frame = requestAnimationFrame(tick);
     }
-    button.hidden = false;
-    button.addEventListener('click', () => {
-      paused = !paused;
-      render();
-      sync();
-    });
     reduced.addEventListener('change', () => {
       pace = reduced.matches ? .7 : 1;
     });
@@ -583,8 +570,8 @@
         });
         const first = visible.findIndex(Boolean);
         // Advance to the visible chapter on phones while retaining one clock.
-        // Returning to an earlier chapter restarts it; pausing preserves the pose.
-        if (!paused && first >= 0 && first !== previousFirst) {
+        // Returning to an earlier chapter restarts it.
+        if (first >= 0 && first !== previousFirst) {
           const clock = elapsed / STORY_DURATION;
           if (previousFirst < 0 || clock < STORY_STARTS[first] ||
               (first < previousFirst && clock > STORY_ENDS[first])) {
@@ -602,14 +589,6 @@
     return true;
   }
 
-  // Leave the original stills in place until the visitor chooses to animate.
-  // Initialize once, then use the same button to pause and resume the clock.
-  async function launch() {
-    button.disabled = true;
-    const started = await start();
-    button.disabled = false;
-    if (!started) button.addEventListener('click', launch, { once: true });
-  }
-  button.hidden = false;
-  button.addEventListener('click', launch, { once: true });
+  // Keep stills as a fallback if an artwork asset cannot be decoded.
+  start();
 })();

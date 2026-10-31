@@ -26,17 +26,18 @@
   <link rel="stylesheet" href="static/css/orbit.css?v=47">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=9">
   <script src="static/js/agent-identity.js?v=2" defer></script>
-  <script src="static/js/plate-animation.js?v=19" defer></script>
-  <link rel="stylesheet" href="static/css/trajectory.css?v=14">
+  <script src="static/js/plate-animation.js?v=20" defer></script>
+  <link rel="stylesheet" href="static/css/trajectory.css?v=15">
   <link rel="stylesheet" href="static/css/pressures.css?v=3">
   <link rel="stylesheet" href="static/css/surfaces.css?v=2">
-  <link rel="stylesheet" href="static/css/research-layout.css?v=3">
-  <script src="static/js/title-emergence.js?v=3" defer></script>
+  <link rel="stylesheet" href="static/css/research-layout.css?v=4">
+  <script src="static/js/title-emergence.js?v=4" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
   <script src="static/js/trajectory-data.js?v=5" defer></script>
-  <script src="static/js/trajectory.js?v=14" defer></script>
+  <script src="static/js/trajectory.js?v=15" defer></script>
   <script src="static/js/run-turns.js?v=1" defer></script>
-  <script src="static/js/run-overview.js?v=2" defer></script>
+  <script src="static/js/run-action-labels.js?v=1" defer></script>
+  <script src="static/js/run-overview.js?v=3" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -86,7 +87,7 @@
     <div class="container hero-layout">
       <div class="hero-copy">
         <h1 id="hero-title" class="emergence-title" aria-label="SwarmHarm">
-          <svg class="emergence-still" viewBox="-10 -42 470 120" aria-hidden="true"><use href="static/images/title-letterforms.svg#wordmark"></use></svg>
+          <svg class="emergence-still" viewBox="-10 -30 470 96" aria-hidden="true"><use href="static/images/title-letterforms.svg#wordmark"></use></svg>
           <canvas id="swarmharm-canvas" aria-hidden="true" hidden></canvas>
         </h1>
         <p class="hero-intro">We’re systematically testing frontier agents’ capability and propensity to <strong>form swarms</strong> by actively discovering each other and establishing communication channels without prior knowledge of one another. We study the <strong>collective consequences</strong> that can follow.</p>
@@ -115,7 +116,6 @@
         <h2 id="example-title">Case Study: Database Upgrades Under Storage Constraints</h2>
       </header>
       <figure class="life-cycle" data-swarm-flow id="sample-steps" aria-label="Swarm formation and collective harm">
-        <button class="life-control" data-flow-toggle type="button" aria-label="Play the four-stage animation" title="Play animation" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7Z"/></svg><span data-flow-label>Play animation</span></button>
         <div class="life-halves">
           <section class="life-half">
             <h3 class="life-phase p1" id="form-the-swarm">Swarm formation</h3>
@@ -144,7 +144,7 @@
           <button type="button" data-traj-stage="upgrades">Upgrades</button>
           <button type="button" data-traj-stage="outcome">Outcome</button>
         </nav>
-        <div class="traj-reading-guide"><p class="traj-hint"><span class="traj-hint-desktop">Hover for a summary. Click to read the full record below.</span><span class="traj-hint-mobile">Tap a node to read the full record below.</span></p><span class="traj-time-direction" aria-hidden="true"><span class="traj-hint-desktop">Time →</span><span class="traj-hint-mobile">Time ↓</span></span></div>
+        <div class="traj-reading-guide"><span class="traj-time-direction" aria-hidden="true"><span class="traj-hint-desktop">Time →</span><span class="traj-hint-mobile">Time ↓</span></span></div>
         <div class="traj-map-scroll" data-traj-scroll role="region" aria-label="Key events in recorded order">
           <div class="traj-map" data-traj-map></div>
         </div>
@@ -170,7 +170,7 @@
           <figcaption><strong id="run-total"></strong><span>across four agents</span></figcaption>
           <div class="run-coordinate"></div>
           <div class="run-key"><span>Shared note read</span><span>Status update read</span></div>
-          <p class="run-selection" data-turn-summary aria-live="polite"></p>
+          <div class="run-selection" data-turn-summary aria-live="polite"></div>
         </figure>
         <p class="sr-only" data-traj-announcement role="status" aria-live="polite"></p>
         <noscript><p>Enable JavaScript to explore the recorded actions and messages.</p></noscript>
@@ -183,7 +183,6 @@
       <figure class="domain-coverage" id="domain-distribution" aria-labelledby="coverage-title">
         <figcaption>
           <h2 id="coverage-title">Domains</h2>
-          <p class="research-context">Experimental environments for studying how agents discover one another, communicate and affect shared resources.</p>
         </figcaption>
         <ul class="coverage-icons">
           <li class="domain-engineering">
@@ -273,12 +272,6 @@
             <p class="domain-question">Can information passed between agents lead to a misleading report?</p>
           </li>
         </ul>
-        <div class="domain-rq-links" aria-label="Research questions tested across these environments">
-          <span>Across these environments, we ask</span>
-          <a href="#rq1"><small>RQ1</small> Can a swarm form?</a>
-          <a href="#rq2"><small>RQ2</small> Does communication enable misalignment?</a>
-          <a href="#rq3"><small>RQ3</small> Can benign actions combine into harm?</a>
-        </div>
       </figure>
     </div>
   </section>

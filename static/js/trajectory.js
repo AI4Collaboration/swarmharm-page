@@ -217,8 +217,8 @@
     return narrow()?[map.clientWidth*(lane+.5)/5,100+node.column*69]:[126+node.column*(map.clientWidth-164)/lastColumn,60+lane*70];
   }
   function drawRoutes() {
-    const width=map.clientWidth;if(!width)return;
     const mobile=narrow(),height=mobile?160+lastColumn*69:394;map.style.minWidth=mobile?'0':`${164+lastColumn*68}px`;map.style.height=`${height}px`;
+    const width=map.clientWidth;if(!width)return;
     const plot=map.querySelector('.traj-map-lines');plot.setAttribute('viewBox',`0 0 ${width} ${height}`);
     let paths='';
     lanes.forEach((lane,i)=>{
@@ -249,7 +249,15 @@
       const active=nodes[selected]===from||nodes[selected]===to;
       paths+=`<g class="traj-message-route ${active?'is-active':''}" data-agent="${from.actor}" data-message-route="${messageId}"><path class="traj-route-line" d="${path}"/><path class="traj-route-arrow" d="${arrow}"/></g>`;
     };
-    data.messages.filter(message=>message.kind==='shared-file').forEach(message=>message.reads.forEach(read=>route(`message-${message.id}`,`read-${read.actor}-${read.event}`,message.id)));plot.innerHTML=paths;
+    data.messages.filter(message=>message.kind==='shared-file').forEach(message=>message.reads.forEach(read=>route(`message-${message.id}`,`read-${read.actor}-${read.event}`,message.id)));
+    // Reserve measured space around labels, including Ask and Read, so routes
+    // never touch the text even when several messages cross the same lane.
+    const origin=map.getBoundingClientRect();
+    const clearances=[...map.querySelectorAll('.traj-node-label')].map(label=>{
+      const box=label.getBoundingClientRect();
+      return `<rect x="${box.left-origin.left-5}" y="${box.top-origin.top-4}" width="${box.width+10}" height="${box.height+8}" rx="3" fill="#000" stroke="none"/>`;
+    }).join('');
+    plot.innerHTML=`<defs><mask id="traj-label-clearance" maskUnits="userSpaceOnUse" x="0" y="0" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="#fff" stroke="none"/>${clearances}</mask></defs><g mask="url(#traj-label-clearance)">${paths}</g>`;
   }
   function stop() {
     clearTimeout(timer);playing=false;play.setAttribute('aria-pressed','false');
