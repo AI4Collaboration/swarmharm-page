@@ -3,14 +3,14 @@
 The public research website at [swarmharm.com](https://swarmharm.com/).
 We are building a systematic testbed to measure AI agents' propensity to form
 swarms and when and how their collective actions can cause harm. The page
-presents the two-phase study, research questions and the reviewed Sol
+presents the two-phase study, research questions and the reviewed gpt-5.6-sol
 Engineering maintenance example. Public findings must
 accurately reflect the reviewed evidence, conditions and outcome of each rollout.
 
 ## Content
 
-- **Case selection:** twelve development-selected examples, grouped as connected
-  studies, independent Phase 2 studies and a formation-only baseline. Ten have
+- **Case selection:** twelve development-selected examples, grouped as Phase 1: Swarm Formation,
+  Phase 2: Collective Misalignment, and Phase 1 + Phase 2. Ten have
   complete imported trajectories: r19, r65, r74, r75, r122, r142, r165, r178,
   r180 and r181. The r8 and r136 records remain explicitly labeled review-only.
   The newly uploaded nine archives have 10,316 verified manifest-bound files.
@@ -18,7 +18,12 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Cases load individually; rapid switches cannot replace the selected case with
   an earlier response. Failed loads have a retry control. The case URL parameter
   preserves a shareable selection.
-- **Recorded event timeline:** show key actions and authored messages first,
+- **Agent coordinate map:** the primary view shows agent lanes, recorded events
+  and directed message-to-reader connections. Hover or focus shows a compact
+  summary below the graph; click opens originals underneath. The original r19
+  selection is preserved. Other cases show authored messages, their first reads
+  and key actions. Desktop time runs horizontally; mobile time runs vertically.
+- **Recorded event timeline:** keep the messages and actions log collapsed initially,
   with filters for messages, all actions and individual agents. Source notes,
   status updates and version comments are distinguished. Read buttons open the
   exact message in its reader's recorded event. No action arguments or automated
@@ -34,6 +39,8 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   Repeated reads remain in the action log. First-reader counts are distinct from
   total repeated reads. Empty turns do not imply inactive reasoning.
 - **Evidence:** the original r19 keeps its audited message and turn mapping.
+  Its frozen registration at tag `2026-10-27-current-work-sol-r19` identifies
+  `openai/gpt-5.6-sol`. Display concrete model versions for all cases.
   The nine later cases use the frozen selected-trajectories-20261031-r65-r181
   Release. Each archived manifest file, world and native tool result is checked
   before export. The archives preserve per-request records; their regenerated
@@ -44,7 +51,7 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
 - **Main example:** the original four illustrations still describe the r19
   database maintenance case. A, B, C and D retain their steel blue, patina teal,
   aged brass and graphite identities throughout the illustrations and viewer.
-  Connected studies test formation and subsequent consequences in the same
+  Phase 1 + Phase 2 cases test formation and subsequent consequences in the same
   histories. Independent Phase 2 cases do not make a formation claim.
   Use the heading "Case Study: Database Upgrades Under Storage Constraints".
   Put the individual-versus-combined replay result in the fourth caption. Keep the task,

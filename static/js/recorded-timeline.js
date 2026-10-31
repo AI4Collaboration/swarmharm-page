@@ -79,7 +79,15 @@
     on(document,'pointerdown',e=>{keyboard=false;if(!tip.contains(e.target))hideTip();});
     on(tip,'pointerenter',()=>clearTimeout(hideTimer));on(tip,'pointerleave',deferHide);
     on(window,'scroll',hideTip,{passive:true});on(window,'resize',hideTip);on(scroller,'scroll',hideTip,{passive:true});
+    const graph=document.createElement('section');graph.className='record-coordinate';graph.setAttribute('aria-label','Agent coordinate map');container.prepend(graph);
+    graph.after(detail);
+    const log=document.createElement('details');log.className='record-log';log.innerHTML='<summary>Messages and actions</summary>';
+    detail.after(log);log.append(container.querySelector('.record-controls'),container.querySelector('.record-counts'),list);
+    const disposeMap=window.mountRecordedAgentMap(graph,data,meta,ids=>{
+      if(ids){const event=events.get(ids[0]);selectTurn(event.actor,event.turn);openEvents(ids);}
+      else {hideTip();detail.hidden=false;detail.innerHTML=`<header><h4>Outcome</h4><button type="button" data-close-record aria-label="Close original record">×</button></header><p class="case-outcome">${esc(meta.outcome)}</p><p class="case-scope">${esc(meta.scope)}</p>`;detail.scrollIntoView({block:'nearest',behavior:'auto'});}
+    });
     render();selectTurn(data.actors[0].id,1);
-    return ()=>{hideTip();controller.abort();tip.remove();container.replaceChildren();};
+    return ()=>{hideTip();disposeMap();controller.abort();tip.remove();container.replaceChildren();};
   };
 })();

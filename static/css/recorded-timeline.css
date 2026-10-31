@@ -102,3 +102,27 @@
  .record-tool dl > div { grid-template-columns:minmax(0,1fr); gap:5px; }
  .record-original-message blockquote { font-size:14px; }
 }
+.case-picker { grid-template-columns:minmax(0,1fr); gap:8px; }
+.case-picker label span { color:var(--muted); font-weight:400; font-size:12px; }
+.record-coordinate { min-width:0; }
+.record-coordinate .traj-chapters { gap:24px; overflow-x:auto; }
+.record-coordinate .traj-chapters button { font:13px/1.5 var(--font); white-space:nowrap; }
+.record-coordinate [data-map-stage="outcome"] { color:var(--risk); }
+.record-coordinate .traj-message-route { opacity:.28; }
+.record-coordinate .traj-message-route.is-active { opacity:1; }
+.coordinate-summary { min-height:94px; max-height:150px; overflow:auto; margin:16px 0 0; padding:12px 14px; background:var(--surface); border-radius:8px; color:var(--muted); overflow-wrap:anywhere; font:13px/1.6 var(--font); }
+.coordinate-summary strong { color:var(--text); font-weight:500; }
+.coordinate-summary p { margin:5px 0 0; }
+.coordinate-summary small { display:block; margin:5px 0 0; font-size:12px; }
+.record-log { margin-top:22px; }
+.record-log > summary { cursor:pointer; color:var(--text); font:500 14px/1.6 var(--font); padding:8px 0; }
+.record-log[open] > summary { margin-bottom:12px; }
+.record-coordinate .traj-node-label { max-width:70px; overflow:hidden; text-overflow:ellipsis; }
+@media(max-width:600px) {
+ .case-picker label span { display:block; margin-top:3px; }
+ .record-coordinate .traj-chapters { gap:18px; }
+ .record-coordinate .traj-node-label { max-width:52px; font-size:9px; }
+}
+
+.record-coordinate .traj-lane-label[data-lane="channel"] { text-align:center; }
+.record-coordinate [data-map-stage="outcome"][aria-current] { color:var(--risk); border-bottom-color:var(--risk); }
