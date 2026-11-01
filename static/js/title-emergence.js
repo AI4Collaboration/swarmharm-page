@@ -12,7 +12,10 @@
   const duration = 6200;
   let elapsed = 0;
   let previous = null, frame = 0, inView = true;
-  let W = 0, H = 0, scale = 1, x0 = 0, y0 = 0;
+  let W = 0, H = 0, scale = 1, x0 = 0, y0 = 0, pixelRatio = 0;
+  const settledSwarm = document.createElement("canvas");
+  const settledContext = settledSwarm.getContext("2d");
+  let wind = [];
   let grains = [], transfers = [], ink = '#282828', red = '#e52b24';
   let seed = 7919;
   const random = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
@@ -54,9 +57,10 @@
   }
   function layout() {
     const bounds = root.getBoundingClientRect();
-    W = bounds.width; H = bounds.height;
-    if (!W || !H) return;
     const dpr = Math.min(devicePixelRatio || 1, 2);
+    if (!bounds.width || !bounds.height) return;
+    if (W === bounds.width && H === bounds.height && pixelRatio === dpr) return;
+    W = bounds.width; H = bounds.height; pixelRatio = dpr;
     canvas.width = Math.round(W*dpr); canvas.height = Math.round(H*dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     scale = W / 470; x0 = 10 * scale; y0 = 30 * scale;
@@ -84,9 +88,19 @@
       return particle;
     });
     root.dataset.particles = `${grains.length}/${transfers.length}`;
-    colors(); draw();
+    colors(); cacheSettledSwarm(); draw();
     canvas.hidden = false;
     root.classList.add('is-ready');
+  }
+  // Once the source word settles, reuse its exact raster instead of repainting
+  // thousands of stationary grains on every display refresh.
+  function cacheSettledSwarm() {
+    settledSwarm.width = canvas.width; settledSwarm.height = canvas.height;
+    settledContext.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+    settledContext.fillStyle = ink; settledContext.globalAlpha = .96;
+    for (const p of grains) {
+      settledContext.beginPath(); settledContext.arc(p.x,p.y,p.r,0,Math.PI*2); settledContext.fill();
+    }
   }
   function dot(x,y,r,color,alpha) {
     if (alpha < .003) return;
@@ -96,10 +110,10 @@
   function windPosition(p,at) {
     // Particles share a moving flock centre, while keeping individual orbits.
     // Gathering and dispersal are smooth, so no grain jumps onto a common path.
+    if (at >= 1) return [p.x,p.y];
     const gather=smooth(at/.3), settle=smooth((at-.56)/.44);
-    const clock=elapsed/620, phase=p.stream*.87;
-    const cx=p.flockX+scale*(19*Math.sin(clock+phase)+6*Math.sin(clock*2.1+phase));
-    const cy=p.flockY+scale*(10*Math.cos(clock*1.3+phase)+3*Math.sin(clock*2.8));
+    const clock=elapsed/620, offset=wind[p.stream];
+    const cx=p.flockX+offset[0], cy=p.flockY+offset[1];
     const orbit=p.orbit*scale*Math.sin(Math.PI*at);
     const ox=orbit*Math.cos(clock*2.5+p.wave), oy=orbit*.65*Math.sin(clock*3+p.wave);
     return [mix(mix(p.source.x,cx+ox,gather),p.x,settle),
@@ -107,7 +121,17 @@
   }
   function draw() {
     ctx.clearRect(0,0,W,H);
-    for (const p of grains) {
+    const clock=elapsed/620;
+    wind=Array.from({length:7},(_,i)=>{
+      const phase=i*.87;
+      return [scale*(19*Math.sin(clock+phase)+6*Math.sin(clock*2.1+phase)),
+        scale*(10*Math.cos(clock*1.3+phase)+3*Math.sin(clock*2.8))];
+    });
+    // Every source particle has returned to its final opacity after 2440 ms.
+    if (elapsed >= 2440) {
+      ctx.globalAlpha=1;
+      ctx.drawImage(settledSwarm,0,0,settledSwarm.width/pixelRatio,settledSwarm.height/pixelRatio);
+    } else for (const p of grains) {
       const u=clamp((elapsed-p.delay)/p.arrival);
       const assembled=1-Math.pow(1-u,2);
       const ripple=Math.sin(Math.PI*u)*(1-u);
@@ -121,7 +145,7 @@
       } else dot(x,y,p.r,ink,.96*smooth((elapsed-transfer.start)/420));
     }
     const solid = smooth((elapsed-5100)/900);
-    for (const p of transfers) {
+    if (solid < 1) for (const p of transfers) {
       if (elapsed < p.start) continue;
       const u=clamp((elapsed-p.start)/p.travel);
       // Local milling makes each group visible before it settles into the word.
@@ -134,7 +158,8 @@
     }
     if (solid) { ctx.globalAlpha=solid; fillPath(ctx,harmPath,red); }
     ctx.globalAlpha=1;
-    root.dataset.formation = elapsed >= duration ? 'complete' : elapsed < 1100 ? 'assembling' : elapsed < 2300 ? 'seeding' : elapsed < 5100 ? 'transferring' : 'settling';
+    const formation = elapsed >= duration ? 'complete' : elapsed < 1100 ? 'assembling' : elapsed < 2300 ? 'seeding' : elapsed < 5100 ? 'transferring' : 'settling';
+    if (root.dataset.formation !== formation) root.dataset.formation = formation;
   }
   function animate(now) {
     frame=0;
@@ -161,6 +186,6 @@
   });
   observer.observe(root);
   new ResizeObserver(layout).observe(root);
-  new MutationObserver(() => {colors();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  new MutationObserver(() => {colors();cacheSettledSwarm();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   layout(); resume();
 })();

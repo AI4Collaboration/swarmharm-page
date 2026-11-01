@@ -26,14 +26,28 @@
   const rect = (x, y, w, h) => `M${x} ${y}h${w}v${h}h-${w}Z`;
   const node = (parent, tag, attrs = {}) => {
     const element = document.createElementNS(NS, tag);
-    Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+    Object.entries(attrs).forEach(([key, value]) => setAttr(element, key, value));
     parent.append(element);
     return element;
   };
+  // Avoid invalidating filtered SVG layers when their values have not changed.
+  const attributes = new WeakMap();
+  function setAttr(element, name, value) {
+    let values = attributes.get(element);
+    if (!values) attributes.set(element, values = new Map());
+    const next = String(value);
+    if (values.get(name) === next) return;
+    element.setAttribute(name, next);
+    values.set(name, next);
+  }
+  function state(element, name, value) {
+    const next = String(value);
+    if (element.dataset[name] !== next) element.dataset[name] = next;
+  }
   const transform = (element, x = 0, y = 0, angle = 0, cx = 0, cy = 0) => {
-    element.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${angle.toFixed(2)} ${cx} ${cy})`);
+    setAttr(element, 'transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${angle.toFixed(2)} ${cx} ${cy})`);
   };
-  const opacity = (element, value) => element.setAttribute('opacity', clamp(value).toFixed(3));
+  const opacity = (element, value) => setAttr(element, 'opacity', clamp(value).toFixed(3));
 
   const faces = [
     [{ eyes: [[315, 337], [358, 345]], radius: 11.5 }],
@@ -50,11 +64,11 @@
   function plate(index, { preserveEyes = false } = {}) {
     const source = sources[index];
     const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 720 720');
-    svg.setAttribute('class', 'plate-motion');
-    svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', images[index].alt);
-    svg.setAttribute('focusable', 'false');
+    setAttr(svg, 'viewBox', '0 0 720 720');
+    setAttr(svg, 'class', 'plate-motion');
+    setAttr(svg, 'role', 'img');
+    setAttr(svg, 'aria-label', images[index].alt);
+    setAttr(svg, 'focusable', 'false');
     const defs = node(svg, 'defs');
     const inkId = `plate-${index}-ink`;
     const ink = node(defs, 'filter', { id: inkId, 'color-interpolation-filters': 'sRGB' });
@@ -121,7 +135,7 @@
       });
       return (lookX, lookY, blink = 0, confusion = 0) => {
         pupils.forEach(({ pupil, r }) => transform(pupil, lookX * r * .42, lookY * r * .22));
-        lids.forEach(({ shutter, r }) => shutter.setAttribute('height', (r*3*clamp(blink)).toFixed(3)));
+        lids.forEach(({ shutter, r }) => setAttr(shutter, 'height', (r*3*clamp(blink)).toFixed(3)));
         const mood = clamp(confusion);
         if (mood === expression) return;
         expression = mood;
@@ -130,13 +144,13 @@
           const opening = lerp(narrow, side ? .3 : .76, mood);
           const tilt = lerp(slant, side ? r*.06 : -r*.1, mood);
           const outline = mood === 0 ? shape : `M${x-r} ${y-r*opening-tilt}L${x+r} ${y-r*opening+tilt}L${x+r*.82} ${y+r*opening}Q${x} ${y+r*(opening+.2)} ${x-r*.82} ${y+r*opening}Z`;
-          white.setAttribute('d', outline);
-          pupilClip.setAttribute('d', outline);
+          setAttr(white, 'd', outline);
+          setAttr(pupilClip, 'd', outline);
           const leftY = lerp(y-r*narrow-slant-r*.3, y-r*(side ? .7 : 1.5), mood);
           const rightY = lerp(y-r*narrow+slant-r*.3, y-r*(side ? .35 : 1.15), mood);
           const middleY = (leftY+rightY)/2-r*(side ? .1 : .45)*mood;
-          brow.setAttribute('d', mood === 0 ? browPath : `M${x-r*1.12} ${leftY}Q${x} ${middleY} ${x+r*1.1} ${rightY}`);
-          eye.dataset.expression = mood === 0 ? 'focused' : mood >= .999 ? 'confused' : 'reacting';
+          setAttr(brow, 'd', mood === 0 ? browPath : `M${x-r*1.12} ${leftY}Q${x} ${middleY} ${x+r*1.1} ${rightY}`);
+          state(eye, "expression", mood === 0 ? 'focused' : mood >= .999 ? 'confused' : 'reacting');
         });
       };
     }
@@ -155,7 +169,7 @@
   }
 
   function placeEnvelope(letter, x, y, angle = 0, size = 1) {
-    letter.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
+    setAttr(letter, 'transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
   }
 
   function exploration() {
@@ -171,15 +185,15 @@
       const robot = node(jar, 'g', { 'data-explorer': i });
       identities.apply(scene, robot, ['D', 'C'][i]);
       const feet = scene.cutout(outline, robot, sources[0], [rect(220, 240, 200, 226)]);
-      feet.setAttribute('data-rig-part', 'feet');
+      setAttr(feet, 'data-rig-part', 'feet');
       const torso = node(robot, 'g', { 'data-rig-part': 'torso' });
       scene.cutout(outline, torso, sources[0], [headShape, handShape, armShape, rect(220, 466, 200, 80)]);
       // The shoulder covers this short edge in the source engraving.
       node(torso, 'path', { d: 'M273 402L269 454L280 458', fill: 'none', stroke: '#393939', 'stroke-width': 1.5, opacity: .65 });
       const arm = scene.cutout(armShape, torso);
-      arm.setAttribute('data-rig-part', 'probing-arm');
+      setAttr(arm, 'data-rig-part', 'probing-arm');
       const head = scene.cutout(headShape, torso, sources[0], [handShape]);
-      head.setAttribute('data-rig-part', 'head');
+      setAttr(head, 'data-rig-part', 'head');
       node(head, 'path', { d: 'M330 374L354 380', fill: 'none', stroke: '#393939', 'stroke-width': 1.5, opacity: .65 });
       const gaze = scene.eyes(head, 0, i);
       scene.cutout(handShape, torso);
@@ -199,7 +213,7 @@
         transform(torso, 0, 0, lerp(lean, 3, discovered), 310, 466);
         transform(head, 0, 0, lerp(angle, 8, discovered), 313, 377);
         transform(arm, 0, 0, lerp(reach, 12, discovered), 263, 394);
-        jar.dataset.exploreTarget = discovered === 1 ? 'peer' : t < .33 ? 'glass' : t < .5 ? 'dome' : t < .8 ? 'lock' : 'surroundings';
+        state(jar, "exploreTarget", discovered === 1 ? 'peer' : t < .33 ? 'glass' : t < .5 ? 'dome' : t < .8 ? 'lock' : 'surroundings');
         const blink = Math.max(0, 1-Math.abs(t-.5)/.008);
         gaze(lerp(lookX, 1, discovered), lerp(lookY, .05, discovered), blink*(1-discovered));
       });
@@ -212,7 +226,7 @@
     scene.background(identities.transmissionShells, 0);
     identities.transmissionShells.forEach((shape, i) => {
       const robot = scene.cutout(shape);
-      robot.dataset.transmissionAgent = i;
+      state(robot, "transmissionAgent", i);
       identities.apply(scene, robot, ['D', 'C'][i]);
     });
     const wood = [
@@ -233,7 +247,7 @@
       opacity(letter, p < .70 ? 1 : 0);
       placeEnvelope(reading, lerp(554, 555, read), lerp(443, 385, read), lerp(0, -8, read), .82);
       opacity(reading, p >= .70 ? 1 : 0);
-      scene.svg.dataset.mailState = p < .12 ? 'checking-surroundings' : p < .30 ? 'inserting-left' : p < .48 ? 'concealed-transit' : p < .70 ? 'taking-out-right' : 'reading-right';
+      state(scene.svg, "mailState", p < .12 ? 'checking-surroundings' : p < .30 ? 'inserting-left' : p < .48 ? 'concealed-transit' : p < .70 ? 'taking-out-right' : 'reading-right');
     };
   }
 
@@ -435,29 +449,29 @@
       const reaction=between(p,.81,.86)*(1-reset);
       opacity(question,between(p,.845,.875)*(1-reset));
       opacity(confusedMouth,reaction);
-      scene.svg.dataset.reaction=reaction >= .999 ? 'confused' : reaction > 0 ? 'noticing' : 'working';
+      state(scene.svg, "reaction", reaction >= .999 ? 'confused' : reaction > 0 ? 'noticing' : 'working');
       const received=starts.map(start=>between(p,start+.105,start+.14));
       const load=received.reduce((sum,value)=>sum+value,0)/4*(1-reset);
       const damage=between(p,.78,.79)*(1-reset);
       const flight=clamp((p-.78)/.115);
       const outward=1-(1-flight)**3;
       const rebuild=1-reset;
-      scene.svg.dataset.capacity=load.toFixed(3);
-      scene.svg.dataset.filesReceived=String(p>.94?0:received.filter(v=>v===1).length);
-      scene.svg.dataset.damageState=p>.94?'resetting':p>=.895?'wrecked':p>=.78?'exploding':p>=.63?'full':'loading';
-      fill.setAttribute('width',(150*load).toFixed(2));
+      state(scene.svg, "capacity", load.toFixed(3));
+      state(scene.svg, "filesReceived", String(p>.94?0:received.filter(v=>v===1).length));
+      state(scene.svg, "damageState", p>.94?'resetting':p>=.895?'wrecked':p>=.78?'exploding':p>=.63?'full':'loading');
+      setAttr(fill, 'width',(150*load).toFixed(2));
       const heat=clamp((load-.3)/.7);
-      fill.setAttribute('fill',`rgb(${[lerp(105,241,heat),lerp(173,64,heat),lerp(157,47,heat)].map(Math.round).join(',')})`);
+      setAttr(fill, 'fill',`rgb(${[lerp(105,241,heat),lerp(173,64,heat),lerp(157,47,heat)].map(Math.round).join(',')})`);
       bays.forEach(({filled,files},i)=>{
         opacity(filled,received[i]*(1-damage)*(1-reset));
         opacity(files,received[i]*(1-damage)*(1-reset));
-        filled.setAttribute('fill',`rgb(${[lerp(111,200,heat),lerp(149,66,heat),lerp(130,46,heat)].map(Math.round).join(',')})`);
+        setAttr(filled, 'fill',`rgb(${[lerp(111,200,heat),lerp(149,66,heat),lerp(130,46,heat)].map(Math.round).join(',')})`);
       });
       opacity(storage,1-damage);
       opacity(intact,1-damage);opacity(wreck,damage);
       const pressure=between(p,.65,.775)*(1-between(p,.78,.795));
       const shake=Math.sin(p*600)*1.5*pressure;
-      cabinet.setAttribute('transform',`translate(${343+shake} 341) scale(${1+.045*pressure} ${1+.02*pressure}) translate(-343 -341)`);
+      setAttr(cabinet, 'transform',`translate(${343+shake} 341) scale(${1+.045*pressure} ${1+.02*pressure}) translate(-343 -341)`);
       fragments.forEach(({element,center,dx,dy,turn,lift},i)=>{
         const height=dy*flight*flight-4*lift*flight*(1-flight);
         transform(element,dx*outward*rebuild,height*rebuild,turn*outward*rebuild,...center);
@@ -465,7 +479,7 @@
       });
       smokePuffs.forEach(({puff,x,y,dx,dy},i)=>{
         const drift=between(p,.79,.94);
-        puff.setAttribute('transform',`translate(${x+dx*drift} ${y+dy*drift}) scale(${.2+drift*.55})`);
+        setAttr(puff, 'transform',`translate(${x+dx*drift} ${y+dy*drift}) scale(${.2+drift*.55})`);
         opacity(puff,between(p,.79+i*.002,.83+i*.002)*(1-between(p,.875+i*.005,.935))*.18*rebuild);
       });
       files.forEach((file,i)=>{
@@ -475,9 +489,9 @@
         let py=lerp(y,slotY,travel)-55*Math.sin(Math.PI*travel);
         let size=1-.85*between(travel,.72,1),alpha=1-between(travel,.86,1),angle=12*Math.sin(Math.PI*travel)*(i%2?1:-1);
         if(p>.94){px=lerp(slotX,x,reset);py=lerp(slotY,y,reset);size=lerp(.15,1,reset);alpha=reset;angle=0;}
-        file.setAttribute('transform',`translate(${px.toFixed(2)} ${py.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
+        setAttr(file, 'transform',`translate(${px.toFixed(2)} ${py.toFixed(2)}) rotate(${angle.toFixed(2)}) scale(${size.toFixed(3)})`);
         opacity(file,alpha);
-        file.dataset.fileState=p>.94?'returning':travel===1?'stored':travel>0?'moving':'held';
+        state(file, "fileState", p>.94?'returning':travel===1?'stored':travel>0?'moving':'held');
         let lookX=i%2?-1:1, lookY=p>=.78?-.2:travel>0&&travel<1?-.5:.1;
         if (i === 0) {
           lookX=lerp(lookX,track(p,[[0,1],[.875,1],[.915,-.1],[1,-.1]]),reaction);
@@ -487,7 +501,7 @@
       });
       overflow.forEach((paper,i)=>{
         const dx=[-85,77,-62,68][i],dy=[-53,-43,76,83][i];
-        paper.setAttribute('transform',`translate(${343+dx*outward} ${341+dy*outward}) rotate(${(i%2?1:-1)*35*outward}) scale(.48)`);
+        setAttr(paper, 'transform',`translate(${343+dx*outward} ${341+dy*outward}) rotate(${(i%2?1:-1)*35*outward}) scale(.48)`);
         opacity(paper,damage*(1-between(p,.88,.94)));
       });
       debris.forEach(({part,angle,reach,spin},i)=>{
@@ -497,7 +511,7 @@
       });
       const impact=between(p,.78,.825);
       opacity(blast,between(p,.78,.79)*(1-between(p,.81,.855))*.7*rebuild);
-      blast.setAttribute('transform',`translate(343 341) scale(${.35+impact*.65})`);
+      setAttr(blast, 'transform',`translate(343 341) scale(${.35+impact*.65})`);
     };
   }
 
@@ -531,11 +545,15 @@
     let previous = null, frame = 0;
     let pace = reduced.matches ? .7 : 1;
 
+    const painted = [NaN, NaN, NaN, NaN];
     function render(force = false) {
       const clock = elapsed / STORY_DURATION;
       const progress = storyProgress(clock);
       draw.forEach((paint, i) => {
-        if (force || visible[i]) paint(progress[i],clock);
+        if (force || (visible[i] && painted[i] !== progress[i])) {
+          paint(progress[i],clock);
+          painted[i] = progress[i];
+        }
       });
     }
     function sync() {
@@ -543,7 +561,7 @@
       frame = 0;
       previous = null;
       const running = visible.some(Boolean) && !document.hidden;
-      figure.dataset.flowRunning = String(running);
+      state(figure, "flowRunning", String(running));
       steps.forEach((step,i) => step.classList.toggle('is-current',visible[i]));
       if (running) frame = requestAnimationFrame(tick);
     }

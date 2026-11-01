@@ -300,6 +300,10 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 Edit `index.html`, `static/css/` and `static/js/`. `orbit.css` is the final
 presentation layer. Bump changed asset query versions in `index.html`.
+Animations use the display-driven animation clock without a fixed FPS cap.
+Only changed, visible plate states update SVG attributes. The title caches its
+settled SWARM grains and shares flock calculations; theme and size changes
+refresh that cache without restarting the one-shot animation.
 Check both themes at desktop and narrow widths, including the menu, animation,
 footer and subscription feedback. Keep reading text at least
 14px and secondary metadata at least 12px; use the theme palette for all text.
