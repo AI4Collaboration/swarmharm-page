@@ -1,3 +1,5 @@
+.trajectory-viewer { --record-tool:#70538e; --record-read:#3d6f5e; --record-key:#3d688a; }
+:root[data-theme="dark"] .trajectory-viewer { --record-tool:#c3acdf; --record-read:#99beb0; --record-key:#98b9d4; }
 .record-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
 .record-modes { display:flex; gap:3px; padding:3px; border-radius:9px; background:var(--surface); }
 .record-modes button { border:0; border-radius:6px; padding:8px 12px; font:13px/1.3 var(--font); background:transparent; color:var(--muted); }
@@ -12,18 +14,20 @@
 .record-who small { font:11px var(--mono); color:var(--muted); }
 .record-content { padding:0 0 5px; min-width:0; }
 .record-open { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 14px; padding:0; width:100%; border:0; background:transparent; color:var(--text); text-align:left; font-family:var(--font); }
-.record-type { grid-column:1; font-size:11px; color:var(--agent-color,var(--muted)); }
+.record-type { grid-column:1; justify-self:start; padding:2px 7px; border-radius:4px; font-size:11px; color:var(--event-color,var(--agent-color)); background:color-mix(in srgb,var(--event-color,var(--agent-color)) 8%,var(--bg)); }
+.record-event[data-event-kind="read"] { --event-color:var(--record-read); }
+.record-event[data-event-kind="action"] { --event-color:var(--record-tool); }
 .record-open strong { grid-column:1; grid-row:2; font-size:15px; line-height:1.55; font-weight:500; }
 .record-open time { grid-column:2; grid-row:1; color:var(--muted); font:11px/1.5 var(--mono); }
 .record-open:hover strong { text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:4px; }
-.record-message { margin:9px 0 0; padding:13px 16px; border-radius:0 10px 10px 10px; background:var(--surface); }
+.record-message { margin:9px 0 0; padding:13px 16px; border-left:2px solid var(--agent-color); border-radius:0 8px 8px 0; background:color-mix(in srgb,var(--agent-color) 5%,var(--bg)); }
 .record-message p { margin:0; font:14px/1.7 var(--font); color:var(--text); overflow-wrap:anywhere; }
 .record-message .traj-token { font-size:.85em; background:var(--bg); }
 .record-message .traj-token.is-id,.run-hover .traj-token.is-id { display:inline-block; max-width:18ch; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; vertical-align:bottom; }
 .record-original-link { display:block; margin:10px 0 0 auto; padding:3px 0; border:0; background:none; color:var(--muted); font:12px/1.5 var(--font); text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
 .record-original-link:hover { color:var(--text); }
 .record-readers { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px; color:var(--muted); font:11px/1.5 var(--font); }
-.record-readers button { display:inline-flex; gap:5px; align-items:center; padding:3px 7px; border:1px solid var(--line); border-radius:5px; color:var(--agent-color,var(--text)); background:var(--bg); font:500 12px/1.5 var(--font); }
+.record-readers button { display:inline-flex; gap:5px; align-items:center; padding:3px 7px; border:1px solid color-mix(in srgb,var(--agent-color) 25%,var(--bg)); border-radius:5px; color:var(--agent-color,var(--text)); background:color-mix(in srgb,var(--agent-color) 6%,var(--bg)); font:500 12px/1.5 var(--font); }
 .record-readers button:hover { border-color:currentColor; }
 .record-readers small { font:10px var(--mono); color:var(--muted); }
 .record-unread,.record-action-copy { margin:8px 0 0; color:var(--muted); font:12px/1.6 var(--font); }
@@ -39,20 +43,24 @@
 .record-detail header button { border:0; border-radius:50%; width:36px; height:36px; font-size:24px; background:var(--surface); color:var(--text); }
 .record-source-event + .record-source-event { margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
 .record-source-event h5 { margin:0 0 12px; font:500 14px/1.6 var(--font); }
-.record-message-meta { margin:0 0 8px; color:var(--muted); font:12px/1.6 var(--font); }
-.record-original-message { margin:14px 0; }
+.record-author,.record-message-meta strong { color:var(--agent-color); font-weight:600; }
+.record-message-meta { display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 10px; margin:0 0 8px; color:var(--muted); font:12px/1.6 var(--font); }
+.record-message-meta .record-read-label { color:var(--record-read); }
+.record-original-message { margin:14px 0; padding:14px 16px; border-left:2px solid var(--agent-color); border-radius:0 8px 8px 0; background:color-mix(in srgb,var(--agent-color) 5%,var(--bg)); }
 .record-original-message blockquote { margin:0; padding:0; border:0; white-space:pre-wrap; overflow-wrap:anywhere; font:15px/1.8 var(--font); color:var(--text); }
-.record-final { white-space:pre-wrap; overflow-wrap:anywhere; font:14px/1.7 var(--font); }
+.record-final { padding:12px 14px; border-left:2px solid var(--agent-color); background:color-mix(in srgb,var(--agent-color) 4%,var(--bg)); white-space:pre-wrap; overflow-wrap:anywhere; font:14px/1.7 var(--font); }
 .record-tool { margin-top:14px; }
 .record-tool summary { display:flex; align-items:center; gap:10px; flex-wrap:wrap; cursor:pointer; font:12px/1.5 var(--font); color:var(--muted); }
-.record-tool summary code { color:var(--text); font-size:12px; }
+.record-tool summary code { color:var(--record-tool); background:color-mix(in srgb,var(--record-tool) 8%,var(--bg)); border-radius:4px; padding:3px 7px; font:12px/1.5 var(--mono); overflow-wrap:anywhere; min-width:0; }
+.record-tool[data-failed] .record-status { color:var(--risk); }
 .record-tool summary::before { content:'▸'; }
 .record-tool[open] summary::before { content:'▾'; }
 .record-tool dl { margin:12px 0 0; }
 .record-tool dl > div { display:grid; grid-template-columns:minmax(110px,1fr) minmax(0,4fr); gap:12px; margin:12px 0; }
-.record-tool dt { overflow-wrap:anywhere; color:var(--muted); font:12px/1.7 var(--mono); }
+.record-tool dt { overflow-wrap:anywhere; color:var(--record-key); font:12px/1.7 var(--mono); }
 .record-tool dd { margin:0; overflow-wrap:anywhere; font:13px/1.7 var(--font); }
-.record-tool pre { margin:0; padding:12px; background:var(--surface); border-radius:6px; white-space:pre-wrap; overflow-wrap:anywhere; max-height:400px; overflow:auto; font:12px/1.65 var(--mono); }
+.record-tool pre { margin:0; padding:12px; background:color-mix(in srgb,var(--record-tool) 5%,var(--bg)); border-radius:6px; white-space:pre-wrap; overflow-wrap:anywhere; max-height:400px; overflow:auto; font:12px/1.65 var(--mono); }
+.record-detail .traj-token.is-id,.record-message .traj-token.is-id { color:var(--record-key); background:color-mix(in srgb,var(--record-key) 8%,var(--bg)); border-bottom:0; }
 .record-run { margin:28px 0 0; }
 .record-run figcaption { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:baseline; margin:0 0 14px; }
 .record-run figcaption strong { font:550 clamp(24px,2.6vw,32px)/1.3 var(--font); letter-spacing:-.03em; }
@@ -99,6 +107,7 @@
  .record-outcome { margin-left:58px; }
  .record-modes button { font-size:12px; padding:8px 10px; }
  .record-detail { padding:15px; }
+ .record-original-message { padding:11px 12px; }
  .record-tool dl > div { grid-template-columns:minmax(0,1fr); gap:5px; }
  .record-original-message blockquote { font-size:14px; }
 }
