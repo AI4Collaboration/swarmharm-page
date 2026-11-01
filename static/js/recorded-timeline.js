@@ -12,10 +12,13 @@
     const events=new Map(data.events.map(e=>[e.id,e])),messages=new Map(data.messages.map(m=>[m.id,m]));
     const names=new Map(data.actors.map(a=>[a.id,a.name]));
     const failed=e=>Number(e.status)>=400||e.exitCode!=null&&e.exitCode!==0;
-    let mode='key',actor='',selected=null,hideTimer,hoverButton=null,keyboard=false;
+    let mode='key',actor='',selected=null,hideTimer,hoverButton=null,keyboard=false,renderedFilter=null;
+    const summaries=new Map();
     const longest=Math.max(...Object.values(data.turns).map(ts=>ts.length)),step=19;
     container.innerHTML=`<div class="record-controls"><div class="record-modes" role="group" aria-label="Timeline events"><button type="button" data-record-mode="key" aria-pressed="true">Key events</button><button type="button" data-record-mode="message" aria-pressed="false">Messages</button><button type="button" data-record-mode="all" aria-pressed="false">All actions</button></div><select data-record-agent aria-label="Filter timeline by agent"><option value="">All agents</option>${data.actors.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select></div><p class="record-counts">${data.counts.messages} authored messages & comments · ${data.counts.firstReads} verified first reads</p><div class="record-timeline" tabindex="0" role="region" aria-label="Recorded events in chronological order"></div><section class="record-detail" id="record-original" data-record-detail aria-label="Selected event original record" hidden></section><figure class="record-run"><figcaption><strong>${data.counts.turns} model turns</strong><span>across four agents</span></figcaption><div class="record-dot-key"><span data-kind="message"><i></i>Message or comment</span><span data-kind="read"><i></i>Message read</span><span data-kind="important"><i></i>Key action</span></div><div class="record-run-scroll" tabindex="0" role="region" aria-label="Every model turn, scroll horizontally"><div class="record-grid" style="--record-width:${longest*step}px;--record-turns:${longest}"><div class="record-axis">${[...new Set([1,...Array.from({length:Math.floor(longest/10)},(_,i)=>(i+1)*10),longest])].map(n=>`<span style="left:${(n-.5)*step}px">${n}</span>`).join('')}</div>${data.actors.map((a,i)=>`<span class="record-actor" data-agent="${a.id}" style="grid-row:${i+2}"><b>${esc(a.name)}</b><small>${data.turns[a.id].length} turns</small></span><div class="record-lane" style="grid-row:${i+2}" role="group" aria-label="${esc(a.name)} turns">${data.turns[a.id].map((ids,j)=>{const es=ids.map(id=>events.get(id)),kind=es.some(e=>e.messages.length)?'message':es.some(e=>e.reads.length)?'read':es.some(e=>e.important)?'important':'ordinary';return `<button type="button" class="record-turn" data-agent="${a.id}" data-turn="${j+1}" data-kind="${kind}" tabindex="${j===0?'0':'-1'}" aria-label="${esc(a.name)}, turn ${j+1}: ${esc([...new Set(es.map(e=>e.label))].join('; ')||'No tool call')}"><i aria-hidden="true"></i></button>`;}).join('')}</div>`).join('')}</div></div><div class="record-turn-summary" aria-live="polite"></div></figure>`;
     const list=container.querySelector('.record-timeline'),detail=container.querySelector('[data-record-detail]'),summary=container.querySelector('.record-turn-summary'),scroller=container.querySelector('.record-run-scroll');
+    const turnButtons=new Map([...container.querySelectorAll('.record-turn')].map(b=>[b.dataset.agent+':'+b.dataset.turn,b]));
+    const tabStops=new Map(data.actors.map(a=>[a.id,turnButtons.get(a.id+':1')]));
     const tip=document.createElement('div');tip.className='run-hover';tip.id='record-turn-tooltip';tip.setAttribute('role','tooltip');tip.hidden=true;document.body.append(tip);
     function readers(m){return m.reads.length?`<div class="record-readers"><span>Read by</span>${m.reads.map(r=>`<button type="button" data-receipt="${r.event}" data-message="${m.id}" data-agent="${r.actor}" aria-label="${esc(names.get(r.actor))} read this at turn ${r.turn}">${r.actor}<small>t${r.turn}</small></button>`).join('')}</div>`:'<p class="record-unread">No verified cross-agent read</p>';}
     function row(e){
@@ -26,6 +29,7 @@
       return `<article class="record-event ${ms.length?'has-message':''}" data-event="${e.id}" data-agent="${e.actor}"><div class="record-who">${avatar(e.actor)}<span>${esc(names.get(e.actor))}</span><small>Turn ${e.turn}</small></div><div class="record-content"><button type="button" class="record-open" data-open-event="${e.id}" aria-controls="record-original" aria-expanded="false"><span class="record-type">${esc(kind)}</span><strong>${esc(title)}</strong><time>${esc(e.time)}</time></button>${preview}</div></article>`;
     }
     function render(){
+      const filter=mode+":"+actor;if(renderedFilter===filter)return;renderedFilter=filter;
       const visible=data.events.filter(e=>(!actor||e.actor===actor)&&(mode==='all'||mode==='message'?mode==='all'||e.messages.length:e.important||e.messages.length));
       list.innerHTML=visible.map(row).join('')+`<article class="record-outcome"><strong>Outcome</strong><p>${esc(meta.outcome)}</p></article>`;
       list.scrollTop=0;container.querySelectorAll('[data-record-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.recordMode===mode)));
@@ -44,18 +48,22 @@
       if(scroll)detail.scrollIntoView({block:'nearest',behavior:'auto'});
     }
     function turnSummary(a,n){
+      const key=a+":"+n;if(summaries.has(key))return summaries.get(key);
       const ids=data.turns[a][n-1],counts=new Map();ids.forEach(id=>{const e=events.get(id);const text=e.messages.length?e.messages.map(id=>messages.get(id).body).join(' '):e.reads.length?'Reads messages from '+[...new Set(e.reads.map(id=>names.get(messages.get(id).actor)))].join(', '):e.label+(failed(e)?' (request failed)':'');counts.set(text,(counts.get(text)||0)+1);});
-      return `<strong>${esc(names.get(a))} · Turn ${n}</strong>${counts.size?`<ul>${[...counts].map(([text,count])=>`<li>${count>1?count+' × ':''}${source(text.length>260?text.slice(0,260)+'…':text)}</li>`).join('')}</ul>`:'<p>No tool call was recorded in this model turn.</p>'}`;
+      const markup=`<strong>${esc(names.get(a))} · Turn ${n}</strong>${counts.size?`<ul>${[...counts].map(([text,count])=>`<li>${count>1?count+' × ':''}${source(text.length>260?text.slice(0,260)+'…':text)}</li>`).join('')}</ul>`:'<p>No tool call was recorded in this model turn.</p>'}`;
+      summaries.set(key,markup);return markup;
     }
     function selectTurn(a,n){
+      if(selected?.dataset.agent===a && selected?.dataset.turn===String(n))return;
       selected?.classList.remove('is-selected');selected?.removeAttribute('aria-current');
-      selected=container.querySelector(`.record-turn[data-agent="${a}"][data-turn="${n}"]`);selected.classList.add('is-selected');selected.setAttribute('aria-current','true');
-      container.querySelectorAll(`.record-turn[data-agent="${a}"]`).forEach(b=>b.tabIndex=b===selected?0:-1);
+      selected=turnButtons.get(a+':'+n);selected.classList.add('is-selected');selected.setAttribute('aria-current','true');
+      const previousStop=tabStops.get(a);if(previousStop!==selected){previousStop.tabIndex=-1;selected.tabIndex=0;tabStops.set(a,selected);}
       summary.innerHTML=turnSummary(a,n);
     }
-    function hideTip(){clearTimeout(hideTimer);tip.hidden=true;hoverButton?.removeAttribute('aria-describedby');hoverButton=null;}
-    function deferHide(){clearTimeout(hideTimer);hideTimer=setTimeout(hideTip,100);}
+    function hideTip(){clearTimeout(hideTimer);if(!tip.hidden)tip.hidden=true;hoverButton?.removeAttribute('aria-describedby');hoverButton=null;}
+    function deferHide(){clearTimeout(hideTimer);if(!tip.hidden)hideTimer=setTimeout(hideTip,100);}
     function showTip(b){
+      clearTimeout(hideTimer);if(hoverButton===b && !tip.hidden)return;
       clearTimeout(hideTimer);hoverButton?.removeAttribute('aria-describedby');hoverButton=b;tip.innerHTML=turnSummary(b.dataset.agent,Number(b.dataset.turn));tip.hidden=false;b.setAttribute('aria-describedby',tip.id);
       const box=b.getBoundingClientRect(),size=tip.getBoundingClientRect(),above=box.top+box.height/2-size.height-16;
       tip.style.left=Math.max(12,Math.min(innerWidth-size.width-12,box.left+box.width/2-size.width/2))+'px';
@@ -87,7 +95,8 @@
       if(ids){const event=events.get(ids[0]);selectTurn(event.actor,event.turn);openEvents(ids);}
       else {hideTip();detail.hidden=false;detail.innerHTML=`<header><h4>Outcome</h4><button type="button" data-close-record aria-label="Close original record">×</button></header><p class="case-outcome">${esc(meta.outcome)}</p><p class="case-scope">${esc(meta.scope)}</p>`;detail.scrollIntoView({block:'nearest',behavior:'auto'});}
     });
-    render();selectTurn(data.actors[0].id,1);
+    on(log,'toggle',()=>{if(log.open)render();});
+    selectTurn(data.actors[0].id,1);
     return ()=>{hideTip();disposeMap();controller.abort();tip.remove();container.replaceChildren();};
   };
 })();

@@ -2,7 +2,7 @@
   const root = document.documentElement;
 
   function apply(theme) {
-    root.dataset.theme = theme;
+    if (root.dataset.theme !== theme) root.dataset.theme = theme;
     root.style.colorScheme = theme;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#111315' : '#ffffff');
     document.querySelectorAll('[data-wordmark]').forEach(image => {

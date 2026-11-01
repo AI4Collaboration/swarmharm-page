@@ -186,6 +186,9 @@
   });
   observer.observe(root);
   new ResizeObserver(layout).observe(root);
-  new MutationObserver(() => {colors();cacheSettledSwarm();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  new MutationObserver(() => {
+    const previousInk=ink, previousRed=red; colors();
+    if (ink!==previousInk || red!==previousRed) {cacheSettledSwarm();draw();}
+  }).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   layout(); resume();
 })();

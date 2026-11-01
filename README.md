@@ -23,8 +23,10 @@ accurately reflect the reviewed evidence, conditions and outcome of each rollout
   summary below the graph; click opens originals underneath. The original r19
   selection is preserved. Other cases show authored messages, their first reads
   and key actions. Desktop time runs horizontally; mobile time runs vertically.
-- **Recorded event timeline:** keep the messages and actions log collapsed initially,
-  with filters for messages, all actions and individual agents. Source notes,
+  Cache node references and unchanged summaries, coalesce resize notifications,
+  and cancel queued layout work when switching cases.
+- **Recorded event timeline:** build rows only when the collapsed messages and
+  actions log is first opened, with filters for messages, all actions and individual agents. Source notes,
   status updates and version comments are distinguished. Read buttons open the
   exact message in its reader's recorded event. No action arguments or automated
   notices are presented as peer dialogue. Full original messages and separately
