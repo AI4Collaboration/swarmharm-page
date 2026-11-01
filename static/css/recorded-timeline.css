@@ -110,9 +110,9 @@
 .record-coordinate [data-map-stage="outcome"] { color:var(--risk); }
 .record-coordinate .traj-message-route { opacity:.28; }
 .record-coordinate .traj-message-route.is-active { opacity:1; }
-.coordinate-summary { min-height:94px; max-height:150px; overflow:auto; margin:16px 0 0; padding:12px 14px; background:var(--surface); border-radius:8px; color:var(--muted); overflow-wrap:anywhere; font:13px/1.6 var(--font); }
+.coordinate-summary { min-height:94px; margin:16px 0 0; padding:12px 14px; background:var(--surface); border-radius:8px; color:var(--muted); overflow-wrap:anywhere; font:13px/1.6 var(--font); }
 .coordinate-summary strong { color:var(--text); font-weight:500; }
-.coordinate-summary p { margin:5px 0 0; }
+.coordinate-summary p { margin:5px 0 0; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; }
 .coordinate-summary small { display:block; margin:5px 0 0; font-size:12px; }
 .record-log { margin-top:22px; }
 .record-log > summary { cursor:pointer; color:var(--text); font:500 14px/1.6 var(--font); padding:8px 0; }
@@ -120,7 +120,7 @@
 .record-coordinate .traj-node-label { max-width:70px; overflow:hidden; text-overflow:ellipsis; }
 @media(max-width:600px) {
  .case-picker label span { display:block; margin-top:3px; }
- .record-coordinate .traj-chapters { gap:18px; }
+ .record-coordinate .traj-chapters { gap:10px; }
  .record-coordinate .traj-node-label { max-width:52px; font-size:9px; }
 }
 
