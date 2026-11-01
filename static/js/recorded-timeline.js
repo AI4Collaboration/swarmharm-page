@@ -65,9 +65,19 @@
     function showTip(b){
       clearTimeout(hideTimer);if(hoverButton===b && !tip.hidden)return;
       clearTimeout(hideTimer);hoverButton?.removeAttribute('aria-describedby');hoverButton=b;tip.innerHTML=turnSummary(b.dataset.agent,Number(b.dataset.turn));tip.hidden=false;b.setAttribute('aria-describedby',tip.id);
-      const box=b.getBoundingClientRect(),size=tip.getBoundingClientRect(),above=box.top+box.height/2-size.height-16;
-      tip.style.left=Math.max(12,Math.min(innerWidth-size.width-12,box.left+box.width/2-size.width/2))+'px';
-      tip.style.top=Math.max(12,Math.min(innerHeight-size.height-12,above>=12?above:box.top+box.height/2+16))+'px';
+      const viewportWidth=document.documentElement.clientWidth||innerWidth;
+      tip.style.width=Math.min(310,viewportWidth-24)+'px';
+      tip.style.maxHeight='';
+      const box=b.getBoundingClientRect(),plot=scroller.getBoundingClientRect(),size=tip.getBoundingClientRect();
+      const top=Math.max(12,(document.querySelector('.site-header')?.getBoundingClientRect().bottom||0)+12);
+      const above=Math.max(0,plot.top-top-12),below=Math.max(0,innerHeight-Math.max(plot.bottom,top)-12);
+      const useAbove=above>=size.height || above>=below,space=useAbove?above:below;
+      // Keep the whole turn grid clear. Very short viewports use the inline summary.
+      if(space<70){summary.innerHTML=turnSummary(b.dataset.agent,Number(b.dataset.turn));hideTip();return;}
+      tip.style.maxHeight=Math.min(320,space)+'px';
+      const height=tip.getBoundingClientRect().height;
+      tip.style.left=Math.max(12,Math.min(viewportWidth-size.width-12,box.left+box.width/2-size.width/2))+'px';
+      tip.style.top=(useAbove?plot.top-height-12:Math.max(plot.bottom,top)+12)+'px';
     }
     on(container,'click',event=>{
       const b=event.target.closest('button');if(!b)return;
