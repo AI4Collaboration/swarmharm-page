@@ -18,14 +18,15 @@ const GAP=8; // approved spacing, keeps SWARM and HARM separated
 const FORM_END=900, ATTACK=5480, END=10800;
 const BEATS=[
   [0,0],
-  [850,200],   // independent exploration
-  [2200,520], // nearby individuals gather into local flocks
-  [3600,1030],// flocks resolve into the wordmark
-  [4100,1030],
-  [4700,5480],
-  [5800,8050],
-  [6800,END],
-  [7550,END]
+  [450,200],  // quick independent exploration
+  [1250,520], // local encounters
+  [2900,760], // gradual convergence toward letters
+  [4200,1030],// let the wordmark resolve slowly
+  [4700,1030],
+  [5300,5480],
+  [6400,8050],
+  [7400,END],
+  [8150,END]
 ];
 const CYCLE=BEATS[BEATS.length-1][0];
 function sceneTime(ms){
@@ -154,6 +155,11 @@ function buildBeeCache(img){
    c.save();c.translate(x,y);c.rotate(n*Math.PI*2/CACHE_ROTATIONS);
    c.drawImage(img,srcX,srcY,34,34,-17,-17,34,34);c.restore();
   }
+ }
+ // Tint the swarm sprite atlas once, retaining transparent wings and detail.
+ if(img===blackBees){
+  c.globalCompositeOperation='source-in';c.fillStyle='#246bc3';
+  c.fillRect(0,0,off.width,off.height);c.globalCompositeOperation='source-over';
  }
  return off;
 }
@@ -335,7 +341,7 @@ function buildFormation(){
   const angle=rand()*Math.PI*2;
   const x=ox+(-9+rand()*276)*S,y=oy+(-24+rand()*86)*S;
   return {target,x,y,vx:Math.cos(angle)*1.3*S,vy:Math.sin(angle)*1.3*S,
-   sprite:target.sprite,size:(5+rand()*3)*S,frames:[{x,y}]};
+   sprite:target.sprite,size:(7+rand()*3.5)*S,frames:[{x,y}]};
  });
  for(let frame=1;frame<=100;frame++){
   const u=frame/100,seek=smooth((u-.56)/.44);
@@ -373,7 +379,7 @@ function drawFormation(t){
  for(const p of formation){
   const a=p.frames[index],b=p.frames[index+1],u=frame-index;
   beeSprite(blackBees,p.sprite,lerp(a.x,b.x,u),lerp(a.y,b.y,u),p.size,
-   Math.atan2(b.y-a.y,b.x-a.x),.88*fade);
+   Math.atan2(b.y-a.y,b.x-a.x),.98*fade);
  }
 }
 function flightPos(p,u){
