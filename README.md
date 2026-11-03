@@ -6,6 +6,10 @@ separately in AI4Collaboration/SwarmHarm.
 
 ## Content and evidence
 
+Keep the established labels **Phase 1: Swarm Formation** and
+**Phase 2: Collective Misalignment** in headings, findings and case navigation.
+Do not rename them while simplifying explanatory copy.
+
 Phase 1 and Phase 2 are independent studies. The overview illustrates their
 separate designs; it does not combine results into one trajectory.
 

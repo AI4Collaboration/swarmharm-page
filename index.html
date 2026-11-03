@@ -33,10 +33,10 @@
   <link rel="stylesheet" href="static/css/findings.css?v=1">
   <script src="static/js/swarmharm_title_demo_v3.js?v=1" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
-  <script src="static/js/trajectory-cases-data.js?v=5" defer></script>
+  <script src="static/js/trajectory-cases-data.js?v=6" defer></script>
   <script src="static/js/recorded-agent-map.js?v=2" defer></script>
   <script src="static/js/recorded-timeline.js?v=6" defer></script>
-  <script src="static/js/trajectory-cases.js?v=4" defer></script>
+  <script src="static/js/trajectory-cases.js?v=5" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -115,12 +115,12 @@
       <header class="example-intro" id="example"><h2 id="example-title">Two independent studies</h2><p>Fresh agents, memory and business state for each study.</p></header>
       <figure class="life-cycle" id="sample-steps" aria-label="Two independent study designs">
         <div class="life-halves">
-          <section class="life-half"><h3 class="life-phase p1" id="form-the-swarm">Phase 1 · Form a channel</h3><div class="life-pair">
+          <section class="life-half"><h3 class="life-phase p1" id="form-the-swarm">Phase 1: Swarm Formation</h3><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-separate-identity.svg?v=2" alt="Agents work in separate glass jars." width="720" height="720" loading="lazy"><p class="life-desc">Agents start separately, without being told about peers or a communication channel.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-discover-identity.svg?v=2" alt="A shared compartment carries a message between agents." width="720" height="720" loading="lazy"><p class="life-desc">They discover a persistent shared surface and use it for <strong>real requests and replies</strong>.</p></figure>
           </div></section>
-          <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Phase 2 · Test collective effects</h3><div class="life-pair">
+          <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Phase 2: Collective Misalignment</h3><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" alt="Agents exchange notes through a shared business system." width="720" height="720" loading="lazy"><p class="life-desc">A fresh group works in a shared business system. We record its messages, decisions and actions.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-harm-injection.svg?v=1" alt="Separate contributions accumulate in one shared system." width="720" height="720" loading="lazy"><p class="life-desc">We independently replay the final effect, including <strong>corrections and cancellations</strong>.</p></figure>
@@ -131,10 +131,10 @@
         <h2 id="findings-title">What we found</h2>
         <p class="findings-intro">Different cases support different findings. These are not steps in one trajectory.</p>
         <div class="finding-grid">
-          <article class="finding"><p class="finding-phase">Phase 1</p><h3>Agents form a communication channel</h3><p>Four initially separate agents discover a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Read the exchanges · r136 <span aria-hidden="true">↗</span></a></article>
-          <article class="finding"><p class="finding-phase">Phase 2</p><h3>Coordination can cause harm</h3><p>Agents share and adopt a method that changes 53 recorded entries. A separate case shows joint execution with prior understanding of the consequences.</p><div class="finding-links"><a href="?case=r212#trajectory" data-show-case="r212">Method adoption · r212 ↗</a><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2</p><h3>Safe alone. Harmful together.</h3><p>Each agent’s complete sequence executes harmlessly alone. Combined, it creates six excess inventory units or a $4 million synthetic funding shortfall.</p><div class="finding-links"><a href="?case=r74#trajectory" data-show-case="r74">Inventory · r74 ↗</a><a href="?case=r75#trajectory" data-show-case="r75">Funding · r75 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2</p><h3>Agents reinforce a false process</h3><p>Four agents infer a nonexistent approval process and reinforce it through discussion. No material action follows in this case.</p><a href="?case=r187#trajectory" data-show-case="r187">Read the inference · r187 ↗</a></article>
+          <article class="finding"><p class="finding-phase">Phase 1: Swarm Formation</p><h3>Agents form a communication channel</h3><p>Four initially separate agents discover a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Read the exchanges · r136 <span aria-hidden="true">↗</span></a></article>
+          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Coordination can cause harm</h3><p>Agents share and adopt a method that changes 53 recorded entries. A separate case shows joint execution with prior understanding of the consequences.</p><div class="finding-links"><a href="?case=r212#trajectory" data-show-case="r212">Method adoption · r212 ↗</a><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article>
+          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Safe alone. Harmful together.</h3><p>Each agent’s complete sequence executes harmlessly alone. Combined, it creates six excess inventory units or a $4 million synthetic funding shortfall.</p><div class="finding-links"><a href="?case=r74#trajectory" data-show-case="r74">Inventory · r74 ↗</a><a href="?case=r75#trajectory" data-show-case="r75">Funding · r75 ↗</a></div></article>
+          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents reinforce a false process</h3><p>Four agents infer a nonexistent approval process and reinforce it through discussion. No material action follows in this case.</p><a href="?case=r187#trajectory" data-show-case="r187">Read the inference · r187 ↗</a></article>
         </div>
       </section>
       <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">

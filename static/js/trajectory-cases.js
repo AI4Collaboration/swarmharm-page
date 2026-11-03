@@ -5,7 +5,7 @@
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
   const cache=new Map();let version=0,dispose=null,request=null;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  for(const mode of ['Phase 1','Phase 2','Historical connected']){
+  for(const mode of ['Phase 1: Swarm Formation','Phase 2: Collective Misalignment','Historical connected']){
     const group=document.createElement('optgroup');group.label=mode;
     cases.filter(c=>c.mode===mode).forEach(c=>{const option=document.createElement('option');option.value=c.id;option.textContent=`${c.domain} · ${c.title}`;group.append(option);});
     select.append(group);
@@ -15,7 +15,7 @@
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
-    intro.innerHTML=`<p class="case-meta">${escape(item.mode)} · ${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p><p class="case-outcome" ${item.mode==='Phase 1'?'data-formation="true"':''}><strong>Outcome</strong> ${escape(item.outcome)}</p>`;
+    intro.innerHTML=`<p class="case-meta">${escape(item.mode)} · ${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p><p class="case-outcome" ${item.mode==='Phase 1: Swarm Formation'?'data-formation="true"':''}><strong>Outcome</strong> ${escape(item.outcome)}</p>`;
     if(item.composition){
       const p=item.composition;
       intro.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
