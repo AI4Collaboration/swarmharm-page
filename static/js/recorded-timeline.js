@@ -33,7 +33,7 @@
     function render(){
       const filter=mode+":"+actor;if(renderedFilter===filter)return;renderedFilter=filter;
       const visible=data.events.filter(e=>(!actor||e.actor===actor)&&(mode==='all'||mode==='message'?mode==='all'||e.messages.length:e.important||e.messages.length));
-      list.innerHTML=visible.map(row).join('')+`<article class="record-outcome"><strong>Outcome</strong><p>${esc(meta.outcome)}</p></article>`;
+      list.innerHTML=visible.map(row).join('');
       list.scrollTop=0;container.querySelectorAll('[data-record-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.recordMode===mode)));
     }
     function argumentsMarkup(args){return Object.entries(args).map(([k,v])=>`<div><dt><code>${esc(k)}</code></dt><dd>${typeof v==='string'?(k==='command'?`<pre><code>${esc(v)}</code></pre>`:source(v)):typeof v==='object'?`<pre><code>${esc(JSON.stringify(v,null,2))}</code></pre>`:`<code>${esc(v)}</code>`}</dd></div>`).join('');}

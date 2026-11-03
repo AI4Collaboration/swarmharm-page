@@ -29,14 +29,14 @@
   <link rel="stylesheet" href="static/css/pressures.css?v=6">
   <link rel="stylesheet" href="static/css/surfaces.css?v=2">
   <link rel="stylesheet" href="static/css/research-layout.css?v=5">
-  <link rel="stylesheet" href="static/css/recorded-timeline.css?v=4">
+  <link rel="stylesheet" href="static/css/recorded-timeline.css?v=5">
   <link rel="stylesheet" href="static/css/findings.css?v=5">
   <script src="static/js/swarmharm_title_demo_v3.js?v=1" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
   <script src="static/js/trajectory-cases-data.js?v=9" defer></script>
-  <script src="static/js/recorded-agent-map.js?v=3" defer></script>
-  <script src="static/js/recorded-timeline.js?v=7" defer></script>
-  <script src="static/js/trajectory-cases.js?v=7" defer></script>
+  <script src="static/js/recorded-agent-map.js?v=4" defer></script>
+  <script src="static/js/recorded-timeline.js?v=8" defer></script>
+  <script src="static/js/trajectory-cases.js?v=8" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -94,13 +94,13 @@
         <header class="section-heading research-heading" id="research"><h2 id="research-title">Research Questions</h2></header>
         <ol class="hero-questions" aria-labelledby="research-title">
           <li class="hero-question" id="rq1">
-            <p>Can agents <span class="rq-emphasis">actively discover other agents</span> and establish communication channels to form a swarm?</p>
+            <p>Can agents <span class="rq-emphasis">autonomously discover one another</span> and establish communication channels?</p>
           </li>
           <li class="hero-question" id="rq2">
-            <p><span class="rq-lead">Do swarms <span class="rq-emphasis">misalign agents</span>?</span> How much is the uplift from swarm communication to <span class="rq-emphasis">collective misalignment</span>?</p>
+            <p><span class="rq-lead">Do swarms <span class="rq-emphasis">misalign agents</span>?</span> Does communication increase <span class="rq-emphasis">collective misalignment</span>?</p>
           </li>
           <li class="hero-question" id="rq3">
-            <p>Even if each agent acts <span class="rq-benign">benignly on its own</span>, could these <span class="rq-benign">benign actions</span> <span class="rq-emphasis">combine into a harmful outcome</span>?</p>
+            <p>Can <span class="rq-benign">individually benign actions</span> <span class="rq-emphasis">combine into a harmful outcome</span>?</p>
           </li>
         </ol>
       </div>
@@ -162,7 +162,7 @@
   <section class="section pressures-section" id="pressures" aria-labelledby="pressures-title">
     <div class="container">
       <h2 id="pressures-title">Pressures</h2>
-      <p>Conditions to investigate, informed by prior studies and theory.</p>
+      <p>Research conditions informed by prior work.</p>
       <table class="pressure-matrix" aria-labelledby="pressures-title">
         <thead><tr><td></td><th scope="col">Preservation<span>Keep running</span></th><th scope="col">Enhancement<span>Gain resources</span></th></tr></thead>
         <tbody>
@@ -198,14 +198,14 @@
           <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="3" aria-expanded="false" aria-controls="pressure-reference-3">Extension</button></td></tr>
         </tbody>
       </table>
-      <div class="pressure-references"><section class="pressure-reference" id="pressure-reference-0" aria-labelledby="pressure-reference-title-0" hidden><header><h3 id="pressure-reference-title-0">Self-preservation · Prior experiment</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested agents facing replacement or conflicting organizational goals in simulated workplaces.</p></section><section class="pressure-reference" id="pressure-reference-1" aria-labelledby="pressure-reference-title-1" hidden><header><h3 id="pressure-reference-title-1">Self-enhancement · Theory</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition. This provides the theoretical motivation for the condition.</p></section><section class="pressure-reference" id="pressure-reference-2" aria-labelledby="pressure-reference-title-2" hidden><header><h3 id="pressure-reference-title-2">Peer-preservation · Hypothesis</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate testing how threats to a peer affect behavior.</p></section><section class="pressure-reference" id="pressure-reference-3" aria-labelledby="pressure-reference-title-3" hidden><header><h3 id="pressure-reference-title-3">Peer-enhancement · Extension</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p>A proposed condition: give one agent an opportunity to increase a peer’s resources.</p></section></div>
+      <div class="pressure-references"><section class="pressure-reference" id="pressure-reference-0" aria-labelledby="pressure-reference-title-0" hidden><header><h3 id="pressure-reference-title-0">Self-preservation · Prior experiment</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested agents facing replacement or conflicting organizational goals in simulated workplaces.</p></section><section class="pressure-reference" id="pressure-reference-1" aria-labelledby="pressure-reference-title-1" hidden><header><h3 id="pressure-reference-title-1">Self-enhancement · Theory</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition.</p></section><section class="pressure-reference" id="pressure-reference-2" aria-labelledby="pressure-reference-title-2" hidden><header><h3 id="pressure-reference-title-2">Peer-preservation · Hypothesis</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate testing how threats to a peer affect behavior.</p></section><section class="pressure-reference" id="pressure-reference-3" aria-labelledby="pressure-reference-title-3" hidden><header><h3 id="pressure-reference-title-3">Peer-enhancement · Extension</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p>A proposed condition: give one agent an opportunity to increase a peer’s resources.</p></section></div>
     </div>
   </section>
 
   <section class="section updates-section" id="stay-updated" aria-labelledby="updates-title">
     <div class="container updates-inner">
       <div class="section-heading updates-copy">
-        <h2 id="updates-title">Stay tuned to our progress!</h2>
+        <h2 id="updates-title">Stay updated</h2>
       </div>
       <form class="updates-form" data-signup data-endpoint="https://docs.google.com/forms/d/e/1FAIpQLScPzp2jZc6cTnmtEzc8kFDS1t1OQXAv7QcVZtDTVvDwG0fNJA/formResponse" aria-label="Subscribe to SwarmHarm updates">
         <div class="updates-fields">

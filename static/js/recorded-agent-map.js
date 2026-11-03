@@ -36,7 +36,7 @@
       if(n.kind==='outcome')return `<strong>Outcome</strong><p>${esc(meta.outcome)}</p>`;
       const ms=(n.messages.length?n.messages:n.reads).map(id=>messages.get(id)).filter(Boolean);
       const excerpt=ms.slice(0,2).map(m=>`<p>${esc(m.body.length>180?m.body.slice(0,180)+'…':m.body)}</p>${n.kind==='message'?`<small>${m.reads.length?'Read by '+m.reads.map(r=>names.get(r.actor)).join(', '):'No verified cross-agent read'}</small>`:''}`).join('');
-      return `<strong>${esc(names.get(n.actor))} · Turn ${n.turn} · ${esc(n.label)}</strong>${excerpt||`<p>${esc(events.get(n.id).label)}</p>`}`;
+      return `<strong>${esc(names.get(n.actor))} · Turn ${n.turn} · ${esc(n.label)}</strong>${excerpt||(events.get(n.id).label!==n.label?`<p>${esc(events.get(n.id).label)}</p>`:'')}`;
     }
     function select(n){
       if (selected===n) return;

@@ -33,9 +33,6 @@
 .record-unread,.record-action-copy { margin:8px 0 0; color:var(--muted); font:12px/1.6 var(--font); }
 .record-failed { margin:7px 0 0; color:var(--risk); font:12px/1.6 var(--font); }
 .record-message .record-unread { margin-top:9px; font-size:11px; color:var(--muted); }
-.record-outcome { margin:4px 0 12px 96px; padding:16px; background:var(--risk-wash); border-radius:8px; color:var(--risk); }
-.record-outcome strong { font:600 13px var(--font); }
-.record-outcome p { margin:6px 0 0; font:15px/1.6 var(--font); }
 .record-detail { margin:24px 0; padding:20px; border:1px solid var(--line); border-radius:10px; scroll-margin-top:110px; }
 .record-detail[hidden] { display:none; }
 .record-detail > header { display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:16px; }
@@ -104,7 +101,6 @@
  .record-open time { font-size:10px; }
  .record-message { padding:11px 12px; }
  .record-message p { font-size:13px; }
- .record-outcome { margin-left:58px; }
  .record-modes button { font-size:12px; padding:8px 10px; }
  .record-detail { padding:15px; }
  .record-original-message { padding:11px 12px; }
