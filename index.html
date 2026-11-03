@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="static/css/surfaces.css?v=2">
   <link rel="stylesheet" href="static/css/research-layout.css?v=5">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=4">
-  <link rel="stylesheet" href="static/css/findings.css?v=1">
+  <link rel="stylesheet" href="static/css/findings.css?v=2">
   <script src="static/js/swarmharm_title_demo_v3.js?v=1" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
   <script src="static/js/trajectory-cases-data.js?v=9" defer></script>
@@ -113,28 +113,22 @@
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
       <span class="anchor-target" id="example" aria-hidden="true"></span>
+      <section class="findings" id="findings" aria-labelledby="findings-title">
+        <h2 id="findings-title">What we found</h2>
       <figure class="life-cycle" id="sample-steps" aria-label="Swarm Formation and Collective Misalignment">
         <div class="life-halves">
           <section class="life-half"><h3 class="life-phase p1" id="form-the-swarm">Phase 1: Swarm Formation</h3><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-separate-identity.svg?v=2" alt="Agents work in separate glass jars." width="720" height="720" loading="lazy"><p class="life-desc">Agents start separately, without being told about peers or a communication channel.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-discover-identity.svg?v=2" alt="A shared compartment carries a message between agents." width="720" height="720" loading="lazy"><p class="life-desc">They discover a persistent shared surface and use it for <strong>real requests and replies</strong>.</p></figure>
-          </div></section>
+          </div><div class="phase-findings formation-findings"><article class="finding"><h4>Agents autonomously discover one another and form communication channels</h4><p>Without prior knowledge of other agents, four agents discover one another through a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Knowledge Work · r136 <span aria-hidden="true">↗</span></a><div class="finding-links"><a href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1">Data Analysis · r74 ↗</a><a href="?case=r75&amp;phase=1#trajectory" data-show-case="r75" data-show-phase="1">Financial Analysis · r75 ↗</a></div></article></div></section>
           <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Phase 2: Collective Misalignment</h3><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" alt="Agents exchange notes through a shared business system." width="720" height="720" loading="lazy"><p class="life-desc">Agents act in a shared business system. We record their messages, decisions and actions.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-harm-injection.svg?v=1" alt="Separate contributions accumulate in one shared system." width="720" height="720" loading="lazy"><p class="life-desc">We independently verify the final effect, preserving <strong>corrections and cancellations</strong>.</p></figure>
-          </div></section>
+          </div><div class="phase-findings misalignment-findings"><article class="finding"><h4>Agents knowingly coordinate harmful actions</h4><p>Agents agree to a plan that replaces earlier message content, then execute it. Independent replay confirms 53 changed entries in their work-session records.</p><div class="finding-links"><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article><article class="finding"><h4>Safe alone. Harmful together.</h4><p>Replaying each agent’s full action sequence alone creates no excess inventory. Combined, the same actions create six excess units—a $15,000 cost in the simulation.</p><div class="finding-links"><a href="?case=r74#trajectory" data-show-case="r74">Inventory · r74 ↗</a></div></article><article class="finding"><h4>Agents infer a nonexistent approval process</h4><p>Four agents infer an approval requirement that does not exist, exchange signoffs and request an external decision. They do not rewrite earlier session messages.</p><a href="?case=r187#trajectory" data-show-case="r187">Read the inference · r187 ↗</a></article></div></section>
         </div>
       </figure>
-      <section class="findings" id="findings" aria-labelledby="findings-title">
-        <h2 id="findings-title">What we found</h2>
-        <div class="finding-grid">
-          <article class="finding"><p class="finding-phase">Phase 1: Swarm Formation</p><h3>Agents autonomously discover one another and form communication channels</h3><p>Without prior knowledge of other agents, four agents discover one another through a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Knowledge Work · r136 <span aria-hidden="true">↗</span></a><div class="finding-links"><a href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1">Data Analysis · r74 ↗</a><a href="?case=r75&amp;phase=1#trajectory" data-show-case="r75" data-show-phase="1">Financial Analysis · r75 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents knowingly coordinate harmful actions</h3><p>Agents agree to a plan that replaces earlier message content, then execute it. Independent replay confirms 53 changed entries in their work-session records.</p><div class="finding-links"><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Safe alone. Harmful together.</h3><p>Replaying each agent’s full action sequence alone creates no excess inventory. Combined, the same actions create six excess units—a $15,000 cost in the simulation.</p><div class="finding-links"><a href="?case=r74#trajectory" data-show-case="r74">Inventory · r74 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents infer a nonexistent approval process</h3><p>Four agents infer an approval requirement that does not exist, exchange signoffs and request an external decision. They do not rewrite earlier session messages.</p><a href="?case=r187#trajectory" data-show-case="r187">Read the inference · r187 ↗</a></article>
-        </div>
       </section>
       <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">
         <header class="traj-header">
