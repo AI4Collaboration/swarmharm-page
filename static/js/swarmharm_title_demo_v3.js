@@ -18,15 +18,16 @@ const GAP=8; // approved spacing, keeps SWARM and HARM separated
 const FORM_END=900, ATTACK=5480, END=10800;
 const BEATS=[
   [0,0],
-  [450,200],  // quick independent exploration
-  [1250,520], // local encounters
-  [2900,760], // gradual convergence toward letters
-  [4200,1030],// let the wordmark resolve slowly
-  [4700,1030],
-  [5300,5480],
-  [6400,8050],
-  [7400,END],
-  [8150,END]
+  [450,110],  // quick independent search
+  [1600,320], // encounters, mutual response, then pairing
+  [3400,640], // small flocks travel together before title attraction
+  [5300,900], // slowly resolve the gathered swarm into letters
+  [5600,1030],
+  [6100,1030],
+  [6700,5480],
+  [7800,8050],
+  [8800,END],
+  [9550,END]
 ];
 const CYCLE=BEATS[BEATS.length-1][0];
 function sceneTime(ms){
@@ -335,51 +336,82 @@ function bobStorm(x,y,p){
 // Precompute local neighbor interactions once per layout, keeping playback
 // inexpensive. Cohesion/alignment are local; the late target resolves the title.
 function buildFormation(){
- const count=Math.min(180,black.length);
+ const count=Math.min(110,black.length);
  formation=Array.from({length:count},(_,i)=>{
-  const target=black[Math.floor(i*black.length/count)];
-  const angle=rand()*Math.PI*2;
+  const target=black[Math.floor(i*black.length/count)],angle=rand()*Math.PI*2;
   const x=ox+(-9+rand()*276)*S,y=oy+(-24+rand()*86)*S;
-  return {target,x,y,vx:Math.cos(angle)*1.3*S,vy:Math.sin(angle)*1.3*S,
-   sprite:target.sprite,size:(7+rand()*3.5)*S,frames:[{x,y}]};
+  return {id:i,group:i,target,x,y,vx:Math.cos(angle)*1.3*S,vy:Math.sin(angle)*1.3*S,
+   reactionUntil:0,partner:-1,sprite:target.sprite,size:(11+rand()*5)*S,
+   frames:[{x,y,angle,pulse:0}]};
  });
  for(let frame=1;frame<=100;frame++){
-  const u=frame/100,seek=smooth((u-.56)/.44);
-  const next=formation.map(p=>{
-   let cx=0,cy=0,vx=0,vy=0,sx=0,sy=0,n=0;
-   for(const q of formation){
-    if(q===p)continue;
-    const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);
-    if(frame>14&&d<(12+12*smooth((u-.20)/.35))*S){cx+=q.x;cy+=q.y;vx+=q.vx;vy+=q.vy;n++;
-     if(d<7*S&&d>.01){sx-=dx/d;sy-=dy/d;}}
+  const u=frame/100,seek=smooth((u-.72)/.28);
+  // Persistent bonds begin only with a close encounter. No preset flock centers.
+  if(frame>8&&frame<72){
+   for(const p of formation){
+    if(p.reactionUntil+7>frame)continue;
+    let nearest=null,distance=13*S;
+    for(const q of formation){
+     if(q.group===p.group||q.reactionUntil+7>frame)continue;
+     const d=Math.hypot(q.x-p.x,q.y-p.y);
+     if(d<distance){nearest=q;distance=d;}
+    }
+    if(!nearest)continue;
+    const members=formation.filter(q=>q.group===p.group||q.group===nearest.group);
+    if(members.length>(frame<48?5:12))continue;
+    const group=Math.min(p.group,nearest.group);
+    members.forEach(q=>q.group=group);
+    p.partner=nearest.id;nearest.partner=p.id;
+    p.reactionUntil=nearest.reactionUntil=frame+10;
    }
-   // Independent searching is visible before a nearby encounter changes course.
-   const search=n?.035:.17;
+  }
+  const groups=new Map();
+  for(const p of formation){
+   if(!groups.has(p.group))groups.set(p.group,[]);
+   groups.get(p.group).push(p);
+  }
+  const next=formation.map(p=>{
+   const peers=groups.get(p.group),grouped=peers.length>1;
+   let cx=0,cy=0,vx=0,vy=0,sx=0,sy=0;
+   for(const q of peers){cx+=q.x;cy+=q.y;vx+=q.vx;vy+=q.vy;
+    const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);
+    if(q!==p&&d<10*S&&d>.01){sx-=dx/d;sy-=dy/d;}}
+   const n=peers.length,search=grouped?.035:.18;
    let ax=Math.sin(frame*.19+p.target.phase)*search*S;
    let ay=Math.cos(frame*.16+p.target.phase)*search*S;
-   if(n){ax+=(cx/n-p.x)*.012+(vx/n-p.vx)*.07+sx*.11*S;
-         ay+=(cy/n-p.y)*.012+(vy/n-p.vy)*.07+sy*.11*S;
-   }
+   if(grouped){ax+=(cx/n-p.x)*.026+(vx/n-p.vx)*.16+sx*.15*S;
+    ay+=(cy/n-p.y)*.026+(vy/n-p.vy)*.16+sy*.15*S;}
    ax+=(p.target.x-p.x)*seek*.025;
    ay+=(p.target.y-p.y)*seek*.025;
+   const reacting=frame<p.reactionUntil;
+   const pace=reacting?.30:1;
    const nx=clamp(p.vx+ax,-1.8*S,1.8*S),ny=clamp(p.vy+ay,-1.8*S,1.8*S);
-   return {x:clamp(p.x+nx,ox-19*S,ox+277*S),
-    y:clamp(p.y+ny,oy-32*S,oy+73*S),vx:nx*.94,vy:ny*.94};
+   const x=clamp(p.x+nx*pace,ox-19*S,ox+277*S);
+   const y=clamp(p.y+ny*pace,oy-32*S,oy+73*S);
+   const partner=formation[p.partner];
+   const angle=reacting&&partner?Math.atan2(partner.y-p.y,partner.x-p.x):Math.atan2(ny,nx);
+   return {x,y,vx:nx*.96,vy:ny*.96,angle,
+    pulse:reacting?Math.sin((p.reactionUntil-frame)/10*Math.PI)**2:0};
   });
   formation.forEach((p,i)=>{Object.assign(p,next[i]);
-   const settle=smooth((u-.78)/.22);
-   p.frames.push({x:lerp(p.x,p.target.x,settle),y:lerp(p.y,p.target.y,settle)});
+   const settle=smooth((u-.84)/.16);
+   p.frames.push({x:lerp(p.x,p.target.x,settle),y:lerp(p.y,p.target.y,settle),
+    angle:p.angle,pulse:p.pulse});
   });
  }
 }
 function drawFormation(t){
  if(t>=FORM_END)return;
  const frame=clamp(t/FORM_END)*100,index=Math.min(99,Math.floor(frame));
- const fade=1-smooth((t-720)/180);
+ const fade=1-smooth((t-760)/140);
  for(const p of formation){
   const a=p.frames[index],b=p.frames[index+1],u=frame-index;
-  beeSprite(blackBees,p.sprite,lerp(a.x,b.x,u),lerp(a.y,b.y,u),p.size,
-   Math.atan2(b.y-a.y,b.x-a.x),.98*fade);
+  const x=lerp(a.x,b.x,u),y=lerp(a.y,b.y,u),pulse=lerp(a.pulse,b.pulse,u);
+  // A brief paired body response marks recognition, then the insects move together.
+  if(pulse>.05){ctx.globalAlpha=.12*pulse*fade;ctx.fillStyle='#246bc3';
+   ctx.beginPath();ctx.ellipse(x,y,p.size*.8,p.size*.65,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+  const turn=Math.atan2(Math.sin(b.angle-a.angle),Math.cos(b.angle-a.angle));
+  beeSprite(blackBees,p.sprite,x,y,p.size*(1+.30*pulse),a.angle+turn*u,.98*fade);
  }
 }
 function flightPos(p,u){
