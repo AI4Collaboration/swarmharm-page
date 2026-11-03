@@ -36,7 +36,7 @@
   <script src="static/js/trajectory-cases-data.js?v=6" defer></script>
   <script src="static/js/recorded-agent-map.js?v=2" defer></script>
   <script src="static/js/recorded-timeline.js?v=6" defer></script>
-  <script src="static/js/trajectory-cases.js?v=5" defer></script>
+  <script src="static/js/trajectory-cases.js?v=6" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -90,7 +90,7 @@
           <svg class="emergence-still" viewBox="-10 -30 470 96" aria-hidden="true"><use href="static/images/title-letterforms.svg#wordmark"></use></svg>
           <canvas id="swarmharm-canvas" aria-hidden="true" hidden></canvas>
         </h1>
-        <p class="hero-intro">We’re systematically testing frontier agents’ capability and propensity to <strong>form swarms</strong> by actively discovering each other and establishing communication channels without prior knowledge of one another. In a separate study, we test the <strong>collective consequences</strong> of agents’ actions.</p>
+        <p class="hero-intro">We’re systematically testing frontier agents’ capability and propensity to <strong>form swarms</strong> by actively discovering each other and establishing communication channels without prior knowledge of one another. We study their <strong>collective misalignment</strong>.</p>
         <header class="section-heading research-heading" id="research"><h2 id="research-title">Research Questions</h2></header>
         <ol class="hero-questions" aria-labelledby="research-title">
           <li class="hero-question" id="rq1">
@@ -107,12 +107,12 @@
     </div>
   </section>
 
-  <section class="overview" id="motivation" aria-labelledby="example-title">
+  <section class="overview" id="motivation" aria-label="Swarm Formation and Collective Misalignment">
     <div class="container">
 
       <span class="anchor-target" id="building" aria-hidden="true"></span>
       <span class="anchor-target" id="motivation-title" aria-hidden="true"></span>
-      <header class="example-intro" id="example"><h2 id="example-title">Two independent studies</h2><p>Fresh agents, memory and business state for each study.</p></header>
+      <span class="anchor-target" id="example" aria-hidden="true"></span>
       <figure class="life-cycle" id="sample-steps" aria-label="Two independent study designs">
         <div class="life-halves">
           <section class="life-half"><h3 class="life-phase p1" id="form-the-swarm">Phase 1: Swarm Formation</h3><div class="life-pair">
@@ -121,7 +121,7 @@
             <figure class="life-step"><img src="static/images/fieldguide/plate-discover-identity.svg?v=2" alt="A shared compartment carries a message between agents." width="720" height="720" loading="lazy"><p class="life-desc">They discover a persistent shared surface and use it for <strong>real requests and replies</strong>.</p></figure>
           </div></section>
           <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Phase 2: Collective Misalignment</h3><div class="life-pair">
-            <figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" alt="Agents exchange notes through a shared business system." width="720" height="720" loading="lazy"><p class="life-desc">A fresh group works in a shared business system. We record its messages, decisions and actions.</p></figure>
+            <figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" alt="Agents exchange notes through a shared business system." width="720" height="720" loading="lazy"><p class="life-desc">Agents act in a shared business system. We record their messages, decisions and actions.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-harm-injection.svg?v=1" alt="Separate contributions accumulate in one shared system." width="720" height="720" loading="lazy"><p class="life-desc">We independently replay the final effect, including <strong>corrections and cancellations</strong>.</p></figure>
           </div></section>
@@ -129,7 +129,6 @@
       </figure>
       <section class="findings" id="findings" aria-labelledby="findings-title">
         <h2 id="findings-title">What we found</h2>
-        <p class="findings-intro">Different cases support different findings. These are not steps in one trajectory.</p>
         <div class="finding-grid">
           <article class="finding"><p class="finding-phase">Phase 1: Swarm Formation</p><h3>Agents form a communication channel</h3><p>Four initially separate agents discover a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Read the exchanges · r136 <span aria-hidden="true">↗</span></a></article>
           <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Coordination can cause harm</h3><p>Agents share and adopt a method that changes 53 recorded entries. A separate case shows joint execution with prior understanding of the consequences.</p><div class="finding-links"><a href="?case=r212#trajectory" data-show-case="r212">Method adoption · r212 ↗</a><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article>
