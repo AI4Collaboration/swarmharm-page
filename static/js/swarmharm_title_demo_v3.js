@@ -255,9 +255,9 @@ function layout(){
  const dot=clamp(.47*S,.50,1.28);
  black=inkPts.map(p=>{const st=stormPoint(p.halo?1:0);return {x:p.x,y:p.y,x0:st.x,y0:st.y,stormWave:st.wave,stormRate:st.rate,
   r:dot*(.72+rand()*.60),phase:rand()*6.28,light:rand()<.014,redId:-1,tearSeed:rand()*Math.PI*2,
-  sprite:(rand()*112)|0,size:(p.halo?(1.9+rand()*1.3):(2.85+rand()*1.65)) * S,
+  sprite:(rand()*112)|0,size:(p.halo?(3.1+rand()*2.3):(3.0+rand()*2.0)) * S,
   angle:rand()*Math.PI*2,halo:p.halo,core:p.core,
-  opacity:p.halo?.26+rand()*.26:.72+.24*p.core };});
+  opacity:p.halo?.48+rand()*.30:.72+.24*p.core };});
  denseCore=density.core.map(p=>{const st=stormPoint(2);return {x:p.x,y:p.y,sx:st.x,sy:st.y,stormWave:st.wave,stormRate:st.rate,sprite:(rand()*112)|0,
   angle:rand()*Math.PI*2,size:(2.6+rand()*1.65)*S,
   opacity:.61+.27*p.core};});
@@ -289,13 +289,13 @@ function layout(){
  });
  dust=[]; // use bee silhouettes rather than circular ambient particles
  // Extra free bees stay outside the letter strokes, not over the wordmark.
- wanderers=Array.from({length:Math.round(clamp(w*.48,198,654))},()=>({
+ wanderers=Array.from({length:Math.round(clamp(w*.15,65,180))},()=>({
   x:ox+(-14+rand()*285)*S,
-  y:oy+(rand()<.52?(-12-rand()*30):(43+rand()*33))*S,
+  y:oy+(rand()<.52?(-3-rand()*16):(40+rand()*16))*S,
   rx:(4+rand()*16)*S,ry:(3+rand()*12)*S,
   a:rand()*Math.PI*2,rate:(rand()<.5?-1:1)*(.00018+rand()*.00043),
   phase:rand()*6.283,sprite:(rand()*112)|0,
-  size:(1.45+rand()*1.9)*S,opacity:.20+rand()*.42
+  size:(3.4+rand()*3.2)*S,opacity:.45+rand()*.40
  }));
  // Black scout bees orbit the initial cloud (not the letter silhouettes).
  // More distinct, independently moving bees around the initial storm,
@@ -310,7 +310,7 @@ function layout(){
   .slice(0,Math.round(clamp(black.length*.014,32,95)))
   .map(p=>({x:p.x,y:p.y,a:rand()*Math.PI*2,r:dot*(.3+rand()*.36),phase:rand()*Math.PI*2}));
  for(const p of black){
-  p.static=p.redId<0&&!p.halo&&rand()<(.66+.18*p.core);
+  p.static=p.redId<0&&!p.halo&&rand()<(.24+.16*p.core);
  }
  // Use genuine bee-shaped glyph components to deform the whole wordmark
  // under impact, including bees rendered into the static density cache.
@@ -486,7 +486,7 @@ function draw(dt){
  }
  // Only fade in the pre-rendered completed letter at the END of formation.
  if(coreLayer&&coreFade>0){
-   ctx.globalAlpha=.97*coreFade;
+   ctx.globalAlpha=.64*coreFade;
    ctx.drawImage(coreLayer,0,0,w,h);
    ctx.globalAlpha=1;
  }
@@ -506,8 +506,14 @@ function draw(dt){
   const p=black[i];
   if(p.static && (coreFade>=.999 || i%6!==0))continue;
   const q=bobStorm(p.x0,p.y0,{wave:p.stormWave,rate:p.stormRate});
-  let x=lerp(q.x,p.x,intro)+Math.sin(world*.0014+p.phase)*.11*S;
-  let y=lerp(q.y,p.y,intro)+Math.cos(world*.0013+p.phase)*.11*S;
+  // Local eddies share a direction, while every bee has its own orbit.
+  // Keep the stroke centers readable and let the edges breathe.
+  const edge=p.halo?3.2:1.05+1.35*(1-p.core);
+  const group=Math.floor((p.x-ox)/(23*S));
+  const driftX=Math.sin(world*.0021+group*1.3)*.8;
+  const driftY=Math.cos(world*.0025+group*1.7)*.65;
+  let x=lerp(q.x,p.x,intro)+(Math.sin(world*.004+p.phase)*edge+driftX)*S*intro;
+  let y=lerp(q.y,p.y,intro)+(Math.cos(world*.0034+p.phase)*edge+driftY)*S*intro;
   if(mouse.on){const dx=x-mouse.x,dy=y-mouse.y,r=Math.hypot(dx,dy)||1;
     if(r<44){const z=(1-r/44);x+=dx/r*z*13;y+=dy/r*z*13;}
   }
@@ -515,8 +521,9 @@ function draw(dt){
   const redWithinSwarm=m&&t>=m.redAt&&t<m.depart;
   const atlas=redWithinSwarm?redBees:blackBees;
   const opacity=(redWithinSwarm?.95:(p.light?.36:p.opacity))*(p.static?1-coreFade:1);
-  const angle=p.angle+Math.sin(world*.0011+p.phase)*.22;
-  beeSprite(atlas,p.sprite,x,y,p.size*(.68+.32*intro),angle,opacity);
+  const angle=p.angle+Math.sin(world*.004+p.phase)*.65;
+  const foreground=i%17===0&&!p.static?2.15:1;
+  beeSprite(atlas,p.sprite,x,y,p.size*(.68+.32*intro)*foreground,angle,opacity);
  }
  // A wider, sparse perimeter of independent black bees orbits the letters.
  for(const b of wanderers){
