@@ -56,3 +56,10 @@
 @media(max-width:1100px) { .site-header .nav-inner { padding:8px 14px; } .site-header .header-institutions { gap:10px; } }
 @media(max-width:600px) { .phase-findings { padding:0 18px; } .team-from { font-size:12px; } .findings { padding-top:24px; } .composition-proof { padding:14px; gap:12px; } .composition-proof strong { font-size:21px; } }
 .record-result { max-height:420px; overflow:auto; padding:14px; white-space:pre-wrap; overflow-wrap:anywhere; font-size:13px; line-height:1.55; }
+
+/* Shared tracks align each pair of findings without fixed heights or clipped text. */
+@media (min-width:901px) {
+  .findings .life-halves { grid-template-rows:auto auto repeat(3,auto); column-gap:40px; row-gap:0; }
+  .findings .life-half { display:grid; grid-template-rows:subgrid; grid-row:span 5; }
+  .findings .phase-findings { display:grid; grid-template-rows:subgrid; grid-row:3 / span 3; }
+}
