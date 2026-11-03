@@ -51,7 +51,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks
 
-- Each phase has three findings, aligned row by row on desktop. Findings sit under their existing phase headings: green for Phase 1, terracotta
+- Each phase has three findings, with titles, copy and matching case plaques aligned row by row on desktop and tablet. Findings sit under their existing phase headings: green for Phase 1, terracotta
   for Phase 2, with matching dark-theme colors. Do not repeat phase labels per claim.
 - Full-width header; “Team from” sits left of the institution conveyor.
 - Preserve the bee title animation, institution assets and both color themes.
