@@ -329,13 +329,12 @@ function bobStorm(x,y,p){
 // Precompute local neighbor interactions once per layout, keeping playback
 // inexpensive. Cohesion/alignment are local; the late target resolves the title.
 function buildFormation(){
- const count=Math.min(240,black.length);
+ const count=Math.min(180,black.length);
  formation=Array.from({length:count},(_,i)=>{
   const target=black[Math.floor(i*black.length/count)];
-  const angle=rand()*Math.PI*2,radius=(9+Math.sqrt(rand())*34)*S;
-  const center=ox+(26+(i%4)*68)*S;
-  const x=center+Math.cos(angle)*radius,y=oy+19.5*S+Math.sin(angle)*radius*.8;
-  return {target,x,y,vx:-Math.sin(angle)*1.25*S,vy:Math.cos(angle)*1.25*S,
+  const angle=rand()*Math.PI*2;
+  const x=ox+(-9+rand()*276)*S,y=oy+(-24+rand()*86)*S;
+  return {target,x,y,vx:Math.cos(angle)*1.3*S,vy:Math.sin(angle)*1.3*S,
    sprite:target.sprite,size:(5+rand()*3)*S,frames:[{x,y}]};
  });
  for(let frame=1;frame<=100;frame++){
@@ -345,16 +344,15 @@ function buildFormation(){
    for(const q of formation){
     if(q===p)continue;
     const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);
-    if(d<28*S){cx+=q.x;cy+=q.y;vx+=q.vx;vy+=q.vy;n++;
+    if(frame>14&&d<(12+12*smooth((u-.20)/.35))*S){cx+=q.x;cy+=q.y;vx+=q.vx;vy+=q.vy;n++;
      if(d<7*S&&d>.01){sx-=dx/d;sy-=dy/d;}}
    }
-   let ax=Math.sin(frame*.15+p.target.phase)*.035*S;
-   let ay=Math.cos(frame*.13+p.target.phase)*.035*S;
+   // Independent searching is visible before a nearby encounter changes course.
+   const search=n?.035:.17;
+   let ax=Math.sin(frame*.19+p.target.phase)*search*S;
+   let ay=Math.cos(frame*.16+p.target.phase)*search*S;
    if(n){ax+=(cx/n-p.x)*.012+(vx/n-p.vx)*.07+sx*.11*S;
          ay+=(cy/n-p.y)*.012+(vy/n-p.vy)*.07+sy*.11*S;
-    // Tangential drift turns local attraction into curved, orbiting streams.
-    ax-=(cy/n-p.y)*.021*(1-seek);
-    ay+=(cx/n-p.x)*.021*(1-seek);
    }
    ax+=(p.target.x-p.x)*seek*.025;
    ay+=(p.target.y-p.y)*seek*.025;
@@ -364,9 +362,7 @@ function buildFormation(){
   });
   formation.forEach((p,i)=>{Object.assign(p,next[i]);
    const settle=smooth((u-.78)/.22);
-   const arc=Math.sin(Math.PI*settle)*.22;
-   p.frames.push({x:lerp(p.x,p.target.x,settle)-(p.target.y-p.y)*arc,
-    y:lerp(p.y,p.target.y,settle)+(p.target.x-p.x)*arc});
+   p.frames.push({x:lerp(p.x,p.target.x,settle),y:lerp(p.y,p.target.y,settle)});
   });
  }
 }
