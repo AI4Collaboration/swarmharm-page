@@ -6,20 +6,29 @@
 .research-context { max-width:760px; margin:12px 0 0; color:var(--muted); font:15px/1.7 var(--font); text-wrap:pretty; }
 .research-context a { color:var(--text); text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
 .research-context a:hover { text-decoration-color:var(--text); }
-/* A single editorial list: the questions themselves provide the hierarchy. */
-.hero-questions { gap:22px; padding-left:30px; }
-.hero-question { padding-left:8px; }
-.hero-question:first-child { padding-left:8px; }
-.hero-question::marker { color:var(--muted); font:400 17px/1 var(--font); }
-.hero-question p { max-width:980px; font-size:clamp(18px,1.8vw,22px); line-height:1.55; letter-spacing:-.018em; }
-.hero-question :is(.rq-emphasis,.rq-benign) { font-weight:550; }
-.hero-question .rq-lead { font-weight:550; }
-.section-heading.research-heading { margin-bottom:20px; }
-@media(max-width:600px) {
-  .hero-questions { gap:20px; padding-left:24px; }
-  .hero-question,.hero-question:first-child { padding-left:3px; }
-  .hero-question p { font-size:18px; line-height:1.55; }
-  .hero-question::marker { font-size:15px; }
+/* Research questions: editorial hierarchy without repeating the findings visuals. */
+.research-questions-block { display:grid; grid-template-columns:210px minmax(0,1fr); gap:48px; padding:32px 0 12px; }
+.section-heading.research-heading { margin:5px 0 0; }
+.research-heading h2 { max-width:12ch; font:500 16px/1.5 var(--font); color:var(--muted); letter-spacing:0; }
+.hero-questions { display:grid; grid-template-columns:1fr; gap:28px; margin:0; padding:0; list-style:none; }
+.hero-questions .hero-question, .hero-questions .hero-question:first-child, .hero-questions .hero-question:last-child { display:grid; grid-template-columns:30px minmax(0,1fr); gap:18px; min-width:0; padding:0; border:0; border-radius:0; background:none; text-align:left; }
+.rq-number { padding-top:8px; color:var(--muted); font:400 11px/1.4 var(--font); letter-spacing:.04em; }
+.hero-question p { margin:0; max-width:38ch; color:var(--text); font:400 clamp(21px,2.2vw,28px)/1.4 var(--font); letter-spacing:-.025em; text-wrap:pretty; }
+.hero-question p strong { font-weight:600; color:#326854; }
+.hero-question:nth-child(2) p strong { color:#3e6585; }
+.hero-question:nth-child(3) p strong { color:#a05643; }
+:root[data-theme="dark"] .hero-question p strong { color:#9bd4b8; }
+:root[data-theme="dark"] .hero-question:nth-child(2) p strong { color:#a4c9e8; }
+:root[data-theme="dark"] .hero-question:nth-child(3) p strong { color:#edb19d; }
+@media(max-width:900px) {
+  .research-questions-block { grid-template-columns:150px minmax(0,1fr); gap:24px; }
+}
+@media(max-width:680px) {
+  .research-questions-block { grid-template-columns:1fr; gap:24px; padding-top:12px; }
+  .research-heading h2 { max-width:none; font-size:15px; }
+  .hero-questions { gap:24px; }
+  .hero-questions .hero-question, .hero-questions .hero-question:first-child, .hero-questions .hero-question:last-child { grid-template-columns:26px minmax(0,1fr); gap:12px; }
+  .rq-number { padding-top:6px; font-size:10px; }
 }
 .domains-section .coverage-icons li { align-items:flex-start; text-align:left; gap:0; }
 .domains-section .coverage-icons .domain-visual { max-width:200px; margin:0 auto 18px; }

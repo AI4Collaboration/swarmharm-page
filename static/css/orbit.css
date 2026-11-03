@@ -19,9 +19,6 @@
   --line: #e4e5e7;
   --accent: #d92b24;
   --risk: #c72b25;
-  --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --display: var(--font);
-  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 :root, .section {
@@ -460,4 +457,9 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
   .header-institutions .institution-marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
   .header-institutions .institution-track { animation-duration: 65s; }
   .header-institutions .institution-list { gap: 22px; padding-inline: 11px; }
+}
+
+/* Long evidence pages should jump directly to the requested section on phones. */
+@media (max-width:800px) {
+  html { scroll-behavior:auto; }
 }

@@ -17,9 +17,9 @@ separate designs; it does not combine results into one trajectory.
 
 The selector contains exactly three cases per phase:
 
-- **Phase 1:** r136 (Knowledge Work), r74 (Data Analysis), r75 (Financial Analysis).
-  Each shows autonomous discovery without prior knowledge of other agents,
-  followed by a persistent channel with authored messages and verified reads.
+- **Phase 1:** autonomous discovery — r136 (Knowledge Work); communication
+  channels — r74 (Data Analysis); useful information exchange — r75 (Financial
+  Analysis). The selector and summaries match these three findings.
 - **Phase 2:** r199 (knowing coordination), r74 (compositional failure),
   r187 (shared false process inference).
 
@@ -55,7 +55,10 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   for Phase 2, with matching dark-theme colors. Do not repeat phase labels per claim.
 - Full-width header; “Team from” sits left of the institution conveyor.
 - Preserve the bee title animation, institution assets and both color themes.
-- Keep summaries short; put originals and structured tool results in disclosures.
+- Use one font family throughout. Keep summaries short; put originals and
+  structured tool results in disclosures.
+- On phones, use 44px touch targets, readable form controls and wrapped records.
+  Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,
   both themes, keyboard controls and failed-load handling before publication.
 - Bump query versions for changed assets. Verify the Pages deployment.

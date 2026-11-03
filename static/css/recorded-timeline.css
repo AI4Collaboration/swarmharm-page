@@ -72,13 +72,13 @@
 :root[data-theme="dark"] .record-run [data-kind="read"] { --dot:#99beb0; }
 :root[data-theme="dark"] .record-run [data-kind="important"] { --dot:#d6b071; }
 .record-run-scroll { overflow-x:auto; scrollbar-width:thin; overscroll-behavior-x:contain; padding-block:8px; }
-.record-grid { display:grid; width:max-content; grid-template-columns:86px var(--record-width); grid-template-rows:24px repeat(4,60px); }
+.record-grid { --record-step:19px; display:grid; width:max-content; grid-template-columns:86px calc(var(--record-turns) * var(--record-step)); grid-template-rows:24px repeat(4,60px); }
 .record-axis { grid-column:2; position:relative; font:11px/20px var(--mono); color:var(--muted); }
 .record-axis span { position:absolute; transform:translateX(-50%); }
 .record-actor { grid-column:1; position:sticky; left:0; z-index:2; display:flex; flex-direction:column; justify-content:center; background:var(--bg); color:var(--agent-color,var(--text)); font:12px/1.6 var(--font); }
 .record-actor b { font-weight:500; }
 .record-actor small { color:var(--muted); font-size:11px; }
-.record-lane { display:grid; grid-column:2; grid-template-columns:repeat(var(--record-turns),19px); }
+.record-lane { display:grid; grid-column:2; grid-template-columns:repeat(var(--record-turns),var(--record-step)); }
 .record-turn { display:flex; align-items:center; justify-content:center; border:0; padding:0; background:transparent; }
 .record-turn i { width:13px; height:13px; border-radius:50%; background:var(--dot,var(--icon)); opacity:.4; }
 .record-turn:not([data-kind="ordinary"]) i { opacity:1; }
@@ -131,3 +131,26 @@
 
 .record-coordinate .traj-lane-label[data-lane="channel"] { text-align:center; }
 .record-coordinate [data-map-stage="outcome"][aria-current] { color:var(--risk); border-bottom-color:var(--risk); }
+
+/* Separate touch targets without changing the recorded turn positions. */
+@media (max-width:800px), (pointer:coarse) {
+ .record-grid { --record-step:44px; }
+ .record-modes button,.record-original-link,.record-readers button,.record-open,.record-tool summary,.record-log > summary { min-height:44px; box-sizing:border-box; }
+ .record-readers button { min-width:44px; justify-content:center; }
+ .record-detail header button { width:44px; height:44px; flex-shrink:0; }
+ .record-controls select { min-height:44px; font-size:16px; }
+ .record-coordinate .traj-chapters button { min-height:44px; }
+}
+@media (max-width:600px) {
+ .record-modes { width:100%; box-sizing:border-box; }
+ .record-modes button { flex:1; font-size:14px; padding:8px 6px; }
+ .record-open time { grid-column:1; grid-row:3; font-size:12px; }
+ .record-open strong { font-size:15px; }
+ .record-message p,.record-original-message blockquote,.record-final { font-size:15px; }
+ .record-original-link,.record-action-copy { font-size:14px; }
+ .record-who,.record-who small { font-size:11px; }
+ .record-timeline { max-height:min(510px,65svh); }
+ .record-tool pre,.record-tool dd { font-size:13px; }
+ .record-detail,.record-source-event { min-width:0; overflow-wrap:anywhere; }
+ .coordinate-summary p { display:block; overflow:visible; }
+}

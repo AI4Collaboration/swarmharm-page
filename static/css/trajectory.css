@@ -296,3 +296,7 @@
   .traj-log-body { margin:0 6px 18px; }
   .traj-inspector { min-height:0; }
 }
+
+@media (max-width:800px), (pointer:coarse) {
+ .case-picker select { font-size:16px; }
+}

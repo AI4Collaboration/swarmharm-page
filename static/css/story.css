@@ -114,7 +114,7 @@
 .log-original[open] > summary::after { content: " −"; }
 .log-original[open] > summary { margin-bottom: 10px; }
 .log-entry p, .log-entry pre { margin: 0; color: #393226; font-size: 14.5px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
-.log-entry pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13.5px; }
+.log-entry pre { font-family: var(--font); font-size: 13.5px; }
 .log-read { padding: 8px 14px; background: transparent; border-color: #6d7567; }
 .log-read p { font-size: 13.5px; color: #444c3e; }
 .release-harm .communication-log { border-color: #a78d85; }

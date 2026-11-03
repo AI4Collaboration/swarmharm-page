@@ -46,7 +46,7 @@
   .domain-case { grid-column:2; }
 }
 .case-evidence { margin:18px 0; font-size:14px; }
-.case-evidence summary { cursor:pointer; padding-block:8px; }
+.case-evidence summary { cursor:pointer; padding-block:11px; min-height:44px; box-sizing:border-box; }
 .case-evidence li { margin:8px 0; line-height:1.6; }
 .case-evidence a { color:var(--text); }
 .composition-proof { display:grid; grid-template-columns:1fr auto 1fr; gap:22px; align-items:center; margin:20px 0; padding:20px; border:1px solid var(--line,var(--muted)); border-radius:12px; }
@@ -65,4 +65,10 @@
   .findings .finding { display:grid; grid-template-rows:subgrid; grid-row:span 3; }
   .findings .finding h4,.findings .finding p { align-self:start; }
   .findings .domain-plaques { margin-top:0; align-self:end; }
+}
+
+@media(max-width:600px) {
+ .case-evidence { overflow-wrap:anywhere; }
+ .case-evidence ul { padding-left:20px; }
+ .composition-proof { grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); }
 }

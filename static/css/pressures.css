@@ -44,13 +44,13 @@
 }
 @media(max-width:480px) {
   .pressure-matrix thead td { width:13%; }
-  .pressure-matrix thead th { width:43.5%; padding:0 8px 14px; font-size:12px; }
-  .pressure-matrix thead th span { font-size:11px; }
+  .pressure-matrix thead th { width:43.5%; padding:0 8px 14px; font-size:14px; }
+  .pressure-matrix thead th span { font-size:12px; }
   .pressure-matrix tbody th { font-size:12px; padding:16px 4px 16px 0; }
   .pressure-matrix tbody td { padding:16px 8px; }
-  .pressure-matrix td > p { font-size:13px; line-height:1.65; }
+  .pressure-matrix td > p { font-size:14px; line-height:1.65; }
   .pressure-visual { width:160px; margin-bottom:10px; }
-  .pressure-evidence-trigger { font-size:11px; }
+  .pressure-evidence-trigger { font-size:12px; }
   .pressure-reference { padding:12px 16px; }
   .pressure-reference p { font-size:13px; }
 }
