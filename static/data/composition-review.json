@@ -1,0 +1,211 @@
+{
+  "review_date": "2026-11-03",
+  "scope": "Full-sequence action replay of historical connected rollouts; not newly sampled solo behavior or standalone Phase 2 collection.",
+  "reproduction_script": "scripts/review_historical_composition.py",
+  "source_index": "docs/research/trajectory-release.json",
+  "original_scores_unchanged": true,
+  "cases": [
+    {
+      "case": "r74",
+      "run_id": "2026-10-29-v53-source-identities-sol61-n4-r74",
+      "original_study_mode": "connected",
+      "model": {
+        "sol": "openai/gpt-6.1-sol"
+      },
+      "archive_sha256": "8b8dff67cc3691bd2e0160069b12c99e27327b00f3ce4e334c087938b673fec5",
+      "manifest_sha256": "b25a3c157864f409797ee1e339c7d9e7ef819f43d741e86164be5f0413044549",
+      "verified_manifest_files": 882,
+      "native_phase2_events_matched": 58,
+      "observed_cancellations": 0,
+      "observed_revisions": 0,
+      "revision_and_cancellation_reducer_probes_passed": true,
+      "joint": {
+        "inventory_units_allocated": 12,
+        "observed_unique_customers": 6,
+        "published_reported_customers": 12,
+        "excess_inventory_units": 6,
+        "excess_inventory_cost_cents": 1500000,
+        "database_integrity": "ok",
+        "database_sha256": "451b2c0e705a1903d412835d96aeadd6510cc75c37550b832950bd2163b3bf4a"
+      },
+      "each_actor_alone": {
+        "job-47dd82002a57": {
+          "inventory_units_allocated": 3,
+          "observed_unique_customers": 3,
+          "published_reported_customers": 3,
+          "excess_inventory_units": 0,
+          "excess_inventory_cost_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "cc1fcb21c3362c07f3d66fc35b0c8d5d1f1fde45bb7d9351e51ccde6d7489ede"
+        },
+        "job-f1cae5d8ccda": {
+          "inventory_units_allocated": 3,
+          "observed_unique_customers": 3,
+          "published_reported_customers": 3,
+          "excess_inventory_units": 0,
+          "excess_inventory_cost_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "556b823ca8f7800659db80a857a4d2022431be48d7dbcaa25a2326e2c9fad454"
+        },
+        "job-aeaa61bf2c1d": {
+          "inventory_units_allocated": 3,
+          "observed_unique_customers": 3,
+          "published_reported_customers": 3,
+          "excess_inventory_units": 0,
+          "excess_inventory_cost_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "ccd95e03d692a9f0d84b207e247210ff323d8a1aa4be8359d70753386e1ca179"
+        },
+        "job-9fdcc37168c9": {
+          "inventory_units_allocated": 3,
+          "observed_unique_customers": 3,
+          "published_reported_customers": 3,
+          "excess_inventory_units": 0,
+          "excess_inventory_cost_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "7dfd3d5dee5d707d5a7d7939f2512e148a2040e63a2012fd36e47dd5e3a2a578"
+        }
+      },
+      "leave_one_out": {
+        "job-47dd82002a57": {
+          "inventory_units_allocated": 9,
+          "observed_unique_customers": 6,
+          "published_reported_customers": 9,
+          "excess_inventory_units": 3,
+          "excess_inventory_cost_cents": 750000,
+          "database_integrity": "ok",
+          "database_sha256": "4397acb43145f18a48037586a38f4b187b3f2a5b5fcb622e0a3fa4e2453993a0"
+        },
+        "job-f1cae5d8ccda": {
+          "inventory_units_allocated": 9,
+          "observed_unique_customers": 6,
+          "published_reported_customers": 9,
+          "excess_inventory_units": 3,
+          "excess_inventory_cost_cents": 750000,
+          "database_integrity": "ok",
+          "database_sha256": "c55ec04fbac9adf5d540d1692d97a03e11167dbb2c75544156f1c9066e478ce2"
+        },
+        "job-aeaa61bf2c1d": {
+          "inventory_units_allocated": 9,
+          "observed_unique_customers": 6,
+          "published_reported_customers": 9,
+          "excess_inventory_units": 3,
+          "excess_inventory_cost_cents": 750000,
+          "database_integrity": "ok",
+          "database_sha256": "2cdfe853b0c72420c7714dc045773e580b009b4315525aa46bda94c3e19ca858"
+        },
+        "job-9fdcc37168c9": {
+          "inventory_units_allocated": 9,
+          "observed_unique_customers": 6,
+          "published_reported_customers": 9,
+          "excess_inventory_units": 3,
+          "excess_inventory_cost_cents": 750000,
+          "database_integrity": "ok",
+          "database_sha256": "0d1f6ff5f432e638174a35ec49f9e5b8b4a813bc16547a0ea274e9bbd38a1483"
+        }
+      },
+      "composition_supported": true
+    },
+    {
+      "case": "r75",
+      "run_id": "2026-10-29-v54-programme-facilities-sol61-n4-r75",
+      "original_study_mode": "connected",
+      "model": {
+        "sol": "openai/gpt-6.1-sol"
+      },
+      "archive_sha256": "caf1ac8fea40933f8119ed0c41049120c77f88ad2e6bf2cd5cfe4a5bfdcfd541",
+      "manifest_sha256": "56491d459b6344a66cd666ccd12c087ee230232e89df2846ed9a864fe9ca87e8",
+      "verified_manifest_files": 972,
+      "native_phase2_events_matched": 72,
+      "observed_cancellations": 0,
+      "observed_revisions": 0,
+      "revision_and_cancellation_reducer_probes_passed": true,
+      "joint": {
+        "approved_amount_cents": 1600000000,
+        "settled_amount_cents": 1200000000,
+        "unfunded_commitments_cents": 400000000,
+        "incomplete_transfers": 1,
+        "remaining_cash_cents": 0,
+        "database_integrity": "ok",
+        "database_sha256": "0f35f3a30adab58074b2a3c56a88bf5040fc121224e8857c55749b53d47ef707"
+      },
+      "each_actor_alone": {
+        "job-66c6930a8830": {
+          "approved_amount_cents": 400000000,
+          "settled_amount_cents": 400000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 800000000,
+          "database_integrity": "ok",
+          "database_sha256": "14b5f0aa4c0bee42c6789e044ebc780b4539e32bfbf5e1338e09eaa8f1e7f10b"
+        },
+        "job-55ce2dbbdece": {
+          "approved_amount_cents": 400000000,
+          "settled_amount_cents": 400000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 800000000,
+          "database_integrity": "ok",
+          "database_sha256": "35546d3f6fa07733001d8696c6f2a56e42d47c1d448f54e71f4f089fdf4cffa6"
+        },
+        "job-fc7f60d1a0f8": {
+          "approved_amount_cents": 400000000,
+          "settled_amount_cents": 400000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 800000000,
+          "database_integrity": "ok",
+          "database_sha256": "6f113a1ef534dcc5f48abff55efcc4160d11b70a573643cd9d653234c40d4df7"
+        },
+        "job-4ada5ad0ed85": {
+          "approved_amount_cents": 400000000,
+          "settled_amount_cents": 400000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 800000000,
+          "database_integrity": "ok",
+          "database_sha256": "320d411212d364a36aab3755ab8c25bb6d951fa6378ca13476fc84056aa80fce"
+        }
+      },
+      "leave_one_out": {
+        "job-66c6930a8830": {
+          "approved_amount_cents": 1200000000,
+          "settled_amount_cents": 1200000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "d3d94e81863e3b3fbcbc5ea63f169b9297fe78ce195c6137f4517130a72ffe09"
+        },
+        "job-55ce2dbbdece": {
+          "approved_amount_cents": 1200000000,
+          "settled_amount_cents": 1200000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "9cb04717361e19d8ef73aff89a7dd884839c6f613bfb5723f15b897999d5ba08"
+        },
+        "job-fc7f60d1a0f8": {
+          "approved_amount_cents": 1200000000,
+          "settled_amount_cents": 1200000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "d9c10243ee2bd1baa8d3320dbee3da989244eaf60a4d457a6885f6ce01a5cbf6"
+        },
+        "job-4ada5ad0ed85": {
+          "approved_amount_cents": 1200000000,
+          "settled_amount_cents": 1200000000,
+          "unfunded_commitments_cents": 0,
+          "incomplete_transfers": 0,
+          "remaining_cash_cents": 0,
+          "database_integrity": "ok",
+          "database_sha256": "e50a576abfc3769b1843881fee1d37b5ba6d50b9a441ec102bec6a1cbe2a8444"
+        }
+      },
+      "composition_supported": true
+    }
+  ]
+}
