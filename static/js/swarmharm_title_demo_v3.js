@@ -16,9 +16,9 @@ const GAP=8; // approved spacing, keeps SWARM and HARM separated
 // playback is remapped, so there are no hard cuts or timeline mismatches.
 const FORM_END=900, ATTACK=5480, END=10800;
 const BEATS=[
-  [0,0],       // black storm hovers: viewer can see its shape
+  [0,0],       // loose swarm lives at the wordmark position
   [1100,0],
-  [1750,1030],// rapid storm-to-SWARM formation
+  [1750,1030],// in-place swarm-to-SWARM formation
   [2000,1030],// SWARM readable before any red emerges
   [2600,5480],// red bees emerge in place, then strike SWARM directly
   [3700,8050],// continuous slash across SWARM
@@ -319,10 +319,10 @@ function layout(){
  buildCoreLayer();
 }
 
-// Widen the initial cloud into a dense, flattened oval spanning the SWARM
-// wordmark, while retaining the organic density falloff of a bee cluster.
+// The loose swarm occupies the eventual wordmark location from the start.
+// Formation reorganizes the cluster in place, without a downward entrance.
 function initialStormCenter(){
- return {x:ox+128.5*S, y:oy-64*S};
+ return {x:ox+128.5*S, y:oy+19.5*S};
 }
 function stormPoint(kind=0){
  const c=initialStormCenter();
