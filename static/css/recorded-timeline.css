@@ -154,3 +154,46 @@
  .record-detail,.record-source-event { min-width:0; overflow-wrap:anywhere; }
  .coordinate-summary p { display:block; overflow:visible; }
 }
+
+/* Start with every turn; original logs open only on deliberate activation. */
+.record-run { margin-top:0; }
+.record-grid { width:100%; --record-step:max(16px, calc((100% - 86px) / var(--record-turns))); grid-template-columns:86px minmax(0,1fr); }
+.record-axis { width:100%; }
+.record-axis span { left:calc((var(--axis-turn) - .5) * 100% / var(--record-turns)); }
+.record-lane { grid-template-columns:repeat(var(--record-turns),minmax(0,1fr)); }
+.record-turn { min-height:44px; }
+.record-turn-summary:empty { display:none; }
+dialog.record-detail { position:fixed; inset:0; margin:auto; width:min(820px,calc(100vw - 40px)); max-height:80dvh; box-sizing:border-box; overflow:auto; padding:24px; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:16px; box-shadow:0 24px 80px #0003; overscroll-behavior:contain; }
+dialog.record-detail:not([open]) { display:none; }
+dialog.record-detail::backdrop { background:rgb(15 23 30 / .36); }
+dialog.record-detail > header { position:sticky; top:-24px; z-index:2; background:var(--bg); padding:12px 0; }
+dialog.record-detail header button { cursor:pointer; flex-shrink:0; }
+@media(max-width:800px) {
+ .record-grid { grid-template-columns:34px repeat(4,minmax(0,1fr)); grid-template-rows:54px repeat(var(--record-turns),44px); width:100%; }
+ .record-actor { grid-row:1!important; position:static; align-items:center; font-size:11px; }
+ .record-actor[data-agent="A"] { grid-column:2; }
+ .record-actor[data-agent="B"] { grid-column:3; }
+ .record-actor[data-agent="C"] { grid-column:4; }
+ .record-actor[data-agent="D"] { grid-column:5; }
+ .record-lane { display:contents; }
+ .record-turn { grid-column:calc(var(--actor-index) + 1); grid-row:calc(var(--turn-index) + 1); width:100%; height:44px; }
+ .record-axis { grid-column:1; grid-row:2 / -1; position:relative; }
+ .record-axis span { left:50%!important; top:calc((var(--axis-turn) - .5) * 44px - 10px); }
+ .record-run-scroll { overflow:visible; }
+ dialog.record-detail { width:calc(100vw - 20px); max-height:88dvh; padding:16px; border-radius:12px; }
+ dialog.record-detail > header { top:-16px; }
+}
+
+.record-zoom { margin-left:auto; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--muted); padding:8px 12px; font-size:12px!important; }
+.record-grid.is-expanded { min-width:calc(86px + var(--record-turns) * 24px); }
+.record-turn i { width:var(--record-dot,13px); height:var(--record-dot,13px); }
+@media(max-width:800px) {
+ .record-zoom { display:none; }
+ .record-grid.is-expanded { min-width:0; }
+ .record-turn i { width:13px; height:13px; }
+}
+
+.record-axis span:last-child { transform:translateX(-100%); }
+.record-turn:focus-visible { outline:none; }
+.record-turn:focus-visible i { outline:2px solid var(--agent-color,var(--accent)); outline-offset:2px; opacity:1; }
+@media(max-width:800px) { .record-axis span:last-child { transform:translateX(-50%); } }

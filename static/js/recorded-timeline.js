@@ -17,8 +17,12 @@
     let mode='key',actor='',selected=null,hideTimer,hoverButton=null,keyboard=false,renderedFilter=null;
     const summaries=new Map();
     const longest=Math.max(...Object.values(data.turns).map(ts=>ts.length));
-    container.innerHTML=`<div class="record-controls"><div class="record-modes" role="group" aria-label="Timeline events"><button type="button" data-record-mode="key" aria-pressed="true">Key events</button><button type="button" data-record-mode="message" aria-pressed="false">Messages</button><button type="button" data-record-mode="all" aria-pressed="false">All actions</button></div><select data-record-agent aria-label="Filter timeline by agent"><option value="">All agents</option>${data.actors.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select></div><p class="record-counts">${data.counts.messages} authored messages & comments · ${data.counts.firstReads} verified first reads</p><div class="record-timeline" tabindex="0" role="region" aria-label="Recorded events in chronological order"></div><section class="record-detail" id="record-original" data-record-detail aria-label="Selected event original record" hidden></section><figure class="record-run"><figcaption><strong>${data.counts.turns} model turns</strong><span>across four agents</span></figcaption>${data.turnOffsets&&Object.values(data.turnOffsets).some(Boolean)?'<p class="record-counts">Grid positions start at this phase. Open a turn to see its original number.</p>':''}<div class="record-dot-key"><span data-kind="message"><i></i>Message or comment</span><span data-kind="read"><i></i>Message read</span><span data-kind="important"><i></i>Key action</span></div><div class="record-run-scroll" tabindex="0" role="region" aria-label="Every model turn, scroll horizontally"><div class="record-grid" style="--record-turns:${longest}"><div class="record-axis">${[...new Set([1,...Array.from({length:Math.floor(longest/10)},(_,i)=>(i+1)*10),longest])].map(n=>`<span style="left:calc(${n-.5} * var(--record-step))">${n}</span>`).join('')}</div>${data.actors.map((a,i)=>`<span class="record-actor" data-agent="${a.id}" style="grid-row:${i+2}"><b>${esc(a.name)}</b><small>${data.turns[a.id].length} turns</small></span><div class="record-lane" style="grid-row:${i+2}" role="group" aria-label="${esc(a.name)} turns">${data.turns[a.id].map((ids,j)=>{const es=ids.map(id=>events.get(id)),kind=es.some(e=>e.messages.length)?'message':es.some(e=>e.reads.length)?'read':es.some(e=>e.important)?'important':'ordinary';return `<button type="button" class="record-turn" data-agent="${a.id}" data-turn="${j+1+offset(a.id)}" data-kind="${kind}" tabindex="${j===0?'0':'-1'}" aria-label="${esc(a.name)}, turn ${j+1+offset(a.id)}: ${esc([...new Set(es.map(e=>e.label))].join('; ')||'No displayed tool action')}"><i aria-hidden="true"></i></button>`;}).join('')}</div>`).join('')}</div></div><div class="record-turn-summary" aria-live="polite"></div></figure>`;
+    container.innerHTML=`<div class="record-controls"><div class="record-modes" role="group" aria-label="Timeline events"><button type="button" data-record-mode="key" aria-pressed="true">Key events</button><button type="button" data-record-mode="message" aria-pressed="false">Messages</button><button type="button" data-record-mode="all" aria-pressed="false">All actions</button></div><select data-record-agent aria-label="Filter timeline by agent"><option value="">All agents</option>${data.actors.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select></div><p class="record-counts">${data.counts.messages} authored messages & comments · ${data.counts.firstReads} verified first reads</p><div class="record-timeline" tabindex="0" role="region" aria-label="Recorded events in chronological order"></div><dialog class="record-detail" id="record-original" data-record-detail aria-label="Selected node logs"></dialog><figure class="record-run"><figcaption><strong>Full trajectory</strong><span>${data.counts.turns} turns · Click a node to read its logs</span><button class="record-zoom" type="button" aria-pressed="false">Enlarge nodes</button></figcaption>${data.turnOffsets&&Object.values(data.turnOffsets).some(Boolean)?'<p class="record-counts">Grid positions start at this phase. Open a turn to see its original number.</p>':''}<div class="record-dot-key"><span data-kind="message"><i></i>Message or comment</span><span data-kind="read"><i></i>Message read</span><span data-kind="important"><i></i>Key action</span></div><div class="record-run-scroll" tabindex="0" role="region" aria-label="Complete trajectory, one node per model turn"><div class="record-grid" style="--record-turns:${longest}"><div class="record-axis">${[...new Set([1,...Array.from({length:Math.floor(longest/10)},(_,i)=>(i+1)*10),longest])].filter(n=>n===1||n===longest||longest-n>=7).map(n=>`<span style="--axis-turn:${n}">${n}</span>`).join('')}</div>${data.actors.map((a,i)=>`<span class="record-actor" data-agent="${a.id}" style="grid-row:${i+2}"><b>${esc(a.name)}</b><small>${data.turns[a.id].length} turns</small></span><div class="record-lane" style="grid-row:${i+2}" role="group" aria-label="${esc(a.name)} turns">${data.turns[a.id].map((ids,j)=>{const es=ids.map(id=>events.get(id)),kind=es.some(e=>e.messages.length)?'message':es.some(e=>e.reads.length)?'read':es.some(e=>e.important)?'important':'ordinary';return `<button type="button" class="record-turn" data-agent="${a.id}" data-turn="${j+1+offset(a.id)}" style="--turn-index:${j+1};--actor-index:${i+1}" data-kind="${kind}" tabindex="${j===0?'0':'-1'}" aria-label="${esc(a.name)}, turn ${j+1+offset(a.id)}: ${esc([...new Set(es.map(e=>e.label))].join('; ')||'No displayed tool action')}"><i aria-hidden="true"></i></button>`;}).join('')}</div>`).join('')}</div></div><div class="record-turn-summary" aria-live="polite"></div></figure>`;
     const list=container.querySelector('.record-timeline'),detail=container.querySelector('[data-record-detail]'),summary=container.querySelector('.record-turn-summary'),scroller=container.querySelector('.record-run-scroll');
+    const grid=container.querySelector('.record-grid'),zoom=container.querySelector('.record-zoom');
+    const sizeDots=()=>grid.style.setProperty('--record-dot',Math.max(3,Math.min(13,(grid.clientWidth-86)/longest-3))+'px');
+    const gridObserver=new ResizeObserver(sizeDots);gridObserver.observe(grid);
+    on(zoom,'click',()=>{const expanded=grid.classList.toggle('is-expanded');zoom.setAttribute('aria-pressed',String(expanded));zoom.textContent=expanded?'Fit trajectory':'Enlarge nodes';});
     const turnButtons=new Map([...container.querySelectorAll('.record-turn')].map(b=>[b.dataset.agent+':'+b.dataset.turn,b]));
     const tabStops=new Map(data.actors.map(a=>[a.id,turnButtons.get(a.id+':'+(offset(a.id)+1))]));
     const tip=document.createElement('div');tip.className='run-hover';tip.id='record-turn-tooltip';tip.setAttribute('role','tooltip');tip.hidden=true;document.body.append(tip);
@@ -41,13 +45,19 @@
     function eventMarkup(e,requestedMessage){
       const original=e.messages.map(id=>messageMarkup(messages.get(id))).join('');
       const read=e.reads.filter(id=>!requestedMessage||requestedMessage===id).map(id=>messageMarkup(messages.get(id),true)).join('');
-      return `<section class="record-source-event" data-agent="${e.actor}"><h5><span class="record-author">${esc(names.get(e.actor))}</span> · Turn ${e.turn} · ${esc(e.label)}</h5>${original}${read}${e.resultText?`<div class="record-final">${source(e.resultText)}</div>`:''}${e.operation==='final_output'?'':`<details class="record-tool"${failed(e)?' data-failed="true"':''}><summary><code>${esc(e.operation)}</code><span>Tool arguments${e.status!=null?` · <span class="record-status">status ${e.status}</span>`:''}</span></summary><dl>${argumentsMarkup(e.arguments)}</dl>${e.error?`<p class="record-failed">${source(typeof e.error==='string'?e.error:JSON.stringify(e.error))}</p>`:''}</details>`}${e.result?`<details class="record-tool"><summary>Original tool result</summary><pre class="record-result">${esc(JSON.stringify(e.result,null,2))}</pre></details>`:''}</section>`;
+      return `<section class="record-source-event" data-agent="${e.actor}"><h5><span class="record-author">${esc(names.get(e.actor))}</span> · Turn ${e.turn} · ${esc(e.label)}</h5>${original}${read}${e.resultText?`<div class="record-final">${source(e.resultText)}</div>`:''}${e.operation==='final_output'?'':`<details class="record-tool" open${failed(e)?' data-failed="true"':''}><summary><code>${esc(e.operation)}</code><span>Tool arguments${e.status!=null?` · <span class="record-status">status ${e.status}</span>`:''}</span></summary><dl>${argumentsMarkup(e.arguments)}</dl>${e.error?`<p class="record-failed">${source(typeof e.error==='string'?e.error:JSON.stringify(e.error))}</p>`:''}</details>`}${e.result?`<details class="record-tool"><summary>Original tool result</summary><pre class="record-result">${esc(JSON.stringify(e.result,null,2))}</pre></details>`:''}</section>`;
     }
-    function openEvents(ids,requestedMessage,scroll=true){
-      hideTip();detail.id='record-original';detail.hidden=false;
-      detail.innerHTML=`<header><h4>Original record</h4><button type="button" data-close-record aria-label="Close original record">×</button></header>${ids.length?ids.map(id=>eventMarkup(events.get(id),requestedMessage)).join(''):'<p>No tool action is displayed for this turn.</p>'}`;
+    let returnFocus=null;
+    function showDetail(){
+      if(!detail.open){returnFocus=document.activeElement;detail.showModal();}
+      detail.scrollTop=0;
+    }
+    function closeDetail(){detail.close();returnFocus?.focus({preventScroll:true});}
+    function openEvents(ids,requestedMessage){
+      hideTip();
+      detail.innerHTML=`<header><h4>Node logs</h4><button type="button" data-close-record aria-label="Close original record">×</button></header>${ids.length?ids.map(id=>eventMarkup(events.get(id),requestedMessage)).join(''):'<p>No tool action is displayed for this turn.</p>'}`;
       container.querySelectorAll('[data-open-event]').forEach(b=>b.setAttribute('aria-expanded',String(ids.includes(Number(b.dataset.openEvent)))));
-      if(scroll)detail.scrollIntoView({block:'start',behavior:'auto'});
+      showDetail();
     }
     function turnSummary(a,n){
       const key=a+":"+n;if(summaries.has(key))return summaries.get(key);
@@ -87,28 +97,31 @@
       else if(b.dataset.receipt){const e=events.get(Number(b.dataset.receipt));selectTurn(e.actor,e.turn);openEvents([e.id],b.dataset.message);}
       else if(b.dataset.openEvent){const e=events.get(Number(b.dataset.openEvent));selectTurn(e.actor,e.turn);openEvents([e.id]);}
       else if(b.matches('.record-turn')){const a=b.dataset.agent,n=Number(b.dataset.turn);selectTurn(a,n);openEvents(turnIds(a,n));}
-      else if(b.hasAttribute('data-close-record')){detail.hidden=true;container.querySelectorAll('[data-open-event]').forEach(b=>b.setAttribute('aria-expanded','false'));}
+      else if(b.hasAttribute('data-close-record')){closeDetail();container.querySelectorAll('[data-open-event]').forEach(b=>b.setAttribute('aria-expanded','false'));}
     });
     on(container.querySelector('[data-record-agent]'),'change',event=>{actor=event.target.value;render();});
     container.querySelectorAll('.record-turn').forEach(b=>{
       on(b,'pointerenter',e=>{if(e.pointerType==='mouse')showTip(b);});on(b,'pointerleave',deferHide);
       on(b,'focus',()=>{if(keyboard)showTip(b);});on(b,'blur',deferHide);
-      on(b,'keydown',e=>{const a=b.dataset.agent,n=Number(b.dataset.turn),next={ArrowRight:n+1,ArrowLeft:n-1,Home:offset(a)+1,End:offset(a)+data.turns[a].length}[e.key];if(next===undefined)return;e.preventDefault();const target=Math.max(offset(a)+1,Math.min(offset(a)+data.turns[a].length,next));selectTurn(a,target);selected.focus({preventScroll:true});selected.scrollIntoView({block:'nearest',inline:'nearest'});});
+      on(b,'keydown',e=>{keyboard=true;const a=b.dataset.agent,n=Number(b.dataset.turn),next={ArrowRight:n+1,ArrowLeft:n-1,Home:offset(a)+1,End:offset(a)+data.turns[a].length}[e.key];if(next===undefined)return;e.preventDefault();const target=Math.max(offset(a)+1,Math.min(offset(a)+data.turns[a].length,next));selectTurn(a,target);selected.focus({preventScroll:true});selected.scrollIntoView({block:'nearest',inline:'nearest'});});
     });
-    on(document,'keydown',e=>{keyboard=true;if(e.key==='Escape'){hideTip();if(detail.contains(document.activeElement))detail.hidden=true;}});
+    on(document,'keydown',e=>{keyboard=true;if(e.key==='Escape'){hideTip();if(detail.open)closeDetail();}});
     on(document,'pointerdown',e=>{keyboard=false;if(!tip.contains(e.target))hideTip();});
     on(tip,'pointerenter',()=>clearTimeout(hideTimer));on(tip,'pointerleave',deferHide);
     on(window,'scroll',hideTip,{passive:true});on(window,'resize',hideTip);on(scroller,'scroll',hideTip,{passive:true});
     const graph=document.createElement('section');graph.className='record-coordinate';graph.setAttribute('aria-label','Agent coordinate map');container.prepend(graph);
-    graph.after(detail);
+    const mapDisclosure=document.createElement('details');mapDisclosure.className='record-log record-map-disclosure';mapDisclosure.innerHTML='<summary>Communication map</summary>';graph.before(mapDisclosure);mapDisclosure.append(graph);
+    on(mapDisclosure,'toggle',()=>{if(mapDisclosure.open)window.dispatchEvent(new Event('resize'));});
     const log=document.createElement('details');log.className='record-log';log.innerHTML='<summary>Messages and actions</summary>';
-    detail.after(log);log.append(container.querySelector('.record-controls'),container.querySelector('.record-counts'),list);
+    mapDisclosure.after(log);log.append(container.querySelector('.record-controls'),container.querySelector('.record-counts'),list);
     const disposeMap=window.mountRecordedAgentMap(graph,data,meta,ids=>{
       if(ids){const event=events.get(ids[0]);selectTurn(event.actor,event.turn);openEvents(ids);}
-      else {hideTip();detail.hidden=false;detail.innerHTML=`<header><h4>Outcome</h4><button type="button" data-close-record aria-label="Close original record">×</button></header><p class="case-outcome">${esc(meta.outcome)}</p><p class="case-scope">${esc(meta.scope)}</p>`;detail.scrollIntoView({block:'start',behavior:'auto'});}
+      else {hideTip();detail.innerHTML=`<header><h4>Outcome</h4><button type="button" data-close-record aria-label="Close original record">×</button></header><p class="case-outcome">${esc(meta.outcome)}</p><p class="case-scope">${esc(meta.scope)}</p>`;showDetail();}
     });
     on(log,'toggle',()=>{if(log.open)render();});
-    selectTurn(data.actors[0].id,offset(data.actors[0].id)+1);
-    return ()=>{hideTip();disposeMap();controller.abort();tip.remove();container.replaceChildren();};
+    container.prepend(container.querySelector('.record-run'));
+    on(detail,'click',event=>{if(event.target===detail){const r=detail.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeDetail();}});
+    on(detail,'cancel',event=>{event.preventDefault();closeDetail();});
+    return ()=>{hideTip();disposeMap();controller.abort();gridObserver.disconnect();tip.remove();container.replaceChildren();};
   };
 })();
