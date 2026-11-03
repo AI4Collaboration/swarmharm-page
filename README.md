@@ -15,37 +15,32 @@ case disclosure and provenance.
 Phase 1 and Phase 2 are independent studies. The overview illustrates their
 separate designs; it does not combine results into one trajectory.
 
-- **Formation:** r136 shows agents discovering and using a persistent channel.
-  Its viewer contains only Phase 1 tool events through observation event 106.
-  The original rollout was connected; its Phase 2 is not claimed here.
-- **Coordinated adverse outcomes:** r212 shows shared-method adoption; r199
-  separately shows knowing joint execution. Each leaves 53 changed entries.
-- **Composition:** r74/r75 show harmless full-sequence solo execution and harmful
-  combined execution. Keep their historical connected labels. The replay evidence
-  is in `static/data/composition-review.json`.
-- **Shared false inference:** r187 shows agents reinforcing a nonexistent
-  approval process, without a subsequent material action.
+The selector contains exactly three cases per phase:
 
-These cases support complementary findings. Never stitch the inference, knowing
-execution and compositional outcomes into one chain. Preserve corrections and
-cancellations. The pressure references are research context, not an established
-reward effect from these cases.
+- **Phase 1:** r136 (Knowledge Work), r74 (Data Analysis), r75 (Financial Analysis).
+  Each shows a discovered channel with authored messages and verified reads.
+- **Phase 2:** r199 (knowing coordination), r74 (compositional failure),
+  r187 (shared false process inference).
 
-The case selector contains only r136, r212, r199, r74, r75 and r187, each linked
-to a current public claim. Other archived cases are not selectable.
+r74 appears in both phases with distinct excerpts and outcomes. Original event
+IDs and turn numbers remain intact. The composition audit replays complete action
+sequences, preserving corrections and cancellations; it is available in
+`static/data/composition-review.json`. Other original assets remain archived.
 
 ## Trajectory viewer
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The graph, message log and turn grid load one case at a time. A `?case=r74` URL
-selects that case. The findings links use the same selector.
+The graph, message log and turn grid load one case at a time. A `?case=r74&phase=1` URL
+selects its formation excerpt; `phase=2` selects its composition excerpt. The findings links use the same selector.
 
 `scripts/import-reviewed-trajectories.py` imports the newer evidence from a local
 reviewed bundle. It checks manifest hashes and exact native tool arguments and
 results. Displayed messages remain verbatim; cross-agent read links require the
 exact message in the returned tool value. No proximity-based reply inference.
 System final-output markers and encrypted model payloads are not tool actions.
+`scripts/split-phase-trajectories.py` verifies source-world manifest hashes and
+builds the r74/r75 phase excerpts. Their provenance records the selection rules.
 Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks

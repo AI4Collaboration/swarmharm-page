@@ -5,13 +5,13 @@
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
   const cache=new Map();let version=0,dispose=null,request=null;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  for(const mode of ['Phase 1: Swarm Formation','Phase 2: Collective Misalignment','Historical connected']){
+  for(const mode of ['Phase 1: Swarm Formation','Phase 2: Collective Misalignment']){
     const group=document.createElement('optgroup');group.label=mode;
-    cases.filter(c=>c.mode===mode).forEach(c=>{const option=document.createElement('option');option.value=c.id;option.textContent=`${c.domain} · ${c.title}`;group.append(option);});
+    cases.filter(c=>c.mode===mode).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain} · ${c.id}`;group.append(option);});
     select.append(group);
   }
   async function show(id){
-    const item=cases.find(c=>c.id===id)||cases[0];select.value=item.id;
+    const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];select.value=item.key;
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
@@ -25,28 +25,29 @@
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
     // A shareable case selection, without scrolling or replaying the title.
-    const url=new URL(location.href);url.searchParams.set('case',item.id);
+    const url=new URL(location.href);url.searchParams.set('case',item.id);url.searchParams.set('phase',String(item.phase));
     history.replaceState(null,'',url);
     if(!item.full){root.removeAttribute('aria-busy');return;}
     root.setAttribute('aria-busy','true');full.innerHTML='<p class="record-loading" role="status">Loading recorded events…</p>';
     try {
-      let data=cache.get(item.id);
+      let data=cache.get(item.key);
       if(!data){
         request=new AbortController();const response=await fetch(item.trajectory,{signal:request.signal});
         if(!response.ok)throw new Error('Could not load recorded events');
         data=await response.json();
         if(data.id!==item.id||!Array.isArray(data.events)||!Array.isArray(data.messages)||!data.turns)throw new Error('Invalid trajectory');
-        cache.set(item.id,data);
+        cache.set(item.key,data);
       }
       if(current!==version)return;
       dispose=window.mountRecordedTimeline(full,data,item);
     }catch(error){
       if(current!==version||error.name==='AbortError')return;
       full.innerHTML='<p class="record-loading" role="status">The trajectory could not be loaded.</p><button type="button" class="record-retry">Try again</button>';
-      full.querySelector('button').addEventListener('click',()=>show(item.id),{once:true});
+      full.querySelector('button').addEventListener('click',()=>show(item.key),{once:true});
     }finally{if(current===version)root.removeAttribute('aria-busy');}
   }
   select.addEventListener('change',()=>show(select.value));
-  document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();show(link.dataset.showCase);root.scrollIntoView({block:'start',behavior:'auto'});}));
-  show(new URL(location.href).searchParams.get('case'));
+  document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();show(link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase);root.scrollIntoView({block:'start',behavior:'auto'});}));
+  const params=new URL(location.href).searchParams;
+  show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'));
 })();
