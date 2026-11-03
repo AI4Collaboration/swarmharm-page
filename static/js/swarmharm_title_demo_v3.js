@@ -241,7 +241,7 @@ function travelProgress(t){
  const q=t/edge;return edge*(-q*q*q+2*q*q);
 }
 function layout(){
- const r=root.getBoundingClientRect();w=Math.max(280,r.width);h=Math.max(195,r.height);
+ const r=root.getBoundingClientRect();w=Math.max(280,r.width);h=Math.max(1,r.height);
  dpr=Math.min(3,Math.max(2,window.devicePixelRatio||1));
  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
  canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
