@@ -31,9 +31,8 @@ execution and compositional outcomes into one chain. Preserve corrections and
 cancellations. The pressure references are research context, not an established
 reward effect from these cases.
 
-The case selector retains earlier reviewed examples, including r19, whose old
-backups disappear but whose upgraded database copies retain the records.
-Do not describe it as verified record loss.
+The case selector contains only r136, r212, r199, r74, r75 and r187, each linked
+to a current public claim. Other archived cases are not selectable.
 
 ## Trajectory viewer
 
