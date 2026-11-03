@@ -23,14 +23,14 @@
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
   <script src="static/js/site.js?v=5" defer></script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
-  <link rel="stylesheet" href="static/css/orbit.css?v=49">
+  <link rel="stylesheet" href="static/css/orbit.css?v=50">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=10">
   <link rel="stylesheet" href="static/css/trajectory.css?v=17">
   <link rel="stylesheet" href="static/css/pressures.css?v=7">
-  <link rel="stylesheet" href="static/css/surfaces.css?v=2">
+  <link rel="stylesheet" href="static/css/surfaces.css?v=3">
   <link rel="stylesheet" href="static/css/research-layout.css?v=9">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=6">
-  <link rel="stylesheet" href="static/css/findings.css?v=6">
+  <link rel="stylesheet" href="static/css/findings.css?v=7">
   <script src="static/js/swarmharm_title_demo_v3.js?v=10" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
   <script src="static/js/trajectory-cases-data.js?v=10" defer></script>
@@ -43,7 +43,16 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
   <div class="container nav-inner">
-    <section class="institutions header-institutions" aria-label="Team affiliations">
+
+    <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation" aria-controls="primary-navigation" aria-expanded="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path class="nav-menu-icon" d="M4 7h16M4 12h16M4 17h16"/><path class="nav-close-icon" d="m6 6 12 12M6 18 18 6"/></svg><span>Sections</span></button>
+    <nav id="primary-navigation" aria-label="Main navigation"><a href="#top">Overview</a><a href="#research">Research Questions</a><a href="#form-the-swarm">Phase 1</a><a href="#cause-harm">Phase 2</a><a href="#trajectory">Trajectories</a><a href="#pressures">Pressures</a><a href="#stay-updated">Stay updated</a></nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode" hidden>
+      <svg class="theme-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.4 14.7A8.6 8.6 0 0 1 9.3 3.6 8.6 8.6 0 1 0 20.4 14.7Z"/></svg>
+      <svg class="theme-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+  </div>
+</header>
+<section class="institutions institution-band" id="top" aria-label="Team affiliations">
         <span class="team-from">Team from</span>
         <div class="institution-marquee">
           <div class="institution-track">
@@ -74,16 +83,8 @@
           </div>
         </div>
       </section>
-    <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation" aria-controls="primary-navigation" aria-expanded="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path class="nav-menu-icon" d="M4 7h16M4 12h16M4 17h16"/><path class="nav-close-icon" d="m6 6 12 12M6 18 18 6"/></svg></button>
-    <nav id="primary-navigation" aria-label="Main navigation"><a href="#research">Research Questions</a><a href="#findings">Findings</a><a href="#trajectory">Explore trajectory</a><a href="#pressures">Pressures</a></nav>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode" hidden>
-      <svg class="theme-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.4 14.7A8.6 8.6 0 0 1 9.3 3.6 8.6 8.6 0 1 0 20.4 14.7Z"/></svg>
-      <svg class="theme-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
-    </button>
-  </div>
-</header>
 <main id="main-content">
-  <section class="hero" id="top" aria-labelledby="hero-title">
+  <section class="hero" aria-labelledby="hero-title">
     <div class="container hero-layout">
       <div class="hero-copy">
         <h1 id="hero-title" class="emergence-title" aria-label="SwarmHarm" style="aspect-ratio:470 / 245">

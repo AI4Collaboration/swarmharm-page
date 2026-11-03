@@ -30,7 +30,6 @@
   background: var(--glass-sheen), var(--bg);
   box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow);
 }
-.site-header .header-institutions { background: transparent; }
 .site-header .nav-inner nav { gap: 4px; }
 .site-header .nav-inner nav a { padding-inline: 11px; border-radius: 14px; }
 .site-header :is(.theme-toggle, .nav-toggle) { border-radius: 50%; }
@@ -104,12 +103,4 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .life-control, .traj-play { transition: none; }
-}
-
-/* Equal desktop regions: institutions on the left, navigation on the right. */
-@media (min-width:1101px) {
-  .site-header .nav-inner { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
-  .site-header .nav-inner > nav { grid-column:2; width:100%; min-width:0; margin:0; padding-right:52px; box-sizing:border-box; justify-content:space-between; gap:0; }
-  .site-header .nav-inner nav a { padding-inline:8px; white-space:nowrap; }
-  .site-header .nav-inner > .theme-toggle { grid-column:2; justify-self:end; z-index:1; }
 }

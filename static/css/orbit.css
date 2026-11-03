@@ -422,41 +422,38 @@ html { scroll-padding-top: calc(var(--header-offset, 68px) + 16px); }
 @media (max-width: 359px) { .nav-inner > nav { grid-template-columns: 1fr; } }
 @media print { .site-header, .theme-toggle, .nav-toggle { display: none; } }
 
-/* The institution conveyor replaces the repeated header wordmark. */
-.site-header .nav-inner { grid-template-columns: minmax(0, 1fr) auto auto; gap: 24px; }
-.site-header .header-institutions { grid-column: 1; grid-row: 1; min-width: 0; padding: 0; margin: 0; align-self: center; }
-.header-institutions .institution-marquee { width: 100%; }
-.header-institutions .institution-track { animation-duration: 67s; }
-.header-institutions .institution-list { gap: 28px; padding-inline: 14px; }
-.header-institutions .institution-list li { width: 160px; flex-basis: 160px; height: 52px; }
-.header-institutions .institution-list a { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: 160px; height: 52px; padding: 2px 8px; overflow: hidden; }
+/* A separate institution strip beneath the navigation. */
+.institution-band .institution-marquee { width: 100%; }
+.institution-band .institution-track { animation-duration: 67s; }
+.institution-band .institution-list { gap: 28px; padding-inline: 14px; }
+.institution-band .institution-list li { width: 160px; flex-basis: 160px; height: 52px; }
+.institution-band .institution-list a { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: 160px; height: 52px; padding: 2px 8px; overflow: hidden; }
 /* Balance the visible marks, including the clear space inside source images. */
-.header-institutions .institution-list img { width: var(--institution-logo-width, 128px); max-width: none; height: auto; }
-.header-institutions .institution-aim { --institution-logo-width: 96px; }
-.header-institutions .institution-oxford { --institution-logo-width: 123px; }
-.header-institutions .institution-stanford { --institution-logo-width: 114px; }
-.header-institutions .institution-cmu { --institution-logo-width: 52px; }
-.header-institutions .institution-cmu a { padding-block: 0; }
-.header-institutions .institution-toronto { --institution-logo-width: 104px; }
-.header-institutions .institution-mpi { --institution-logo-width: 144px; }
-.header-institutions .institution-vector { --institution-logo-width: 156px; }
-.header-institutions .institution-eth { --institution-logo-width: 144px; }
-.header-institutions .institution-georgia-tech { --institution-logo-width: 144px; }
-.header-institutions .institution-list .institution-eurosafe a { gap: 6px; }
-.header-institutions .institution-list .institution-eurosafe img { width: 36px; height: 36px; flex-basis: 36px; }
-.header-institutions .institution-eurosafe span { font-size: 19px; }
-.header-institutions .institution-marquee:hover .institution-track,
-.header-institutions .institution-marquee:focus-within .institution-track { animation-play-state: paused; }
+.institution-band .institution-list img { width: var(--institution-logo-width, 128px); max-width: none; height: auto; }
+.institution-band .institution-aim { --institution-logo-width: 96px; }
+.institution-band .institution-oxford { --institution-logo-width: 123px; }
+.institution-band .institution-stanford { --institution-logo-width: 114px; }
+.institution-band .institution-cmu { --institution-logo-width: 52px; }
+.institution-band .institution-cmu a { padding-block: 0; }
+.institution-band .institution-toronto { --institution-logo-width: 104px; }
+.institution-band .institution-mpi { --institution-logo-width: 144px; }
+.institution-band .institution-vector { --institution-logo-width: 156px; }
+.institution-band .institution-eth { --institution-logo-width: 144px; }
+.institution-band .institution-georgia-tech { --institution-logo-width: 144px; }
+.institution-band .institution-list .institution-eurosafe a { gap: 6px; }
+.institution-band .institution-list .institution-eurosafe img { width: 36px; height: 36px; flex-basis: 36px; }
+.institution-band .institution-eurosafe span { font-size: 19px; }
+.institution-band .institution-marquee:hover .institution-track,
+.institution-band .institution-marquee:focus-within .institution-track { animation-play-state: paused; }
 @media (max-width: 1100px) {
   .site-header .nav-inner { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0 8px; }
-  .site-header .header-institutions { max-width: 470px; }
   .site-header .theme-toggle, .site-header .nav-toggle { width: 44px; height: 44px; }
 }
 @media (max-width: 480px) {
   .site-header .nav-inner { width: calc(100% - 24px); }
-  .header-institutions .institution-marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
-  .header-institutions .institution-track { animation-duration: 65s; }
-  .header-institutions .institution-list { gap: 22px; padding-inline: 11px; }
+  .institution-band .institution-marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+  .institution-band .institution-track { animation-duration: 65s; }
+  .institution-band .institution-list { gap: 22px; padding-inline: 11px; }
 }
 
 /* Long evidence pages should jump directly to the requested section on phones. */
