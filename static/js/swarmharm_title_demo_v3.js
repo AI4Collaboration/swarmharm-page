@@ -16,14 +16,15 @@ const GAP=8; // approved spacing, keeps SWARM and HARM separated
 // playback is remapped, so there are no hard cuts or timeline mismatches.
 const FORM_END=900, ATTACK=5480, END=10800;
 const BEATS=[
-  [0,0],       // loose swarm lives at the wordmark position
-  [1100,0],
-  [1750,1030],// in-place swarm-to-SWARM formation
-  [2000,1030],// SWARM readable before any red emerges
-  [2600,5480],// red bees emerge in place, then strike SWARM directly
-  [3700,8050],// continuous slash across SWARM
-  [4700,END], // HARM formation from the same red bees
-  [5450,END]  // final wordmark pause then replay
+  [0,0],
+  [850,200],   // independent exploration
+  [2200,520], // nearby individuals gather into local flocks
+  [3600,1030],// flocks resolve into the wordmark
+  [4100,1030],
+  [4700,5480],
+  [5800,8050],
+  [6800,END],
+  [7550,END]
 ];
 const CYCLE=BEATS[BEATS.length-1][0];
 function sceneTime(ms){
@@ -40,8 +41,8 @@ function sceneTime(ms){
 }
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 let w=1000,h=410,dpr=1,S=1,ox=0,oy=0;
-let black=[],denseCore=[],coreLayer=null,stormLayer=null,stormFill=[],red=[],dust=[],debris=[],wanderers=[],stormScouts=[],tearBees=[];
-let blackCache=null,redCache=null;
+let black=[],denseCore=[],coreLayer=null,red=[],dust=[],debris=[],wanderers=[],tearBees=[];
+let blackCache=null,redCache=null,formation=[];
 let elapsed=reduce?END:0,world=0,last=0,visible=!document.hidden,paused=false;
 let mouse={x:-999,y:-999,on:false};
 let seed=491120;
@@ -186,16 +187,6 @@ function buildCoreLayer(){
   if(p.static)beeStamp(c,blackBees,p.sprite,p.x,p.y,p.size,p.angle,p.opacity);
  }
  coreLayer=off;
- // Cache the dense *initial* cloud. Only a controlled subset of bees needs
- // individual motion; this avoids redrawing 6k sprites on every animation frame.
- const cloud=document.createElement('canvas');cloud.width=canvas.width;cloud.height=canvas.height;
- const cc=cloud.getContext('2d',{alpha:true});cc.setTransform(dpr,0,0,dpr,0,0);
- // All these are bee silhouettes. A thick extra body is cached once rather
- // than stamped every frame; the edges remain porous, like a real swarm.
- for(const p of stormFill){beeStamp(cc,blackBees,p.sprite,p.x,p.y,p.size,p.angle,p.opacity);}
- for(const p of denseCore){beeStamp(cc,blackBees,p.sprite,p.sx,p.sy,Math.max(3.2,p.size*.94),p.angle,Math.min(1,p.opacity*1.16));}
- for(const p of black){if(p.static)beeStamp(cc,blackBees,p.sprite,p.x0,p.y0,Math.max(3.1,p.size*.92),p.angle,Math.min(1,p.opacity*1.13));}
- stormLayer=cloud;
 }
 blackBees.addEventListener('load',()=>{blackCache=buildBeeCache(blackBees);buildCoreLayer()});
 redBees.addEventListener('load',()=>{redCache=buildBeeCache(redBees)});
@@ -243,9 +234,10 @@ function travelProgress(t){
 }
 function layout(){
  const r=root.getBoundingClientRect();w=Math.max(280,r.width);h=Math.max(195,r.height);
- dpr=Math.min(2,window.devicePixelRatio||1);
+ dpr=Math.min(3,Math.max(2,window.devicePixelRatio||1));
  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
  canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
  seed=491120;
  S=Math.min(3.05,w*.957/(450+GAP));ox=(w-(450+GAP)*S)/2;oy=h*.69-19.5*S;
  const step=clamp(1.18*S,.9,2.48);
@@ -261,16 +253,7 @@ function layout(){
  denseCore=density.core.map(p=>{const st=stormPoint(2);return {x:p.x,y:p.y,sx:st.x,sy:st.y,stormWave:st.wave,stormRate:st.rate,sprite:(rand()*112)|0,
   angle:rand()*Math.PI*2,size:(2.6+rand()*1.65)*S,
   opacity:.61+.27*p.core};});
- // Thousands of additional cached bee-shaped flecks thicken only the
- // opening storm; no extra per-frame rendering cost during the attack.
- const stormCount=Math.round(clamp(w*2.50,960,3400));
- stormFill=Array.from({length:stormCount},()=>{
-   const p=stormPoint(rand()<.12?1:2);
-   return {x:p.x,y:p.y,sprite:(rand()*112)|0,
-     size:Math.max(3.3,(2.45+rand()*2.05)*S),angle:rand()*Math.PI*2,
-     opacity:.66+rand()*.32};
- });
- coreLayer=null;stormLayer=null;
+ coreLayer=null;
  const pool=shuffle(black.map((_,i)=>i)).slice(0,Math.max(48,Math.floor(black.length*.09)));
  red=redPts.map((p,i)=>{
   const src=black[pool[i%pool.length]],a=swarmOffset();
@@ -297,15 +280,6 @@ function layout(){
   phase:rand()*6.283,sprite:(rand()*112)|0,
   size:(3.4+rand()*3.2)*S,opacity:.45+rand()*.40
  }));
- // Black scout bees orbit the initial cloud (not the letter silhouettes).
- // More distinct, independently moving bees around the initial storm,
- // concentrated near its outline rather than scattered across the page.
- stormScouts=Array.from({length:Math.round(clamp(w*.122,45,162))},()=>({
-  a:rand()*Math.PI*2, rate:(rand()<.5?-1:1)*(.00029+rand()*.00096),
-  rx:(77+rand()*62)*S,ry:(25+rand()*28)*S,
-  size:(2.1+rand()*2.75)*S,sprite:(rand()*112)|0,
-  phase:rand()*Math.PI*2,alpha:.40+rand()*.46
- }));
  debris=shuffle(inkPts.filter(p=>p.x<ox+250*S&&Math.abs(p.y-(oy+19*S))<12*S))
   .slice(0,Math.round(clamp(black.length*.014,32,95)))
   .map(p=>({x:p.x,y:p.y,a:rand()*Math.PI*2,r:dot*(.3+rand()*.36),phase:rand()*Math.PI*2}));
@@ -315,8 +289,9 @@ function layout(){
  // Use genuine bee-shaped glyph components to deform the whole wordmark
  // under impact, including bees rendered into the static density cache.
  tearBees=denseCore.concat(black);
- coreLayer=null;stormLayer=null;
+ coreLayer=null;
  buildCoreLayer();
+ buildFormation();
 }
 
 // The loose swarm occupies the eventual wordmark location from the start.
@@ -349,6 +324,53 @@ function bobStorm(x,y,p){
  const a=world*p.rate+p.wave;
  // Very small motion: keep cluster shape coherent while the bees buzz.
  return {x:x+Math.sin(a)*1.8*S,y:y+Math.cos(a*1.13)*1.3*S};
+}
+// Precompute local neighbor interactions once per layout, keeping playback
+// inexpensive. Cohesion/alignment are local; the late target resolves the title.
+function buildFormation(){
+ const count=Math.min(190,black.length);
+ formation=Array.from({length:count},(_,i)=>{
+  const target=black[Math.floor(i*black.length/count)];
+  const x=ox+(-9+rand()*276)*S,y=oy+(-24+rand()*86)*S;
+  const angle=rand()*Math.PI*2;
+  return {target,x,y,vx:Math.cos(angle)*.6*S,vy:Math.sin(angle)*.6*S,
+   sprite:target.sprite,size:(5+rand()*3)*S,frames:[{x,y}]};
+ });
+ for(let frame=1;frame<=100;frame++){
+  const u=frame/100,seek=smooth((u-.56)/.44);
+  const next=formation.map(p=>{
+   let cx=0,cy=0,vx=0,vy=0,sx=0,sy=0,n=0;
+   for(const q of formation){
+    if(q===p)continue;
+    const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);
+    if(d<28*S){cx+=q.x;cy+=q.y;vx+=q.vx;vy+=q.vy;n++;
+     if(d<7*S&&d>.01){sx-=dx/d;sy-=dy/d;}}
+   }
+   let ax=Math.sin(frame*.15+p.target.phase)*.035*S;
+   let ay=Math.cos(frame*.13+p.target.phase)*.035*S;
+   if(n){ax+=(cx/n-p.x)*.012+(vx/n-p.vx)*.07+sx*.11*S;
+         ay+=(cy/n-p.y)*.012+(vy/n-p.vy)*.07+sy*.11*S;}
+   ax+=(p.target.x-p.x)*seek*.025;
+   ay+=(p.target.y-p.y)*seek*.025;
+   const nx=clamp(p.vx+ax,-1.8*S,1.8*S),ny=clamp(p.vy+ay,-1.8*S,1.8*S);
+   return {x:clamp(p.x+nx,ox-19*S,ox+277*S),
+    y:clamp(p.y+ny,oy-32*S,oy+73*S),vx:nx*.94,vy:ny*.94};
+  });
+  formation.forEach((p,i)=>{Object.assign(p,next[i]);
+   const settle=smooth((u-.78)/.22);
+   p.frames.push({x:lerp(p.x,p.target.x,settle),y:lerp(p.y,p.target.y,settle)});
+  });
+ }
+}
+function drawFormation(t){
+ if(t>=FORM_END)return;
+ const frame=clamp(t/FORM_END)*100,index=Math.min(99,Math.floor(frame));
+ const fade=1-smooth((t-720)/180);
+ for(const p of formation){
+  const a=p.frames[index],b=p.frames[index+1],u=frame-index;
+  beeSprite(blackBees,p.sprite,lerp(a.x,b.x,u),lerp(a.y,b.y,u),p.size,
+   Math.atan2(b.y-a.y,b.x-a.x),.88*fade);
+ }
 }
 function flightPos(p,u){
  const prog=travelProgress(u);
@@ -464,47 +486,18 @@ function draw(dt){
  ctx.clearRect(0,0,w,h);
  const intro=easeOut(Math.min(1,t/FORM_END));
  const coreFade=smooth((t-(FORM_END-105))/145);
- const stormAlive=1-smooth((t-55)/660); // linger while the cloud is visible
- // The dense swarm is cached, with subtle coherent breathing, while hundreds
- // of individual bees continue to move and later form the letter.
- const stormVisibility=(1-smooth(t/FORM_END));
- if(stormLayer&&stormVisibility>.001){
-   ctx.save();ctx.globalAlpha=stormVisibility;
-   const c=initialStormCenter();
-   const breath=1+.006*Math.sin(world*.0031);
-   ctx.translate(c.x,c.y);ctx.scale(breath,breath);ctx.translate(-c.x,-c.y);
-   ctx.drawImage(stormLayer,0,0,w,h);ctx.restore();
- }
- if(t<FORM_END+80){
-   for(let i=0;i<denseCore.length;i+=6){
-     const p=denseCore[i];
-     const q=bobStorm(p.sx,p.sy,{wave:p.stormWave,rate:p.stormRate});
-     const x=lerp(q.x,p.x,intro),y=lerp(q.y,p.y,intro);
-     beeSprite(blackBees,p.sprite,x,y,p.size*(.67+.33*intro),p.angle,
-       p.opacity*(1-coreFade));
-   }
- }
+ drawFormation(t);
  // Only fade in the pre-rendered completed letter at the END of formation.
  if(coreLayer&&coreFade>0){
    ctx.globalAlpha=.64*coreFade;
    ctx.drawImage(coreLayer,0,0,w,h);
    ctx.globalAlpha=1;
  }
- // Separate scout bees buzz in loose orbits around the initial swarm.
- if(stormAlive>.006){
-   const c=initialStormCenter();
-   for(const b of stormScouts){
-     const a=b.a+world*b.rate;
-     const x=c.x+Math.cos(a)*b.rx+Math.sin(world*.0048+b.phase)*6.0*S;
-     const y=c.y+Math.sin(a)*b.ry+Math.cos(world*.0051+b.phase)*4.2*S;
-     beeSprite(blackBees,b.sprite,x,y,b.size,a+Math.sin(world*.003+b.phase)*.38,b.alpha*stormAlive);
-   }
- }
  // SWARM is built from tiny bee sprites, preserving the clustered “bee-bâu” look.
  const active=[];
  for(let i=0;i<black.length;i++){
   const p=black[i];
-  if(p.static && (coreFade>=.999 || i%6!==0))continue;
+  if(t<720 || (p.static && (coreFade>=.999 || i%6!==0)))continue;
   const q=bobStorm(p.x0,p.y0,{wave:p.stormWave,rate:p.stormRate});
   // Local eddies share a direction, while every bee has its own orbit.
   // Keep the stroke centers readable and let the edges breathe.
@@ -520,7 +513,7 @@ function draw(dt){
   const m=p.redId>=0?red[p.redId]:null;
   const redWithinSwarm=m&&t>=m.redAt&&t<m.depart;
   const atlas=redWithinSwarm?redBees:blackBees;
-  const opacity=(redWithinSwarm?.95:(p.light?.36:p.opacity))*(p.static?1-coreFade:1);
+  const opacity=(redWithinSwarm?.95:(p.light?.36:p.opacity))*(p.static?1-coreFade:1)*smooth((t-720)/180);
   const angle=p.angle+Math.sin(world*.004+p.phase)*.65;
   const foreground=i%17===0&&!p.static?2.15:1;
   beeSprite(atlas,p.sprite,x,y,p.size*(.68+.32*intro)*foreground,angle,opacity);
@@ -530,7 +523,7 @@ function draw(dt){
   const a=b.a+world*b.rate;
   const x=b.x+Math.cos(a)*b.rx+Math.sin(world*.0018+b.phase)*2*S;
   const y=b.y+Math.sin(a)*b.ry+Math.cos(world*.0013+b.phase)*2*S;
-  beeSprite(blackBees,b.sprite,x,y,b.size,a,b.opacity*smooth((t-350)/650));
+  beeSprite(blackBees,b.sprite,x,y,b.size,a,b.opacity*smooth((t-720)/350));
  }
  // V11-like slash: a local, moving tear centered on the attacking head.
  // Nothing is pre-cut ahead of the bees.
@@ -559,7 +552,7 @@ function draw(dt){
   const {p,q}=active[i];
   const early=smooth((t-p.depart)/260);
   const arrive=smooth((t-(p.attackAt+p.flight+p.settle*.82))/(p.settle*.20));
-  const opacity=.86+arrive*.10;
+  const opacity=(.86+arrive*.10)*(1-smooth((t-10050)/650));
   const prev=redPos(p,t-18);
   const angle=Math.atan2(q.y-prev.y,q.x-prev.x);
   const size=p.size;
@@ -598,7 +591,7 @@ window.__swarmharmTitleDemoV3={
  get scenePhase(){return sceneTime(elapsed)},
  get harmSolid(){return smooth((sceneTime(elapsed)-10050)/650)},
  get beats(){return BEATS.map(x=>x.slice())},
- get counts(){return{swarm:black.length,staticBees:black.filter(p=>p.static).length,denseCore:denseCore.length,harm:red.length,wanderingBees:wanderers.length,stormScouts:stormScouts.length,stormFill:stormFill.length,slashActive:!!currentSlashState(sceneTime(elapsed))}},
+ get counts(){return{swarm:black.length,staticBees:black.filter(p=>p.static).length,denseCore:denseCore.length,harm:red.length,wanderingBees:wanderers.length,formationAgents:formation.length,slashActive:!!currentSlashState(sceneTime(elapsed))}},
  get targetBounds(){return{swarm:{min:ox,max:ox+257*S},harm:{min:ox+(262+GAP)*S,max:ox+(445+GAP)*S}}},
  get completedParticles(){return red.filter(p=>sceneTime(elapsed)>=p.finishAt).length}
 };
