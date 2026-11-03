@@ -20,11 +20,10 @@ const BEATS=[
   [1100,0],
   [1750,1030],// rapid storm-to-SWARM formation
   [2000,1030],// SWARM readable before any red emerges
-  [3400,3920],// red bees rise, cluster and fly above SWARM
-  [4650,5430],// suspended swarm darkens then turns red
-  [5500,8050],// quick, smooth slash across SWARM
-  [6200,END], // quick HARM formation from red bees
-  [6950,END]  // final wordmark pause then replay
+  [2600,5480],// red bees emerge in place, then strike SWARM directly
+  [3700,8050],// continuous slash across SWARM
+  [4700,END], // HARM formation from the same red bees
+  [5450,END]  // final wordmark pause then replay
 ];
 const CYCLE=BEATS[BEATS.length-1][0];
 function sceneTime(ms){
@@ -41,7 +40,7 @@ function sceneTime(ms){
 }
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 let w=1000,h=410,dpr=1,S=1,ox=0,oy=0;
-let black=[],denseCore=[],coreLayer=null,stormLayer=null,stormFill=[],red=[],dust=[],debris=[],beeCompanions=[],wanderers=[],stormScouts=[],tearBees=[];
+let black=[],denseCore=[],coreLayer=null,stormLayer=null,stormFill=[],red=[],dust=[],debris=[],wanderers=[],stormScouts=[],tearBees=[];
 let blackCache=null,redCache=null;
 let elapsed=reduce?END:0,world=0,last=0,visible=!document.hidden,paused=false;
 let mouse={x:-999,y:-999,on:false};
@@ -211,7 +210,7 @@ function swarmOffset(){
 // The slash and attack are ONE connected cubic spline. A lookup table maps
 // distance -> position so speed remains continuous across every segment.
 const points=[
- [{x:237,y:-78},{x:264,y:-88},{x:269,y:9},{x:214,y:19}],
+ [{x:254,y:18},{x:242,y:17},{x:228,y:18},{x:214,y:19}],
  [{x:214,y:19},{x:165,y:25},{x:70,y:21},{x:26,y:19}],
  [{x:26,y:19},{x:-14,y:17},{x:18,y:53},{x:75,y:44}],
  [{x:75,y:44},{x:140,y:40},{x:235,y:27},{x:278,y:20}]
@@ -277,19 +276,16 @@ function layout(){
   const src=black[pool[i%pool.length]],a=swarmOffset();
   if(src.redId<0)src.redId=i;
   const redAt=1150+rand()*600;
-  const depart=redAt+250+rand()*350;
   const aStart=ATTACK+rand()*620;
+  const depart=aStart;
   const flight=2190+rand()*175;
   const targetT=clamp((p.x-(ox+(262+GAP)*S))/(184*S));
   const settle=1160+rand()*350+targetT*440;
   return {src,tx:p.x,ty:p.y,ux:a.x,uy:a.y,
    redAt,depart,attackAt:aStart,flight,settle,finishAt:aStart+flight+settle,
-   roamer:rand()<.045,rad:(18+rand()*31)*S,
-   orbit:(rand()<.5?-1:1)*(.00125+rand()*.0016),angle:rand()*Math.PI*2,
    seed:rand()*6.283,phase:rand()*6.283,cross:clamp(gauss()*.64,-1.5,1.5),
    r:dot*(.75+rand()*.6),bee:true,
-   sprite:(rand()*112)|0,size:(2.7+rand()*2.1)*S,shape:(rand()*6.283),lastStage:0,
-   darkCore:(Math.hypot(a.x/.94,a.y/.96)<.76 && rand() < .66*(1-smooth((Math.hypot(a.x/.94,a.y/.96)-.18)/.6)))};
+   sprite:(rand()*112)|0,size:(2.7+rand()*2.1)*S,shape:(rand()*6.283),lastStage:0};
  });
  dust=[]; // use bee silhouettes rather than circular ambient particles
  // Extra free bees stay outside the letter strokes, not over the wordmark.
@@ -300,11 +296,6 @@ function layout(){
   a:rand()*Math.PI*2,rate:(rand()<.5?-1:1)*(.00018+rand()*.00043),
   phase:rand()*6.283,sprite:(rand()*112)|0,
   size:(1.45+rand()*1.9)*S,opacity:.20+rand()*.42
- }));
- beeCompanions=Array.from({length:Math.round(clamp(w*.015,9,19))},()=>({
-  a:rand()*Math.PI*2,rate:(rand()<.5?-1:1)*(.00032+rand()*.00058),
-  rx:(36+rand()*24)*S,ry:(20+rand()*13)*S,size:(3.2+rand()*2.8)*S,
-  sprite:(rand()*112)|0,phase:rand()*Math.PI*2
  }));
  // Black scout bees orbit the initial cloud (not the letter silhouettes).
  // More distinct, independently moving bees around the initial storm,
@@ -359,24 +350,10 @@ function bobStorm(x,y,p){
  // Very small motion: keep cluster shape coherent while the bees buzz.
  return {x:x+Math.sin(a)*1.8*S,y:y+Math.cos(a*1.13)*1.3*S};
 }
-function cloudCenter(t){
- const lift=smooth((t-1500)/2400);
- return {x:ox+(199+35*lift)*S+Math.sin(world*.0012)*1.3*S,
-         y:oy-(30+51*lift)*S+Math.sin(world*.0019)*1.8*S};
-}
-function cloudSeat(p,t){
- const c=cloudCenter(t),breath=1+.035*Math.sin(world*.0035+p.phase);
- let x=c.x+p.ux*53*S*breath,y=c.y+p.uy*27*S*breath;
- if(p.roamer){const a=p.angle+world*p.orbit;
-   x=c.x+Math.cos(a)*p.rad;
-   y=c.y+Math.sin(a)*p.rad*.72;
- }else{ x+=Math.sin(world*.004+p.seed)*1.2*S;y+=Math.cos(world*.0043+p.phase)*1.1*S; }
- return {x,y};
-}
 function flightPos(p,u){
  const prog=travelProgress(u);
  const q=pathAt(prog);
- // Natural taper: a broad bee cloud becomes a narrow, fast attack ribbon.
+ // A broad in-place departure narrows into a fast ribbon across SWARM.
  const narrow=smooth(prog/.30);
  const width=lerp(49,10,narrow),height=lerp(27,9,narrow);
  let x=ox+(q.x+p.ux*width)*S;
@@ -388,19 +365,11 @@ function flightPos(p,u){
 }
 function redPos(p,t){
  if(t<=p.depart)return {x:p.src.x,y:p.src.y};
- if(t<p.attackAt){
-  const cloud=cloudSeat(p,t);
-  const r=smooth((t-p.depart)/Math.max(600,3650-p.depart));
-  const x=cubic(p.src.x,p.src.x+19*S,cloud.x-31*S,cloud.x,r);
-  const y=cubic(p.src.y,p.src.y-18*S,cloud.y+22*S,cloud.y,r);
-  return {x:x+Math.sin(world*.011+p.seed)*2.5*S*Math.sin(r*Math.PI),
-          y:y+Math.cos(world*.009+p.phase)*2*S*Math.sin(r*Math.PI)};
- }
  const aEnd=p.attackAt+p.flight;
  if(t<aEnd){
   const u=clamp((t-p.attackAt)/p.flight);
-  const q=flightPos(p,u),start=cloudSeat(p,p.attackAt),fp=flightPos(p,0);
-  // Position and first derivative evolve smoothly from the hovering cluster.
+  const q=flightPos(p,u),start={x:p.src.x,y:p.src.y},fp=flightPos(p,0);
+  // Each bee starts at its own position, without an overhead gathering point.
   const settle=smooth(u/.145);
   return {x:q.x+(start.x-fp.x)*(1-settle), y:q.y+(start.y-fp.y)*(1-settle)};
  }
@@ -521,7 +490,7 @@ function draw(dt){
    ctx.drawImage(coreLayer,0,0,w,h);
    ctx.globalAlpha=1;
  }
- // Separate scout bees buzz in loose orbits, like those near the later cloud.
+ // Separate scout bees buzz in loose orbits around the initial swarm.
  if(stormAlive>.006){
    const c=initialStormCenter();
    for(const b of stormScouts){
@@ -559,15 +528,6 @@ function draw(dt){
  // V11-like slash: a local, moving tear centered on the attacking head.
  // Nothing is pre-cut ahead of the bees.
  drawHeadSlash(t);
- // Small companions around the hovering cloud.
- const companion=smooth((t-2500)/700)*(1-smooth((t-5750)/430));
- if(companion>.01){const c=cloudCenter(t);
-  for(const b of beeCompanions){const a=b.a+world*b.rate;
-   const x=c.x+Math.cos(a)*b.rx+Math.sin(world*.006+b.phase)*3.4*S;
-   const y=c.y+Math.sin(a)*b.ry+Math.cos(world*.007+b.phase)*2.4*S;
-   beeSprite(redBees,b.sprite,x,y,b.size,a,companion*.62);
-  }
- }
  // Track active red bees.
  for(let i=0;i<red.length;i++){
   const p=red[i];if(t<=p.depart)continue;
@@ -592,15 +552,11 @@ function draw(dt){
   const {p,q}=active[i];
   const early=smooth((t-p.depart)/260);
   const arrive=smooth((t-(p.attackAt+p.flight+p.settle*.82))/(p.settle*.20));
-  const opacity=(t<p.attackAt?0.78:0.86) + arrive*.10;
+  const opacity=.86+arrive*.10;
   const prev=redPos(p,t-18);
   const angle=Math.atan2(q.y-prev.y,q.x-prev.x);
-  const size=p.size*(t<p.attackAt?1.02:1.0);
-  // Same bees, temporarily dark at the cloud center. They all turn red
-  // before the strike, so no black particles remain in the completed HARM.
-  const dark=p.darkCore?smooth((t-1680)/1100)*(1-smooth((t-(ATTACK-430))/620)):0;
-  if(dark>.018)beeSprite(blackBees,p.sprite,q.x,q.y,size,angle,opacity*early*dark);
-  if(dark<.982)beeSprite(redBees,p.sprite,q.x,q.y,size,angle,opacity*early*(1-dark));
+  const size=p.size;
+  beeSprite(redBees,p.sprite,q.x,q.y,size,angle,opacity*early);
  }
  // Crystallize after the bees arrive: particle texture gradually resolves to
  // the exact solid original wordmark. At the end there are NO dotted gaps.
@@ -635,7 +591,7 @@ window.__swarmharmTitleDemoV3={
  get scenePhase(){return sceneTime(elapsed)},
  get harmSolid(){return smooth((sceneTime(elapsed)-10050)/650)},
  get beats(){return BEATS.map(x=>x.slice())},
- get counts(){return{swarm:black.length,staticBees:black.filter(p=>p.static).length,denseCore:denseCore.length,harm:red.length,wanderingBees:wanderers.length,stormScouts:stormScouts.length,stormFill:stormFill.length,slashActive:!!currentSlashState(sceneTime(elapsed)),cloudBlackCore:red.filter(p=>p.darkCore).length}},
+ get counts(){return{swarm:black.length,staticBees:black.filter(p=>p.static).length,denseCore:denseCore.length,harm:red.length,wanderingBees:wanderers.length,stormScouts:stormScouts.length,stormFill:stormFill.length,slashActive:!!currentSlashState(sceneTime(elapsed))}},
  get targetBounds(){return{swarm:{min:ox,max:ox+257*S},harm:{min:ox+(262+GAP)*S,max:ox+(445+GAP)*S}}},
  get completedParticles(){return red.filter(p=>sceneTime(elapsed)>=p.finishAt).length}
 };
