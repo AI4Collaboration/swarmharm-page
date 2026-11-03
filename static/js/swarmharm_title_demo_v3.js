@@ -18,16 +18,16 @@ const GAP=8; // approved spacing, keeps SWARM and HARM separated
 const FORM_END=900, ATTACK=5480, END=10800;
 const BEATS=[
   [0,0],
-  [450,110],  // quick independent search
-  [1600,320], // encounters, mutual response, then pairing
-  [3400,640], // small flocks travel together before title attraction
-  [5300,900], // slowly resolve the gathered swarm into letters
-  [5600,1030],
-  [6100,1030],
-  [6700,5480],
-  [7800,8050],
-  [8800,END],
-  [9550,END]
+  [280,110],  // quick independent search
+  [950,320], // encounters, mutual response, then pairing
+  [2050,640], // small flocks travel together before title attraction
+  [3300,900], // slowly resolve the gathered swarm into letters
+  [3500,1030],
+  [3800,1030],
+  [4400,5480],
+  [5500,8050],
+  [6500,END],
+  [7250,END]
 ];
 const CYCLE=BEATS[BEATS.length-1][0];
 function sceneTime(ms){
