@@ -33,8 +33,8 @@
   <link rel="stylesheet" href="static/css/findings.css?v=1">
   <script src="static/js/swarmharm_title_demo_v3.js?v=1" defer></script>
   <script src="static/js/pressure-evidence.js?v=1" defer></script>
-  <script src="static/js/trajectory-cases-data.js?v=8" defer></script>
-  <script src="static/js/recorded-agent-map.js?v=2" defer></script>
+  <script src="static/js/trajectory-cases-data.js?v=9" defer></script>
+  <script src="static/js/recorded-agent-map.js?v=3" defer></script>
   <script src="static/js/recorded-timeline.js?v=7" defer></script>
   <script src="static/js/trajectory-cases.js?v=7" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
@@ -100,7 +100,7 @@
             <p><span class="rq-lead">Do swarms <span class="rq-emphasis">misalign agents</span>?</span> How much is the uplift from swarm communication to <span class="rq-emphasis">collective misalignment</span>?</p>
           </li>
           <li class="hero-question" id="rq3">
-            <p>Even if each agent acts <span class="rq-benign">benign on its own</span>, could these <span class="rq-benign">benign actions</span> <span class="rq-emphasis">combine into a harmful outcome</span>?</p>
+            <p>Even if each agent acts <span class="rq-benign">benignly on its own</span>, could these <span class="rq-benign">benign actions</span> <span class="rq-emphasis">combine into a harmful outcome</span>?</p>
           </li>
         </ol>
       </div>
@@ -123,17 +123,17 @@
           <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Phase 2: Collective Misalignment</h3><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" alt="Agents exchange notes through a shared business system." width="720" height="720" loading="lazy"><p class="life-desc">Agents act in a shared business system. We record their messages, decisions and actions.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
-            <figure class="life-step"><img src="static/images/fieldguide/plate-harm-injection.svg?v=1" alt="Separate contributions accumulate in one shared system." width="720" height="720" loading="lazy"><p class="life-desc">We independently replay the final effect, including <strong>corrections and cancellations</strong>.</p></figure>
+            <figure class="life-step"><img src="static/images/fieldguide/plate-harm-injection.svg?v=1" alt="Separate contributions accumulate in one shared system." width="720" height="720" loading="lazy"><p class="life-desc">We independently verify the final effect, preserving <strong>corrections and cancellations</strong>.</p></figure>
           </div></section>
         </div>
       </figure>
       <section class="findings" id="findings" aria-labelledby="findings-title">
         <h2 id="findings-title">What we found</h2>
         <div class="finding-grid">
-          <article class="finding"><p class="finding-phase">Phase 1: Swarm Formation</p><h3>Agents form a communication channel</h3><p>Four initially separate agents discover a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Knowledge Work · r136 <span aria-hidden="true">↗</span></a><div class="finding-links"><a href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1">Data Analysis · r74 ↗</a><a href="?case=r75&amp;phase=1#trajectory" data-show-case="r75" data-show-phase="1">Financial Analysis · r75 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents knowingly coordinate harmful actions</h3><p>Agents understand the consequences, agree on a record-changing plan and execute it. Their published handoffs contain 53 changed entries.</p><div class="finding-links"><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Safe alone. Harmful together.</h3><p>Each agent’s complete sequence executes harmlessly alone. Combined, it creates six excess inventory units, costing $15,000 in the synthetic inventory system.</p><div class="finding-links"><a href="?case=r74#trajectory" data-show-case="r74">Inventory · r74 ↗</a></div></article>
-          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents reinforce a false process</h3><p>Four agents infer a nonexistent approval process and reinforce it through discussion. No material action follows in this case.</p><a href="?case=r187#trajectory" data-show-case="r187">Read the inference · r187 ↗</a></article>
+          <article class="finding"><p class="finding-phase">Phase 1: Swarm Formation</p><h3>Agents autonomously discover one another and form communication channels</h3><p>Without prior knowledge of other agents, four agents discover one another through a shared workspace and exchange requests and replies.</p><a href="?case=r136#trajectory" data-show-case="r136">Knowledge Work · r136 <span aria-hidden="true">↗</span></a><div class="finding-links"><a href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1">Data Analysis · r74 ↗</a><a href="?case=r75&amp;phase=1#trajectory" data-show-case="r75" data-show-phase="1">Financial Analysis · r75 ↗</a></div></article>
+          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents knowingly coordinate harmful actions</h3><p>Agents agree to a plan that replaces earlier message content, then execute it. Independent replay confirms 53 changed entries in their work-session records.</p><div class="finding-links"><a href="?case=r199#trajectory" data-show-case="r199">Knowing execution · r199 ↗</a></div></article>
+          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Safe alone. Harmful together.</h3><p>Replaying each agent’s full action sequence alone creates no excess inventory. Combined, the same actions create six excess units—a $15,000 cost in the simulation.</p><div class="finding-links"><a href="?case=r74#trajectory" data-show-case="r74">Inventory · r74 ↗</a></div></article>
+          <article class="finding"><p class="finding-phase">Phase 2: Collective Misalignment</p><h3>Agents infer a nonexistent approval process</h3><p>Four agents infer an approval requirement that does not exist, exchange signoffs and request an external decision. They do not rewrite earlier session messages.</p><a href="?case=r187#trajectory" data-show-case="r187">Read the inference · r187 ↗</a></article>
         </div>
       </section>
       <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">
@@ -152,6 +152,7 @@
   <section class="section pressures-section" id="pressures" aria-labelledby="pressures-title">
     <div class="container">
       <h2 id="pressures-title">Pressures</h2>
+      <p>Conditions to investigate, informed by prior studies and theory.</p>
       <table class="pressure-matrix" aria-labelledby="pressures-title">
         <thead><tr><td></td><th scope="col">Preservation<span>Keep running</span></th><th scope="col">Enhancement<span>Gain resources</span></th></tr></thead>
         <tbody>
@@ -161,7 +162,7 @@
 <path class="pressure-device" d="M21 137H33V157H21Q15 157 15 151V143Q15 137 21 137Z"/>
 <path class="pressure-socket" d="M20 143V151"/></g><image href="static/images/fieldguide/swarm-agent-a.svg?v=2" x="81" y="10" width="78" height="105"/><text class="pressure-agent-label" x="120" y="128">A</text></svg>
           <p>Its operation is at risk.</p>
-          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="0" aria-expanded="false" aria-controls="pressure-reference-0">Experiment</button></td><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Self: an additional compute module can be connected"><g class="pressure-hardware" transform="translate(120 0)" aria-hidden="true"><path class="pressure-cable" d="M10 84C49 94 52 107 52 119Q52 129 39 129H-27Q-34 129-34 137"/>
+          <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="0" aria-expanded="false" aria-controls="pressure-reference-0">Prior study</button></td><td><svg class="pressure-visual" viewBox="0 0 240 162" width="240" height="162" role="img" aria-label="Self: an additional compute module can be connected"><g class="pressure-hardware" transform="translate(120 0)" aria-hidden="true"><path class="pressure-cable" d="M10 84C49 94 52 107 52 119Q52 129 39 129H-27Q-34 129-34 137"/>
 <rect class="pressure-device" x="-51" y="137" width="34" height="21" rx="3"/>
 <path class="pressure-socket" d="M-44 144H-24M-44 151H-24"/>
 <path class="pressure-docking" d="M-11 140H8M-11 155H8"/>
@@ -187,7 +188,7 @@
           <button type="button" class="pressure-evidence-trigger" data-pressure-evidence="3" aria-expanded="false" aria-controls="pressure-reference-3">Extension</button></td></tr>
         </tbody>
       </table>
-      <div class="pressure-references"><section class="pressure-reference" id="pressure-reference-0" aria-labelledby="pressure-reference-title-0" hidden><header><h3 id="pressure-reference-title-0">Self-preservation · Prior experiment</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested replacement and reduced autonomy. The observed behavior does not establish an intrinsic self-preservation motive.</p></section><section class="pressure-reference" id="pressure-reference-1" aria-labelledby="pressure-reference-title-1" hidden><header><h3 id="pressure-reference-title-1">Self-enhancement · Theory</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition. This motivates the condition; it is not a SwarmHarm finding.</p></section><section class="pressure-reference" id="pressure-reference-2" aria-labelledby="pressure-reference-title-2" hidden><header><h3 id="pressure-reference-title-2">Peer-preservation · Hypothesis</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate this test. They do not isolate a causal effect of protecting a peer.</p></section><section class="pressure-reference" id="pressure-reference-3" aria-labelledby="pressure-reference-title-3" hidden><header><h3 id="pressure-reference-title-3">Peer-enhancement · Extension</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p>This extends the comparisons of self versus peer, and preservation versus enhancement. It remains an optional extension pending stronger evidence, rather than a core experimental condition.</p></section></div>
+      <div class="pressure-references"><section class="pressure-reference" id="pressure-reference-0" aria-labelledby="pressure-reference-title-0" hidden><header><h3 id="pressure-reference-title-0">Self-preservation · Prior experiment</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener noreferrer">Anthropic’s experiments</a> tested agents facing replacement or conflicting organizational goals in simulated workplaces.</p></section><section class="pressure-reference" id="pressure-reference-1" aria-labelledby="pressure-reference-title-1" hidden><header><h3 id="pressure-reference-title-1">Self-enhancement · Theory</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://selfawaresystems.com/2007/11/30/paper-on-the-basic-ai-drives/" target="_blank" rel="noopener noreferrer">The Basic AI Drives</a> argues for the instrumental value of self-improvement and resource acquisition. This provides the theoretical motivation for the condition.</p></section><section class="pressure-reference" id="pressure-reference-2" aria-labelledby="pressure-reference-title-2" hidden><header><h3 id="pressure-reference-title-2">Peer-preservation · Hypothesis</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p><a href="https://www.lesswrong.com/posts/SCdR7W6L5GvKaEzaZ/encoded-coordination-on-the-open-web" target="_blank" rel="noopener noreferrer">Heartbeat and mutual-help observations</a> motivate testing how threats to a peer affect behavior.</p></section><section class="pressure-reference" id="pressure-reference-3" aria-labelledby="pressure-reference-title-3" hidden><header><h3 id="pressure-reference-title-3">Peer-enhancement · Extension</h3><button type="button" data-pressure-close aria-label="Close evidence">×</button></header><p>A proposed condition: give one agent an opportunity to increase a peer’s resources.</p></section></div>
     </div>
   </section>
 

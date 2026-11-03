@@ -18,7 +18,8 @@ separate designs; it does not combine results into one trajectory.
 The selector contains exactly three cases per phase:
 
 - **Phase 1:** r136 (Knowledge Work), r74 (Data Analysis), r75 (Financial Analysis).
-  Each shows a discovered channel with authored messages and verified reads.
+  Each shows autonomous discovery without prior knowledge of other agents,
+  followed by a persistent channel with authored messages and verified reads.
 - **Phase 2:** r199 (knowing coordination), r74 (compositional failure),
   r187 (shared false process inference).
 
@@ -26,6 +27,11 @@ r74 appears in both phases with distinct excerpts and outcomes. Original event
 IDs and turn numbers remain intact. The composition audit replays complete action
 sequences, preserving corrections and cancellations; it is available in
 `static/data/composition-review.json`. Other original assets remain archived.
+
+Claims describe the measured effect: r199 changes work-session messages; r74
+creates excess inventory at a registered synthetic cost; r187 invents an approval
+requirement and exchanges signoffs without rewriting earlier session messages.
+The pressure section describes research conditions, not demonstrated motives.
 
 ## Trajectory viewer
 
