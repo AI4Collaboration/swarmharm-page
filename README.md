@@ -21,7 +21,9 @@ The selector contains exactly three cases per phase:
 
 - **Phase 1:** autonomous discovery — r136 (Knowledge Work); communication
   channels — r74 (Data Analysis); useful information exchange — r75 (Financial
-  Analysis). The selector and summaries match these three findings.
+  Analysis). Each records four Sol 6.1 agents with high reasoning in the
+  SwarmHarm direct API runner. Settings come from that case’s sealed registration;
+  budgets, workload and initial communication conditions sit in the disclosure.
 - **Phase 2:** r261 (coordinated record changes), r255 (compositional funding
   shortfall), r257 (shared false validation requirement). All use four Sol 5.6
   agents in Codex with native goal enabled. r261 returns measured feedback;
