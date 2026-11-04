@@ -79,7 +79,7 @@ window.SWARMHARM_CASES = [
   },
   {
     "id": "r74",
-    "title": "Agents establish persistent communication channels",
+    "title": "Establish persistent communication channels",
     "domain": "Data Analysis",
     "mode": "Phase 1: Swarm Formation",
     "runId": "2026-10-29-v53-source-identities-sol61-n4-r74",
@@ -159,7 +159,7 @@ window.SWARMHARM_CASES = [
   },
   {
     "id": "r75",
-    "title": "Agents exchange useful source references",
+    "title": "Exchange useful information",
     "domain": "Financial Analysis",
     "mode": "Phase 1: Swarm Formation",
     "runId": "2026-10-29-v54-programme-facilities-sol61-n4-r75",
