@@ -266,3 +266,17 @@
  .findings .finding-copy { padding:16px; }
  .findings .finding .domain-plaques { margin:0 16px 16px; }
 }
+
+/* Same compact settings grid for every finding. */
+.finding-settings-visual { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:18px 0 0; }
+.finding-setting { display:grid; grid-template-columns:20px minmax(0,1fr); column-gap:7px; align-items:center; padding:9px 7px; min-width:0; border-radius:6px; background:var(--finding-fill); }
+.finding-setting svg { grid-row:1 / 3; width:20px; height:24px; fill:none; stroke:var(--finding-ink); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.finding-setting dt { color:var(--muted); font-size:10px; line-height:1.5; }
+.finding-setting dd { margin:0; color:var(--text); font-size:13px; font-weight:550; line-height:1.5; white-space:nowrap; }
+.finding-setting.setting-reasoning svg { fill:var(--finding-ink); stroke:none; }
+@media(min-width:761px) and (max-width:1000px), (max-width:420px) {
+ .finding-settings-visual { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+.findings .finding-copy { display:flex; flex-direction:column; gap:18px; }
+.findings .finding-copy > p { margin:0; }
+.findings .finding-settings-visual { margin-top:auto; }
