@@ -248,3 +248,21 @@
   .findings .phase-summary { grid-template-rows:subgrid; grid-row:2 / span 4; row-gap:12px; }
   .findings .life-half > .life-pair { grid-row:6; }
 }
+
+/* Each finding has its own numbered banner and evidence block. */
+.findings .phase-findings { padding:0; border:0; border-radius:0; background:transparent; }
+.findings .finding { padding:0; margin-bottom:28px; border:1px solid var(--finding-line); border-radius:8px; background:var(--bg); overflow:hidden; }
+.findings .finding:last-child { margin-bottom:0; }
+.findings .finding h4 { display:grid; grid-template-columns:42px minmax(0,1fr); align-items:center; gap:16px; align-self:stretch; margin:0; padding:22px 20px; border-bottom:1px solid var(--finding-line); font-size:24px; line-height:1.25; background:var(--finding-fill); }
+.formation-findings { --finding-fill:var(--formation-fill); }
+.misalignment-findings { --finding-fill:var(--misalignment-fill); }
+.findings .finding-marker { display:grid; place-items:center; align-self:start; width:42px; height:42px; padding:0; border-radius:4px; background:var(--finding-ink); color:var(--bg); font-size:20px; line-height:1; font-weight:550; letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
+.findings .finding-copy { padding:20px; }
+.findings .finding .domain-plaques { margin:0 20px 20px; padding:0; }
+.findings .finding .domain-plaque { box-shadow:none; border-radius:6px; }
+@media(max-width:600px) {
+ .findings .finding h4 { grid-template-columns:36px minmax(0,1fr); gap:12px; padding:18px 16px; font-size:22px; }
+ .findings .finding-marker { width:36px; height:36px; font-size:18px; }
+ .findings .finding-copy { padding:16px; }
+ .findings .finding .domain-plaques { margin:0 16px 16px; }
+}
