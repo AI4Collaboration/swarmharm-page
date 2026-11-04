@@ -44,7 +44,6 @@ r261 has 27 changed session-message entries and three retained original backups;
 r257 shares and adopts an invented prerequisite, without publishing or changing
 live records. Each case has its own settings, trajectory and independent review
 in `static/data/reviews/`. Budgets and scoring parameters stay in a disclosure.
-The pressure section describes research conditions, not demonstrated motives.
 
 ## Phase 2 terminology
 
@@ -66,7 +65,8 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The graph, message log and turn grid load one case at a time. For example,
+The trajectory line chart is expanded first, with the turn grid underneath;
+clicking either opens its original logs. They load one case at a time. For example,
 `?case=r261&phase=2` selects the current record-change case. Findings links use
 the same selector. Earlier r199/r74/r187 Phase 2 links still open their original
 evidence, outside the current selections; they never redirect to a new case.
@@ -85,10 +85,14 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 - Each phase has three findings, with titles, copy and matching case plaques aligned row by row on desktop and tablet. Findings sit under their existing phase headings: green for Phase 1, terracotta
   for Phase 2, with matching dark-theme colors. Do not repeat phase labels per claim.
 - Full-width header; “Team from” sits left of the institution conveyor.
-- Preserve the bee title animation, institution assets and both color themes.
+- Play the bee title animation once per load, then hold the final title. Theme
+  and case changes do not restart it. Preserve institution assets.
+- Use the user-supplied three questions as the TLDR, without a separate RQ section.
+- Light/Dark is an explicit toggle; remember the selected theme.
 - Use one font family throughout. Keep summaries short; put originals and
   structured tool results in disclosures.
-- Case settings pair icons with their recorded values. Outcome panels explain
+- Keep case settings compact; Settings & evidence visibly expands on click.
+  Icons accompany recorded values. Outcome panels explain
   the action and separate completed work from its measured consequence. Keep
   backed-up originals distinct from changed live records.
 - On phones, use 44px touch targets, readable form controls and wrapped records.

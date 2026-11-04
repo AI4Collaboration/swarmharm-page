@@ -46,7 +46,7 @@ const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 let w=1000,h=410,dpr=1,S=1,ox=0,oy=0;
 let black=[],denseCore=[],coreLayer=null,red=[],dust=[],debris=[],wanderers=[],tearBees=[];
 let blackCache=null,redCache=null,formation=[];
-let elapsed=reduce?END:0,world=0,last=0,visible=!document.hidden,paused=false;
+let elapsed=reduce?CYCLE:0,world=0,last=0,visible=!document.hidden,paused=false,animationFrame=0;
 let mouse={x:-999,y:-999,on:false};
 let seed=491120;
 const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
@@ -611,14 +611,17 @@ function draw(dt){
  ctx.globalAlpha=1;
 }
 function tick(now){
+ animationFrame=0;
  if(!last)last=now;
  const dt=Math.min(65,now-last);last=now;
  if(visible){
-  if(!paused&&!reduce){elapsed=(elapsed+dt)%CYCLE;world+=dt;}
+  if(!paused&&!reduce){const next=Math.min(elapsed+dt,CYCLE);world+=next-elapsed;elapsed=next;}
   draw(dt);
  }
- requestAnimationFrame(tick);
+ root.dataset.animationState=elapsed>=CYCLE?'complete':'playing';
+ requestTick();
 }
+function requestTick(){if(!animationFrame&&!paused&&!reduce&&elapsed<CYCLE)animationFrame=requestAnimationFrame(tick);}
 let pending=false;
 function resize(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;layout();draw(16)})}
 addEventListener('resize',resize,{passive:true});
@@ -627,8 +630,8 @@ canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect()
 canvas.addEventListener('pointerleave',()=>mouse.on=false);
 document.addEventListener('visibilitychange',()=>{visible=!document.hidden;last=performance.now()});
 window.__swarmharmTitleDemoV3={
- seek(ms){elapsed=clamp(ms,0,CYCLE-1);world=ms;paused=true;draw(16)},
- resume(){paused=false;last=performance.now()},
+ seek(ms){elapsed=clamp(ms,0,CYCLE);world=elapsed;paused=true;draw(16)},
+ resume(){paused=false;last=performance.now();requestTick()},
  get phase(){return elapsed},
  get scenePhase(){return sceneTime(elapsed)},
  get harmSolid(){return smooth((sceneTime(elapsed)-10050)/650)},
@@ -657,5 +660,7 @@ layout();
 if(blackBees.complete&&blackBees.naturalWidth){blackCache=buildBeeCache(blackBees);buildCoreLayer()}
 if(redBees.complete&&redBees.naturalWidth)redCache=buildBeeCache(redBees);
 revealWhenReady();
-requestAnimationFrame(tick);
+root.dataset.animationState=reduce?'complete':'playing';
+draw(0);
+requestTick();
 })();

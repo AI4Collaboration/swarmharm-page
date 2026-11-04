@@ -60,6 +60,7 @@
     try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
     // Preserve shared links when sections are renamed or consolidated.
     const original = id;
+    if (["research", "rq1", "rq2", "rq3"].includes(id)) id = "tldr";
     if (id === 'sample' || id === 'sample-title' || id === 'sample-result' || id === 'incident-goal-drift' || id.startsWith('case-')) id = 'sample-steps';
     const target = document.getElementById(id);
     if (!target) return;

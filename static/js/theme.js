@@ -1,5 +1,9 @@
 (() => {
   const root = document.documentElement;
+  const preference = matchMedia('(prefers-color-scheme: dark)');
+  let selected = null;
+  try { selected = localStorage.getItem('swarmharm-theme'); } catch {}
+  if (!['light', 'dark'].includes(selected)) selected = null;
 
   function apply(theme) {
     if (root.dataset.theme !== theme) root.dataset.theme = theme;
@@ -18,11 +22,16 @@
     }
   }
 
-  apply('light');
+  apply(selected || (preference.matches ? 'dark' : 'light'));
+  preference.addEventListener('change', () => {
+    if (!selected) apply(preference.matches ? 'dark' : 'light');
+  });
   document.addEventListener('DOMContentLoaded', () => {
     apply(root.dataset.theme);
     document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
-      apply(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      selected = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('swarmharm-theme', selected); } catch {}
+      apply(selected);
     });
   });
 })();

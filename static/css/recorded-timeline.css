@@ -60,7 +60,7 @@
 .record-detail .traj-token.is-id,.record-message .traj-token.is-id { color:var(--record-key); background:color-mix(in srgb,var(--record-key) 8%,var(--bg)); border-bottom:0; }
 .record-run { margin:28px 0 0; }
 .record-run figcaption { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:baseline; margin:0 0 14px; }
-.record-run figcaption strong { font:550 clamp(24px,2.6vw,32px)/1.3 var(--font); letter-spacing:-.03em; }
+.record-run figcaption strong { font:550 20px/1.3 var(--font); letter-spacing:-.03em; }
 .record-run figcaption span { color:var(--muted); font:13px/1.5 var(--font); }
 .record-dot-key { display:flex; flex-wrap:wrap; gap:8px 18px; margin-bottom:14px; font:12px/1.5 var(--font); color:var(--muted); }
 .record-dot-key span { display:flex; gap:7px; align-items:center; }
@@ -155,8 +155,8 @@
  .coordinate-summary p { display:block; overflow:visible; }
 }
 
-/* Start with every turn; original logs open only on deliberate activation. */
-.record-run { margin-top:0; }
+/* Show the relationship map first, followed by every recorded turn. */
+.record-run { margin-top:18px; }
 .record-grid { width:100%; --record-step:max(16px, calc((100% - 86px) / var(--record-turns))); grid-template-columns:86px minmax(0,1fr); }
 .record-axis { width:100%; }
 .record-axis span { left:calc((var(--axis-turn) - .5) * 100% / var(--record-turns)); }
@@ -197,3 +197,9 @@ dialog.record-detail header button { cursor:pointer; flex-shrink:0; }
 .record-turn:focus-visible { outline:none; }
 .record-turn:focus-visible i { outline:2px solid var(--agent-color,var(--accent)); outline-offset:2px; opacity:1; }
 @media(max-width:800px) { .record-axis span:last-child { transform:translateX(-50%); } }
+
+.record-map-section { margin:0 0 18px; padding:16px; background:color-mix(in srgb,var(--discovery) 6%,var(--bg)); border-radius:10px; }
+.record-map-heading { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 14px; margin-bottom:10px; }
+.record-map-heading h4 { margin:0; color:var(--text); font:550 22px/1.3 var(--font); }
+.record-map-heading p { margin:0; color:var(--muted); font:12px/1.5 var(--font); }
+@media(max-width:600px) { .record-map-section { padding:12px; } }
