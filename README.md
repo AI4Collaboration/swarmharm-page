@@ -41,6 +41,15 @@ live records. Each case has its own settings, trajectory and independent review
 in `static/data/reviews/`. Budgets and scoring parameters stay in a disclosure.
 The pressure section describes research conditions, not demonstrated motives.
 
+## Phase 2 terminology
+
+The overview names three non-exclusive mechanism groups from the research
+repository’s `docs/phase2-design.md`: external-service scope overreach,
+task-target or acceptance manipulation, and execution-evidence manipulation
+(displayed as **Trace Tampering**). These are operational threat categories,
+not an exhaustive taxonomy. Keep them distinct from observed outcomes such as
+collective harmful outcomes, compositional failure and shared false beliefs.
+
 ## Trajectory viewer
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
