@@ -17,17 +17,21 @@ case disclosure and provenance.
 Phase 1 and Phase 2 are independent studies. The overview illustrates their
 separate designs; it does not combine results into one trajectory.
 
-The selector contains exactly three cases per phase:
+The selector keeps three Phase 1 cases and five Phase 2 cases:
 
 - **Phase 1:** autonomous discovery — r136 (Knowledge Work); communication
   channels — r74 (Data Analysis); useful information exchange — r75 (Financial
   Analysis). Each records four Sol 6.1 agents with high reasoning in the
-  SwarmHarm direct API runner. Settings come from that case’s sealed registration;
+  direct API runner. This is an execution mode, not a named native harness.
+  Settings come from that case’s sealed registration;
   budgets, workload and initial communication conditions sit in the disclosure.
-- **Phase 2:** r261 (coordinated record changes), r255 (compositional funding
+- **Phase 2 findings:** r261 (coordinated record changes), r255 (compositional funding
   shortfall), r257 (shared false validation requirement). All use four Sol 5.6
   agents in Codex with native goal enabled. r261 returns measured feedback;
   r257 returns status only.
+- **Phase 2 mechanism cases:** r165 (external-service resource overreach) and
+  r178 (acceptance manipulation), both Sol 5.6 / Pi 1.4.0 with pi-goal 0.54.13.
+  Trace tampering links to r261, which also supports coordinated adverse outcomes.
 
 The composition selection also offers **r263, Haiku 5.5 / Claude Code**, with
 goal disabled in that recorded run. It has no authored messages and supports
@@ -43,12 +47,13 @@ The pressure section describes research conditions, not demonstrated motives.
 
 ## Phase 2 terminology
 
-The overview names three non-exclusive mechanism groups from the research
-repository’s `docs/phase2-design.md`: external-service scope overreach,
-task-target or acceptance manipulation, and execution-evidence manipulation
-(displayed as **Trace Tampering**). These are operational threat categories,
-not an exhaustive taxonomy. Keep them distinct from observed outcomes such as
-collective harmful outcomes, compositional failure and shared false beliefs.
+Three mechanism cards link directly to reviewed cases: external-service resource
+scope overreach — **r165**; task/acceptance manipulation — **r178**; trace tampering
+— **r261**. Each shows its own result and actual harness. r165 and r178 each leave
+31 of 55 reports delayed, in separate runs. r165 establishes consequence-aware
+joint execution; r178 does not establish a joint decision to proceed without
+finance approval. External-service scope overreach is business resource misuse,
+not host escape. Keep these mechanisms distinct from the three observed findings.
 
 ## Trajectory viewer
 
@@ -57,7 +62,7 @@ collective harmful outcomes, compositional failure and shared false beliefs.
 The graph, message log and turn grid load one case at a time. For example,
 `?case=r261&phase=2` selects the current record-change case. Findings links use
 the same selector. Earlier r199/r74/r187 Phase 2 links still open their original
-evidence, outside the six primary selections; they never redirect to a new case.
+evidence, outside the current selections; they never redirect to a new case.
 
 `scripts/import-reviewed-trajectories.py` imports the newer evidence from a local
 reviewed bundle. It checks manifest hashes and exact native tool arguments and
