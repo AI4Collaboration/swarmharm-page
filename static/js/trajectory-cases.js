@@ -53,7 +53,14 @@
   }
   select.addEventListener('change',()=>show(select.value));
   intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
-  document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();show(link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase);root.scrollIntoView({block:'start',behavior:'auto'});}));
+  document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',async event=>{
+    event.preventDefault();
+    const loading=show(link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase),clickedVersion=version;
+    await loading;
+    if(clickedVersion!==version)return;
+    const url=new URL(location.href);url.hash='trajectory';history.replaceState(null,'',url);
+    root.scrollIntoView({block:'start',behavior:'instant'});
+  }));
   const params=new URL(location.href).searchParams;
   show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'));
 })();
