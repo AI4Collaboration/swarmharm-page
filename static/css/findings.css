@@ -88,3 +88,57 @@
   .institution-band .institution-list li, .institution-band .institution-list a { height:44px; }
   .institution-band .institution-list img { max-height:40px; object-fit:contain; }
 }
+
+/* Quiet navigation: content supplies the color, selection supplies the accent. */
+.site-header { padding-block:0; background:var(--bg); }
+.site-header .nav-inner {
+  min-height:60px;
+  padding:0 28px;
+  gap:20px;
+  border-bottom:1px solid var(--glass-edge);
+  background:var(--bg);
+}
+.site-header .nav-inner > nav { justify-content:space-evenly; gap:12px; }
+.site-header .nav-inner nav a {
+  position:relative;
+  min-height:60px;
+  padding:0 8px;
+  border-radius:0;
+  color:var(--muted);
+  background:transparent;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.4;
+  letter-spacing:0;
+  transition:color .18s, background-color .18s;
+}
+.site-header .nav-inner nav a::after {
+  content:"";
+  position:absolute;
+  inset:auto 8px 0;
+  height:2px;
+  background:currentColor;
+  transform:scaleX(0);
+  transition:transform .18s;
+}
+.site-header .nav-inner nav a:is(:hover,:focus-visible,:active) {
+  color:var(--text);
+  background:var(--glass-hover);
+}
+.site-header .nav-inner nav a[aria-current="location"] { color:#0066cc; }
+:root[data-theme="dark"] .site-header .nav-inner nav a[aria-current="location"] { color:#8abfff; }
+.site-header .nav-inner nav a[aria-current="location"]::after { transform:scaleX(1); }
+.site-header :is(a,button):focus-visible { outline:2px solid var(--text); outline-offset:-3px; }
+.site-header .theme-toggle { width:44px; height:44px; background:transparent; }
+@media(max-width:1100px) {
+  .site-header .nav-inner { min-height:56px; padding:6px 16px; gap:0 12px; }
+  .site-header .nav-inner > nav { gap:0 20px; padding:8px 0 12px; }
+  .site-header .nav-inner nav a { min-height:48px; padding:12px 8px; white-space:normal; font-size:15px; }
+  .site-header .nav-inner > .nav-toggle:not([hidden]) { background:transparent; border-radius:8px; padding:10px 8px; }
+}
+@media(max-width:560px) {
+  .site-header .nav-inner > nav { grid-template-columns:1fr; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .site-header .nav-inner nav a, .site-header .nav-inner nav a::after { transition:none; }
+}

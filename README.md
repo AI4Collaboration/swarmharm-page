@@ -1,14 +1,16 @@
 # SwarmHarm website
 
 Public research website: [swarmharm.com](https://swarmharm.com/).
-Static GitHub Pages site; publish to `origin/master`. Research code is maintained
-separately in AI4Collaboration/SwarmHarm.
+Static GitHub Pages site; publish to `origin/master`. After completing and checking
+website changes, always commit and push to `origin/master` unless the user explicitly
+requests local-only work. Verify the Pages deployment after pushing.
+Research code is maintained separately in AI4Collaboration/SwarmHarm.
 
 ## Content and evidence
 
 Keep the established labels **Phase 1: Swarm Formation** and
 **Phase 2: Collective Misalignment** in headings, findings and case navigation.
-Do not rename them while simplifying explanatory copy. Avoid meta headings or
+Use **Swarm Formation** and **Collective Misalignment** without phase numbers in the top navigation. Preserve the full study labels in the research content. Avoid meta headings or
 repetitive study-design disclaimers on the page; keep evidence scope in the
 case disclosure and provenance.
 

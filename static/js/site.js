@@ -43,6 +43,17 @@
     scheduleHeaderOffset();
   }
 
+  const sectionLinks = [...(navigation?.querySelectorAll('a[href^="#"]') || [])];
+  function selectSection(hash) {
+    sectionLinks.forEach(link => {
+      if (link.hash === (hash || '#top')) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+  sectionLinks.forEach(link => link.addEventListener('click', () => selectSection(link.hash)));
+  window.addEventListener('hashchange', () => selectSection(location.hash));
+  selectSection(location.hash);
+
   function revealTarget(hash, scroll = false) {
     if (!hash || hash === '#') return;
     let id;
