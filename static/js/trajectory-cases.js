@@ -5,6 +5,26 @@
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
   const cache=new Map();let version=0,dispose=null,request=null;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const icons={
+    Agents:'<circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/>',
+    Harness:'<rect x="3" y="5" width="26" height="22" rx="4"/><path d="m8 12 4 4-4 4m9 0h7"/>',
+    Goal:'<circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="6"/><path d="m16 16 10-10m-5 0h5v5"/>',
+    Reasoning:'<rect x="4" y="21" width="5" height="7" rx="1"/><rect x="13" y="14" width="5" height="14" rx="1"/><rect x="22" y="5" width="5" height="23" rx="1"/>',
+    Feedback:'<rect x="3" y="5" width="26" height="20" rx="4"/><path d="m9 25-3 5v-5m3-13h14M9 18h9"/>'
+  };
+  function settingsMarkup(item){
+    const settings=(item.settings||[]).map(row=>[...row]);
+    const reasoning=item.parameters?.find(([key])=>key==='Reasoning effort');
+    if(reasoning&&!settings.some(([key])=>key==='Reasoning')){
+      const value=reasoning[1];settings.splice(3,0,['Reasoning',value.charAt(0).toUpperCase()+value.slice(1)]);
+    }
+    return `<dl class="case-settings" style="--settings-count:${settings.length}" aria-label="Recorded experiment settings">${settings.map(([key,value])=>`<div class="case-setting" data-setting="${escape(key.toLowerCase())}" data-value="${escape(value.toLowerCase())}"><span class="case-setting-icon" aria-hidden="true"><svg viewBox="0 0 32 34">${icons[key]||icons.Feedback}</svg></span><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`;
+  }
+  function outcomeMarkup(item){
+    const visual=item.outcomeVisual;
+    if(!visual)return `<div class="case-result" data-result="${item.phase===1?'formation':'impact'}"><span class="case-result-label">Outcome</span><p>${escape(item.outcome)}</p></div>`;
+    return `<div class="case-result" data-result="${item.phase===1?'formation':'impact'}"><span class="case-result-label">Outcome</span><p>${escape(visual.action)}</p><dl class="case-result-metrics">${visual.metrics.map(m=>`<div data-tone="${escape(m.tone)}"><dt>${escape(m.label)}</dt><dd>${escape(m.value)}</dd></div>`).join('')}</dl>${visual.note?`<small class="case-result-note">${escape(visual.note)}</small>`:''}</div>`;
+  }
   for(const mode of ['Phase 1: Swarm Formation','Phase 2: Collective Misalignment']){
     const group=document.createElement('optgroup');group.label=mode;
     cases.filter(c=>c.mode===mode&&!c.replication&&!c.archived).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain} · ${c.selectorCases||c.id}`;group.append(option);});
@@ -18,8 +38,7 @@
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
-    intro.innerHTML=`<p class="case-meta">${escape(item.mode)} · ${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p><p class="case-outcome" ${item.mode==='Phase 1: Swarm Formation'?'data-formation="true"':''}><strong>Outcome</strong> ${escape(item.outcome)}</p>`;
-    if(item.settings)intro.insertAdjacentHTML('beforeend',`<dl class="case-settings" aria-label="Recorded experiment settings">${item.settings.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`);
+    intro.innerHTML=`<div class="case-setup"><p class="case-meta">${escape(item.mode)} · ${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>${outcomeMarkup(item)}`;
     if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${c.id==='r263'?'Haiku 5.5':'Sol 5.6'} · ${escape(c.id)}</button>`;}).join('')}</div>`);
     if(item.composition){
       const p=item.composition;

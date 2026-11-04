@@ -53,10 +53,52 @@
 .case-evidence summary { cursor:pointer; padding-block:11px; min-height:44px; box-sizing:border-box; }
 .case-evidence li { margin:8px 0; line-height:1.6; }
 .case-evidence a { color:var(--text); }
-.case-settings { display:flex; flex-wrap:wrap; gap:8px 20px; margin:16px 0; font-size:13px; }
-.case-settings > div { display:flex; gap:6px; }
-.case-settings dt { color:var(--muted); }
-.case-settings dd { margin:0; color:var(--text); }
+.case-intro { max-width:none; }
+.case-setup { padding:22px 24px; border-radius:14px 14px 0 0; background:color-mix(in srgb,var(--discovery) 9%,var(--bg)); }
+.case-settings { display:grid; grid-template-columns:repeat(var(--settings-count,4),minmax(0,1fr)); gap:12px; margin:20px 0 0; font-size:13px; }
+.case-settings > .case-setting { --setting-color:var(--discovery); display:grid; grid-template-columns:34px minmax(0,1fr); grid-template-rows:auto auto; align-content:center; gap:0 10px; flex:1 1 135px; min-width:0; padding:12px 14px; border-radius:10px; background:color-mix(in srgb,var(--setting-color) 7%,var(--bg)); }
+.case-setting[data-setting="harness"] { --setting-color:var(--traj-d); }
+.case-setting[data-setting="goal"] { --setting-color:var(--benign); }
+.case-setting[data-setting="reasoning"] { --setting-color:var(--coordination); }
+.case-setting[data-setting="feedback"] { --setting-color:var(--record-tool); }
+.case-setting[data-setting="goal"][data-value="off"] { --setting-color:var(--muted); }
+.case-setting-icon { grid-column:1; grid-row:1/3; align-self:center; display:flex; color:var(--setting-color); }
+.case-setting-icon svg { width:32px; height:34px; stroke-width:1.7; }
+.case-setting[data-setting="reasoning"] svg rect { fill:currentColor; stroke:none; }
+.case-setting[data-setting="goal"][data-value="off"] svg { opacity:.55; }
+.case-settings dt { grid-column:2; color:var(--muted); font-size:11px; line-height:1.5; }
+.case-settings dd { grid-column:2; margin:0; color:var(--text); font-size:16px; font-weight:550; line-height:1.5; }
+.case-result { padding:22px 24px; border-radius:0 0 14px 14px; background:color-mix(in srgb,var(--coordination) 9%,var(--bg)); }
+.case-result[data-result="formation"] { background:color-mix(in srgb,var(--benign) 9%,var(--bg)); }
+.case-result-label { color:var(--muted); font-size:12px; font-weight:550; }
+.case-result > p { margin:5px 0 0; max-width:850px; color:var(--text); font-size:15px; line-height:1.65; text-wrap:pretty; }
+.case-result-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:18px 0 0; }
+.case-result-metrics > div { --metric-color:var(--discovery); display:flex; flex-direction:column-reverse; justify-content:flex-end; gap:5px; padding:16px 18px; background:color-mix(in srgb,var(--metric-color) 10%,var(--bg)); border-radius:10px; }
+.case-result-metrics [data-tone="good"] { --metric-color:var(--benign); }
+.case-result-metrics [data-tone="adverse"] { --metric-color:var(--risk); }
+.case-result-metrics [data-tone="caution"] { --metric-color:var(--coordination); }
+.case-result-metrics dt { color:var(--text); font-size:13px; line-height:1.5; }
+.case-result-metrics dd { margin:0; color:var(--metric-color); font:550 clamp(24px,2.8vw,32px)/1.25 var(--font); letter-spacing:-.03em; }
+.case-result-note { display:block; margin-top:12px; color:var(--muted); font-size:12px; line-height:1.6; }
+.trajectory-viewer .record-run { padding:22px 24px; border-radius:14px; background:color-mix(in srgb,var(--discovery) 6%,var(--bg)); }
+.trajectory-viewer .record-actor { background:color-mix(in srgb,var(--discovery) 6%,var(--bg)); }
+@media(max-width:800px) {
+ .case-settings { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .case-setting:last-child:nth-child(odd) { grid-column:1/-1; }
+}
+@media(max-width:600px) {
+ .case-setup,.case-result,.trajectory-viewer .record-run { padding:18px 16px; }
+ .case-settings { gap:8px; }
+ .case-settings > .case-setting { flex-basis:calc(50% - 4px); box-sizing:border-box; padding:10px; grid-template-columns:28px minmax(0,1fr); column-gap:8px; }
+ .case-setting-icon svg { width:26px; height:30px; }
+ .case-result-metrics { gap:10px; }
+ .case-result-metrics > div { padding:12px; }
+ .case-result-metrics dd { font-size:24px; }
+}
+@media(max-width:380px) {
+ .case-result-metrics { grid-template-columns:1fr; }
+ .case-settings dd { font-size:15px; }
+}
 .case-parameters { display:grid; gap:10px; margin:20px 0; }
 .case-parameters > div { display:grid; grid-template-columns:150px minmax(0,1fr); gap:12px; }
 .case-parameters dt { color:var(--muted); }

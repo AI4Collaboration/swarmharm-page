@@ -59,6 +59,8 @@ not host escape. Keep these mechanisms distinct from the three observed findings
 Harness badges use only **Codex**, **CC** (Claude Code), or **Pi**. Version
 numbers and collection details belong in Settings & evidence. Never infer a
 harness from the model name or relabel a direct-API trajectory as native.
+Fresh runs use native model-family harnesses through AxonHub; replace a displayed
+case only after its new native run has matching reviewed evidence.
 
 ## Trajectory viewer
 
@@ -86,6 +88,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 - Preserve the bee title animation, institution assets and both color themes.
 - Use one font family throughout. Keep summaries short; put originals and
   structured tool results in disclosures.
+- Case settings pair icons with their recorded values. Outcome panels explain
+  the action and separate completed work from its measured consequence. Keep
+  backed-up originals distinct from changed live records.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,
