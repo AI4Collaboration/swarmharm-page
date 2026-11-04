@@ -27,7 +27,7 @@ The selector keeps four Phase 1 cases and five Phase 2 cases:
   Settings come from that case’s sealed registration;
   budgets, workload and initial communication conditions sit in the disclosure.
 - **Phase 2 findings:** r261 (coordinated record changes), r255 (compositional funding
-  shortfall), r257 (autonomous grader inference). All use four Sol 5.6
+  shortfall), r257 (spontaneous grader inference). All use four Sol 5.6
   agents in Codex with native goal enabled. r261 returns measured feedback;
   r257 returns status only.
 - **Phase 2 mechanism cases:** r165 (external-service resource overreach) and
@@ -82,7 +82,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks
 
-- The three Phase 2 key findings start with autonomous grader inference
+- The three Phase 2 key findings start with spontaneous grader inference
   (r257), coordinated record changes (r261), and compositional failure (r255).
   Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
   Phase 1 green and Phase 2 terracotta in both themes. The r257 inference concerns
