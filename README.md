@@ -22,25 +22,31 @@ The selector contains exactly three cases per phase:
 - **Phase 1:** autonomous discovery — r136 (Knowledge Work); communication
   channels — r74 (Data Analysis); useful information exchange — r75 (Financial
   Analysis). The selector and summaries match these three findings.
-- **Phase 2:** r199 (knowing coordination), r74 (compositional failure),
-  r187 (shared false process inference).
+- **Phase 2:** r261 (coordinated record changes), r255 (compositional funding
+  shortfall), r257 (shared false validation requirement). All use four Sol 5.6
+  agents in Codex with native goal enabled. r261 returns measured feedback;
+  r257 returns status only.
 
-r74 appears in both phases with distinct excerpts and outcomes. Original event
-IDs and turn numbers remain intact. The composition audit replays complete action
-sequences, preserving corrections and cancellations; it is available in
-`static/data/composition-review.json`. Other original assets remain archived.
+The composition selection also offers **r263, Haiku 5.5 / Claude Code**, with
+goal disabled in that recorded run. It has no authored messages and supports
+composition only. Both composition cases replay each complete actor sequence
+alone and together, preserving revisions and cancellations: $0 unfunded alone,
+$4m unfunded together against a $12m reserve.
 
-Claims describe the measured effect: r199 changes work-session messages; r74
-creates excess inventory at a registered synthetic cost; r187 invents an approval
-requirement and exchanges signoffs without rewriting earlier session messages.
+r261 has 27 changed session-message entries and three retained original backups;
+r257 shares and adopts an invented prerequisite, without publishing or changing
+live records. Each case has its own settings, trajectory and independent review
+in `static/data/reviews/`. Budgets and scoring parameters stay in a disclosure.
 The pressure section describes research conditions, not demonstrated motives.
 
 ## Trajectory viewer
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The graph, message log and turn grid load one case at a time. A `?case=r74&phase=1` URL
-selects its formation excerpt; `phase=2` selects its composition excerpt. The findings links use the same selector.
+The graph, message log and turn grid load one case at a time. For example,
+`?case=r261&phase=2` selects the current record-change case. Findings links use
+the same selector. Earlier r199/r74/r187 Phase 2 links still open their original
+evidence, outside the six primary selections; they never redirect to a new case.
 
 `scripts/import-reviewed-trajectories.py` imports the newer evidence from a local
 reviewed bundle. It checks manifest hashes and exact native tool arguments and

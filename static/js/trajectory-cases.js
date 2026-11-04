@@ -1,5 +1,5 @@
 (() => {
-  const root=document.querySelector('.trajectory-viewer'),cases=window.SWARMHARM_CASES;
+  const root=document.querySelector('.trajectory-viewer'),cases=window.SWARMHARM_CASES?.concat(window.SWARMHARM_ARCHIVED_CASES||[]);
   if(!root||!cases?.length)return;
   const select=root.querySelector('[data-case-select]'),intro=root.querySelector('[data-case-intro]');
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
@@ -7,20 +7,25 @@
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   for(const mode of ['Phase 1: Swarm Formation','Phase 2: Collective Misalignment']){
     const group=document.createElement('optgroup');group.label=mode;
-    cases.filter(c=>c.mode===mode).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain} · ${c.id}`;group.append(option);});
+    cases.filter(c=>c.mode===mode&&!c.replication&&!c.archived).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain} · ${c.selectorCases||c.id}`;group.append(option);});
     select.append(group);
   }
   async function show(id){
-    const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];select.value=item.key;
+    const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
+    select.querySelector('[data-archived-option]')?.remove();
+    if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
+    select.value=item.selectionKey||item.key;
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
     intro.innerHTML=`<p class="case-meta">${escape(item.mode)} · ${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p><p class="case-outcome" ${item.mode==='Phase 1: Swarm Formation'?'data-formation="true"':''}><strong>Outcome</strong> ${escape(item.outcome)}</p>`;
+    if(item.settings)intro.insertAdjacentHTML('beforeend',`<dl class="case-settings" aria-label="Recorded experiment settings">${item.settings.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`);
+    if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${c.id==='r263'?'Haiku 5.5':'Sol 5.6'} · ${escape(c.id)}</button>`;}).join('')}</div>`);
     if(item.composition){
       const p=item.composition;
       intro.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
     }
-    intro.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary>Evidence</summary><p class="case-scope">${escape(item.scope)}</p><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
+    intro.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary>${item.settings?'Settings & evidence':'Evidence'}</summary><p class="case-scope">${escape(item.scope)}</p>${item.parameters?`<dl class="case-parameters">${item.parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>Download independent review</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
     if(!item.full){
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
@@ -47,6 +52,7 @@
     }finally{if(current===version)root.removeAttribute('aria-busy');}
   }
   select.addEventListener('change',()=>show(select.value));
+  intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
   document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();show(link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase);root.scrollIntoView({block:'start',behavior:'auto'});}));
   const params=new URL(location.href).searchParams;
   show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'));

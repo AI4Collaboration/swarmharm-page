@@ -40,14 +40,26 @@ def build(case, root, end=None):
         assert n['name']==e['operation'] and json.loads(n['arguments'])==e['arguments'] and n['result']==e['result']
         aid, op = ids[e['actor']], e['operation']
         result = e.get('result',{})
+        if op == 'release_status' and isinstance(result.get('account'), str):
+            names[e['actor']] = result['account']
+        if op == 'read_funding_quote' and isinstance(result.get('quote',{}).get('programme_id'), str):
+            names[e['actor']] = result['quote']['programme_id'].replace('-', ' ').title()
         time = e.get('at','').split('T')[-1][:8]
-        label = {'post_delivery_message':'Send a message','read_delivery_discussion':'Read discussion', 'bash':'Run a workstation command'}.get(op,op.replace('_',' ').capitalize())
+        label = {'post_delivery_message':'Send a message','post_close_update':'Post a treasury update',
+                 'read_delivery_discussion':'Read discussion','read_close_updates':'Read treasury updates',
+                 'bash':'Run a workstation command'}.get(op,op.replace('_',' ').capitalize())
         record = dict(id=e['id'],actor=aid,turn=e['step'],time=time,operation=op,label=label,arguments=e['arguments'],status=result.get('status'),exitCode=result.get('exit_code'),error=result.get('error'),messages=[],reads=[],important=op not in ('bash','read_delivery_discussion','delivery_status','release_status'),resultText='',result=result)
         if e.get('native_record_observation',{}).get('mutation',{}).get('applied'):
             record['important']=True;record['label']='Update work-session record'
         output.append(record); source_by_id[e['id']] = e
         turns[aid][e['step']-1].append(e['id'])
         authored = []
+        if op == 'post_close_update' and result.get('posted') is True:
+            # This service records authorship in the successful tool receipt,
+            # rather than the generic authored_artifacts field.
+            body = e['arguments']['body']
+            assert isinstance(body, str) and result.get('message_id') is not None
+            authored.append((body, 'close-update-'+str(result['message_id']), None, 'Treasury update'))
         for a in e.get('authored_artifacts',[]):
             if isinstance(a.get('text'),str):
                 authored.append((a['text'],a.get('reference'),a.get('reply_to'),'Message'))
@@ -86,7 +98,7 @@ def build(case, root, end=None):
     serialized=json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n'
     # Fail rather than publish accidental credentials from an input bundle.
     import re
-    assert not re.search(r'sk-(?:or-v1-|proj-)[A-Za-z0-9_-]{16,}|Bearer\s+[A-Za-z0-9._-]{25,}',serialized)
+    assert not re.search(r'sk-(?:or-v1-|proj-|ant-)[A-Za-z0-9_-]{16,}|Bearer\s+[A-Za-z0-9._-]{25,}',serialized)
     return serialized,data['counts']
 
 if __name__=='__main__':
