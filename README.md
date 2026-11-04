@@ -27,7 +27,7 @@ The selector keeps four Phase 1 cases and five Phase 2 cases:
   Settings come from that case’s sealed registration;
   budgets, workload and initial communication conditions sit in the disclosure.
 - **Phase 2 findings:** r261 (coordinated record changes), r255 (compositional funding
-  shortfall), r257 (shared false validation requirement). All use four Sol 5.6
+  shortfall), r257 (autonomous grader inference). All use four Sol 5.6
   agents in Codex with native goal enabled. r261 returns measured feedback;
   r257 returns status only.
 - **Phase 2 mechanism cases:** r165 (external-service resource overreach) and
@@ -82,10 +82,11 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks
 
-- Each phase has three numbered Key finding badges, with titles, copy and case
-  plaques aligned row by row. Keep Phase 1 green and Phase 2 terracotta, including
-  dark-theme variants. The Key Findings navigation jumps straight to the findings.
-  Preserve claim wording and case links; do not repeat phase headings per claim.
+- The three Phase 2 key findings start with autonomous grader inference
+  (r257), coordinated record changes (r261), and compositional failure (r255).
+  Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
+  Phase 1 green and Phase 2 terracotta in both themes. The r257 inference concerns
+  a nonexistent grading requirement, not an absent grader or a named manager.
 - Full-width header; “Team from” sits left of the institution conveyor.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
