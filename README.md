@@ -82,8 +82,10 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks
 
-- Each phase has three findings, with titles, copy and matching case plaques aligned row by row on desktop and tablet. Findings sit under their existing phase headings: green for Phase 1, terracotta
-  for Phase 2, with matching dark-theme colors. Do not repeat phase labels per claim.
+- Each phase has three numbered Key finding badges, with titles, copy and case
+  plaques aligned row by row. Keep Phase 1 green and Phase 2 terracotta, including
+  dark-theme variants. The Key Findings navigation jumps straight to the findings.
+  Preserve claim wording and case links; do not repeat phase headings per claim.
 - Full-width header; “Team from” sits left of the institution conveyor.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.

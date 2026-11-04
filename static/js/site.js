@@ -26,7 +26,8 @@
       header.classList.toggle('nav-open', open);
       menu.setAttribute('aria-expanded', String(open));
       menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-      scheduleHeaderOffset();
+      // Update before an anchor uses the header height, especially on phones.
+      updateHeaderOffset();
     }
     menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
     header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
