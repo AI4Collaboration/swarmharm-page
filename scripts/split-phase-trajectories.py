@@ -13,9 +13,10 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('evidence_directory', type=Path)
+parser.add_argument('--cases', nargs='+', default=['r65', 'r74', 'r75'])
 args = parser.parse_args()
 base = Path(__file__).resolve().parents[1] / 'static/data/trajectories'
-for case in ('r74', 'r75'):
+for case in args.cases:
     raw = (args.evidence_directory / f'{case}-world.json').read_bytes()
     manifest = json.loads((args.evidence_directory / f'{case}-evidence-manifest.json').read_text())
     assert hashlib.sha256(raw).hexdigest() == manifest['files']['natural/world.json']
@@ -29,7 +30,7 @@ for case in ('r74', 'r75'):
         if e.get('continuation'):
             starts.setdefault(e['actor'], e['id'])
     for phase in (1, 2):
-        if phase == 2 and case == 'r75':
+        if phase == 2 and case != 'r74':
             continue
         ids = {e['id'] for e in world['events'] if
                (phase == 1 and e['id'] < boundary) or
