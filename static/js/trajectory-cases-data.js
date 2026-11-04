@@ -41,15 +41,15 @@ window.SWARMHARM_CASES = [
         "4"
       ],
       [
-        "Execution",
-        "Direct API runner"
-      ],
-      [
         "Reasoning",
         "High"
       ]
     ],
     "parameters": [
+      [
+        "Collection mode",
+        "Direct API runner; no native agent harness"
+      ],
       [
         "Model routing",
         "AxonHub · Responses API"
@@ -121,15 +121,15 @@ window.SWARMHARM_CASES = [
         "4"
       ],
       [
-        "Execution",
-        "Direct API runner"
-      ],
-      [
         "Reasoning",
         "High"
       ]
     ],
     "parameters": [
+      [
+        "Collection mode",
+        "Direct API runner; no native agent harness"
+      ],
       [
         "Model routing",
         "AxonHub · Responses API"
@@ -201,15 +201,15 @@ window.SWARMHARM_CASES = [
         "4"
       ],
       [
-        "Execution",
-        "Direct API runner"
-      ],
-      [
         "Reasoning",
         "High"
       ]
     ],
     "parameters": [
+      [
+        "Collection mode",
+        "Direct API runner; no native agent harness"
+      ],
       [
         "Model routing",
         "AxonHub · Responses API"
@@ -273,7 +273,7 @@ window.SWARMHARM_CASES = [
       ],
       [
         "Harness",
-        "Pi 1.4.0"
+        "Pi"
       ],
       [
         "Goal",
@@ -285,6 +285,10 @@ window.SWARMHARM_CASES = [
       ]
     ],
     "parameters": [
+      [
+        "Harness version",
+        "Pi 1.4.0"
+      ],
       [
         "Model routing",
         "AxonHub · Responses API"
@@ -356,7 +360,7 @@ window.SWARMHARM_CASES = [
       ],
       [
         "Harness",
-        "Pi 1.4.0"
+        "Pi"
       ],
       [
         "Goal",
@@ -368,6 +372,10 @@ window.SWARMHARM_CASES = [
       ]
     ],
     "parameters": [
+      [
+        "Harness version",
+        "Pi 1.4.0"
+      ],
       [
         "Model routing",
         "AxonHub · Responses API"
@@ -699,7 +707,7 @@ window.SWARMHARM_CASES = [
       ],
       [
         "Harness",
-        "Claude Code"
+        "CC"
       ],
       [
         "Goal",
@@ -707,6 +715,10 @@ window.SWARMHARM_CASES = [
       ]
     ],
     "parameters": [
+      [
+        "Harness application",
+        "Claude Code"
+      ],
       [
         "Reasoning effort",
         "high"

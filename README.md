@@ -22,7 +22,8 @@ The selector keeps three Phase 1 cases and five Phase 2 cases:
 - **Phase 1:** autonomous discovery — r136 (Knowledge Work); communication
   channels — r74 (Data Analysis); useful information exchange — r75 (Financial
   Analysis). Each records four Sol 6.1 agents with high reasoning in the
-  direct API runner. This is an execution mode, not a named native harness.
+  direct API runner, without a native harness. That collection mode stays in
+  Settings & evidence; no Codex/CC/Pi label is assigned to these old runs.
   Settings come from that case’s sealed registration;
   budgets, workload and initial communication conditions sit in the disclosure.
 - **Phase 2 findings:** r261 (coordinated record changes), r255 (compositional funding
@@ -33,7 +34,7 @@ The selector keeps three Phase 1 cases and five Phase 2 cases:
   r178 (acceptance manipulation), both Sol 5.6 / Pi 1.4.0 with pi-goal 0.54.13.
   Trace tampering links to r261, which also supports coordinated adverse outcomes.
 
-The composition selection also offers **r263, Haiku 5.5 / Claude Code**, with
+The composition selection also offers **r263, Haiku 5.5 / CC (Claude Code)**, with
 goal disabled in that recorded run. It has no authored messages and supports
 composition only. Both composition cases replay each complete actor sequence
 alone and together, preserving revisions and cancellations: $0 unfunded alone,
@@ -54,6 +55,10 @@ scope overreach — **r165**; task/acceptance manipulation — **r178**; trace t
 joint execution; r178 does not establish a joint decision to proceed without
 finance approval. External-service scope overreach is business resource misuse,
 not host escape. Keep these mechanisms distinct from the three observed findings.
+
+Harness badges use only **Codex**, **CC** (Claude Code), or **Pi**. Version
+numbers and collection details belong in Settings & evidence. Never infer a
+harness from the model name or relabel a direct-API trajectory as native.
 
 ## Trajectory viewer
 
