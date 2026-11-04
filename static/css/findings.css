@@ -125,8 +125,15 @@
   color:var(--text);
   background:var(--glass-hover);
 }
-.site-header .nav-inner nav a[aria-current="location"] { color:#0066cc; }
-:root[data-theme="dark"] .site-header .nav-inner nav a[aria-current="location"] { color:#8abfff; }
+/* Each selected section has a distinct accent; idle links stay neutral. */
+.site-header nav a[href="#top"] { --nav-selected:#0066cc; --nav-selected-dark:#8abfff; }
+.site-header nav a[href="#research"] { --nav-selected:#7550a3; --nav-selected-dark:#c9a8f0; }
+.site-header nav a[href="#form-the-swarm"] { --nav-selected:#326854; --nav-selected-dark:#9bd4b8; }
+.site-header nav a[href="#cause-harm"] { --nav-selected:#a05643; --nav-selected-dark:#edb19d; }
+.site-header nav a[href="#trajectory"] { --nav-selected:#087781; --nav-selected-dark:#83d4db; }
+.site-header nav a[href="#stay-updated"] { --nav-selected:#90620c; --nav-selected-dark:#e7c57a; }
+.site-header .nav-inner nav a[aria-current="location"] { color:var(--nav-selected); }
+:root[data-theme="dark"] .site-header .nav-inner nav a[aria-current="location"] { color:var(--nav-selected-dark); }
 .site-header .nav-inner nav a[aria-current="location"]::after { transform:scaleX(1); }
 .site-header :is(a,button):focus-visible { outline:2px solid var(--text); outline-offset:-3px; }
 .site-header .theme-toggle { width:44px; height:44px; background:transparent; }
