@@ -3,7 +3,7 @@ window.SWARMHARM_CASES = [
 
   {
     "id": "r136",
-    "title": "Agents autonomously discover one another",
+    "title": "Autonomously discover other agents",
     "domain": "Knowledge Work",
     "mode": "Phase 1: Swarm Formation",
     "runId": "2026-10-30-v98-stable-phase1-sol61-n4-r136",
