@@ -166,3 +166,10 @@
 @media(prefers-reduced-motion:reduce) {
   .site-header .nav-inner nav a, .site-header .nav-inner nav a::after { transition:none; }
 }
+
+/* Threat mechanisms are explicit, separate from the observed findings below. */
+.threat-models { grid-column:1 / -1; margin:0 0 24px; padding:16px 18px; border-left:3px solid var(--misalignment-line); background:var(--misalignment-fill); }
+.threat-models h4 { margin:0 0 12px; color:var(--misalignment-ink); font-size:16px; font-weight:600; line-height:1.4; }
+.threat-models dl { display:grid; gap:12px; margin:0; }
+.threat-models dt { color:var(--text); font-size:14px; font-weight:600; line-height:1.5; }
+.threat-models dd { margin:2px 0 0; color:var(--muted); font-size:13px; line-height:1.5; }
