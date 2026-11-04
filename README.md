@@ -111,6 +111,8 @@ Run a local preview with `python3 -m http.server 8765 --bind 127.0.0.1`.
 Based on [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template)
 and [Nerfies](https://nerfies.github.io/), under CC BY-SA 4.0. Retain local font and
 icon licenses. Institutional marks identify team affiliations.
+OpenAI model badges use the monochrome logo from [SVGL](https://github.com/pheralb/svgl),
+with its license retained beside the asset. Reasoning badges show High with three filled bars.
 
 The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result. The three finding rows remain unchanged.
 

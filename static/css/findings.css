@@ -273,7 +273,13 @@
 .finding-setting svg { flex:none; width:14px; height:16px; fill:none; stroke:var(--finding-ink); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 .finding-setting dt { color:var(--muted); font-size:11px; line-height:1.5; }
 .finding-setting dd { margin:0; color:var(--text); font-size:11px; font-weight:550; line-height:1.5; }
-.finding-setting.setting-reasoning svg { fill:var(--finding-ink); stroke:none; }
+.finding-setting .model-logo { display:block; flex:none; width:24px; height:24px; object-fit:contain; }
+:root[data-theme="dark"] .finding-setting .model-logo { filter:invert(1); }
+.reasoning-bars { display:inline-flex; align-items:flex-end; flex:none; gap:2px; width:20px; height:15px; margin-right:2px; }
+.reasoning-bars i { display:block; flex:1; border-radius:1px; background:var(--finding-ink); }
+.reasoning-bars i:nth-child(1) { height:40%; }
+.reasoning-bars i:nth-child(2) { height:70%; }
+.reasoning-bars i:nth-child(3) { height:100%; }
 .finding-setting.setting-model dt { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .findings .finding-copy { display:flex; flex-direction:column; gap:14px; }
 .findings .finding-copy > p { margin:0; }
