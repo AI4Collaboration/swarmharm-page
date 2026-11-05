@@ -28,7 +28,7 @@
       menu.setAttribute('aria-expanded', String(open));
       menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
       if (drawer) {
-        if (open && !drawer.open) drawer.showModal();
+        if (open && !drawer.open) drawer.show();
         if (!open && drawer.open) drawer.close();
         document.body.classList.toggle('nav-drawer-open', open);
       }
