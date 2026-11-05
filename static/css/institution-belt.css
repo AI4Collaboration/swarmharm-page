@@ -82,9 +82,11 @@
 }
 .institution-band .institution-aim { --institution-logo-width: 104px; }
 .institution-band .institution-stanford { --institution-logo-width: 112px; }
+.institution-band .institution-princeton { --institution-logo-width:118px; }
 .institution-band .institution-ucl { --institution-logo-width: 94px; }
 .institution-band .institution-cmu { --institution-logo-width: 164px; }
 .institution-band .institution-toronto { --institution-logo-width: 112px; }
+.institution-band .institution-ellis { --institution-logo-width:148px; }
 .institution-band .institution-mpi,
 .institution-band .institution-vector,
 .institution-band .institution-georgia-tech { --institution-logo-width: 138px; }
