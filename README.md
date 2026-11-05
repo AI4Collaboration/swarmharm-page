@@ -8,9 +8,7 @@ Research code is maintained separately in AI4Collaboration/SwarmHarm.
 
 ## Content and evidence
 
-Keep the established labels **Phase 1: Swarm Formation** and
-**Phase 2: Collective Misalignment** in headings, findings and case navigation.
-Use **Swarm Formation** and **Collective Misalignment** without phase numbers in the top navigation. Preserve the full study labels in the research content. Avoid meta headings or
+Use **Swarm Formation** and **Collective Misalignment** without phase numbers in headings, findings, case navigation and presentation copy. Internal query parameters, evidence keys and provenance may retain numeric phase identifiers. Avoid meta headings or
 repetitive study-design disclaimers on the page; keep evidence scope in the
 case disclosure and provenance.
 
