@@ -5,7 +5,10 @@
 .team-from { flex:none; white-space:nowrap; color:var(--muted); font-size:14px; }
 .institution-band .institution-marquee { min-width:0; flex:1; }
 .example-intro p,.findings-intro { color:var(--muted); font-size:16px; line-height:1.6; }
-.findings { padding:48px 0 56px; scroll-margin-top:100px; }
+.findings { display:flex; flex-direction:column; padding:32px 0 56px; scroll-margin-top:100px; }
+.findings > .life-cycle { order:1; }
+.findings > .threat-models { order:2; }
+.findings > .domain-coverage { order:3; margin:40px 0 0; }
 /* Findings stay directly beneath their original phase heading and illustration. */
 .findings > h2 { margin-bottom:32px; }
 .findings { --formation-ink:#246452; --formation-fill:#eef6f2; --formation-line:#c5ddd2; --misalignment-ink:#984937; --misalignment-fill:#fcf2ed; --misalignment-line:#e9cec2; }

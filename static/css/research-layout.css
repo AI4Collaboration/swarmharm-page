@@ -1,5 +1,5 @@
 /* One formation animation, followed by a still wordmark. */
-.hero-copy .emergence-title { position:relative; width:min(100%,660px); aspect-ratio:470/200; margin-bottom:24px; color:var(--text); }
+.hero-copy .emergence-title { position:relative; width:min(100%,660px); aspect-ratio:470/150; margin-bottom:16px; color:var(--text); }
 .emergence-title :is(svg,canvas) { display:block; width:100%; height:100%; }
 .emergence-title canvas { position:absolute; inset:0; }
 .emergence-title canvas[hidden], .emergence-title.is-ready .emergence-still { display:none; }
@@ -23,10 +23,10 @@
 }
 
 :root { --section-gap:4rem; --sample-gap:2.5rem; }
-.hero-layout { padding-top:8px; }
-.hero-intro { max-width:780px; margin-bottom:48px; line-height:1.75; }
+.hero-layout { padding-top:0; }
+.hero-intro { max-width:780px; margin-bottom:32px; line-height:1.75; }
 .trajectory-viewer { margin-top:32px; }
 @media(max-width:760px) {
   :root { --section-gap:3rem; --sample-gap:2rem; }
-  .hero-intro { margin-bottom:32px; }
+  .hero-intro { margin-bottom:24px; }
 }

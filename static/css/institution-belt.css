@@ -2,7 +2,7 @@
 .institutions.institution-band {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 28px;
+  gap: 18px;
   padding: 12px 28px;
 }
 .institution-leads,
@@ -10,11 +10,11 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 16px;
+  gap: 12px;
 }
 .institution-collaborators {
   border-left: 1px solid var(--line);
-  padding-left: 28px;
+  padding-left: 18px;
 }
 .institution-caption {
   flex: none;
@@ -24,7 +24,7 @@
   white-space: nowrap;
 }
 .institution-band .institution-lead-list {
-  gap: 18px;
+  gap: 10px;
   padding: 0;
 }
 .institution-band .institution-lead-list li,
@@ -54,6 +54,29 @@
   width: 0;
   flex: 1 1 0;
 }
+/* Use one compact rhythm for the moving logos instead of wide fixed stages. */
+.institution-collaborators .institution-list {
+  gap: 14px;
+  padding-inline: 7px;
+}
+.institution-collaborators .institution-list li,
+.institution-collaborators .institution-list a {
+  width: 136px;
+  flex-basis: 136px;
+}
+.institution-collaborators .institution-list a { padding-inline: 4px; }
+.institution-collaborators .institution-list img {
+  width: min(var(--institution-logo-width, 118px), 118px);
+  max-width: 118px;
+}
+.institution-band .institution-aim { --institution-logo-width: 88px; }
+.institution-band .institution-stanford { --institution-logo-width: 104px; }
+.institution-band .institution-ucl { --institution-logo-width: 84px; }
+.institution-band .institution-toronto { --institution-logo-width: 96px; }
+.institution-band .institution-mpi,
+.institution-band .institution-vector,
+.institution-band .institution-eth,
+.institution-band .institution-georgia-tech { --institution-logo-width: 116px; }
 .institution-band .institution-ucl a {
   display: flex;
   flex-direction: column;
@@ -80,9 +103,13 @@
 @media (max-width: 600px) {
   .institutions.institution-band { padding: 10px 14px; }
   .institution-leads { gap: 12px; }
-  .institution-band .institution-lead-list { gap: 14px; }
+  .institution-band .institution-lead-list { gap: 8px; }
   .institution-caption { font-size: 11px; }
   .institution-collaborators { gap: 8px; }
+  .institution-collaborators .institution-list { gap: 10px; padding-inline: 5px; }
+  .institution-collaborators .institution-list li,
+  .institution-collaborators .institution-list a { width: 122px; flex-basis: 122px; }
+  .institution-collaborators .institution-list img { max-width: 108px; }
   .institution-band .institution-lead-list li,
   .institution-band .institution-lead-list a { width: 46px; height: 46px; flex-basis: 46px; }
   .institution-band .institution-lead-list img { width: 46px; height: 46px; }
