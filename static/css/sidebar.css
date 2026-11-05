@@ -39,7 +39,7 @@ body.nav-drawer-open { overflow: hidden; }
 .site-header .nav-inner > .theme-toggle { grid-column: 3; grid-row: 1; }
 .navigation-drawer {
   position: fixed;
-  inset: 12px auto auto 12px;
+  inset: 50% auto auto 16px;
   width: min(264px, calc(100% - 24px));
   max-width: 100%;
   height: auto;
@@ -52,12 +52,12 @@ body.nav-drawer-open { overflow: hidden; }
   border: 1px solid var(--line);
   border-radius: 10px;
   box-shadow: 0 8px 28px #0001;
-  transform: translateX(calc(-100% - 16px));
+  transform: translate(calc(-100% - 20px), -50%);
   opacity: 0;
   transition: transform .28s ease, opacity .28s ease, display .28s allow-discrete, overlay .28s allow-discrete;
 }
-.navigation-drawer[open] { transform: translateX(0); opacity: 1; }
-@starting-style { .navigation-drawer[open] { transform: translateX(calc(-100% - 16px)); opacity: 0; } }
+.navigation-drawer[open] { transform: translate(0, -50%); opacity: 1; }
+@starting-style { .navigation-drawer[open] { transform: translate(calc(-100% - 20px), -50%); opacity: 0; } }
 .navigation-drawer::backdrop { background: #09101b14; }
 .drawer-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; border-bottom: 1px solid var(--line); }
 .drawer-brand { color: var(--text); font-size: 17px; font-weight: 600; text-decoration: none; letter-spacing: -.04em; }

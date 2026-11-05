@@ -28,12 +28,7 @@
       menu.setAttribute('aria-expanded', String(open));
       menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
       if (drawer) {
-        if (open && !drawer.open) {
-          const anchor = menu.getBoundingClientRect();
-          drawer.style.left = `${Math.max(12, anchor.left)}px`;
-          drawer.showModal();
-          drawer.style.top = `${Math.max(12, Math.min(anchor.top, window.innerHeight - drawer.offsetHeight - 12))}px`;
-        }
+        if (open && !drawer.open) drawer.showModal();
         if (!open && drawer.open) drawer.close();
         document.body.classList.toggle('nav-drawer-open', open);
       }
