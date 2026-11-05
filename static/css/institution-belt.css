@@ -1,7 +1,7 @@
 /* The lead institutions stay still; collaborators retain the continuous belt. */
 .institutions.institution-band {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 28px;
   padding: 12px 28px;
 }
@@ -89,4 +89,31 @@
   .institution-band .institution-lead-list .institution-oxford,
   .institution-band .institution-lead-list .institution-oxford a { width: 46px; flex-basis: 46px; }
   .institution-band .institution-lead-list .institution-oxford img { width: 46px; height: 46px; }
+}
+
+/* Theme controls share the only top band. */
+.institution-band > .theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 2px;
+  width: auto;
+  height: 40px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--bg);
+}
+.institution-band > .theme-toggle[hidden] { display: none; }
+.institution-band > .theme-toggle .theme-option svg { width: 15px; height: 15px; }
+@media (max-width: 1050px) {
+  .institutions.institution-band { grid-template-columns: minmax(0, 1fr) auto; }
+  .institution-leads { grid-column: 1; grid-row: 1; justify-content: flex-start; }
+  .institution-collaborators { grid-column: 1 / -1; grid-row: 2; }
+  .institution-band > .theme-toggle { grid-column: 2; grid-row: 1; }
+}
+@media (max-width: 600px) {
+  .institution-band > .theme-toggle .theme-option > span { display: none; }
+  .institution-band > .theme-toggle .theme-option { padding: 6px; }
+  .institutions.institution-band { column-gap: 12px; }
 }

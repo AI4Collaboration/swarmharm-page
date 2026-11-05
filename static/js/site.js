@@ -62,7 +62,9 @@
       const bounds = drawer.getBoundingClientRect();
       if (event.target === drawer && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) setMenu(false);
     });
-    header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      if (matchMedia('(max-width: 800px)').matches) setMenu(false);
+    }));
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && header.classList.contains('nav-open')) {
         setMenu(false);
@@ -70,10 +72,12 @@
       }
     });
     document.addEventListener('click', event => {
-      if (!header.contains(event.target)) setMenu(false);
+      if (matchMedia('(max-width: 800px)').matches && !header.contains(event.target)) setMenu(false);
     });
     matchMedia('(max-width: 1100px)').addEventListener('change', () => setMenu(false));
     scheduleHeaderOffset();
+    setMenu(true);
+    if (drawer?.contains(document.activeElement)) document.activeElement.blur();
   }
 
   const sectionLinks = [...(navigation?.querySelectorAll('a[href^="#"]') || [])];

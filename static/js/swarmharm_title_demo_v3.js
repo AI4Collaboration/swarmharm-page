@@ -124,19 +124,9 @@ function densityCloud(step){
   p.depth=d;p.core=Math.max(0,smooth((d-.7)/2.9));p.halo=false;
   return true;
  });
- const halo=[];
- const outerStep=step*1.44;
- for(let y=oy-4*S;y<oy+43*S;y+=outerStep){
-  for(let x=ox-5*S;x<ox+262*S;x+=outerStep){
-   const px=x+(rand()-.5)*outerStep*.62;
-   const py=y+(rand()-.5)*outerStep*.62;
-   const d=glyphDepth(px,py);
-   if(d>=0||d< -3.8)continue;
-   const chance=.19*Math.max(0,1-Math.abs(d)/4.3);
-   if(rand()<chance)halo.push({x:px,y:py,depth:d,core:0,halo:true});
-  }
- }
- return {base,core:extra.concat(deep),halo};
+ // Keep the completed wordmark crisp: bees belong to the letterforms, not a
+ // decorative cloud around them.
+ return {base,core:extra.concat(deep),halo:[]};
 }
 
 const CACHE_TILE=44,CACHE_COLUMNS=48,CACHE_ROTATIONS=16;
@@ -279,15 +269,8 @@ function layout(){
    sprite:(rand()*112)|0,size:(2.7+rand()*2.1)*S,shape:(rand()*6.283),lastStage:0};
  });
  dust=[]; // use bee silhouettes rather than circular ambient particles
- // Extra free bees stay outside the letter strokes, not over the wordmark.
- wanderers=Array.from({length:Math.round(clamp(w*.15,65,180))},()=>({
-  x:ox+(-14+rand()*285)*S,
-  y:oy+(rand()<.52?(-3-rand()*16):(40+rand()*16))*S,
-  rx:(4+rand()*16)*S,ry:(3+rand()*12)*S,
-  a:rand()*Math.PI*2,rate:(rand()<.5?-1:1)*(.00018+rand()*.00043),
-  phase:rand()*6.283,sprite:(rand()*112)|0,
-  size:(3.4+rand()*3.2)*S,opacity:.45+rand()*.40
- }));
+ // No permanent perimeter swarm: the motion resolves into the word itself.
+ wanderers=[];
  debris=shuffle(inkPts.filter(p=>p.x<ox+250*S&&Math.abs(p.y-(oy+19*S))<12*S))
   .slice(0,Math.round(clamp(black.length*.014,32,95)))
   .map(p=>({x:p.x,y:p.y,a:rand()*Math.PI*2,r:dot*(.3+rand()*.36),phase:rand()*Math.PI*2}));
@@ -559,13 +542,6 @@ function draw(dt){
   const angle=p.angle+Math.sin(world*.004+p.phase)*.65;
   const foreground=i%17===0&&!p.static?2.15:1;
   beeSprite(atlas,p.sprite,x,y,p.size*(.68+.32*intro)*foreground,angle,opacity);
- }
- // A wider, sparse perimeter of independent black bees orbits the letters.
- for(const b of wanderers){
-  const a=b.a+world*b.rate;
-  const x=b.x+Math.cos(a)*b.rx+Math.sin(world*.0018+b.phase)*2*S;
-  const y=b.y+Math.sin(a)*b.ry+Math.cos(world*.0013+b.phase)*2*S;
-  beeSprite(blackBees,b.sprite,x,y,b.size,a,b.opacity*smooth((t-720)/350));
  }
  // V11-like slash: a local, moving tear centered on the attacking head.
  // Nothing is pre-cut ahead of the bees.

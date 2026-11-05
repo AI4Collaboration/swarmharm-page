@@ -2,42 +2,28 @@
 body { display: block; }
 body.nav-drawer-open #main-content,
 body.nav-drawer-open > footer { margin-left: 208px; }
-.site-header { position: sticky; top: 0; z-index: 50; }
-.site-header .nav-inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 14px;
-  min-height: 64px;
-  padding: 8px 28px;
-  border-bottom: 1px solid var(--line);
-}
-.site-header .sidebar-brand {
-  display: block;
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: start;
-  color: var(--text);
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -.04em;
-}
+.site-header { position: static; height: 0; min-height: 0; padding: 0; border: 0; background: transparent; z-index: 50; }
+.site-header .nav-inner { display: contents; }
+.site-header .sidebar-brand { display: none; }
 .site-header .nav-inner > .nav-toggle:not([hidden]) {
-  display: flex;
-  grid-column: 1;
-  grid-row: 1;
-  align-items: center;
-  gap: 8px;
-  width: auto;
-  height: 44px;
-  padding: 10px;
+  position: fixed;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
   border: 1px solid var(--line);
-  border-radius: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 13px;
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  z-index: 49;
 }
-.site-header .nav-inner > .theme-toggle { grid-column: 3; grid-row: 1; }
+.site-header .nav-toggle span { display: none; }
+.site-header.nav-open .nav-inner > .nav-toggle { display: none; }
+body.nav-on-right .site-header .nav-inner > .nav-toggle { left: auto; right: 12px; }
 .navigation-drawer {
   position: fixed;
   inset: 50% auto auto 12px;
@@ -101,7 +87,7 @@ body.nav-on-right.nav-drawer-open > footer { margin-left: 0; margin-right: 208px
 .site-header .navigation-drawer nav a::after { display: none; }
 .site-header .navigation-drawer nav a:is(:hover, :focus-visible) { background: transparent; color: var(--text); }
 @media (max-width: 800px) {
-  .site-header .nav-inner { padding: 6px 14px; gap: 8px; }
+  .site-header.nav-open { height: auto; padding: 0 14px; }
   .site-header .nav-toggle span { display: none; }
   body.nav-drawer-open #main-content,
   body.nav-drawer-open > footer { margin-left: 0; }
@@ -111,11 +97,10 @@ body.nav-on-right.nav-drawer-open > footer { margin-left: 0; margin-right: 208px
   .site-header.nav-open { position: static; }
   .navigation-drawer[open] {
     position: static;
-    grid-column: 1 / -1;
-    grid-row: 2;
+    display: block;
     width: 100%;
     max-height: none;
-    margin-top: 6px;
+    margin: 8px 0 0;
     padding-inline: 12px;
     transform: none;
     box-shadow: none;
