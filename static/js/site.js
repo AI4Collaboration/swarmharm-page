@@ -3,7 +3,7 @@
   let headerHeight = null, headerFrame = 0;
   function updateHeaderOffset() {
     headerFrame = 0;
-    const height = header && getComputedStyle(header).position === 'sticky'
+    const height = header && matchMedia('(max-width: 1100px)').matches && getComputedStyle(header).position === 'sticky'
       ? header.getBoundingClientRect().height : 0;
     if (height === headerHeight) return;
     headerHeight = height;

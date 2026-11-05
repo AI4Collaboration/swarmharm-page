@@ -43,12 +43,12 @@
 }
 .institution-band .institution-lead-list .institution-oxford,
 .institution-band .institution-lead-list .institution-oxford a {
-  width: 123px;
-  flex-basis: 123px;
+  width: 56px;
+  flex-basis: 56px;
 }
 .institution-band .institution-lead-list .institution-oxford img {
-  width: 123px;
-  height: auto;
+  width: 56px;
+  height: 56px;
 }
 .institution-collaborators .institution-marquee {
   width: 0;
@@ -87,6 +87,6 @@
   .institution-band .institution-lead-list a { width: 46px; height: 46px; flex-basis: 46px; }
   .institution-band .institution-lead-list img { width: 46px; height: 46px; }
   .institution-band .institution-lead-list .institution-oxford,
-  .institution-band .institution-lead-list .institution-oxford a { width: 112px; flex-basis: 112px; }
-  .institution-band .institution-lead-list .institution-oxford img { width: 112px; height: auto; }
+  .institution-band .institution-lead-list .institution-oxford a { width: 46px; flex-basis: 46px; }
+  .institution-band .institution-lead-list .institution-oxford img { width: 46px; height: 46px; }
 }
