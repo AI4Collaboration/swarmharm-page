@@ -1,0 +1,92 @@
+/* The lead institutions stay still; collaborators retain the continuous belt. */
+.institutions.institution-band {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 28px;
+  padding: 12px 28px;
+}
+.institution-leads,
+.institution-collaborators {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 16px;
+}
+.institution-collaborators {
+  border-left: 1px solid var(--line);
+  padding-left: 28px;
+}
+.institution-caption {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.institution-band .institution-lead-list {
+  gap: 18px;
+  padding: 0;
+}
+.institution-band .institution-lead-list li,
+.institution-band .institution-lead-list a {
+  width: 56px;
+  height: 56px;
+  flex-basis: 56px;
+  padding: 0;
+}
+.institution-band .institution-lead-list img {
+  width: 56px;
+  height: 56px;
+  max-height: none;
+  filter: grayscale(1);
+  opacity: .85;
+}
+.institution-band .institution-lead-list .institution-oxford,
+.institution-band .institution-lead-list .institution-oxford a {
+  width: 123px;
+  flex-basis: 123px;
+}
+.institution-band .institution-lead-list .institution-oxford img {
+  width: 123px;
+  height: auto;
+}
+.institution-collaborators .institution-marquee {
+  width: 0;
+  flex: 1 1 0;
+}
+.institution-band .institution-ucl a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text);
+  text-decoration: none;
+}
+.institution-band .institution-ucl img { width: 80px; height: 29px; filter: brightness(0); }
+.institution-ucl span { font-size: 11px; line-height: 1.1; white-space: nowrap; }
+:root[data-theme="dark"] .institution-band .institution-ucl img { filter: none; }
+:root[data-theme="dark"] .institution-band .institution-lead-list .institution-oii img {
+  filter: grayscale(1) invert(1);
+}
+:root[data-theme="dark"] .institution-band .institution-lead-list :is(.institution-oxrml,.institution-oxford) img {
+  filter: grayscale(1) contrast(3);
+  mix-blend-mode: screen;
+}
+@media (max-width: 1050px) {
+  .institutions.institution-band { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .institution-leads { justify-content: center; }
+  .institution-collaborators { border-left: 0; border-top: 1px solid var(--line); padding: 10px 0 0; }
+}
+@media (max-width: 600px) {
+  .institutions.institution-band { padding: 10px 14px; }
+  .institution-leads { gap: 12px; }
+  .institution-band .institution-lead-list { gap: 14px; }
+  .institution-caption { font-size: 11px; }
+  .institution-collaborators { gap: 8px; }
+  .institution-band .institution-lead-list li,
+  .institution-band .institution-lead-list a { width: 46px; height: 46px; flex-basis: 46px; }
+  .institution-band .institution-lead-list img { width: 46px; height: 46px; }
+  .institution-band .institution-lead-list .institution-oxford,
+  .institution-band .institution-lead-list .institution-oxford a { width: 112px; flex-basis: 112px; }
+  .institution-band .institution-lead-list .institution-oxford img { width: 112px; height: auto; }
+}
