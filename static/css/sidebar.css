@@ -106,3 +106,28 @@ body.nav-on-right.nav-drawer-open > footer { margin:0; }
   .site-header .nav-inner nav a::after { transition:none; }
 }
 @media print { .site-header { display:none; } }
+
+/* Two compact study groups, followed by the shared resources. */
+.site-header .nav-inner { min-height:58px; gap:22px; }
+.site-header .header-brand { min-height:58px; gap:8px; padding-right:22px; font-weight:500; font-size:12px; }
+.site-header .header-brand > span { font-size:17px; font-weight:400; }
+.site-header .nav-inner > nav { flex-wrap:nowrap; gap:clamp(22px,3vw,42px); }
+.nav-study { flex:none; display:grid; gap:3px; padding-top:6px; }
+.nav-study > span { color:var(--muted); font:500 9px/1.4 var(--font); letter-spacing:.015em; white-space:nowrap; }
+.nav-study > div { display:flex; align-items:center; gap:17px; }
+.site-header .nav-inner .nav-study a { min-height:28px; font-size:12px; }
+.nav-study-formation { --nav-selected:#275ca8; --nav-selected-dark:#94baff; }
+.nav-study-misalignment { --nav-selected:#a72d43; --nav-selected-dark:#f2a0ad; }
+@media(max-width:800px) {
+ .site-header .nav-inner { gap:15px; }
+ .site-header .header-brand { padding-right:15px; }
+ .site-header .nav-inner > nav { flex-wrap:nowrap; gap:24px; }
+}
+@media(max-width:520px) {
+ .site-header .nav-inner { display:flex; flex-wrap:nowrap; width:100%; padding-inline:12px 0; gap:12px; box-sizing:border-box; }
+ .site-header .header-brand { display:inline-flex; font-size:10px; padding-right:12px; min-height:58px; gap:5px; }
+ .site-header .nav-inner > nav { width:0; flex:1; flex-wrap:nowrap; padding:0 14px 0 0; gap:23px; max-height:none; }
+ .site-header .nav-inner nav a { font-size:11px; min-height:58px; }
+ .site-header .nav-inner .nav-study a { min-height:28px; font-size:11px; }
+ .nav-study > span { font-size:8px; }
+}

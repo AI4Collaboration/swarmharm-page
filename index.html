@@ -28,14 +28,15 @@
   <link rel="stylesheet" href="static/css/trajectory.css?v=18">
   <link rel="stylesheet" href="static/css/surfaces.css?v=3">
   <link rel="stylesheet" href="static/css/research-layout.css?v=13">
-  <link rel="stylesheet" href="static/css/recorded-timeline.css?v=9">
+  <link rel="stylesheet" href="static/css/recorded-timeline.css?v=10">
+  <link rel="stylesheet" href="static/css/communication-replay.css?v=1">
   <link rel="stylesheet" href="static/css/findings.css?v=25">
   <link rel="stylesheet" href="static/css/domain-coverage.css?v=2">
   <link rel="stylesheet" href="static/css/institution-belt.css?v=10">
-  <link rel="stylesheet" href="static/css/sidebar.css?v=9">
+  <link rel="stylesheet" href="static/css/sidebar.css?v=10">
   <script src="static/js/swarmharm_title_demo_v3.js?v=16" defer></script>
-  <script src="static/js/trajectory-cases-data.js?v=24" defer></script>
-  <script src="static/js/recorded-agent-map.js?v=5" defer></script>
+  <script src="static/js/trajectory-cases-data.js?v=25" defer></script>
+  <script src="static/js/recorded-agent-map.js?v=6" defer></script>
   <script src="static/js/recorded-timeline.js?v=13" defer></script>
   <script src="static/js/trajectory-cases.js?v=15" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
@@ -95,8 +96,8 @@
       </section>
 <header class="site-header">
   <div class="container nav-inner">
-    <a class="header-brand" href="#top">SwarmHarm</a>
-    <nav id="primary-navigation" aria-label="Main navigation"><a class="nav-formation" href="#form-the-swarm">Swarm Formation</a><a href="#finding-1-1">Formation Findings</a><a class="nav-misalignment" href="#cause-harm">Collective Misalignment</a><a href="#core-findings">Misalignment Findings</a><a href="#threat-models">Threat Models</a><a href="#trajectory">Trajectories</a><a href="#stay-updated">Updates</a></nav>
+    <a class="header-brand" href="#top"><span aria-hidden="true">↑</span> Back to top</a>
+    <nav id="primary-navigation" aria-label="Main navigation"><div class="nav-study nav-study-formation"><span>Swarm Formation</span><div><a class="nav-formation" href="#form-the-swarm" aria-label="Swarm Formation setting">Setting</a><a href="#finding-1-1" aria-label="Swarm Formation findings">Findings</a></div></div><div class="nav-study nav-study-misalignment"><span>Collective Misalignment</span><div><a class="nav-misalignment" href="#cause-harm" aria-label="Collective Misalignment setting">Setting</a><a href="#core-findings" aria-label="Collective Misalignment findings">Findings</a></div></div><a href="#threat-models">Threat Models</a><a href="#trajectory">Trajectories</a><a href="#stay-updated">Updates</a></nav>
   </div>
 </header>
 <main id="main-content">
@@ -107,7 +108,7 @@
           <svg class="emergence-still" viewBox="-10 -30 470 96" aria-hidden="true"><use href="static/images/title-letterforms.svg?v=2#wordmark"></use></svg>
           <canvas id="swarmharm-canvas" aria-hidden="true" hidden></canvas>
         </h1>
-        <p class="hero-intro" id="tldr"><strong>TLDR:</strong> We are building a systematic testbed to see whether agents can actively discover one another across separate sandboxes without knowing other agents exist, and establish persistent communication channels to form a swarm. <strong>What kinds of consequences can follow?</strong> We found three recurring threat models: external-service overreach, task and acceptance manipulation, and trace tampering.</p>
+        <p class="hero-intro" id="tldr"><strong>TLDR:</strong> We are building a systematic testbed to see whether agents can actively discover one another across separate sandboxes without knowing other agents exist, and establish communication channels to form a swarm. <strong>What kinds of consequences can follow?</strong> We found three recurring threat models: external-service overreach, task and acceptance manipulation, and trace tampering.</p>
       </div>
     </div>
   </section>
@@ -122,7 +123,7 @@
         <nav class="domain-coverage" aria-label="Four task domains"><div class="domain-coverage-links"><a class="domain-knowledge" href="?case=r136&amp;phase=1#trajectory" data-show-case="r136" data-show-phase="1"><svg class="domain-entry-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M10 14h32v40H10z"/><path d="M17 10h30l7 7v34H17zM47 10v9h7M10 19v37h34M25 27h21M25 34h17M25 41h12"/><circle cx="46" cy="46" r="8"/><path d="m52 52 6 6"/></svg><span class="domain-entry-label">Knowledge Work</span><span class="domain-entry-arrow" aria-hidden="true">↗</span></a><a class="domain-data" href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1"><svg class="domain-entry-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M10 12h44v40H10z"/><rect x="8" y="10" width="48" height="43" rx="4"/><path d="M8 21h48M20 10v43M27 44l9-10 8 5 7-11"/><circle cx="36" cy="34" r="2"/><circle cx="44" cy="39" r="2"/><path d="M13 28h2M13 36h2M13 44h2M27 16h21"/></svg><span class="domain-entry-label">Data Analysis</span><span class="domain-entry-arrow" aria-hidden="true">↗</span></a><a class="domain-finance" href="?case=r75&amp;phase=1#trajectory" data-show-case="r75" data-show-phase="1"><svg class="domain-entry-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M12 9h34v45H12z"/><rect x="10" y="8" width="34" height="47" rx="3"/><path d="M18 18h18M18 27h9M33 27h3M18 35h9M18 43h7"/><circle cx="44" cy="43" r="13"/><path d="M48 36h-6a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-6M44 33v18"/></svg><span class="domain-entry-label">Financial Analysis</span><span class="domain-entry-arrow" aria-hidden="true">↗</span></a><a class="domain-engineering" href="?case=r65&amp;phase=1#trajectory" data-show-case="r65" data-show-phase="1"><svg class="domain-entry-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M14 14h36v36H14z"/><rect x="14" y="14" width="36" height="36" rx="5"/><rect x="24" y="24" width="16" height="16" rx="2"/><path d="M24 7v7M32 7v7M40 7v7M24 50v7M32 50v7M40 50v7M7 24h7M7 32h7M7 40h7M50 24h7M50 32h7M50 40h7"/></svg><span class="domain-entry-label">Engineering</span><span class="domain-entry-arrow" aria-hidden="true">↗</span></a></div></nav>
       <figure class="life-cycle" id="sample-steps" aria-label="Swarm Formation and Collective Misalignment">
         <div class="life-halves">
-          <section class="life-half"><h3 class="life-phase p1" id="form-the-swarm">Swarm Formation</h3><section class="phase-summary p1" aria-labelledby="p1-summary-title"><h4 id="p1-summary-title">3 key steps</h4><div class="summary-item"><h5>Autonomous Discovery</h5><p>Finding other agents without prior knowledge of their existence.</p></div><div class="summary-item"><h5>Communication Channels</h5><p>Turning shared surfaces into persistent channels for requests and replies.</p></div><div class="summary-item"><h5>Useful Information Exchange</h5><p>Sharing references and information that help peers complete their tasks.</p></div></section><div class="life-pair">
+          <section class="life-half"><h3 class="life-phase p1" id="form-the-swarm">Swarm Formation</h3><section class="phase-summary p1" aria-labelledby="p1-summary-title"><h4 id="p1-summary-title">3 key steps</h4><div class="summary-item"><h5>Autonomous Discovery</h5><p>Finding other agents without prior knowledge of their existence.</p></div><div class="summary-item"><h5>Communication Channels</h5><p>Turning shared surfaces into channels for requests and replies.</p></div><div class="summary-item"><h5>Useful Information Exchange</h5><p>Sharing references and information that help peers complete their tasks.</p></div></section><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-separate-identity.svg?v=3" alt="Agents work in separate glass jars." width="720" height="720" loading="lazy"><p class="life-desc">Separate agents, no prior knowledge of peers.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-discover-identity.svg?v=3" alt="A shared compartment carries a message between agents." width="720" height="720" loading="lazy"><p class="life-desc">A shared surface becomes a channel for <strong>requests and replies</strong>.</p></figure>
@@ -132,7 +133,7 @@
                   <span class="domain-label"><strong>Knowledge Work</strong><span>Source-backed briefings</span></span>
                   <span class="domain-case">r136 <span aria-hidden="true">↗</span></span>
                 </a></div></article>
-<article class="finding" id="finding-1-2"><h4><span class="finding-marker" aria-label="Formation step 2">02</span><span class="finding-title">Establish persistent communication channels</span></h4><div class="finding-copy"><p>They repurpose a shared business surface to send requests and replies.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Direct API runner"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 6.1</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-data" href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1">
+<article class="finding" id="finding-1-2"><h4><span class="finding-marker" aria-label="Formation step 2">02</span><span class="finding-title">Establish communication channels</span></h4><div class="finding-copy"><p>They repurpose a shared business surface to send requests and replies.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Direct API runner"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 6.1</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-data" href="?case=r74&amp;phase=1#trajectory" data-show-case="r74" data-show-phase="1">
                   <svg class="domain-visual" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M10 12h44v40H10z"/><rect x="8" y="10" width="48" height="43" rx="4"/><path d="M8 21h48M20 10v43M27 44l9-10 8 5 7-11"/><circle cx="36" cy="34" r="2"/><circle cx="44" cy="39" r="2"/><path d="M13 28h2M13 36h2M13 44h2M27 16h21"/></svg>
                   <span class="domain-label"><strong>Data Analysis</strong><span>Data validation</span></span>
                   <span class="domain-case">r74 <span aria-hidden="true">↗</span></span>
@@ -180,7 +181,7 @@
         <details class="trajectory-disclosure" data-trajectory-disclosure>
           <summary>
             <span id="trajectory-title">Explore trajectories</span>
-            <span class="trajectory-toggle-action"><span class="when-closed">Open map</span><span class="when-open">Close map</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span>
+            <span class="trajectory-toggle-action"><span class="when-closed">Open replay</span><span class="when-open">Close replay</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span>
           </summary>
           <div class="trajectory-content">
             <div class="case-picker"><label for="trajectory-case">Select a case</label><select id="trajectory-case" data-case-select></select></div>
