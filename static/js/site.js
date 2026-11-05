@@ -16,69 +16,7 @@
   window.addEventListener('resize', scheduleHeaderOffset);
   updateHeaderOffset();
 
-  const menu = header?.querySelector('[data-nav-toggle]');
   const navigation = header?.querySelector('nav');
-  const drawer = header?.querySelector('.navigation-drawer');
-  const sideButton = header?.querySelector('[data-nav-side]');
-  function setNavigationSide(side) {
-    const right = side === 'right';
-    document.body.classList.toggle('nav-on-right', right);
-    if (sideButton) {
-      const label = `Move navigation to ${right ? 'left' : 'right'}`;
-      sideButton.setAttribute('aria-label', label);
-      sideButton.title = label;
-    }
-  }
-  try { setNavigationSide(localStorage.getItem('swarmharm-nav-side')); } catch { setNavigationSide('left'); }
-  sideButton?.addEventListener('click', () => {
-    const side = document.body.classList.contains('nav-on-right') ? 'left' : 'right';
-    setNavigationSide(side);
-    try { localStorage.setItem('swarmharm-nav-side', side); } catch { /* Storage may be unavailable. */ }
-  });
-  if (menu && navigation) {
-    header.classList.add('nav-enhanced');
-    menu.hidden = false;
-    function setMenu(open) {
-      if (menu.getAttribute('aria-expanded') === String(open)) return;
-      header.classList.toggle('nav-open', open);
-      menu.setAttribute('aria-expanded', String(open));
-      menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-      if (drawer) {
-        if (open && !drawer.open) drawer.show();
-        if (!open && drawer.open) drawer.close();
-        document.body.classList.toggle('nav-drawer-open', open);
-      }
-      updateHeaderOffset();
-    }
-    menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
-    header.querySelector('[data-nav-close]')?.addEventListener('click', () => setMenu(false));
-    drawer?.addEventListener('close', () => {
-      header.classList.remove('nav-open');
-      document.body.classList.remove('nav-drawer-open');
-      menu.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-label', 'Open navigation');
-    });
-    drawer?.addEventListener('click', event => {
-      const bounds = drawer.getBoundingClientRect();
-      if (event.target === drawer && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) setMenu(false);
-    });
-    header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-      if (matchMedia('(max-width: 800px)').matches) setMenu(false);
-    }));
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && header.classList.contains('nav-open')) {
-        setMenu(false);
-        menu.focus();
-      }
-    });
-    document.addEventListener('click', event => {
-      if (matchMedia('(max-width: 800px)').matches && !header.contains(event.target)) setMenu(false);
-    });
-    matchMedia('(max-width: 1100px)').addEventListener('change', () => setMenu(false));
-    scheduleHeaderOffset();
-    setMenu(true);
-    if (drawer?.contains(document.activeElement)) document.activeElement.blur();
-  }
 
   const sectionLinks = [...(navigation?.querySelectorAll('a[href^="#"]') || [])];
   function selectSection(hash) {

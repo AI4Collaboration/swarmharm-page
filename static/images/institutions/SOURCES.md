@@ -4,4 +4,4 @@
 - OXRML: https://oxrml.com/assets/img/assets/rml_logo_dark.jpg
 - UCL: https://cdn.ucl.ac.uk/logos/ucl/ucl-logo--secondary-inverted.svg
 
-Original institutional marks are preserved. Computer Science is a separate text label linking to the department.
+Original institutional marks are preserved. UCL is shown as the university wordmark without a departmental label.

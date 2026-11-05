@@ -12,8 +12,8 @@ const ctx=canvas.getContext('2d',{alpha:true}); if(!ctx)return;
 const root=canvas.closest('.emergence-title');
 if(!root)return;
 const TITLE_COLORS={
- light:{blue:'#184f88',red:'#9c342f'},
- dark:{blue:'#527eae',red:'#a84742'}
+ light:{blue:'#075fbd',red:'#dc202b'},
+ dark:{blue:'#58a6f0',red:'#ff565f'}
 };
 let BLUE=TITLE_COLORS.light.blue,RED=TITLE_COLORS.light.red;
 const GAP=8; // approved spacing, keeps SWARM and HARM separated
@@ -324,12 +324,12 @@ function bobStorm(x,y,p){
 // Precompute local neighbor interactions once per layout, keeping playback
 // inexpensive. Cohesion/alignment are local; the late target resolves the title.
 function buildFormation(){
- const count=Math.min(110,black.length);
+ const count=Math.min(150,black.length);
  formation=Array.from({length:count},(_,i)=>{
   const target=black[Math.floor(i*black.length/count)],angle=rand()*Math.PI*2;
-  const x=ox+(-9+rand()*276)*S,y=oy+(-24+rand()*86)*S;
+  const start=stormPoint(0),x=start.x,y=start.y;
   return {id:i,group:i,target,x,y,vx:Math.cos(angle)*1.3*S,vy:Math.sin(angle)*1.3*S,
-   reactionUntil:0,partner:-1,sprite:target.sprite,size:(11+rand()*5)*S,
+   reactionUntil:0,partner:-1,sprite:target.sprite,size:(6.2+rand()*3.2)*S,
    frames:[{x,y,angle,pulse:0}]};
  });
  for(let frame=1;frame<=100;frame++){
@@ -395,11 +395,10 @@ function drawFormation(t){
  for(const p of formation){
   const a=p.frames[index],b=p.frames[index+1],u=frame-index;
   const x=lerp(a.x,b.x,u),y=lerp(a.y,b.y,u),pulse=lerp(a.pulse,b.pulse,u);
-  // A brief paired body response marks recognition, then the insects move together.
-  if(pulse>.05){ctx.globalAlpha=.12*pulse*fade;ctx.fillStyle=BLUE;
-   ctx.beginPath();ctx.ellipse(x,y,p.size*.8,p.size*.65,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+  // Recognition is carried by a small change in scale, without large halos or
+  // circular clumps around the individual insects.
   const turn=Math.atan2(Math.sin(b.angle-a.angle),Math.cos(b.angle-a.angle));
-  beeSprite(blackBees,p.sprite,x,y,p.size*(1+.30*pulse),a.angle+turn*u,.98*fade);
+  beeSprite(blackBees,p.sprite,x,y,p.size*(1+.12*pulse),a.angle+turn*u,.94*fade);
  }
 }
 function flightPos(p,u){
