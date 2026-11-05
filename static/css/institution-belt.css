@@ -56,15 +56,18 @@
 }
 /* Use one compact rhythm for the moving logos instead of wide fixed stages. */
 .institution-collaborators .institution-list {
-  gap: 14px;
-  padding-inline: 7px;
+  gap: 10px;
+  padding-inline: 5px;
 }
-.institution-collaborators .institution-list li,
+.institution-collaborators .institution-list li {
+  width: auto;
+  flex-basis: auto;
+}
 .institution-collaborators .institution-list a {
-  width: 136px;
-  flex-basis: 136px;
+  width: auto;
+  min-width: 0;
+  padding-inline: 0;
 }
-.institution-collaborators .institution-list a { padding-inline: 4px; }
 .institution-collaborators .institution-list img {
   width: min(var(--institution-logo-width, 118px), 118px);
   max-width: 118px;
@@ -106,9 +109,9 @@
   .institution-band .institution-lead-list { gap: 8px; }
   .institution-caption { font-size: 11px; }
   .institution-collaborators { gap: 8px; }
-  .institution-collaborators .institution-list { gap: 10px; padding-inline: 5px; }
+  .institution-collaborators .institution-list { gap: 8px; padding-inline: 4px; }
   .institution-collaborators .institution-list li,
-  .institution-collaborators .institution-list a { width: 122px; flex-basis: 122px; }
+  .institution-collaborators .institution-list a { width: auto; flex-basis: auto; }
   .institution-collaborators .institution-list img { max-width: 108px; }
   .institution-band .institution-lead-list li,
   .institution-band .institution-lead-list a { width: 46px; height: 46px; flex-basis: 46px; }
