@@ -11,7 +11,11 @@ if(!canvas)return;
 const ctx=canvas.getContext('2d',{alpha:true}); if(!ctx)return;
 const root=canvas.closest('.emergence-title');
 if(!root)return;
-let INK='#222521',RED='#ed302b',PALE='#c2bcb5';
+const TITLE_COLORS={
+ light:{blue:'#184f88',red:'#9c342f'},
+ dark:{blue:'#527eae',red:'#a84742'}
+};
+let BLUE=TITLE_COLORS.light.blue,RED=TITLE_COLORS.light.red;
 const GAP=8; // approved spacing, keeps SWARM and HARM separated
 // The physical bee paths use the stable V16 time scale. Only presentation
 // playback is remapped, so there are no hard cuts or timeline mismatches.
@@ -147,11 +151,12 @@ function buildBeeCache(img){
    c.drawImage(img,srcX,srcY,34,34,-17,-17,34,34);c.restore();
   }
  }
- // Tint the swarm sprite atlas once, retaining transparent wings and detail.
- if(img===blackBees){
-  c.globalCompositeOperation='source-in';c.fillStyle='#246bc3';
-  c.fillRect(0,0,off.width,off.height);c.globalCompositeOperation='source-over';
- }
+ // Give both words the same restrained, deep-colour treatment while retaining
+ // transparent wings and the detail of each bee silhouette.
+ c.globalCompositeOperation='source-in';
+ c.fillStyle=img===blackBees?BLUE:RED;
+ c.fillRect(0,0,off.width,off.height);
+ c.globalCompositeOperation='source-over';
  return off;
 }
 function beeStamp(c,img,id,x,y,size,angle,opacity){
@@ -391,7 +396,7 @@ function drawFormation(t){
   const a=p.frames[index],b=p.frames[index+1],u=frame-index;
   const x=lerp(a.x,b.x,u),y=lerp(a.y,b.y,u),pulse=lerp(a.pulse,b.pulse,u);
   // A brief paired body response marks recognition, then the insects move together.
-  if(pulse>.05){ctx.globalAlpha=.12*pulse*fade;ctx.fillStyle='#246bc3';
+  if(pulse>.05){ctx.globalAlpha=.12*pulse*fade;ctx.fillStyle=BLUE;
    ctx.beginPath();ctx.ellipse(x,y,p.size*.8,p.size*.65,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
   const turn=Math.atan2(Math.sin(b.angle-a.angle),Math.cos(b.angle-a.angle));
   beeSprite(blackBees,p.sprite,x,y,p.size*(1+.30*pulse),a.angle+turn*u,.98*fade);
@@ -514,7 +519,7 @@ function draw(dt){
  drawFormation(t);
  // Only fade in the pre-rendered completed letter at the END of formation.
  if(coreLayer&&coreFade>0){
-   ctx.globalAlpha=.64*coreFade;
+   ctx.globalAlpha=.86*coreFade;
    ctx.drawImage(coreLayer,0,0,w,h);
    ctx.globalAlpha=1;
  }
@@ -624,10 +629,17 @@ function revealWhenReady(){
 }
 blackBees.addEventListener('load',revealWhenReady);
 redBees.addEventListener('load',revealWhenReady);
-// Keep the title legible in the website's existing dark mode.
+// Rebuild the tinted sprite atlases for each theme. This keeps blue and red
+// distinct without the washed-out hue shift caused by filtering the canvas.
 function syncTitleTheme(){
-  canvas.style.filter=document.documentElement.dataset.theme==='dark'
-    ?'invert(1) hue-rotate(180deg)':'none';
+  const palette=TITLE_COLORS[document.documentElement.dataset.theme==='dark'?'dark':'light'];
+  canvas.style.filter='none';
+  if(BLUE===palette.blue&&RED===palette.red)return;
+  BLUE=palette.blue;RED=palette.red;
+  if(blackBees.complete&&blackBees.naturalWidth)blackCache=buildBeeCache(blackBees);
+  if(redBees.complete&&redBees.naturalWidth)redCache=buildBeeCache(redBees);
+  coreLayer=null;
+  if(black.length){buildCoreLayer();draw(0)}
 }
 if(typeof MutationObserver!=='undefined')new MutationObserver(syncTitleTheme)
  .observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
