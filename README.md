@@ -116,4 +116,4 @@ with its license retained beside the asset. Reasoning badges show High with thre
 
 The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result. The three finding rows remain unchanged.
 
-Finding banners use one compact line of four icon settings: Agents, Model, Goal, Reasoning. Per the project owner’s display convention, all six banners show Goal On and High reasoning; new finding banners default to Goal On. This display default does not rewrite historical runner metadata or variant-specific settings in the case viewer.
+Finding banners show Agents, Model and Reasoning. Goal settings are omitted from the page, including the case settings panel; original values remain in the case data and downloadable evidence.
