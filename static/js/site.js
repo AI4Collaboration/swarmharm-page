@@ -3,7 +3,7 @@
   let headerHeight = null, headerFrame = 0;
   function updateHeaderOffset() {
     headerFrame = 0;
-    const height = header && matchMedia('(max-width: 1100px)').matches && getComputedStyle(header).position === 'sticky'
+    const height = header && getComputedStyle(header).position === 'sticky'
       ? header.getBoundingClientRect().height : 0;
     if (height === headerHeight) return;
     headerHeight = height;
@@ -18,6 +18,7 @@
 
   const menu = header?.querySelector('[data-nav-toggle]');
   const navigation = header?.querySelector('nav');
+  const drawer = header?.querySelector('.navigation-drawer');
   if (menu && navigation) {
     header.classList.add('nav-enhanced');
     menu.hidden = false;
@@ -26,10 +27,25 @@
       header.classList.toggle('nav-open', open);
       menu.setAttribute('aria-expanded', String(open));
       menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-      // Update before an anchor uses the header height, especially on phones.
+      if (drawer) {
+        if (open && !drawer.open) drawer.showModal();
+        if (!open && drawer.open) drawer.close();
+        document.body.classList.toggle('nav-drawer-open', open);
+      }
       updateHeaderOffset();
     }
     menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
+    header.querySelector('[data-nav-close]')?.addEventListener('click', () => setMenu(false));
+    drawer?.addEventListener('close', () => {
+      header.classList.remove('nav-open');
+      document.body.classList.remove('nav-drawer-open');
+      menu.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-label', 'Open navigation');
+    });
+    drawer?.addEventListener('click', event => {
+      const bounds = drawer.getBoundingClientRect();
+      if (event.target === drawer && (event.clientX > bounds.right || event.clientY > bounds.bottom)) setMenu(false);
+    });
     header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && header.classList.contains('nav-open')) {
