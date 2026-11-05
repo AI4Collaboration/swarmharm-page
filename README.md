@@ -115,6 +115,7 @@ Run a local preview with `python3 -m http.server 8765 --bind 127.0.0.1`.
 Based on [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template)
 and [Nerfies](https://nerfies.github.io/), under CC BY-SA 4.0. Retain local font and
 icon licenses. Institutional marks identify team affiliations.
+Princeton's shield-and-wordmark signatures use the University's [light](https://www.princeton.edu/themes/custom/hobbes/logo.svg) and [dark](https://www.princeton.edu/themes/custom/hobbes/images/logo-white.svg) website assets.
 OpenAI model badges use the monochrome logo from [SVGL](https://github.com/pheralb/svgl),
 with its license retained beside the asset. Reasoning badges show High with three filled bars.
 

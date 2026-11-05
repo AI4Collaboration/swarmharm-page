@@ -83,6 +83,9 @@
 .institution-band .institution-aim { --institution-logo-width: 104px; }
 .institution-band .institution-stanford { --institution-logo-width: 112px; }
 .institution-band .institution-princeton { --institution-logo-width:118px; }
+.institution-band .institution-princeton .princeton-dark { display:none; }
+:root[data-theme="dark"] .institution-band .institution-princeton .princeton-light { display:none; }
+:root[data-theme="dark"] .institution-band .institution-princeton .princeton-dark { display:block; filter:none; mix-blend-mode:normal; opacity:1; }
 .institution-band .institution-ucl { --institution-logo-width: 94px; }
 .institution-band .institution-cmu { --institution-logo-width: 164px; }
 .institution-band .institution-toronto { --institution-logo-width: 112px; }
