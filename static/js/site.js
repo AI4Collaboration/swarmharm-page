@@ -19,6 +19,22 @@
   const menu = header?.querySelector('[data-nav-toggle]');
   const navigation = header?.querySelector('nav');
   const drawer = header?.querySelector('.navigation-drawer');
+  const sideButton = header?.querySelector('[data-nav-side]');
+  function setNavigationSide(side) {
+    const right = side === 'right';
+    document.body.classList.toggle('nav-on-right', right);
+    if (sideButton) {
+      const label = `Move navigation to ${right ? 'left' : 'right'}`;
+      sideButton.setAttribute('aria-label', label);
+      sideButton.title = label;
+    }
+  }
+  try { setNavigationSide(localStorage.getItem('swarmharm-nav-side')); } catch { setNavigationSide('left'); }
+  sideButton?.addEventListener('click', () => {
+    const side = document.body.classList.contains('nav-on-right') ? 'left' : 'right';
+    setNavigationSide(side);
+    try { localStorage.setItem('swarmharm-nav-side', side); } catch { /* Storage may be unavailable. */ }
+  });
   if (menu && navigation) {
     header.classList.add('nav-enhanced');
     menu.hidden = false;

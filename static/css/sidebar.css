@@ -1,4 +1,4 @@
-/* A compact header opens a left-hand drawer without narrowing the page. */
+/* A compact navigation pane reserves its own space beside the content. */
 body { display: block; }
 body.nav-drawer-open #main-content,
 body.nav-drawer-open > footer { margin-left: 208px; }
@@ -50,9 +50,13 @@ body.nav-drawer-open > footer { margin-left: 208px; }
   box-sizing: border-box;
   color: var(--text);
   background: var(--bg);
-  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  background-image: linear-gradient(145deg, #ffffff20, transparent 55%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
   border-radius: 10px;
-  box-shadow: 0 8px 28px #0001;
+  box-shadow: 0 8px 28px #0001, inset 0 1px 0 #ffffff25;
   transform: translate(calc(-100% - 20px), -50%);
   opacity: 0;
   transition: transform .28s ease, opacity .28s ease, display .28s allow-discrete, overlay .28s allow-discrete;
@@ -60,10 +64,18 @@ body.nav-drawer-open > footer { margin-left: 208px; }
 .navigation-drawer[open] { transform: translate(0, -50%); opacity: 1; }
 @starting-style { .navigation-drawer[open] { transform: translate(calc(-100% - 20px), -50%); opacity: 0; } }
 .navigation-drawer::backdrop { background: #09101b14; }
-.drawer-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; border-bottom: 1px solid var(--line); }
-.drawer-brand { color: var(--text); font-size: 14px; font-weight: 600; text-decoration: none; letter-spacing: -.04em; }
-.drawer-close { display: grid; place-items: center; width: 28px; height: 28px; padding: 6px; border: 0; background: transparent; color: var(--text); cursor: pointer; }
-.drawer-close svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.drawer-heading { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-height: 44px; border-bottom: 1px solid var(--line); }
+.drawer-title { color: var(--muted); font-size: 11px; font-weight: 500; white-space: nowrap; }
+.drawer-tools { display: flex; align-items: center; gap: 0; }
+.drawer-close, .drawer-side { display: grid; place-items: center; flex: none; width: 24px; height: 28px; padding: 4px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); cursor: pointer; }
+.drawer-close svg, .drawer-side svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.drawer-tools button:hover { background: var(--glass-hover); color: var(--text); }
+body.nav-on-right .drawer-side svg { transform: rotate(180deg); }
+body.nav-on-right .navigation-drawer { inset: 50% 12px auto auto; transform: translate(calc(100% + 20px), -50%); }
+body.nav-on-right .navigation-drawer[open] { transform: translate(0, -50%); }
+@starting-style { body.nav-on-right .navigation-drawer[open] { transform: translate(calc(100% + 20px), -50%); opacity: 0; } }
+body.nav-on-right.nav-drawer-open #main-content,
+body.nav-on-right.nav-drawer-open > footer { margin-left: 0; margin-right: 208px; }
 .site-header .navigation-drawer nav {
   display: flex;
   flex-direction: column;
@@ -93,6 +105,9 @@ body.nav-drawer-open > footer { margin-left: 208px; }
   .site-header .nav-toggle span { display: none; }
   body.nav-drawer-open #main-content,
   body.nav-drawer-open > footer { margin-left: 0; }
+  body.nav-on-right.nav-drawer-open #main-content,
+  body.nav-on-right.nav-drawer-open > footer { margin-right: 0; }
+  body.nav-on-right .navigation-drawer[open] { transform: none; }
   .site-header.nav-open { position: static; }
   .navigation-drawer[open] {
     position: static;
