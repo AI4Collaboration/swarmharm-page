@@ -1,4 +1,4 @@
-/* A quiet second header row keeps navigation visible without a side panel. */
+/* A single row of concrete finding links, with horizontal scrolling on phones. */
 body { display:block; }
 body.nav-drawer-open #main-content,
 body.nav-drawer-open > footer,
@@ -36,17 +36,20 @@ body.nav-on-right.nav-drawer-open > footer { margin:0; }
 .site-header .header-brand {
   display:inline-flex;
   align-items:center;
+  gap:8px;
   flex:none;
   min-height:48px;
   padding-right:24px;
   border-right:1px solid color-mix(in srgb,var(--text) 10%,transparent);
   color:var(--text);
-  font:600 13px/1 var(--font);
+  font:500 12px/1 var(--font);
   letter-spacing:-.015em;
   white-space:nowrap;
 }
+.site-header .header-brand > span { font-size:17px; font-weight:400; }
 .site-header .nav-inner > nav {
   display:flex;
+  flex-wrap:nowrap;
   align-items:center;
   justify-content:flex-start;
   flex:1 1 auto;
@@ -54,7 +57,7 @@ body.nav-on-right.nav-drawer-open > footer { margin:0; }
   width:auto;
   margin:0;
   padding:0;
-  gap:clamp(18px,2.6vw,34px);
+  gap:clamp(18px,2vw,28px);
   overflow-x:auto;
   overflow-y:hidden;
   scrollbar-width:none;
@@ -90,6 +93,13 @@ body.nav-on-right.nav-drawer-open > footer { margin:0; }
 :root[data-theme="dark"] .site-header .nav-inner nav a[aria-current="location"] { color:var(--nav-selected-dark,var(--text)); }
 .site-header .nav-inner nav a[aria-current="location"]::after { transform:scaleX(1); }
 .site-header :is(a,button):focus-visible { outline:2px solid var(--text); outline-offset:-4px; }
+.site-header nav a[href="#sample-steps"] { --nav-selected:#536376; --nav-selected-dark:#b4c5dc; }
+.site-header nav a[href="#finding-1-1"] { --nav-selected:#275ca8; --nav-selected-dark:#94baff; }
+.site-header nav a[href="#finding-1-2"] { --nav-selected:#176d97; --nav-selected-dark:#86c9ee; }
+.site-header nav a[href="#finding-1-3"] { --nav-selected:#147f81; --nav-selected-dark:#82d8cd; }
+.site-header nav a[href="#finding-2-3"] { --nav-selected:#7550a3; --nav-selected-dark:#c9a8f0; }
+.site-header nav a[href="#finding-2-1"] { --nav-selected:#b11d32; --nav-selected-dark:#ff8998; }
+.site-header nav a[href="#finding-2-2"] { --nav-selected:#a65c00; --nav-selected-dark:#efbd72; }
 
 @media (max-width:800px) {
   .site-header .nav-inner { width:calc(100% - 24px); gap:16px; }
@@ -98,36 +108,12 @@ body.nav-on-right.nav-drawer-open > footer { margin:0; }
   .site-header .nav-inner nav a { font-size:12px; }
 }
 @media (max-width:520px) {
-  .site-header .nav-inner { width:100%; padding-left:16px; gap:0; }
-  .site-header .header-brand { display:none; }
-  .site-header .nav-inner > nav { gap:24px; padding-right:16px; }
+  .site-header .nav-inner { flex-wrap:nowrap; width:100%; padding:0 0 0 12px; gap:12px; box-sizing:border-box; }
+  .site-header .header-brand { font-size:10px; padding-right:12px; gap:5px; }
+  .site-header .nav-inner > nav { width:0; flex:1; gap:22px; padding:0 14px 0 0; max-height:none; }
+  .site-header .nav-inner nav a { font-size:11px; }
 }
 @media (prefers-reduced-motion:reduce) {
   .site-header .nav-inner nav a::after { transition:none; }
 }
 @media print { .site-header { display:none; } }
-
-/* Two compact study groups, followed by the shared resources. */
-.site-header .nav-inner { min-height:58px; gap:22px; }
-.site-header .header-brand { min-height:58px; gap:8px; padding-right:22px; font-weight:500; font-size:12px; }
-.site-header .header-brand > span { font-size:17px; font-weight:400; }
-.site-header .nav-inner > nav { flex-wrap:nowrap; gap:clamp(22px,3vw,42px); }
-.nav-study { flex:none; display:grid; gap:3px; padding-top:6px; }
-.nav-study > span { color:var(--muted); font:500 9px/1.4 var(--font); letter-spacing:.015em; white-space:nowrap; }
-.nav-study > div { display:flex; align-items:center; gap:17px; }
-.site-header .nav-inner .nav-study a { min-height:28px; font-size:12px; }
-.nav-study-formation { --nav-selected:#275ca8; --nav-selected-dark:#94baff; }
-.nav-study-misalignment { --nav-selected:#a72d43; --nav-selected-dark:#f2a0ad; }
-@media(max-width:800px) {
- .site-header .nav-inner { gap:15px; }
- .site-header .header-brand { padding-right:15px; }
- .site-header .nav-inner > nav { flex-wrap:nowrap; gap:24px; }
-}
-@media(max-width:520px) {
- .site-header .nav-inner { display:flex; flex-wrap:nowrap; width:100%; padding-inline:12px 0; gap:12px; box-sizing:border-box; }
- .site-header .header-brand { display:inline-flex; font-size:10px; padding-right:12px; min-height:58px; gap:5px; }
- .site-header .nav-inner > nav { width:0; flex:1; flex-wrap:nowrap; padding:0 14px 0 0; gap:23px; max-height:none; }
- .site-header .nav-inner nav a { font-size:11px; min-height:58px; }
- .site-header .nav-inner .nav-study a { min-height:28px; font-size:11px; }
- .nav-study > span { font-size:8px; }
-}

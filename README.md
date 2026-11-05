@@ -91,7 +91,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
   Phase 1 green and Phase 2 terracotta in both themes. The r257 inference concerns
   a nonexistent grading requirement, not an absent grader or a named manager.
-- Full-width header; “Team from” sits left of the institution conveyor.
+- Keep the institution belt above one compact navigation row. Use Setup and
+  concrete finding names in the header, with Back to top on the left and
+  Trajectories at the end. The study names stay in the page's section headings.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
 - Use the user-supplied three questions as the TLDR, without a separate RQ section.
