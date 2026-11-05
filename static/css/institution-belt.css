@@ -87,6 +87,26 @@
 .institution-band .institution-cmu { --institution-logo-width: 164px; }
 .institution-band .institution-toronto { --institution-logo-width: 112px; }
 .institution-band .institution-ellis { --institution-logo-width:148px; }
+.institution-band .institution-ellis a {
+  position: relative;
+  isolation: isolate;
+}
+.institution-band .institution-ellis a::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 50%;
+  width: 31px;
+  height: 31px;
+  border-radius: 4px;
+  background: #112b4a;
+  transform: translateY(-50%);
+}
+.institution-band .institution-ellis img {
+  position: relative;
+  z-index: 1;
+}
 .institution-band .institution-mpi,
 .institution-band .institution-vector,
 .institution-band .institution-georgia-tech { --institution-logo-width: 138px; }
@@ -102,6 +122,8 @@
 .institution-band .institution-ucl img { filter:brightness(0); }
 :root[data-theme="dark"] .institution-band .institution-ucl img { filter: none; }
 :root[data-theme="dark"] .institution-band .institution-cmu img { filter:none; mix-blend-mode:normal; }
+:root[data-theme="dark"] .institution-band .institution-ellis img { filter:none; mix-blend-mode:normal; opacity:1; }
+:root[data-theme="dark"] .institution-band .institution-ellis a::before { background:transparent; }
 :root[data-theme="dark"] .institution-band .institution-lead-list a { background:#f5f7fa; }
 :root[data-theme="dark"] .institution-band .institution-lead-list img { filter:none; mix-blend-mode:normal; opacity:1; }
 @media (max-width: 1050px) {
