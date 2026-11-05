@@ -63,8 +63,10 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The trajectory line chart is expanded first, with the turn grid underneath;
-clicking either opens its original logs. They load one case at a time. For example,
+The communication replay is expanded first, with a moving time cursor, agent
+lanes and a shared-channel lane. The full turn grid and message log remain in
+collapsed evidence disclosures; clicking a replay event or turn opens its original
+logs. They load one case at a time. For example,
 `?case=r261&phase=2` selects the current record-change case. Findings links use
 the same selector. Earlier r199/r74/r187 Phase 2 links still open their original
 evidence, outside the current selections; they never redirect to a new case.
