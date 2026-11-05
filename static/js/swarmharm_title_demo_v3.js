@@ -12,8 +12,8 @@ const ctx=canvas.getContext('2d',{alpha:true}); if(!ctx)return;
 const root=canvas.closest('.emergence-title');
 if(!root)return;
 const TITLE_COLORS={
- light:{blue:'#075fbd',red:'#dc202b'},
- dark:{blue:'#58a6f0',red:'#ff565f'}
+ light:{blue:'#003f88',red:'#b51028'},
+ dark:{blue:'#2476c9',red:'#c8102e'}
 };
 let BLUE=TITLE_COLORS.light.blue,RED=TITLE_COLORS.light.red;
 const GAP=8; // approved spacing, keeps SWARM and HARM separated

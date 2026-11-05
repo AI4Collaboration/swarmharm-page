@@ -1,5 +1,6 @@
 /* One formation animation, followed by a still wordmark. */
-.hero-copy .emergence-title { position:relative; width:min(100%,660px); aspect-ratio:470/150; margin-bottom:16px; color:var(--text); }
+.hero-copy .emergence-title { position:relative; width:min(100%,660px); aspect-ratio:470/150; margin-top:-18px; margin-bottom:16px; color:#003f88; }
+:root[data-theme="dark"] .hero-copy .emergence-title { color:#2476c9; }
 .emergence-title :is(svg,canvas) { display:block; width:100%; height:100%; }
 .emergence-title canvas { position:absolute; inset:0; }
 .emergence-title canvas[hidden], .emergence-title.is-ready .emergence-still { display:none; }

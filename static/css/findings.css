@@ -192,10 +192,11 @@
   background:var(--glass-hover);
 }
 /* Each selected section has a distinct accent; idle links stay neutral. */
-.site-header nav a[href="#top"] { --nav-selected:#0066cc; --nav-selected-dark:#8abfff; }
+.site-header nav a[href="#form-the-swarm"] { --nav-selected:#005cbd; --nav-selected-dark:#74b6ff; }
+.site-header nav a[href="#finding-1-1"] { --nav-selected:#007c91; --nav-selected-dark:#78d2df; }
+.site-header nav a[href="#cause-harm"] { --nav-selected:#b11d32; --nav-selected-dark:#ff8998; }
 .site-header nav a[href="#core-findings"] { --nav-selected:#7550a3; --nav-selected-dark:#c9a8f0; }
-.site-header nav a[href="#form-the-swarm"] { --nav-selected:#326854; --nav-selected-dark:#9bd4b8; }
-.site-header nav a[href="#cause-harm"] { --nav-selected:#a05643; --nav-selected-dark:#edb19d; }
+.site-header nav a[href="#threat-models"] { --nav-selected:#a65c00; --nav-selected-dark:#efbd72; }
 .site-header nav a[href="#trajectory"] { --nav-selected:#087781; --nav-selected-dark:#83d4db; }
 .site-header nav a[href="#stay-updated"] { --nav-selected:#90620c; --nav-selected-dark:#e7c57a; }
 .site-header .nav-inner nav a[aria-current="location"] { color:var(--nav-selected); }

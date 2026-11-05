@@ -86,24 +86,26 @@
 .institution-band .institution-ucl { --institution-logo-width: 94px; }
 .institution-band .institution-cmu { --institution-logo-width: 164px; }
 .institution-band .institution-toronto { --institution-logo-width: 112px; }
-.institution-band .institution-ellis { --institution-logo-width:48px; }
+.institution-band .institution-ellis { --institution-logo-width:148px; }
 .institution-band .institution-ellis a {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:52px;
-  height:52px;
-  padding:3px;
-  box-sizing:border-box;
+  position: relative;
+  isolation: isolate;
+}
+.institution-band .institution-ellis a::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 50%;
+  width: 31px;
+  height: 31px;
   border-radius: 4px;
   background: #112b4a;
+  transform: translateY(-50%);
 }
 .institution-band .institution-ellis img {
-  width:46px;
-  max-width:46px;
-  height:46px;
-  max-height:46px;
-  object-fit:contain;
+  position: relative;
+  z-index: 1;
 }
 .institution-band .institution-mpi,
 .institution-band .institution-vector,
@@ -121,6 +123,7 @@
 :root[data-theme="dark"] .institution-band .institution-ucl img { filter: none; }
 :root[data-theme="dark"] .institution-band .institution-cmu img { filter:none; mix-blend-mode:normal; }
 :root[data-theme="dark"] .institution-band .institution-ellis img { filter:none; mix-blend-mode:normal; opacity:1; }
+:root[data-theme="dark"] .institution-band .institution-ellis a::before { background:transparent; }
 :root[data-theme="dark"] .institution-band .institution-lead-list a { background:#f5f7fa; }
 :root[data-theme="dark"] .institution-band .institution-lead-list img { filter:none; mix-blend-mode:normal; opacity:1; }
 @media (max-width: 1050px) {

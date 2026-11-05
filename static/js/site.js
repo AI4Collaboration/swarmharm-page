@@ -20,8 +20,9 @@
 
   const sectionLinks = [...(navigation?.querySelectorAll('a[href^="#"]') || [])];
   function selectSection(hash) {
+    const selectedHash = hash || sectionLinks[0]?.hash || '#top';
     sectionLinks.forEach(link => {
-      if (link.hash === (hash || '#top')) link.setAttribute('aria-current', 'location');
+      if (link.hash === selectedHash) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   }

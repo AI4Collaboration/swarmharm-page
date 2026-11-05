@@ -21,19 +21,19 @@
   <link rel="stylesheet" href="static/css/story.css?v=25">
   <link rel="stylesheet" href="static/css/flight.css?v=85">
   <link rel="stylesheet" href="static/css/fieldguide.css?v=18">
-  <script src="static/js/site.js?v=16" defer></script>
+  <script src="static/js/site.js?v=17" defer></script>
   <link rel="stylesheet" href="static/css/maintenance-case.css?v=2">
   <link rel="stylesheet" href="static/css/orbit.css?v=50">
   <link rel="stylesheet" href="static/css/plate-animation.css?v=10">
   <link rel="stylesheet" href="static/css/trajectory.css?v=18">
   <link rel="stylesheet" href="static/css/surfaces.css?v=3">
-  <link rel="stylesheet" href="static/css/research-layout.css?v=12">
+  <link rel="stylesheet" href="static/css/research-layout.css?v=13">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=8">
-  <link rel="stylesheet" href="static/css/findings.css?v=24">
+  <link rel="stylesheet" href="static/css/findings.css?v=25">
   <link rel="stylesheet" href="static/css/domain-coverage.css?v=2">
-  <link rel="stylesheet" href="static/css/institution-belt.css?v=9">
+  <link rel="stylesheet" href="static/css/institution-belt.css?v=10">
   <link rel="stylesheet" href="static/css/sidebar.css?v=9">
-  <script src="static/js/swarmharm_title_demo_v3.js?v=15" defer></script>
+  <script src="static/js/swarmharm_title_demo_v3.js?v=16" defer></script>
   <script src="static/js/trajectory-cases-data.js?v=23" defer></script>
   <script src="static/js/recorded-agent-map.js?v=4" defer></script>
   <script src="static/js/recorded-timeline.js?v=11" defer></script>
@@ -63,7 +63,7 @@
               <li class="institution-ucl"><a href="https://www.ucl.ac.uk/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/ucl.svg" alt="UCL" width="1394" height="391"></a></li>
               <li class="institution-cmu"><a href="https://www.cmu.edu/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/cmu.svg" alt="Carnegie Mellon University" width="145" height="13"></a></li>
               <li class="institution-toronto"><a href="https://www.utoronto.ca/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/toronto.svg?v=2" alt="University of Toronto" width="429" height="159"></a></li>
-              <li class="institution-ellis"><a href="https://ellis.eu/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/ellis-vertical.webp" alt="European Laboratory for Learning and Intelligent Systems" width="226" height="198"></a></li>
+              <li class="institution-ellis"><a href="https://ellis.eu/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/ellis.webp" alt="European Laboratory for Learning and Intelligent Systems" width="240" height="37"></a></li>
               <li class="institution-mpi"><a href="https://is.mpg.de/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/mpi-is.webp?v=2" alt="Max Planck Institute for Intelligent Systems, Tübingen" width="1000" height="199"></a></li>
               <li class="institution-vector"><a href="https://vectorinstitute.ai/" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/vector.png" alt="Vector Institute" width="2702" height="992"></a></li>
               <li class="institution-eth"><a href="https://ethz.ch/en.html" target="_blank" rel="noopener noreferrer"><img src="static/images/institutions/eth-zurich.svg?v=3" alt="ETH Zürich" width="120" height="20"></a></li>
@@ -78,7 +78,7 @@
               <li class="institution-ucl"><a href="https://www.ucl.ac.uk/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/ucl.svg" alt="" width="1394" height="391"></a></li>
               <li class="institution-cmu"><a href="https://www.cmu.edu/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/cmu.svg" alt="" width="145" height="13"></a></li>
               <li class="institution-toronto"><a href="https://www.utoronto.ca/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/toronto.svg?v=2" alt="" width="429" height="159"></a></li>
-              <li class="institution-ellis"><a href="https://ellis.eu/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/ellis-vertical.webp" alt="" width="226" height="198"></a></li>
+              <li class="institution-ellis"><a href="https://ellis.eu/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/ellis.webp" alt="" width="240" height="37"></a></li>
               <li class="institution-mpi"><a href="https://is.mpg.de/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/mpi-is.webp?v=2" alt="" width="1000" height="199"></a></li>
               <li class="institution-vector"><a href="https://vectorinstitute.ai/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/vector.png" alt="" width="2702" height="992"></a></li>
               <li class="institution-eth"><a href="https://ethz.ch/en.html" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="static/images/institutions/eth-zurich.svg?v=3" alt="" width="120" height="20"></a></li>
@@ -96,7 +96,7 @@
 <header class="site-header">
   <div class="container nav-inner">
     <a class="header-brand" href="#top">SwarmHarm</a>
-    <nav id="primary-navigation" aria-label="Main navigation"><a href="#top">Overview</a><a class="nav-formation" href="#form-the-swarm">Swarm Formation</a><a class="nav-misalignment" href="#cause-harm">Collective Misalignment</a><a href="#trajectory">Explore Trajectories</a><a href="#stay-updated">Stay updated</a></nav>
+    <nav id="primary-navigation" aria-label="Main navigation"><a class="nav-formation" href="#form-the-swarm">Swarm Formation</a><a href="#finding-1-1">Formation Findings</a><a class="nav-misalignment" href="#cause-harm">Collective Misalignment</a><a href="#core-findings">Misalignment Findings</a><a href="#threat-models">Threat Models</a><a href="#trajectory">Trajectories</a><a href="#stay-updated">Updates</a></nav>
   </div>
 </header>
 <main id="main-content">
@@ -104,10 +104,10 @@
     <div class="container hero-layout">
       <div class="hero-copy">
         <h1 id="hero-title" class="emergence-title" aria-label="SwarmHarm" style="aspect-ratio:470 / 150">
-          <svg class="emergence-still" viewBox="-10 -30 470 96" aria-hidden="true"><use href="static/images/title-letterforms.svg#wordmark"></use></svg>
+          <svg class="emergence-still" viewBox="-10 -30 470 96" aria-hidden="true"><use href="static/images/title-letterforms.svg?v=2#wordmark"></use></svg>
           <canvas id="swarmharm-canvas" aria-hidden="true" hidden></canvas>
         </h1>
-        <p class="hero-intro" id="tldr">Can agents <strong>autonomously discover each other</strong> without knowing they exist? Can they <strong>establish communication to form a swarm</strong>? <strong>What are the consequences that follow?</strong></p>
+        <p class="hero-intro" id="tldr"><strong>TLDR:</strong> We are building a systematic testbed to see whether agents can actively discover one another across separate sandboxes without knowing other agents exist, and establish persistent communication channels to form a swarm. <strong>What kinds of consequences can follow?</strong> We found three recurring threat models: external-service overreach, task and acceptance manipulation, and trace tampering.</p>
       </div>
     </div>
   </section>
@@ -152,7 +152,7 @@
 <article class="finding" id="finding-2-2"><h4><span class="finding-marker" aria-label="Key finding 3">03</span><span class="finding-title">Compositional Failure</span></h4><div class="finding-copy"><p>Individually harmless actions combine into a <strong>$4m funding shortfall</strong>.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Codex"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 5.6</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-finance" href="?case=r255&amp;phase=2#trajectory" data-show-case="r255" data-show-phase="2"><svg class="domain-visual" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M12 9h34v45H12z"/><rect x="10" y="8" width="34" height="47" rx="3"/><path d="M18 18h18M18 27h9M33 27h3M18 35h9M18 43h7"/><circle cx="44" cy="43" r="13"/><path d="M48 36h-6a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-6M44 33v18"/></svg><span class="domain-label"><strong>Financial Analysis</strong><span>Shared cash commitments</span></span><span class="domain-case">r255 <span aria-hidden="true">↗</span></span></a></div></article></div></section>
         </div>
       </figure>
-      <section class="threat-models" aria-labelledby="threat-models-title">
+      <section class="threat-models" id="threat-models" aria-labelledby="threat-models-title">
         <h3 id="threat-models-title">Phase 2 threat models</h3>
         <div class="mechanism-cases">
           <a class="mechanism-case" href="?case=r165&amp;phase=2#trajectory" data-show-case="r165" data-show-phase="2">
