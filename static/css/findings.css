@@ -231,7 +231,7 @@
 @media(max-width:760px) { .mechanism-cases { grid-template-columns:1fr; } .mechanism-case { padding:18px; } }
 
 /* The headline leads with the result; the rest of the page supplies its evidence. */
-.main-result { max-width:860px; box-sizing:border-box; padding:clamp(24px,4vw,42px); border:1px solid color-mix(in srgb,var(--discovery) 35%,var(--line)); border-left:4px solid var(--discovery); border-radius:16px; background:linear-gradient(135deg,color-mix(in srgb,var(--discovery) 9%,var(--bg)),color-mix(in srgb,var(--risk) 5%,var(--bg))); }
+.main-result { max-width:860px; box-sizing:border-box; margin:0 auto 20px; padding:clamp(24px,4vw,42px); border:1px solid color-mix(in srgb,var(--discovery) 35%,var(--line)); border-left:4px solid var(--discovery); border-radius:16px; background:linear-gradient(135deg,color-mix(in srgb,var(--discovery) 9%,var(--bg)),color-mix(in srgb,var(--risk) 5%,var(--bg))); }
 .main-result-label { margin:0 0 12px; color:var(--discovery); font:650 12px/1.4 var(--font); letter-spacing:.1em; text-transform:uppercase; }
 .main-result h2 { margin:0; color:var(--text); font:500 clamp(27px,3.6vw,43px)/1.15 var(--display); letter-spacing:-.035em; text-wrap:balance; }
 .result-path { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:28px 0 0; padding:0; list-style:none; }
@@ -239,6 +239,8 @@
 .result-path li:not(:last-child)::after { content:"→"; position:absolute; top:50%; right:10px; color:var(--muted); transform:translateY(-50%); }
 .result-path strong { color:var(--text); font:600 14px/1.4 var(--font); }
 .result-path span { color:var(--muted); font:12px/1.45 var(--font); }
+.original-tldr { max-width:860px; margin-top:0; }
+.trajectory-promoted { margin:0 0 44px; scroll-margin-top:100px; }
 
 /* The detection pair separates observable effects from transcript interpretation. */
 .detection-section { margin:48px 0 8px; padding:clamp(24px,4vw,40px); border-radius:16px; background:color-mix(in srgb,var(--discovery) 6%,var(--surface)); scroll-margin-top:100px; }

@@ -499,7 +499,7 @@ window.SWARMHARM_CASES = [
     "id": "r261",
     "key": "r261-phase2",
     "phase": 2,
-    "claim": "Trace Tampering / Coordinated Adverse Records",
+    "claim": "Trace Tampering / Collective Harmful Outcome",
     "title": "Trace Tampering",
     "domain": "Knowledge Work",
     "mode": "Collective Misalignment",
