@@ -120,7 +120,7 @@
         return `<button type="button" data-obs-receipt="${step.order}" style="--reader:${color(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
       }).join('');
       return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${color(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
-        <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,data.id)||`static/images/fieldguide/swarm-agent-${message.actor.toLowerCase()}.svg?v=2`)}" width="230" height="310" alt=""></span>
+        <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,data.id)||`static/images/fieldguide/finding-agents.svg?v=4#${message.actor.toLowerCase()}-attentive`)}" width="128" height="120" alt=""></span>
         <div class="obs-chat-content">
           <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}" aria-label="Select message ${number} from ${esc(names.get(message.actor))}"><span>From</span><strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong><span>to</span><strong data-chat-recipient>${esc(messageSource(message))}</strong></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
           ${parent?`<button class="obs-chat-reply" type="button" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to #${messageNumberById.get(parent.id)}</button>`:''}
