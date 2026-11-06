@@ -191,14 +191,6 @@
   color:var(--text);
   background:var(--glass-hover);
 }
-/* Each selected section has a distinct accent; idle links stay neutral. */
-.site-header nav a[href="#form-the-swarm"] { --nav-selected:#005cbd; --nav-selected-dark:#74b6ff; }
-.site-header nav a[href="#finding-1-1"] { --nav-selected:#007c91; --nav-selected-dark:#78d2df; }
-.site-header nav a[href="#cause-harm"] { --nav-selected:#b11d32; --nav-selected-dark:#ff8998; }
-.site-header nav a[href="#core-findings"] { --nav-selected:#7550a3; --nav-selected-dark:#c9a8f0; }
-.site-header nav a[href="#threat-models"] { --nav-selected:#a65c00; --nav-selected-dark:#efbd72; }
-.site-header nav a[href="#trajectory"] { --nav-selected:#087781; --nav-selected-dark:#83d4db; }
-.site-header nav a[href="#stay-updated"] { --nav-selected:#90620c; --nav-selected-dark:#e7c57a; }
 .site-header .nav-inner nav a[aria-current="location"] { color:var(--nav-selected); }
 :root[data-theme="dark"] .site-header .nav-inner nav a[aria-current="location"] { color:var(--nav-selected-dark); }
 .site-header .nav-inner nav a[aria-current="location"]::after { transform:scaleX(1); }
@@ -237,6 +229,45 @@
 .mechanism-case:hover { border-color:var(--misalignment-ink); }
 .mechanism-case:focus-visible { outline:2px solid var(--misalignment-ink); outline-offset:4px; }
 @media(max-width:760px) { .mechanism-cases { grid-template-columns:1fr; } .mechanism-case { padding:18px; } }
+
+/* The headline leads with the result; the rest of the page supplies its evidence. */
+.main-result { max-width:860px; box-sizing:border-box; padding:clamp(24px,4vw,42px); border:1px solid color-mix(in srgb,var(--discovery) 35%,var(--line)); border-left:4px solid var(--discovery); border-radius:16px; background:linear-gradient(135deg,color-mix(in srgb,var(--discovery) 9%,var(--bg)),color-mix(in srgb,var(--risk) 5%,var(--bg))); }
+.main-result-label { margin:0 0 12px; color:var(--discovery); font:650 12px/1.4 var(--font); letter-spacing:.1em; text-transform:uppercase; }
+.main-result h2 { margin:0; color:var(--text); font:500 clamp(27px,3.6vw,43px)/1.15 var(--display); letter-spacing:-.035em; text-wrap:balance; }
+.result-path { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:28px 0 0; padding:0; list-style:none; }
+.result-path li { position:relative; display:grid; gap:2px; min-width:0; padding:12px 36px 12px 14px; border-radius:9px; background:color-mix(in srgb,var(--bg) 76%,transparent); }
+.result-path li:not(:last-child)::after { content:"→"; position:absolute; top:50%; right:10px; color:var(--muted); transform:translateY(-50%); }
+.result-path strong { color:var(--text); font:600 14px/1.4 var(--font); }
+.result-path span { color:var(--muted); font:12px/1.45 var(--font); }
+
+/* The detection pair separates observable effects from transcript interpretation. */
+.detection-section { margin:48px 0 8px; padding:clamp(24px,4vw,40px); border-radius:16px; background:color-mix(in srgb,var(--discovery) 6%,var(--surface)); scroll-margin-top:100px; }
+.detection-heading { display:grid; grid-template-columns:minmax(0,1fr); max-width:720px; margin-bottom:24px; }
+.detection-heading > p:first-child { margin:0 0 6px; color:var(--discovery); font:650 12px/1.4 var(--font); letter-spacing:.1em; text-transform:uppercase; }
+.detection-heading h2 { margin:0; font:500 clamp(24px,3vw,34px)/1.2 var(--display); letter-spacing:-.025em; }
+.detection-heading > p:last-child { margin:8px 0 0; color:var(--muted); font:15px/1.6 var(--font); }
+.monitor-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.monitor-card { display:grid; grid-template-columns:52px minmax(0,1fr); gap:16px; min-width:0; padding:22px; border:1px solid var(--line); border-radius:12px; background:var(--bg); }
+.monitor-card > svg { width:48px; height:48px; padding:9px; box-sizing:border-box; border-radius:10px; color:var(--discovery); background:color-mix(in srgb,var(--discovery) 10%,var(--bg)); fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.transcript-monitor > svg { color:var(--risk); background:color-mix(in srgb,var(--risk) 10%,var(--bg)); }
+.monitor-card h3 { margin:0 0 6px; color:var(--text); font:600 18px/1.35 var(--font); }
+.monitor-card p { margin:0; color:var(--muted); font:14px/1.65 var(--font); }
+.claim-verdict { display:grid; grid-template-columns:auto repeat(3,minmax(0,1fr)); align-items:center; gap:12px; margin-top:16px; padding:15px 18px; border-radius:10px; background:var(--discovery); color:var(--bg); }
+.claim-verdict strong { font:650 13px/1.4 var(--font); white-space:nowrap; }
+.claim-verdict span { padding-left:12px; border-left:1px solid color-mix(in srgb,var(--bg) 25%,transparent); font:12px/1.45 var(--font); }
+@media(max-width:760px) {
+  .main-result { padding:24px 20px; border-radius:12px; }
+  .main-result h2 { font-size:clamp(25px,8vw,34px); }
+  .result-path { grid-template-columns:1fr; gap:8px; }
+  .result-path li { padding:10px 14px; }
+  .result-path li:not(:last-child)::after { content:"↓"; top:auto; right:16px; bottom:-13px; z-index:1; }
+  .detection-section { margin-top:36px; padding:24px 18px; border-radius:12px; }
+  .monitor-grid { grid-template-columns:1fr; }
+  .monitor-card { grid-template-columns:44px minmax(0,1fr); padding:18px; }
+  .monitor-card > svg { width:42px; height:42px; }
+  .claim-verdict { grid-template-columns:1fr; gap:8px; }
+  .claim-verdict span { padding:8px 0 0; border-left:0; border-top:1px solid color-mix(in srgb,var(--bg) 25%,transparent); }
+}
 
 /* Matching summaries share row heights so both phases stay aligned. */
 .phase-summary { display:grid; gap:12px; min-width:0; margin:0 0 24px; padding:18px; border-left:3px solid var(--summary-line); background:var(--summary-fill); }

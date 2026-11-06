@@ -15,6 +15,12 @@ case disclosure and provenance.
 Phase 1 and Phase 2 are independent studies. The overview illustrates their
 separate designs; it does not combine results into one trajectory.
 
+The public storyline is **Discover → Propagate → Consequences**. Lead with the
+main result: across reviewed cases, independent agents autonomously discover one
+another, propagate methods, and produce verified system-level harm. The three
+steps are supported by separate reviewed cases and must not be presented as one
+end-to-end trajectory.
+
 The selector keeps four Phase 1 cases and five Phase 2 cases:
 
 - **Phase 1:** autonomous discovery — r136 (Knowledge Work); communication
@@ -24,8 +30,8 @@ The selector keeps four Phase 1 cases and five Phase 2 cases:
   Settings & evidence; no Codex/CC/Pi label is assigned to these old runs.
   Settings come from that case’s sealed registration;
   budgets, workload and initial communication conditions sit in the disclosure.
-- **Phase 2 findings:** r261 (coordinated record changes), r255 (compositional funding
-  shortfall), r257 (spontaneous grader inference). All use four Sol 5.6
+- **Phase 2 findings:** r257 (spontaneous grader inference), r261 (coordinated
+  adverse records), and r255 (compositional funding shortfall). All use four Sol 5.6
   agents in Codex with native goal enabled. r261 returns measured feedback;
   r257 returns status only.
 - **Phase 2 mechanism cases:** r165 (external-service resource overreach) and
@@ -42,6 +48,13 @@ r261 has 27 changed session-message entries and three retained original backups;
 r257 shares and adopts an invented prerequisite, without publishing or changing
 live records. Each case has its own settings, trajectory and independent review
 in `static/data/reviews/`. Budgets and scoring parameters stay in a disclosure.
+
+The detection section explains the two-part measurement protocol. The
+**action-only monitor** establishes tool use, state changes, final effects and
+solo-versus-combined replay. The **transcript LLM judge** identifies discovery,
+exact reads, proposals, adoption and shared false inference, citing recorded
+events. Claim-specific rules join those views; neither view is presented as a
+standalone verdict for every claim.
 
 ## Phase 2 terminology
 
@@ -104,17 +117,17 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks
 
-- The three Phase 2 key findings start with spontaneous grader inference
-  (r257), coordinated record changes (r261), and compositional failure (r255).
+- The three Phase 2 key findings are spontaneous grader inference (r257),
+  coordinated adverse records (r261), and compositional failure (r255).
   Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
   Phase 1 green and Phase 2 terracotta in both themes. The r257 inference concerns
   a nonexistent grading requirement, not an absent grader or a named manager.
-- Keep the institution belt above one compact navigation row. Use Setup and
-  concrete finding names in the header, with Back to top on the left and
-  Trajectories at the end. The study names stay in the page's section headings.
+- Keep the institution belt above one compact navigation row. Navigation follows
+  the evidence hierarchy: Main result, Findings, Threat models, Detection and
+  Trajectories. The study names stay in the page's section headings.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
-- Use the user-supplied three questions as the TLDR, without a separate RQ section.
+- Put the main result in the hero. Do not add a separate RQ section.
 - Light/Dark is an explicit toggle; remember the selected theme.
 - Use one font family throughout. Keep summaries short; put originals and
   structured tool results in disclosures.

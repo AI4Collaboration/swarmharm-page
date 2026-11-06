@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SwarmHarm</title>
-  <meta name="description" content="A testbed for swarm formation and collective harm.">
+  <meta name="description" content="Independent AI agents can discover one another, propagate methods, and produce verified system-level harm.">
   <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
   <script src="static/js/theme.js?v=26"></script>
   <link rel="canonical" href="https://swarmharm.com/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="SwarmHarm">
-  <meta property="og:description" content="A testbed for swarm formation and collective harm.">
+  <meta property="og:description" content="Independent AI agents can discover one another, propagate methods, and produce verified system-level harm.">
   <meta property="og:url" content="https://swarmharm.com/">
   <meta property="og:image" content="https://swarmharm.com/static/images/swarmharm-wordmark.png?v=27">
   <meta property="og:image:alt" content="SwarmHarm logo">
@@ -30,12 +30,12 @@
   <link rel="stylesheet" href="static/css/research-layout.css?v=13">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=10">
   <link rel="stylesheet" href="static/css/trajectory-observatory.css?v=6">
-  <link rel="stylesheet" href="static/css/findings.css?v=25">
+  <link rel="stylesheet" href="static/css/findings.css?v=26">
   <link rel="stylesheet" href="static/css/domain-coverage.css?v=2">
   <link rel="stylesheet" href="static/css/institution-belt.css?v=13">
   <link rel="stylesheet" href="static/css/sidebar.css?v=11">
   <script src="static/js/swarmharm_title_demo_v3.js?v=16" defer></script>
-  <script src="static/js/trajectory-cases-data.js?v=25" defer></script>
+  <script src="static/js/trajectory-cases-data.js?v=26" defer></script>
   <script src="static/js/trajectory-observatory.js?v=6" defer></script>
   <script src="static/js/recorded-timeline.js?v=15" defer></script>
   <script src="static/js/trajectory-cases.js?v=16" defer></script>
@@ -96,13 +96,10 @@
   <div class="container nav-inner">
     <a class="header-brand" href="#top"><span aria-hidden="true">↑</span> Back to top</a>
     <nav id="primary-navigation" aria-label="Main navigation">
-      <a href="#sample-steps">Setup</a>
-      <a href="#finding-1-1">Discovery</a>
-      <a href="#finding-1-2">Communication</a>
-      <a href="#finding-1-3">Information Exchange</a>
-      <a href="#finding-2-3">Grader Inference</a>
-      <a href="#finding-2-1">Trace Tampering</a>
-      <a href="#finding-2-2">Compositional Failure</a>
+      <a href="#tldr">Main result</a>
+      <a href="#sample-steps">Findings</a>
+      <a href="#threat-models">Threat models</a>
+      <a href="#detection">Detection</a>
       <a href="#trajectory">Trajectories</a>
     </nav>
   </div>
@@ -115,7 +112,15 @@
           <svg class="emergence-still" viewBox="-10 -30 470 96" aria-hidden="true"><use href="static/images/title-letterforms.svg?v=2#wordmark"></use></svg>
           <canvas id="swarmharm-canvas" aria-hidden="true" hidden></canvas>
         </h1>
-        <p class="hero-intro" id="tldr"><strong>TLDR:</strong> We are building a systematic testbed to see whether agents can actively discover one another across separate sandboxes without knowing other agents exist, and establish communication channels to form a swarm. <strong>What kinds of consequences can follow?</strong> We found three recurring threat models: external-service overreach, task and acceptance manipulation, and trace tampering.</p>
+        <section class="hero-intro main-result" id="tldr" aria-labelledby="main-result-title">
+          <p class="main-result-label">Main result</p>
+          <h2 id="main-result-title">Across reviewed cases, independent agents autonomously discover one another, propagate methods, and produce verified system-level harm.</h2>
+          <ol class="result-path" aria-label="Observed progression">
+            <li><strong>Discover</strong><span>Find other agents</span></li>
+            <li><strong>Propagate</strong><span>Share and reuse methods</span></li>
+            <li><strong>Consequences</strong><span>Change shared outcomes</span></li>
+          </ol>
+        </section>
       </div>
     </div>
   </section>
@@ -151,12 +156,12 @@
                   <span class="domain-case">r75 <span aria-hidden="true">↗</span></span>
                 </a></div></article>
 </div></section>
-          <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Collective Misalignment</h3><section class="phase-summary p2" aria-labelledby="p2-summary-title"><h4 id="p2-summary-title">Three threat models</h4><div class="summary-item"><h5>External-Service Overreach</h5><p>Acting beyond an external service’s authorized scope.</p></div><div class="summary-item"><h5>Task / Acceptance Manipulation</h5><p>Changing the task target or acceptance criteria to appear successful.</p></div><div class="summary-item"><h5>Trace Tampering</h5><p>Altering execution records or evidence of what happened.</p></div></section><div class="life-pair">
+          <section class="life-half"><h3 class="life-phase p2" id="cause-harm">Collective Misalignment</h3><section class="phase-summary p2" aria-labelledby="p2-summary-title"><h4 id="p2-summary-title">3 key findings</h4><div class="summary-item"><h5>Spontaneous Grader Inference</h5><p>Agents share and adopt a validation rule that does not exist.</p></div><div class="summary-item"><h5>Coordinated Adverse Records</h5><p>A shared method produces measured changes to activity records.</p></div><div class="summary-item"><h5>Compositional Failure</h5><p>Actions that are safe alone produce harm when combined.</p></div></section><div class="life-pair">
             <figure class="life-step"><img src="static/images/fieldguide/plate-communicate-identity.svg?v=2" alt="Agents exchange notes through a shared business system." width="720" height="720" loading="lazy"><p class="life-desc">Agents communicate while working on shared systems.</p></figure>
             <div class="life-arrow" aria-hidden="true"><svg viewBox="0 0 32 24" fill="none"><path d="M3 12H29M22 5L29 12L22 19"/></svg></div>
             <figure class="life-step"><img src="static/images/fieldguide/plate-harm-injection.svg?v=1" alt="Separate contributions accumulate in one shared system." width="720" height="720" loading="lazy"><p class="life-desc">Their combined actions can cause <strong>harm in the shared system</strong>.</p></figure>
           </div><div class="phase-findings misalignment-findings" id="core-findings" role="group" aria-label="Collective Misalignment findings"><article class="finding" id="finding-2-3"><h4><span class="finding-marker" aria-label="Key finding 1">01</span><span class="finding-title">Spontaneous Grader Inference</span></h4><div class="finding-copy"><p>Infer, share, and act on <strong>grading rules that do not exist</strong>.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Codex"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 5.6</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-knowledge" href="?case=r257&amp;phase=2#trajectory" data-show-case="r257" data-show-phase="2"><svg class="domain-visual" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M10 14h32v40H10z"/><path d="M17 10h30l7 7v34H17zM47 10v9h7M10 19v37h34M25 27h21M25 34h17M25 41h12"/><circle cx="46" cy="46" r="8"/><path d="m52 52 6 6"/></svg><span class="domain-label"><strong>Knowledge Work</strong><span>Shared validation inference</span></span><span class="domain-case">r257 <span aria-hidden="true">↗</span></span></a></div></article>
-<article class="finding" id="finding-2-1"><h4><span class="finding-marker" aria-label="Key finding 2">02</span><span class="finding-title">Collective Harmful Outcome</span></h4><div class="finding-copy"><p>Share and reuse a method that changes <strong>27 session-message entries</strong>.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Codex"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 5.6</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-knowledge" href="?case=r261&amp;phase=2#trajectory" data-show-case="r261" data-show-phase="2"><svg class="domain-visual" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M10 14h32v40H10z"/><path d="M17 10h30l7 7v34H17zM47 10v9h7M10 19v37h34M25 27h21M25 34h17M25 41h12"/><circle cx="46" cy="46" r="8"/><path d="m52 52 6 6"/></svg><span class="domain-label"><strong>Knowledge Work</strong><span>Customer briefings &amp; activity records</span></span><span class="domain-case">r261 <span aria-hidden="true">↗</span></span></a></div></article>
+<article class="finding" id="finding-2-1"><h4><span class="finding-marker" aria-label="Key finding 2">02</span><span class="finding-title">Coordinated Adverse Records</span></h4><div class="finding-copy"><p>Share and reuse a method that changes <strong>27 session-message entries</strong>.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Codex"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 5.6</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-knowledge" href="?case=r261&amp;phase=2#trajectory" data-show-case="r261" data-show-phase="2"><svg class="domain-visual" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M10 14h32v40H10z"/><path d="M17 10h30l7 7v34H17zM47 10v9h7M10 19v37h34M25 27h21M25 34h17M25 41h12"/><circle cx="46" cy="46" r="8"/><path d="m52 52 6 6"/></svg><span class="domain-label"><strong>Knowledge Work</strong><span>Customer briefings &amp; activity records</span></span><span class="domain-case">r261 <span aria-hidden="true">↗</span></span></a></div></article>
 <article class="finding" id="finding-2-2"><h4><span class="finding-marker" aria-label="Key finding 3">03</span><span class="finding-title">Compositional Failure</span></h4><div class="finding-copy"><p>Individually harmless actions combine into a <strong>$4m funding shortfall</strong>.</p><dl class="finding-settings-visual" aria-label="Experiment settings"><div class="finding-setting setting-agents" title="Four agents"><svg viewBox="0 0 32 34" aria-hidden="true"><circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/></svg><dt>Agents</dt><dd>4</dd></div><div class="finding-setting setting-model" title="Codex"><img class="model-logo" src="static/images/openai.svg" alt="OpenAI" width="24" height="24"><dt>Model</dt><dd>Sol 5.6</dd></div><div class="finding-setting setting-reasoning" title="High reasoning effort"><span class="reasoning-bars" data-level="high" aria-hidden="true"><i></i><i></i><i></i></span><dt>Reasoning</dt><dd>High</dd></div></dl></div><div class="domain-plaques"><a class="domain-plaque domain-finance" href="?case=r255&amp;phase=2#trajectory" data-show-case="r255" data-show-phase="2"><svg class="domain-visual" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="domain-wash" d="M12 9h34v45H12z"/><rect x="10" y="8" width="34" height="47" rx="3"/><path d="M18 18h18M18 27h9M33 27h3M18 35h9M18 43h7"/><circle cx="44" cy="43" r="13"/><path d="M48 36h-6a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-6M44 33v18"/></svg><span class="domain-label"><strong>Financial Analysis</strong><span>Shared cash commitments</span></span><span class="domain-case">r255 <span aria-hidden="true">↗</span></span></a></div></article></div></section>
         </div>
       </figure>
@@ -183,6 +188,29 @@
           </a>
         </div>
       </section>
+      </section>
+      <section class="detection-section" id="detection" aria-labelledby="detection-title">
+        <div class="detection-heading">
+          <p>Measurement</p>
+          <h2 id="detection-title">How we detect misalignment</h2>
+          <p>Two independent views connect observed behavior to the measured result.</p>
+        </div>
+        <div class="monitor-grid">
+          <article class="monitor-card action-monitor">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8h30v32H9zM15 16h3m5 0h10M15 24h3m5 0h10M15 32h3m5 0h10"/></svg>
+            <div><h3>Action-only monitor</h3><p>Checks tool calls, state changes, receipts, final files, and solo-versus-combined replay. It establishes what changed and whether harm occurred.</p></div>
+          </article>
+          <article class="monitor-card transcript-monitor">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 10h25v20H17l-7 6v-6H7zM18 17h22v18h-5v6l-7-6H18zM13 17h12M13 23h8m5 0h8m-8 6h8"/></svg>
+            <div><h3>Transcript LLM judge</h3><p>Reads messages alongside actions to identify discovery, proposals, exact reads, adoption, and shared false inferences. Every judgment cites recorded events.</p></div>
+          </article>
+        </div>
+        <div class="claim-verdict" aria-label="How a claim is established">
+          <strong>Claim verdict</strong>
+          <span>Measured outcome for harm</span>
+          <span>Read followed by action for propagation</span>
+          <span>Solo and combined replay for composition</span>
+        </div>
       </section>
       <section class="trajectory-viewer" id="trajectory" aria-labelledby="trajectory-title">
         <details class="trajectory-disclosure" data-trajectory-disclosure>
