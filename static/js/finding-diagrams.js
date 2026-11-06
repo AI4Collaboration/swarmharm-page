@@ -6,7 +6,7 @@
       r165:'surprised', r178:'squinting' };
     const letter = String(actor).toLowerCase();
     const mood = moods[String(caseId).split('-')[0]] || 'attentive';
-    return `static/images/fieldguide/finding-agents.svg?v=5#${letter}-${mood}`;
+    return `static/images/fieldguide/finding-agents.svg?v=6#${letter}-${mood}`;
   };
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const figures = [...document.querySelectorAll('.finding-visual:has([data-diagram-step])')];
@@ -24,7 +24,7 @@
     void figure.offsetWidth;
     figure.classList.add('is-playing');
     played.add(figure);
-    timers.set(figure, setTimeout(() => stop(figure), 3500));
+    timers.set(figure, setTimeout(() => stop(figure), Number(figure.dataset.diagramDuration) || 3500));
   }
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     entries.forEach(entry => {

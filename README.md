@@ -181,14 +181,19 @@ the complete page. Resource links must point to accessible public assets. Do not
 add a Paper or evaluation-code link before its public release can be verified.
 
 `python3 scripts/build-finding-agents.py` derives 52 expression views from the
-original full-body field-guide robots. Preserve their head shape, proportions,
-mechanical texture, bodies and four identity colors. Expression changes must
-use this artwork, not substitute a new robot character or a head-only icon.
+original field-guide robots, cropped to their heads. Preserve the original head
+shape, proportions, mechanical texture and four identity colors. Reuse the artwork
+and its neighboring texture to finish the chin previously hidden by a hand. Do not
+substitute a flat icon or a new character. Small head tilts vary across identities.
 Setups, findings, threat-model diagrams, messages and action-log avatars share
 these views. Original actions, messages and evidence remain unchanged.
 
 The propagation diagrams show a proposed false rule reaching peers (r257), and
 one shared record-editing method being read and reused by two later agents (r261).
+The eraser rests on the record, with each contact pass progressively clearing a
+source-reference segment and leaving faint residue and rubber crumbs. The record
+body remains present. Its 6.2-second replay stops offscreen, with a complete static
+result when motion is reduced.
 The 27 changed entries are the whole-run result, including two independent initial
 edits. Composition remains four individual commitments aggregating to a shortfall;
 no communication is invented to explain it. Arrow emphasis plays once on entry,

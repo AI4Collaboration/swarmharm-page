@@ -1,4 +1,4 @@
-"""Build expression views from the existing editable field-guide robot rig.
+"""Build head-only expression views from the original field-guide robot art.
 
 One embedded artwork and shared definitions serve every expression. The faces
 are illustrative cues for the finding, not claims about an agent's mental state.
@@ -77,16 +77,24 @@ def failure_face(face, mood):
 
 base = ET.parse(ART / 'swarm-agent-a.svg').getroot()
 sprite = element('svg', {
-    'viewBox': '0 0 230 310', 'width': '230', 'height': '310',
-    'aria-label': 'Field-guide robots with scenario-specific expressions',
+    'viewBox': '0 0 210 150', 'width': '210', 'height': '150',
+    'aria-label': 'Original field-guide robot heads with scenario-specific expressions',
 })
 defs = deepcopy(base.find(f'{{{NS}}}defs'))
+head_cut = next(n for n in defs.iter() if n.get('id') == 'plate-0-cut-17')
+head_edge = head_cut.find(f'{{{NS}}}path')
+head_edge.set('d', head_edge.get('d').replace('L264 374L254 362', 'L282 372L264 365L254 359'))
 for letter in 'BCD':
     other = ET.parse(ART / f'swarm-agent-{letter.lower()}.svg').getroot()
     color = next(n for n in other.iter() if n.get('id') == f'robot-identity-{letter}')
     defs.append(deepcopy(color))
+# The original thinking hand occluded a small part of the chin. Continue the
+# neighboring metal texture across that gap, without redrawing the character.
+chin_clip = element('clipPath', {'id': 'head-chin-repair', 'clipPathUnits': 'userSpaceOnUse'})
+chin_clip.append(element('path', {'d': 'M330 366L348 366L363 380L330 376Z'}))
+defs.append(chin_clip)
 sprite.append(defs)
-body = base.find(f'{{{NS}}}g')
+original_head = next(n for n in base.iter() if n.get('data-rig-part') == 'head')
 
 VIEWS = [
     (letter, mood)
@@ -98,20 +106,24 @@ VIEWS = [
 
 for index, (letter, mood) in enumerate(VIEWS):
     name = f'{letter}-{mood}'
-    offset = index * 620  # Leave blank gutters between fragment views.
-    sprite.append(element('view', {'id': name, 'viewBox': f'0 {offset} 230 310'}))
-    frame = element('g', {'transform': f'translate(-198 {offset - 242})'})
-    rig = deepcopy(body)
-    rig.set('filter', f'url(#robot-identity-{letter.upper()})')
-    rig.set('data-agent', letter.upper())
-    rig.set('data-expression', mood)
-    head = next(n for n in rig.iter() if n.get('data-rig-part') == 'head')
-    arm = next(n for n in rig.iter() if n.get('data-rig-part') == 'probing-arm')
-    torso = next(n for n in rig.iter() if n.get('data-rig-part') == 'torso')
+    offset = index * 300  # Leave blank gutters between fragment views.
+    sprite.append(element('view', {'id': name, 'viewBox': f'0 {offset} 210 150'}))
+    frame = element('g', {'transform': f'translate(-214 {offset - 247})'})
+    rig = element('g', {'filter': f'url(#robot-identity-{letter.upper()})',
+                        'data-agent': letter.upper(), 'data-expression': mood})
+    head = deepcopy(original_head)
+    rig.append(head)
     distinct = mood in ('questioning', 'editing', 'money-concerned', 'money')
     for child in list(head):
         if child.get('data-gaze-eye') is not None or child.tag.endswith('path'):
             head.remove(child)
+    repair = element('g', {'clip-path': 'url(#head-chin-repair)'})
+    repair.append(element('use', {
+        'href': '#still-separate-source-0', 'width': '720', 'height': '720',
+        'filter': 'url(#plate-0-ink)', 'transform': 'translate(29 16)',
+    }))
+    head.insert(0, repair)
+    stroke(head, 'M332 376L361 380', 1.7)
 
     tilts = {'curious': -8, 'surprised': 4, 'speaking': -3,
              'attentive': 7, 'relieved': -4, 'confused': 10,
@@ -120,14 +132,11 @@ for index, (letter, mood) in enumerate(VIEWS):
     tilt = tilts[mood]
     if mood == 'confused' and letter in 'bd':
         tilt = -10
+    # Subtle differences keep a group of the same expression from looking cloned.
+    tilt += {'a': -2, 'b': 3, 'c': -4, 'd': 2}[letter]
     head.set('transform', f'rotate({tilt} 330 359)')
-    torso.set('transform', 'rotate(0 310 466)')
-    arm.set('transform', f'rotate({-24 if mood == "speaking" else -7 if mood == "curious" else 2} 263 394)')
 
     if distinct:
-        arm_angle = {'questioning': 12, 'editing': 18, 'money-concerned': 2, 'money': 2}[mood]
-        arm.set('transform', f'rotate({arm_angle} 263 394)')
-        torso.set('transform', 'rotate(0 310 466)')
         face = element('g', {'data-face': mood})
         failure_face(face, mood)
         if mood in ('money', 'money-concerned'):
@@ -138,14 +147,6 @@ for index, (letter, mood) in enumerate(VIEWS):
         else:
             head.append(face)
             frame.append(rig)
-        if mood == 'editing':
-            # The eraser is deliberately outside the identity-color filter.
-            prop = element('g', {'transform': 'rotate(-25 349 428)', 'data-prop': 'eraser'})
-            filled(prop, 'rect', x=330, y=418, width=41, height=19, rx=4,
-                   fill='#b52d40', stroke='#292020', stroke_width=2.5)
-            filled(prop, 'path', d='M356 419h11q4 0 4 4v9q0 4-4 4h-11Z', fill='#f4d5c9')
-            stroke(prop, 'M356 420v15', 2)
-            frame.append(prop)
         sprite.append(frame)
         continue
 

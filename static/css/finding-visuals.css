@@ -68,22 +68,63 @@
 @keyframes finding-step { 0%,100% { opacity:1; } 15%,70% { stroke:var(--diagram-risk); stroke-width:4; } }
 @media(prefers-reduced-motion:reduce) { .is-playing [data-diagram-step] { animation:none; } .diagram-replay { display:none; } .finding-visual:has(.diagram-replay) figcaption { padding-right:0; } }
 
-/* Original field-guide robots use simple expressions and scenario props. */
+/* Original textured heads use simple expressions and separate scenario props. */
 .failure-scene > svg { aspect-ratio:480/260; }
-.diagram-erased { fill:none; stroke:var(--diagram-paper); stroke-width:9; stroke-linecap:butt; }
-.diagram-eraser { fill:var(--diagram-risk); stroke:currentColor; stroke-width:1.8; }
-.diagram-eraser-tip { fill:#f1d5c9; }
-.diagram-crumbs { fill:none; stroke:var(--diagram-risk); stroke-width:2.5; stroke-linecap:round; }
 .diagram-solo-check-bg { fill:color-mix(in srgb,var(--discovery) 13%,var(--bg)); }
 .diagram-solo-check { fill:none; stroke:var(--discovery); stroke-width:2.8; stroke-linecap:round; stroke-linejoin:round; }
 .composition-before { opacity:0; }
 .composition-after { opacity:1; }
 .is-playing .composition-before { animation:composition-before 3.5s linear both; }
 .is-playing :is(.composition-after,.composition-impact) { animation:composition-after 3.5s linear both; }
-.is-playing .eraser-tool { animation:erase-record 1.15s 2.3s ease-in-out both; }
 @keyframes composition-before { 0%,62% { opacity:1; } 66%,100% { opacity:0; } }
 @keyframes composition-after { 0%,62% { opacity:0; } 66%,100% { opacity:1; } }
-@keyframes erase-record { 0%,100% { transform:translateX(0); } 25%,75% { transform:translateX(-9px); } 50% { transform:translateX(9px); } }
+
+/* The rubber's contact point and the three progressive masks share one timeline.
+   Only reference segments are altered; the rest of the record stays intact. */
+.record-ink { fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; }
+.record-wipe { fill:none; stroke:#000; stroke-width:7; stroke-dasharray:41; stroke-dashoffset:0; }
+.record-residue { fill:none; stroke:currentColor; stroke-width:2; stroke-dasharray:1 4; opacity:.12; }
+.record-crumbs { fill:none; stroke:#b79a8c; stroke-width:2; stroke-linecap:round; }
+.eraser-motion { transform:translate(424px,177px); }
+.eraser-contact { fill:#503a31; opacity:.16; }
+.eraser-motion path { stroke:#684b4d; stroke-width:1; stroke-linejoin:round; }
+.eraser-top { fill:#e3a2a8; }
+.eraser-side { fill:#bf747e; }
+.eraser-end { fill:#e7d3bf; }
+.eraser-tip-top { fill:#f3e5d3; }
+.eraser-tip-side { fill:#dac2ad; }
+.eraser-seam { fill:none; opacity:.55; }
+.is-playing .eraser-motion { animation:erase-contact 6.2s linear both; }
+.is-playing .record-wipe-1 { animation:erase-first 6.2s linear both; }
+.is-playing .record-wipe-2 { animation:erase-second 6.2s linear both; }
+.is-playing .record-wipe-3 { animation:erase-third 6.2s linear both; }
+.is-playing :is(.record-residue-1,.record-crumbs-1) { animation:erase-debris-first 6.2s linear both; }
+.is-playing :is(.record-residue-2,.record-crumbs-2) { animation:erase-debris-second 6.2s linear both; }
+.is-playing :is(.record-residue-3,.record-crumbs-3) { animation:erase-debris-third 6.2s linear both; }
+.is-playing .record-replacement { animation:record-replaced 6.2s linear both; }
+@keyframes erase-contact {
+  0%,36%,90%,100% { transform:translate(424px,177px); }
+  40% { transform:translate(388px,114px); }
+  44% { transform:translate(405px,114px); }
+  47% { transform:translate(397px,114px); }
+  52% { transform:translate(429px,114px); }
+  55% { transform:translate(388px,132px); }
+  59% { transform:translate(405px,132px); }
+  62% { transform:translate(397px,132px); }
+  67% { transform:translate(429px,132px); }
+  70% { transform:translate(388px,150px); }
+  74% { transform:translate(405px,150px); }
+  77% { transform:translate(397px,150px); }
+  82% { transform:translate(429px,150px); }
+}
+@keyframes erase-first { 0%,40% { stroke-dashoffset:41; } 44%,47% { stroke-dashoffset:24; } 52%,100% { stroke-dashoffset:0; } }
+@keyframes erase-second { 0%,55% { stroke-dashoffset:41; } 59%,62% { stroke-dashoffset:24; } 67%,100% { stroke-dashoffset:0; } }
+@keyframes erase-third { 0%,70% { stroke-dashoffset:41; } 74%,77% { stroke-dashoffset:24; } 82%,100% { stroke-dashoffset:0; } }
+@keyframes erase-debris-first { 0%,44% { visibility:hidden; } 47%,100% { visibility:visible; } }
+@keyframes erase-debris-second { 0%,59% { visibility:hidden; } 62%,100% { visibility:visible; } }
+@keyframes erase-debris-third { 0%,74% { visibility:hidden; } 77%,100% { visibility:visible; } }
+@keyframes record-replaced { 0%,86% { opacity:0; } 92%,100% { opacity:1; } }
 @media(prefers-reduced-motion:reduce) {
- .is-playing :is(.composition-before,.composition-after,.composition-impact,.eraser-tool) { animation:none; }
+ .is-playing :is(.composition-before,.composition-after,.composition-impact,
+  .eraser-motion,.record-wipe,.record-residue,.record-crumbs,.record-replacement) { animation:none; }
 }
