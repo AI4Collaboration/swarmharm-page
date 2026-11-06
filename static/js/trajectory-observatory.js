@@ -1,6 +1,8 @@
 (() => {
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const palette = ['#79b5ee','#b4a0e5','#80cbb7','#e5a08b'];
+  const travelMs = 1450;
+  const arrivalMs = 420;
   const playIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z"/></svg>';
   const pauseIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12"/></svg>';
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
@@ -42,33 +44,53 @@
     const laneY=id=>(actorIndex.get(id)-(actors.length-1)/2)*102;
     const lanePoint=(x,id,z=0)=>[x,laneY(id)+Math.sin((x+360)/720*Math.PI*2+actorIndex.get(id)*.6)*9,z+Math.sin((x+360)/720*Math.PI)*6];
     const eventPoint=e=>lanePoint(worldX(e.id),e.actor,e.messages.length?28:e.reads.length?19:5);
-    const hubPoint=m=>[worldX(m.event),0,176];
-    const connections=messages.flatMap(message=>[
-      {kind:'send',message,event:message.event,actor:message.actor},
-      ...message.reads.map(read=>({kind:'read',message,event:read.event,actor:read.actor,read}))
-    ]);
+    const channelHeight = 198;
+    const hubPoint=m=>[worldX(m.event),0,channelHeight];
+    // Use the very same send/read as the inspector, even when one action reads several messages.
+    const connections = moments.filter(moment => moment.message);
     function connectionPath(connection) {
       const m=connection.message,hub=hubPoint(m);
       if(connection.kind==='send') {
         const start=eventPoint(eventById.get(m.event));
-        return [start,[start[0]-16,start[1]*.72,110],[hub[0]-12,hub[1],218],hub];
+        return [start,[start[0]-15,start[1]*.75,105],[hub[0]-25,hub[1],channelHeight-3],hub];
       }
       const end=eventPoint(eventById.get(connection.event)),dx=end[0]-hub[0];
-      return [hub,[hub[0]+dx*.28,hub[1],265],[end[0]-dx*.2,end[1]*.65,185],end];
+      return [hub,[hub[0]+Math.max(28,dx*.28),hub[1],channelHeight+28],[end[0]-dx*.18+10,end[1]*.66,150],end];
     }
-    connections.forEach(c=>{c.path=connectionPath(c);c.samples=Array.from({length:37},(_,i)=>cubic(c.path,i/36));});
+    for (const connection of connections) {
+      const path = connectionPath(connection);
+      connection.samples = Array.from({length: 37}, (_, i) => cubic(path, i / 36));
+    }
+    const lanePaths = new Map(actors.map(actor => [
+      actor.id, Array.from({length: 61}, (_, i) => lanePoint(mix(-375, 375, i / 60), actor.id))
+    ]));
+    const framingPoints = [
+      ...Array.from(lanePaths.values()).flat(),
+      ...stageEvents.map(eventPoint),
+      ...connections.flatMap(connection => connection.samples)
+    ];
+    if (messages.length) framingPoints.push([-380, 0, channelHeight], [380, 0, channelHeight]);
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
-    let elapsed=0,clock=0,lastFrame=0,frame=0,speed=1;
+    let elapsed=0,lastFrame=0,frame=0,speed=1;
+    let previewingTransfer = false;
     let reading=false,focused=false,hovered=null,drag=null;
     let yaw=-.16,pitch=.72,viewWidth=760,viewHeight=510,flowWidth=1000,dpr=1;
+    let verticalScale = 1, verticalOrigin = 0;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
     const active=()=>moments[current];
     const holding=()=>reading||focused||!!hovered||!!drag;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
-    const running=()=>playing&&isVisible();
+    const running=()=>(playing || previewingTransfer) && isVisible();
+
+    function participantRole(actor, moment) {
+      if (moment.message?.actor === actor) return 'Sender';
+      if (moment.kind === 'read' && moment.actor === actor) return 'Reader';
+      if (moment.kind === 'action' && moment.actor === actor) return 'Acting';
+      return '';
+    }
 
     host.classList.add('trajectory-observatory');
     host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>Trajectory observatory</h4><span class="obs-run">${esc(data.id)}</span></div><div class="obs-top-stats"><span><b>${actors.length}</b> agents</span><span><b>${messages.length}</b> messages</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
@@ -82,8 +104,9 @@
         </section>
         <section class="obs-spatial" aria-label="Spatial view of recorded agent actions">
           <header class="obs-panel-heading"><h5>${noMessages?'Action landscape':'Communication window'}<span>${stageEvents.length} actions</span></h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select a point to read</div><div class="obs-route" data-route></div></div>
-          <div class="obs-agent-strip">${actors.map(a=>`<div style="--agent:${color(a.id)}"><span>${a.id}</span><div><strong>${esc(a.name)}</strong><small data-actor-count="${a.id}"></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
+          <div class="obs-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select a point to read</div></div>
+          <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${color(a.id)}"><span>${a.id}</span><div><strong>${esc(a.name)}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
       <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>Event flow</h5><span>${events.length} actions · recorded order</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
@@ -99,6 +122,9 @@
     const tooltips=new Map([[scene,host.querySelector('.obs-graph-tooltip')],[flow,host.querySelector('.obs-flow-tooltip')]]);
     const indexButtons=[...host.querySelectorAll('[data-message]')];
     const fontFamily=getComputedStyle(host).fontFamily;
+    const routeHeading = host.querySelector('.obs-route-heading');
+    const routeQuote = host.querySelector('.obs-route-quote');
+    const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
     const eventMoment=new Map();
     moments.forEach(m=>{if(!eventMoment.has(m.event))eventMoment.set(m.event,m.order);});
@@ -128,9 +154,50 @@
       host.querySelector('[data-prev-message]').disabled=noMessages?current===0:(m.index??messages.length)===0;
       host.querySelector('[data-next-message]').disabled=m.kind==='outcome';
     }
-    function select(index) {
+    function showExchange(moment) {
+      const message = moment.message;
+      routeHeading.replaceChildren();
+      routeQuote.hidden = !message;
+      routeQuote.textContent = '';
+      if (!message) {
+        routeHeading.textContent = moment.kind === 'action'
+          ? names.get(moment.actor) + ' · ' + moment.action.label
+          : 'Recorded sequence complete';
+        return;
+      }
+
+      const number = document.createElement('span');
+      number.className = 'obs-route-number';
+      number.textContent = 'Message ' + String(moment.index + 1).padStart(2, '0');
+      const sender = document.createElement('strong');
+      sender.textContent = names.get(message.actor);
+      sender.style.color = color(message.actor);
+      const verb = document.createElement('span');
+      verb.className = 'obs-route-verb';
+      const recipient = document.createElement('strong');
+      if (moment.kind === 'read') {
+        recipient.textContent = names.get(moment.actor);
+        recipient.style.color = color(moment.actor);
+      } else {
+        recipient.textContent = channel;
+      }
+      verb.textContent = '→';
+      const description = moment.kind === 'read' ? 'read by' : 'posted to';
+      verb.setAttribute('role', 'img');
+      verb.setAttribute('aria-label', description);
+      routeHeading.append(number, sender, verb, recipient);
+
+      const body = message.body.trim();
+      const prefix = body.slice(0, 170);
+      const atWord = prefix.replace(/\s+\S*$/, '').trimEnd();
+      const excerpt = body.length <= prefix.length ? body : (atWord.length > 130 ? atWord : prefix) + '…';
+      routeQuote.textContent = '“' + excerpt + '”';
+    }
+
+    function select(index, preview = false) {
       current=clamp(index,0,moments.length-1);elapsed=0;
       const m=active(),message=m.message,id=message?.actor||m.actor;
+      previewingTransfer = preview && Boolean(message) && !reduced;
       host.style.setProperty('--signal',color(id));
       host.dataset.moment=m.kind;
       host.querySelector('[data-author-dot]').style.background=color(id);
@@ -145,8 +212,14 @@
         const readIndex=moments.findIndex(v=>v.kind==='read'&&v.event===read.event&&v.message.id===message.id);
         return `<button type="button" data-obs-receipt="${readIndex}" aria-current="${readIndex===current?'step':'false'}" class="${readIndex<=current?'is-received':''}" style="--agent:${color(read.actor)}" aria-label="${esc(names.get(read.actor))} reads this message at turn ${read.turn}"><i>${read.actor}</i><span>${esc(names.get(read.actor))}</span><b>${readIndex<=current?'✓':'·'}</b></button>`;
       }).join('')}</div>`:noMessages&&m.kind!=='outcome'?'<span>No authored messages in this run</span>':'<span>Source records remain available below</span>';
-      host.querySelector('[data-route]').innerHTML=m.kind==='send'?`<b style="color:${color(m.actor)}">${esc(names.get(m.actor))}</b><span>→</span><b>${channel}</b><small>Message ${String(m.index+1).padStart(2,'0')} published</small>`:m.kind==='read'?`<b style="color:${color(message.actor)}">${esc(names.get(message.actor))}</b><span>→</span><b style="color:${color(m.actor)}">${esc(names.get(m.actor))}</b><small>Read through ${channel.toLowerCase()}</small>`:m.kind==='outcome'?'<b>Recorded sequence complete</b>':`<b style="color:${color(m.actor)}">${esc(names.get(m.actor))}</b><small>${esc(m.action.label)}</small>`;
+      showExchange(m);
       actors.forEach(a=>{
+        const row = stripRows.get(a.id);
+        const role = participantRole(a.id, m);
+        row.toggleAttribute('data-participant', Boolean(role));
+        const roleLabel = row.querySelector('[data-actor-role]');
+        roleLabel.textContent = role;
+        roleLabel.hidden = !role;
         const sent=messages.filter(x=>x.actor===a.id&&x.event<=m.event).length;
         const reads=moments.filter(x=>x.kind==='read'&&x.actor===a.id&&x.order<=current).length;
         host.querySelector(`[data-actor-count="${a.id}"]`).textContent=noMessages?`${events.filter(e=>e.actor===a.id&&e.id<=m.event).length} actions`:`${sent} sent · ${reads} read`;
@@ -155,21 +228,40 @@
       indexButtons.forEach(button=>{const selected=button.dataset.message===message?.id;button.setAttribute('aria-pressed',String(selected));button.classList.toggle('is-future',sendIndex.get(button.dataset.message)>current);});
       const selectedRow=indexButtons.find(button=>button.dataset.message===message?.id);
       if(selectedRow){const list=selectedRow.parentElement,row=selectedRow.getBoundingClientRect(),box=list.getBoundingClientRect();if(row.top<box.top)list.scrollTop+=row.top-box.top;else if(row.bottom>box.bottom)list.scrollTop+=row.bottom-box.bottom;}
-      updateControls();draw();
+      updateControls();draw();ensureFrame();
     }
-    function stop(){playing=false;lastFrame=0;updateControls();cancelAnimationFrame(frame);frame=0;draw();}
-    function seek(index){started=true;stop();hovered=null;hideTooltips();select(index);}
-    function togglePlay(){started=true;if(playing){stop();return;}if(active().kind==='outcome')select(0);playing=true;lastFrame=0;updateControls();ensureFrame();}
+    function stop(){playing=false;previewingTransfer=false;lastFrame=0;updateControls();cancelAnimationFrame(frame);frame=0;draw();}
+    function seek(index){started=true;stop();hovered=null;hideTooltips();select(index,true);}
+    function togglePlay(){started=true;if(playing){stop();return;}if(active().kind==='outcome')select(0);previewingTransfer=false;playing=true;lastFrame=0;updateControls();ensureFrame();}
     function openOriginal(){stop();const m=active();openRecord(m.kind==='outcome'?null:[m.event]);}
     function moveMessage(direction){const m=active();if(noMessages){seek(current+direction);return;}const at=m.message?m.index:messages.length;const next=at+direction;if(next>=messages.length)seek(moments.length-1);else seek(sendIndex.get(messages[Math.max(0,next)].id));}
 
-    function project(p) {
-      const angle=yaw+(playing&&!reduced?Math.sin(clock*.12)*.022:0);
-      const x=p[0]*Math.cos(angle)-p[1]*Math.sin(angle),y=p[0]*Math.sin(angle)+p[1]*Math.cos(angle);
-      const scale=(viewWidth-70)/830,depth=1+y*.00038;
-      // Small screens retain vertical separation instead of shrinking all axes.
-      const verticalScale=Math.max(.65,scale);
-      return [viewWidth*.5+x*scale*depth,viewHeight*.56+(y*Math.sin(pitch)-p[2]*Math.cos(pitch))*verticalScale*depth];
+    function elevation(depth, height) {
+      return (depth * Math.sin(pitch) - height * Math.cos(pitch)) * (1 + depth * .00038);
+    }
+    function fitCamera() {
+      // Fit the whole recording once per camera change so switching messages keeps the rails steady.
+      let lowest = Infinity, highest = -Infinity;
+      for (const [x, y, z] of framingPoints) {
+        const depth = x * Math.sin(yaw) + y * Math.cos(yaw);
+        const height = elevation(depth, z);
+        lowest = Math.min(lowest, height);
+        highest = Math.max(highest, height);
+      }
+      const top = viewWidth > 590 ? 45 : 65;
+      const available = Math.max(1, viewHeight - top - 31);
+      const span = Math.max(1, highest - lowest);
+      verticalScale = Math.min(Math.max(.65, (viewWidth - 70) / 830), available / span);
+      verticalOrigin = top + (available - span * verticalScale) / 2 - lowest * verticalScale;
+    }
+    function project([x, y, z]) {
+      const depth = x * Math.sin(yaw) + y * Math.cos(yaw);
+      const across = x * Math.cos(yaw) - y * Math.sin(yaw);
+      const horizontalScale = (viewWidth - 70) / 830;
+      return [
+        viewWidth / 2 + across * horizontalScale * (1 + depth * .00038),
+        verticalOrigin + elevation(depth, z) * verticalScale
+      ];
     }
     function strokePoints(context,points,stroke,width=1) {
       context.beginPath();points.forEach((p,i)=>i?context.lineTo(p[0],p[1]):context.moveTo(p[0],p[1]));context.strokeStyle=stroke;context.lineWidth=width;context.stroke();
@@ -184,57 +276,189 @@
     function drawLabel(label,p,c,small=false) {
       ctx.font=`${small?'10':'11'}px ${fontFamily}`;ctx.fillStyle=c;ctx.fillText(label,p[0],p[1]);
     }
-    function isActiveConnection(c) {const m=active();return m.message?.id===c.message.id&&(m.kind==='send'?c.kind==='send':m.kind==='read'&&(c.kind==='send'||c.actor===m.actor&&c.event===m.event));}
+    function drawTransfer(moment) {
+      const points = moment.samples.map(project);
+      const start = points[0];
+      const end = points.at(-1);
+      const senderColor = color(moment.message.actor);
+      const endColor = color(moment.actor);
+      const gradient = ctx.createLinearGradient(...start, ...end);
+      gradient.addColorStop(0, senderColor);
+      gradient.addColorStop(1, endColor);
+
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      strokePoints(ctx, points, senderColor + '12', 9);
+      strokePoints(ctx, points, gradient, 2.3);
+
+      // Direction stays legible when the reader pauses or requests reduced motion.
+      const arrowIndex = Math.floor(points.length * .62);
+      const ahead = points[arrowIndex + 1];
+      const behind = points[arrowIndex - 1];
+      ctx.save();
+      ctx.translate(...points[arrowIndex]);
+      ctx.rotate(Math.atan2(ahead[1] - behind[1], ahead[0] - behind[0]));
+      strokePoints(ctx, [[-4, -3.5], [1, 0], [-4, 3.5]], '#edf5ff', 1.8);
+      ctx.restore();
+
+      const progress = reduced ? 1 : clamp(elapsed / travelMs, 0, 1);
+      if (progress < 1) {
+        const position = progress * (points.length - 1);
+        const index = Math.floor(position);
+        const fraction = position - index;
+        const next = points[index + 1];
+        const head = points[index].map((v, axis) => mix(v, next[axis], fraction));
+        const tail = points.slice(Math.max(0, index - 4), index + 1);
+        strokePoints(ctx, [...tail, head], '#f4f8ffb0', 2.8);
+        glow(ctx, ...head, 18, endColor);
+        dot(ctx, ...head, 3, '#ffffff');
+      } else if (!reduced && elapsed < travelMs + arrivalMs) {
+        const arrival = (elapsed - travelMs) / arrivalMs;
+        ctx.globalAlpha = 1 - arrival;
+        dot(ctx, ...end, 10 + 11 * arrival, endColor, false);
+      }
+      ctx.restore();
+    }
+
+    function markParticipant(moment, label, alignLeft) {
+      const event = eventById.get(moment.event);
+      const [x, y] = project(eventPoint(event));
+      const ink = color(event.actor);
+      glow(ctx, x, y, 22, ink, .75);
+      dot(ctx, x, y, 8.5, '#151b23');
+      dot(ctx, x, y, 8.5, ink, false);
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.font = '600 10px ' + fontFamily;
+      ctx.fillStyle = '#edf4fc';
+      ctx.fillText(event.actor, x, y + 3.5);
+      ctx.textAlign = 'left';
+      const showName = viewWidth > 495;
+      const caption = showName ? names.get(event.actor) : label;
+      ctx.font = '550 11px ' + fontFamily;
+      const width = ctx.measureText(caption).width;
+      const fitsLeft = x - 13 - width > 3;
+      const fitsRight = x + 13 + width < viewWidth - 3;
+      const placeLeft = fitsLeft && (alignLeft || !fitsRight);
+      const left = clamp(placeLeft ? x - 13 - width : x + 13, 3, viewWidth - width - 4);
+      const labelY = showName ? y - 1 : y + 3.5;
+      ctx.fillStyle = '#10151df0';
+      ctx.fillRect(left - 2, labelY - 10, width + 4, showName ? 25 : 14);
+      ctx.fillStyle = ink;
+      ctx.fillText(caption, left, labelY);
+      if (showName) {
+        ctx.font = '10px ' + fontFamily;
+        ctx.fillStyle = '#b9c4d1';
+        ctx.fillText(label, left, labelY + 12);
+      }
+      ctx.restore();
+      sceneHits.push({x, y, r: 10, event: event.id, moment: moment.order});
+    }
+
     function drawSpatial() {
-      ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,viewWidth,viewHeight);sceneHits=[];
-      const m=active(),endY=(actors.length/2)*102,currentX=worldX(m.event);
-      // Every point represents an actual tool action. The floor is event order.
-      for(let i=0;i<=10;i++) {const x=mix(-390,390,i/10);strokePoints(ctx,[project([x,-endY,0]),project([x,endY,0])],'#b7c7e011',.6);}
-      for(let y=-endY;y<=endY;y+=34)strokePoints(ctx,[project([-390,y,0]),project([390,y,0])],'#b7c7e009',.6);
-      const plane=[project([currentX,-endY,0]),project([currentX,endY,0]),project([currentX,endY,125]),project([currentX,-endY,125])];
-      ctx.beginPath();plane.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();ctx.fillStyle='#b6cee805';ctx.fill();strokePoints(ctx,[plane[0],plane[1]],'#b9d9ff42',1);
-      actors.forEach(a=>{
-        const y=laneY(a.id),c=color(a.id),rail=Array.from({length:61},(_,i)=>project(lanePoint(mix(-375,375,i/60),a.id)));
-        strokePoints(ctx,rail,c+'0c',19);strokePoints(ctx,rail,c+'20',7);strokePoints(ctx,rail,c+'7a',.8);
-        const label=project([-390,y,0]);dot(ctx,label[0],label[1],10,'#12171f');ctx.textAlign='center';drawLabel(a.id,[label[0],label[1]+4],c);ctx.textAlign='left';
-        if(viewWidth>460){const name=project([-350,y,-20]);drawLabel(short(a.name,22),[name[0],name[1]+13],c+'b8',true);}
-      });
-      if(!noMessages){strokePoints(ctx,[project([-380,0,176]),project([380,0,176])],'#e8d5b64d',.7);const p=project([-380,0,176]);drawLabel(channel,[p[0],p[1]-17],'#ded1b6',true);}
-      const paths=connections.map(c=>({c,points:c.samples.map(project),selected:isActiveConnection(c)}));
-      paths.sort((a,b)=>Number(a.selected)-Number(b.selected));
-      paths.forEach(({c,points,selected})=>{
-        const visible=c.event<=m.event,cx=color(c.message.actor);
-        strokePoints(ctx,points,cx+(selected?'db':visible?'70':'30'),selected?1.55:.8);
-        if(!selected)return;
-        ctx.save();ctx.globalCompositeOperation='lighter';strokePoints(ctx,points,cx+'08',11);strokePoints(ctx,points,cx+'17',4);
-        const t=reduced?.57:clock*.22;
-        for(let n=0;n<3;n++) {
-          const head=(t+n/3)%1;
-          for(let trail=12;trail>=0;trail--) {
-            const u=head-trail*.006;if(u<0)continue;const p=project(cubic(c.path,u));ctx.globalAlpha=(1-trail/13)*.9;dot(ctx,...p,trail===0?2.2:1.1,cx);
-          }
-          const p=project(cubic(c.path,head));ctx.globalAlpha=1;glow(ctx,...p,20,cx,.85);dot(ctx,...p,1.5,'#fff4e6');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, viewWidth, viewHeight);
+      sceneHits = [];
+      const moment = active();
+      const focused = moment.kind !== 'outcome';
+      const endY = actors.length * 51;
+      const originalSend = moment.message && moments[sendIndex.get(moment.message.id)];
+
+      for (let i = 0; i <= 10; i++) {
+        const x = mix(-390, 390, i / 10);
+        strokePoints(ctx, [project([x, -endY, 0]), project([x, endY, 0])], '#b7c7e00d', .6);
+      }
+
+      // Other exchanges stay behind the rails and never carry moving packets.
+      for (const connection of connections) {
+        if (connection === moment || connection === originalSend) continue;
+        let ink = '#9baabc0a';
+        if (connection.event <= moment.event) ink = '#9baabc1c';
+        if (!focused) ink = color(connection.message.actor) + '56';
+        strokePoints(ctx, connection.samples.map(project), ink, .75);
+      }
+
+      for (const actor of actors) {
+        const role = participantRole(actor.id, moment);
+        const lit = Boolean(role) || !focused;
+        const ink = lit ? color(actor.id) : '#78899b';
+        const rail = lanePaths.get(actor.id).map(project);
+        if (lit) strokePoints(ctx, rail, ink + '16', 7);
+        strokePoints(ctx, rail, ink + (lit ? 'a6' : '43'), lit ? 1.2 : .8);
+        const y = laneY(actor.id);
+        const label = project([-390, y, 0]);
+        ctx.textAlign = 'center';
+        drawLabel(actor.id, [label[0], label[1] + 4], ink);
+        ctx.textAlign = 'left';
+        if (!focused && viewWidth > 460) {
+          const name = project([-350, y, -20]);
+          drawLabel(short(actor.name, 22), [name[0], name[1] + 12], lit ? ink : '#73808e', true);
         }
-        ctx.restore();
-      });
-      stageEvents.forEach(e=>{
-        const p=project(eventPoint(e)),base=project(lanePoint(worldX(e.id),e.actor));
-        const isMessage=e.messages.length>0,isRead=e.reads.length>0,selected=m.event===e.id,seen=e.id<=m.event,c=color(e.actor);
-        if(isMessage||isRead){strokePoints(ctx,[base,p],c+(seen?'65':'25'),.7);}
-        if(selected)glow(ctx,...p,28,c,.9);
-        dot(ctx,...p,selected?4.8:isMessage?3.7:isRead?3:1.7,c+(seen?'ef':'60'),!isRead||isMessage);
-        if(selected)dot(ctx,...p,7,c+'76',false);
-        sceneHits.push({x:p[0],y:p[1],event:e.id,r:isMessage?9:7});
-      });
-      messages.forEach(message=>{
-        const p=project(hubPoint(message)),selected=m.message?.id===message.id,c=color(message.actor),seen=message.event<=m.event;
-        if(selected) {glow(ctx,...p,38,c,.8);const radius=8+(reduced?.6:(clock*.6)%1)*12;dot(ctx,...p,radius,c+'46',false);}
-        dot(ctx,...p,selected?4:2.3,c+(seen?'ed':'4d'));if(selected)dot(ctx,...p,1.5,'#ffffff');
-        sceneHits.push({x:p[0],y:p[1],message:message.id,event:message.event,r:12});
-        if(selected){const label=project([worldX(message.event),0,204]);ctx.textAlign='center';drawLabel(`Message ${String(messages.indexOf(message)+1).padStart(2,'0')}`,[label[0],label[1]-9],c);ctx.textAlign='left';}
-      });
-      if(hovered?.surface===scene){const p=hovered.hit;glow(ctx,p.x,p.y,20,'#d8e5f3',.7);dot(ctx,p.x,p.y,7,'#e4ecf6',false);}
-      const left=project([-360,endY,0]),right=project([360,endY,0]);drawLabel(stageEvents[0]?.time||'',left,'#7e8794',true);ctx.textAlign='right';drawLabel(stageEvents.at(-1)?.time||'',right,'#7e8794',true);ctx.textAlign='left';
+      }
+
+      if (!noMessages) {
+        const left = project([-380, 0, channelHeight]);
+        strokePoints(ctx, [left, project([380, 0, channelHeight])], '#b6c3d139', .7);
+        drawLabel(channel, [left[0], left[1] + 14], '#85909e', true);
+      }
+
+      for (const event of stageEvents) {
+        const [x, y] = project(eventPoint(event));
+        const sent = event.messages.length > 0;
+        const read = event.reads.length > 0;
+        const participant = participantRole(event.actor, moment);
+        const actorInk = color(event.actor);
+        let ink = '#8290a13b';
+        if (participant) ink = actorInk + '70';
+        if (!focused) ink = actorInk + 'b8';
+        if (focused && event.id > moment.event) ink = '#8290a12c';
+        dot(ctx, x, y, sent ? 2.8 : read ? 2.4 : 1.4, ink, !read || sent);
+        sceneHits.push({x, y, event: event.id, r: sent ? 8 : 6});
+      }
+
+      for (const message of messages) {
+        const [x, y] = project(hubPoint(message));
+        dot(ctx, x, y, 2.1, focused ? '#9aaabb51' : color(message.actor));
+        sceneHits.push({x, y, message: message.id, event: message.event, r: 7});
+      }
+
+      if (originalSend) {
+        // A read starts at the stored message. Its earlier send is a static trace.
+        if (moment.kind === 'read') {
+          strokePoints(ctx, originalSend.samples.map(project), color(originalSend.actor) + 'ae', 1.2);
+        }
+        drawTransfer(moment);
+        markParticipant(originalSend, 'Sent', true);
+        if (moment.kind === 'read') markParticipant(moment, 'Read', false);
+
+        const [x, y] = project(hubPoint(moment.message));
+        const ink = color(originalSend.actor);
+        glow(ctx, x, y, 17, ink);
+        ctx.fillStyle = '#18202b';
+        ctx.strokeStyle = ink;
+        ctx.lineWidth = 1.3;
+        ctx.fillRect(x - 6.5, y - 4.5, 13, 9);
+        ctx.strokeRect(x - 6.5, y - 4.5, 13, 9);
+        strokePoints(ctx, [[x - 6, y - 4], [x, y + .5], [x + 6, y - 4]], ink, 1);
+        const labelX = clamp(x, 38, viewWidth - 38);
+        const labelY = clamp(y - 17, 14, viewHeight - 10);
+        ctx.textAlign = 'center';
+        drawLabel('Message ' + String(moment.index + 1).padStart(2, '0'), [labelX, labelY], '#e7ecf4');
+        ctx.textAlign = 'left';
+        sceneHits.push({x, y, r: 9, event: originalSend.event, moment: originalSend.order});
+      } else if (moment.kind === 'action') {
+        markParticipant(moment, 'Action', false);
+      }
+
+      if (hovered?.surface === scene) {
+        const hit = hovered.hit;
+        dot(ctx, hit.x, hit.y, 8, '#e4ecf6', false);
+      }
+      drawLabel(stageEvents[0]?.time || '', [16, viewHeight - 7], '#798594', true);
+      ctx.textAlign = 'right';
+      drawLabel(stageEvents.at(-1)?.time || '', [viewWidth - 16, viewHeight - 7], '#798594', true);
+      ctx.textAlign = 'left';
     }
     function flowPoint(e){return [68+eventFraction(e.id)*(flowWidth-91),23+actorIndex.get(e.actor)*31];}
     function cacheFlowRidges(){
@@ -254,36 +478,83 @@
         fctx.fillStyle=c;fctx.fillText(a.id,16,y+4);fctx.fillStyle='#6b7789';fctx.fillText(String(own.length),32,y+4);
       });
       const x=68+eventFraction(m.event)*(flowWidth-91);strokePoints(fctx,[[x,4],[x,137]],'#c9e2ff77',1);glow(fctx,x,70,65,color(m.message?.actor||m.actor),.25);
-      events.forEach(e=>{const p=flowPoint(e),selected=e.id===m.event,c=color(e.actor),seen=e.id<=m.event;
-        if(selected)glow(fctx,...p,18,c);dot(fctx,...p,selected?4.5:e.messages.length?3:e.reads.length?2.5:1.7,c+(seen?'dd':'4d'),!e.reads.length||e.messages.length>0);flowHits.push({x:p[0],y:p[1],event:e.id,r:8});});
+      for (const event of events) {
+        const point = flowPoint(event);
+        const isEndpoint = event.id === m.event || event.id === m.message?.event;
+        const participant = participantRole(event.actor, m);
+        const ink = color(event.actor);
+        let dotColor = '#8292a25c';
+        if (participant || m.kind === 'outcome') dotColor = ink + 'a0';
+        if (event.id > m.event) dotColor = '#8292a244';
+        let radius = event.messages.length ? 3 : event.reads.length ? 2.5 : 1.7;
+        if (isEndpoint) {
+          glow(fctx, ...point, 16, ink);
+          radius = 4.3;
+          dotColor = ink;
+        }
+        dot(fctx, ...point, radius, dotColor, !event.reads.length || event.messages.length > 0);
+        const hit = {x: point[0], y: point[1], event: event.id, r: 8};
+        if (event.id === m.event) hit.moment = m.order;
+        else if (event.id === m.message?.event) hit.moment = sendIndex.get(m.message.id);
+        flowHits.push(hit);
+      }
       if(hovered?.surface===flow)dot(fctx,hovered.hit.x,hovered.hit.y,7,'#e4ecf6',false);
       fctx.fillStyle='#7e8794';fctx.fillText(events[0]?.time||'',68,158);fctx.textAlign='right';fctx.fillText(events.at(-1)?.time||'',flowWidth-23,158);fctx.textAlign='left';
     }
     function draw(){if(disposed||!ctx||!fctx)return;drawSpatial();drawFlow();}
-    function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);cacheFlowRidges();draw();}
+    function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);fitCamera();cacheFlowRidges();draw();}
     function ensureFrame(){if(!frame&&running())frame=requestAnimationFrame(animate);}
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
-      const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;clock+=dt/1000;
-      if(!holding()){
-        elapsed+=dt*speed;const m=active();const duration=m.kind==='send'?7200:m.kind==='read'?3100:m.kind==='outcome'?5500:1800;
-        if(elapsed>=duration){if(current===moments.length-1){stop();return;}select(current+1);}
+      const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
+      if (previewingTransfer || !holding()) {
+        const moment = active();
+        const moving = moment.message && !reduced && elapsed < travelMs + arrivalMs;
+        elapsed += dt * speed;
+        if (previewingTransfer && elapsed >= travelMs + arrivalMs) previewingTransfer = false;
+        const duration = {send: 7200, read: 3100, outcome: 5500, action: 1800}[moment.kind];
+        if (playing && elapsed >= duration) {
+          if (current === moments.length - 1) { stop(); return; }
+          select(current + 1);
+        } else if (moving && ctx) {
+          drawSpatial();
+        }
       }
-      draw();ensureFrame();
+      ensureFrame();
     }
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
-    function nearest(surface,x,y){let best=null,dist=Infinity;for(const hit of surface===scene?sceneHits:flowHits){const d=Math.hypot(hit.x-x,hit.y-y);if(d<hit.r&&d<dist){best=hit;dist=d;}}return best;}
+    function nearest(surface, x, y) {
+      let best = null, distance = Infinity;
+      for (const hit of surface === scene ? sceneHits : flowHits) {
+        const d = Math.hypot(hit.x - x, hit.y - y);
+        if (d >= hit.r) continue;
+        // The labelled endpoints sit above other records that share the same coordinates.
+        const priority = hit.moment !== undefined;
+        if (best && best.moment !== undefined && !priority) continue;
+        if (d < distance || (priority && best?.moment === undefined)) {
+          best = hit;
+          distance = d;
+        }
+      }
+      return best;
+    }
     function hover(surface,event){
       const box=surface.getBoundingClientRect(),x=event.clientX-box.left,y=event.clientY-box.top,hit=nearest(surface,x,y),tip=tooltips.get(surface);
       if(!hit){hovered=null;tip.hidden=true;updateControls();draw();return;}
-      hovered={surface,hit};const e=eventById.get(hit.event),message=hit.message?messageById.get(hit.message):messageById.get(e.messages[0]);
-      tip.innerHTML=`<strong style="color:${color(e.actor)}">${esc(names.get(e.actor))}<time>${esc(e.time)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${message?'Select message':'Open original action'}</small>`;tip.hidden=false;
+      hovered={surface,hit};const e=eventById.get(hit.event);
+      const moment = moments[hit.moment ?? eventMoment.get(hit.event)];
+      const message = messageById.get(hit.message) || moment?.message || messageById.get(e.messages[0]);
+      let label = 'Open original action';
+      if (message) label = 'Select message';
+      if (moment?.kind === 'read') label = 'Select recorded read';
+      if (moment?.kind === 'action') label = 'Select action';
+      tip.innerHTML=`<strong style="color:${color(e.actor)}">${esc(names.get(e.actor))}<time>${esc(e.time)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
       tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';updateControls();draw();
     }
-    function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
+    function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
     [scene,flow].forEach(surface=>{
       on(surface,'pointermove',event=>{
-        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=clamp(drag.yaw+dx*.002,-.5,.5);pitch=clamp(drag.pitch+dy*.003,.35,1.1);hideTooltips();draw();return;}
+        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=clamp(drag.yaw+dx*.002,-.5,.5);pitch=clamp(drag.pitch+dy*.003,.35,1.1);fitCamera();hideTooltips();draw();return;}
         if(event.pointerType==='mouse')hover(surface,event);
       });
       on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
@@ -304,7 +575,7 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal();
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);documentPanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=-.16;pitch=.72;draw();}
+      else if(button.hasAttribute('data-reset')){yaw=-.16;pitch=.72;fitCamera();draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
