@@ -16,6 +16,21 @@
   border-left: 1px solid var(--line);
   padding-left: 24px;
 }
+.institution-eurosafe-fixed {
+  flex: none;
+}
+.institution-eurosafe-fixed a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 52px;
+  text-decoration: none;
+}
+.institution-eurosafe-fixed img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
 .institution-caption {
   flex: none;
   color: var(--muted);
