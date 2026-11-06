@@ -111,7 +111,6 @@
     on(window,'scroll',hideTip,{passive:true});on(window,'resize',hideTip);on(scroller,'scroll',hideTip,{passive:true});
     const graph=document.createElement('section');graph.className='record-coordinate';graph.setAttribute('aria-label','Communication replay');container.prepend(graph);
     const mapSection=document.createElement('section');mapSection.className='record-map-section';
-    mapSection.innerHTML='<header class="record-map-heading"><h4>Communication replay</h4><p>Watch messages move through the shared channel</p></header>';
     graph.before(mapSection);mapSection.append(graph);
     const evidence=document.createElement('div');evidence.className='record-evidence-disclosures';
     const runDisclosure=document.createElement('details');runDisclosure.className='record-evidence record-run-disclosure';runDisclosure.innerHTML=`<summary><span><b>Full turn record</b><small>${data.counts.turns} turns</small></span><i aria-hidden="true"></i></summary>`;
@@ -119,7 +118,7 @@
     const log=document.createElement('details');log.className='record-evidence record-log';log.innerHTML=`<summary><span><b>Message and action log</b><small>${data.counts.actions} recorded actions</small></span><i aria-hidden="true"></i></summary>`;
     log.append(container.querySelector('.record-controls'),container.querySelector('.record-counts'),list);
     evidence.append(runDisclosure,log);mapSection.after(evidence);container.append(detail);
-    const disposeMap=window.mountRecordedAgentMap(graph,data,meta,ids=>{
+    const disposeMap=window.mountTrajectoryObservatory(graph,data,meta,ids=>{
       if(ids){const event=events.get(ids[0]);selectTurn(event.actor,event.turn);openEvents(ids);}
       else {hideTip();detail.innerHTML=`<header><h4>Outcome</h4><button type="button" data-close-record aria-label="Close original record">×</button></header><p class="case-outcome">${esc(meta.outcome)}</p><p class="case-scope">${esc(meta.scope)}</p>`;showDetail();}
     });

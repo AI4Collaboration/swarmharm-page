@@ -4,6 +4,7 @@
   const disclosure=root.querySelector('[data-trajectory-disclosure]');
   const select=root.querySelector('[data-case-select]'),intro=root.querySelector('[data-case-intro]');
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
+  const details=root.querySelector('[data-case-details]');
   const cache=new Map();let version=0,dispose=null,request=null;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icons={
@@ -40,14 +41,15 @@
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
-    intro.innerHTML=`<div class="case-setup"><p class="case-meta">${escape(item.mode)} · ${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>${outcomeMarkup(item)}`;
+    intro.innerHTML=`<div class="case-setup"><p class="case-meta">${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>`;
+    details.innerHTML=outcomeMarkup(item);
     if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${c.id==='r263'?'Haiku 5.5':'Sol 5.6'} · ${escape(c.id)}</button>`;}).join('')}</div>`);
     if(item.composition){
       const p=item.composition;
-      intro.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
+      details.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
     }
     const parameters=visibleSettings(item.parameters);
-    intro.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><span class="when-closed">View details</span><span class="when-open">Hide details</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>Download independent review</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
+    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><span class="when-closed">View details</span><span class="when-open">Hide details</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>Download independent review</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
     if(!item.full){
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }

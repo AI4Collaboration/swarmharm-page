@@ -63,13 +63,19 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The communication replay shows four agents exchanging messages through a shared
-channel, beside the complete original message text. Animated packets, receipt
-badges and the event-order timeline follow recorded sends and verified reads.
-Hovering or focusing the transcript holds playback for reading. Reduced motion
-disables autoplay. Cases without messages show recorded actions instead.
+`static/js/trajectory-observatory.js` renders a spatial view of recorded agent
+actions beside the complete original message text. Four agent lanes connect to
+a shared channel; animated packets follow recorded sends and verified reads.
+The spatial view focuses on the communication window, while the full event flow
+below retains every recorded action in event order, rather than elapsed-time
+spacing. Each point opens its message or source record. Drag to rotate, select
+a message or reader, or scrub the sequence; all views stay synchronized.
+Hovering or focusing the message holds playback for reading. Reduced motion
+disables autoplay, and offscreen views stop drawing. Cases without messages
+show recorded actions and tool arguments, with no invented communication links.
 The full turn grid and action log remain in collapsed evidence disclosures;
-the Original button opens each message's underlying logs. They load one case
+the Original record and Read record buttons open the selected event's underlying
+logs. Detailed outcomes and Settings & evidence follow the replay. They load one case
 at a time. For example,
 `?case=r261&phase=2` selects the current record-change case. Findings links use
 the same selector. Earlier r199/r74/r187 Phase 2 links still open their original
