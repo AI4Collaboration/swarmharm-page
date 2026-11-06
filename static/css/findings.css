@@ -72,6 +72,8 @@
 .case-settings > .case-setting { --setting-color:var(--discovery); display:grid; grid-template-columns:24px minmax(0,1fr); grid-template-rows:auto auto; align-content:center; gap:0 8px; min-width:0; padding:8px 10px; border-radius:7px; background:color-mix(in srgb,var(--setting-color) 7%,var(--bg)); }
 .case-setting[data-setting="harness"] { --setting-color:var(--traj-d); }
 .case-setting[data-setting="reasoning"] { --setting-color:var(--coordination); }
+.case-setting[data-setting="reasoning"][data-value="high"] { --setting-color:var(--reasoning-high); }
+.case-setting[data-setting="reasoning"][data-value="high"] :is(dt,dd) { color:var(--reasoning-high); }
 .case-setting[data-setting="feedback"] { --setting-color:var(--record-tool); }
 .case-setting-icon { grid-column:1; grid-row:1/3; align-self:center; display:flex; color:var(--setting-color); }
 .case-setting-icon svg { width:23px; height:25px; stroke-width:1.7; }
@@ -314,6 +316,10 @@
 .reasoning-bars i:nth-child(1) { height:40%; }
 .reasoning-bars i:nth-child(2) { height:70%; }
 .reasoning-bars i:nth-child(3) { height:100%; }
+:root { --reasoning-high:#b11d32; }
+:root[data-theme="dark"] { --reasoning-high:#ff7d8e; }
+.reasoning-bars[data-level="high"] i { background:var(--reasoning-high); }
+.finding-setting:has(.reasoning-bars[data-level="high"]) :is(dt,dd) { color:var(--reasoning-high); }
 .finding-setting.setting-model dt { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .findings .finding-copy { display:flex; flex-direction:column; gap:14px; }
 .findings .finding-copy > p { margin:0; }

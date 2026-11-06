@@ -16,8 +16,7 @@ Phase 1 and Phase 2 are independent studies. The overview illustrates their
 separate designs; it does not combine results into one trajectory.
 
 The public storyline is **Discover → Propagate → Consequences**. Lead with the
-main result: across reviewed cases, independent agents autonomously discover one
-another, propagate methods, and produce verified system-level harm. The three
+main result: agents find one another, methods spread, and harm can follow. The three
 steps are supported by separate reviewed cases and must not be presented as one
 end-to-end trajectory.
 
@@ -129,7 +128,8 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   names stay in the page's section headings.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
-- Put the highlighted main result above the existing TLDR. Preserve the TLDR;
+- Put the concise main result and three linked story steps first. Keep the original
+  TLDR under About SwarmHarm. The opening states the initiative and evaluation gap;
   do not add a separate RQ section.
 - Light/Dark is an explicit toggle; remember the selected theme.
 - Use one font family throughout. Keep summaries short; put originals and
@@ -165,3 +165,40 @@ with its license retained beside the asset. Reasoning badges show High with thre
 The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result. The three finding rows remain unchanged.
 
 Finding banners show Agents, Model and Reasoning. Goal settings are omitted from the page, including the case settings panel; original values remain in the case data and downloadable evidence.
+
+## Project page structure and visual language
+
+The opening introduces an initiative to build the foundation for swarm evaluation,
+then offers direct routes to trajectories, setup and resources. Each study has a
+matched compact setup and native SVG diagram. Formation shows hard tasks in
+separate sandboxes, no prior peer knowledge, and discovery of a deliberately
+introduced vulnerability. The consequence study has separate agents pursuing
+ordinary tasks in a shared system. These are separate experiments.
+
+The six independent finding banners, three threat models, four task domains,
+measurement protocol, review downloads, website source, contact and updates form
+the complete page. Resource links must point to accessible public assets. Do not
+add a Paper or evaluation-code link before its public release can be verified.
+
+`python3 scripts/build-finding-agents.py` derives a shared SVG sprite from the
+existing editable field-guide robot artwork. The 36 views change eyebrows, eyes,
+mouth, gaze, head and arm pose. Curious discovery, speaking/listening, relief,
+confusion, focused editing, squinting at a target and concern at a shared shortfall
+are visual cues, not measurements of internal mental states or malicious intent.
+Every setup, finding and threat-model illustration uses these variants. Trajectory
+and action-log avatars also use the same case-specific expression family, while
+all original actions, authored messages and evidence links remain unchanged.
+
+The propagation diagrams show a proposed false rule reaching peers (r257), and
+one shared record-editing method being read and reused by two later agents (r261).
+The 27 changed entries are the whole-run result, including two independent initial
+edits. Composition remains four individual commitments aggregating to a shortfall;
+no communication is invented to explain it. Arrow emphasis plays once on entry,
+stops offscreen and can be replayed. Reduced motion shows the full static diagram.
+High reasoning bars and text are red in finding cards and trajectory settings.
+
+Design references reviewed for this revision: Stolen Thoughts (result-led sections
+and direct examples), PostTrainBench (short setup, traces, methodology and project
+resources), JailbreakBench (explicit benchmark components and artifact access),
+and the primary AgentHarm and Claudini project pages (bounded claims, methods and
+released resources). Reuse the information hierarchy, not their visual assets.

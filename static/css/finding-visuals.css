@@ -53,3 +53,17 @@
   .finding-visual .diagram-overflow-label { font-size:24px; }
 }
 @media print { .finding-explanation > p { display:block; } }
+
+/* Brief, replayable emphasis shows the order of propagation. Static diagrams
+   remain complete when JavaScript or motion is disabled. */
+.finding-visual { position:relative; }
+.finding-visual:has(.diagram-replay) figcaption { padding-right:62px; }
+.diagram-replay { display:inline-flex; align-items:center; justify-content:flex-end; gap:5px; position:absolute; right:0; bottom:-10px; min-width:58px; min-height:44px; padding:0; border:0; color:var(--finding-ink); background:none; font:500 10px/1.4 var(--font); cursor:pointer; }
+.diagram-replay[hidden] { display:none; }
+.diagram-replay svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.diagram-replay:focus-visible { outline:2px solid var(--finding-ink); outline-offset:3px; }
+.is-playing [data-diagram-step] { animation:finding-step 1.15s ease-in-out both; }
+.is-playing [data-diagram-step="2"] { animation-delay:1.15s; }
+.is-playing [data-diagram-step="3"] { animation-delay:2.3s; }
+@keyframes finding-step { 0%,100% { opacity:1; } 15%,70% { stroke:var(--diagram-risk); stroke-width:4; } }
+@media(prefers-reduced-motion:reduce) { .is-playing [data-diagram-step] { animation:none; } .diagram-replay { display:none; } .finding-visual:has(.diagram-replay) figcaption { padding-right:0; } }
