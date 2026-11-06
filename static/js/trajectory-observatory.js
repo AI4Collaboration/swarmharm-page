@@ -113,15 +113,21 @@
       return parent && reference && (!parent.sourceReference || reference===parent.sourceReference) ? parent : null;
     }
 
-    function earlierMessages(message) {
-      const chain=[],seen=new Set([message.id]);
-      let parent=replyParent(message);
-      while(parent && !seen.has(parent.id)) {
-        seen.add(parent.id);
-        chain.unshift(parent);
-        parent=replyParent(parent);
-      }
-      return chain;
+    function chatMessage(message) {
+      const number=messageNumberById.get(message.id),parent=replyParent(message);
+      const receipts=message.reads.map(read=>{
+        const step=connections.find(item=>item.kind==='read' && item.message===message && item.event===read.event);
+        return `<button type="button" data-obs-receipt="${step.order}" style="--reader:${color(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
+      }).join('');
+      return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${color(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
+        <span class="obs-chat-avatar" aria-hidden="true"><img src="static/images/fieldguide/swarm-agent-${esc(message.actor.toLowerCase())}.svg?v=2" width="230" height="310" alt=""></span>
+        <div class="obs-chat-content">
+          <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}" aria-label="Select message ${number} from ${esc(names.get(message.actor))}"><span>From</span><strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong><span>to</span><strong data-chat-recipient>${esc(messageSource(message))}</strong></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
+          ${parent?`<button class="obs-chat-reply" type="button" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to #${messageNumberById.get(parent.id)}</button>`:''}
+          <p class="obs-chat-text" data-message-body>${esc(message.body)}</p>
+          ${receipts?`<div class="obs-chat-readers"><span>Read by</span>${receipts}</div>`:''}
+        </div>
+      </article>`;
     }
 
     function participantRole(actor, moment) {
@@ -147,15 +153,10 @@
           </section>
           <section class="obs-message-panel" data-message-panel aria-label="Message">
             <header class="obs-panel-heading"><h5>Message</h5>${noMessages?'':stepControls}<button class="obs-source-link" type="button" data-original="message" aria-label="View message record" title="View message record">↗</button></header>
-            <div class="obs-record-meta" data-message-meta><div class="obs-message-participants"><span>From</span><strong data-author></strong><span>to</span><strong data-recipient></strong></div><time data-record-time></time></div>
-            <div class="obs-document" tabindex="0" role="region" aria-label="Message content">
-              <div class="obs-document-kicker" data-document-kicker></div>
-              <div class="obs-reply" data-reply></div>
-              <blockquote data-original-text></blockquote>
-              <div class="obs-returned-messages" data-returned-messages></div>
+            <div class="obs-document" tabindex="0" role="region" aria-label="Conversation history">
+              <div class="obs-chat" data-chat-log>${messages.map(chatMessage).join('')}</div>
               <p class="obs-message-empty" data-message-empty hidden></p>
             </div>
-            <div class="obs-receipts" data-receipts></div>
           </section>
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
@@ -168,16 +169,15 @@
       </div>
       <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>Event flow</h5><span>${events.length} actions · recorded order</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
       <footer class="obs-transport"><button type="button" data-previous aria-label="Previous event">${arrow(-1)}</button><button type="button" data-next aria-label="Next event">${arrow(1)}</button><input type="range" min="0" max="${moments.length-1}" value="0" step="1" aria-label="Replay position"><span data-position></span><button type="button" data-speed aria-label="Playback speed: 1 times">1×</button><button class="obs-outcome-button" type="button" data-outcome>Outcome ↗</button></footer>
-      <div class="obs-bottom"><section class="obs-message-stream" aria-label="Message index"><header><h5>${noMessages?'Action index':'Message index'}</h5><span>${noMessages?'Select any point above':'Select a message to follow its readers'}</span></header><div class="obs-index">${noMessages?'<p>No authored messages in this run.</p>':messages.map((m,i)=>`<button type="button" data-message="${esc(m.id)}" style="--agent:${color(m.actor)}" aria-label="Message ${i+1} from ${esc(names.get(m.actor))}"><span class="obs-index-number">${String(i+1).padStart(2,'0')}</span><i></i><span class="obs-index-copy"><b>${esc(names.get(m.actor))}</b><span>${esc(short(m.body,110))}</span></span><time>${esc(m.time)}</time></button>`).join('')}</div></section><section class="obs-result" aria-label="Recorded outcome"><span>Recorded outcome</span><p>${esc(meta.outcome)}</p><button type="button" data-outcome>Inspect outcome ↗</button></section></div>`;
+      <div class="obs-bottom"><section class="obs-result" aria-label="Recorded outcome"><span>Recorded outcome</span><p>${esc(meta.outcome)}</p><button type="button" data-outcome>Inspect outcome ↗</button></section></div>`;
 
     const scene=host.querySelector('.obs-space-canvas'),ctx=scene.getContext('2d');
     const flow=host.querySelector('.obs-flow-canvas'),fctx=flow.getContext('2d');
     const stage=host.querySelector('.obs-stage'),flowStage=host.querySelector('.obs-flow-stage');
     const documentPanel=host.querySelector('.obs-document'),inspector=host.querySelector('.obs-inspector');
-    const text=host.querySelector('[data-original-text]'),receiptHost=host.querySelector('[data-receipts]');
     const range=host.querySelector('input[type="range"]');
     const tooltips=new Map([[scene,host.querySelector('.obs-graph-tooltip')],[flow,host.querySelector('.obs-flow-tooltip')]]);
-    const indexButtons=[...host.querySelectorAll('[data-message]')];
+    const chatRows=new Map([...host.querySelectorAll('[data-chat-message]')].map(row=>[row.dataset.chatMessage,row]));
     const fontFamily=getComputedStyle(host).fontFamily;
     const routeHeading = host.querySelector('.obs-route-heading');
     const routeQuote = host.querySelector('.obs-route-quote');
@@ -259,30 +259,17 @@
     const actionArgs = actionPanel.querySelector('[data-action-args]');
     const messagePanel = host.querySelector('[data-message-panel]');
     const outcomePanel = host.querySelector('[data-inspector-outcome]');
-    const messageMeta = messagePanel.querySelector('[data-message-meta]');
-    const messageKind = messagePanel.querySelector('[data-document-kicker]');
-    const reply = messagePanel.querySelector('[data-reply]');
-    const returned = messagePanel.querySelector('[data-returned-messages]');
+    const chatLog = messagePanel.querySelector('[data-chat-log]');
     const empty = messagePanel.querySelector('[data-message-empty]');
     const nav = host.querySelector('[data-inspector-nav]');
     const messageNumber = host.querySelector('[data-message-number]');
 
-    function renderReaders(message) {
-      receiptHost.replaceChildren();
-      const label = document.createElement('span');
-      label.textContent = message.reads.length ? 'Read receipts' : 'No verified reader';
-      const list = document.createElement('div');
-      for (const read of message.reads) {
-        const step = connections.find(item => item.kind === 'read' && item.message === message && item.event === read.event);
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.dataset.obsReceipt = step.order;
-        button.style.setProperty('--agent', color(read.actor));
-        button.setAttribute('aria-label', names.get(read.actor) + ' reads this message at turn ' + read.turn);
-        button.innerHTML = `<span>${esc(names.get(read.actor))}</span><b aria-hidden="true"></b>`;
-        list.append(button);
-      }
-      receiptHost.append(label, list);
+    function scrollToMessage(message) {
+      const row=chatRows.get(message.id);
+      if(!row || !documentPanel.clientHeight)return;
+      const viewport=documentPanel.getBoundingClientRect(),box=row.getBoundingClientRect();
+      // Leave a little preceding conversation visible and move only the chat's scroll area.
+      documentPanel.scrollTop+=box.top-viewport.top-Math.min(100,documentPanel.clientHeight*.23);
     }
 
     function renderInspector(moment) {
@@ -309,58 +296,40 @@
         actionArgs.querySelector('pre').textContent = typeof args === 'string' ? args : JSON.stringify(args, null, 2);
       }
 
-      messageMeta.hidden = messageKind.hidden = text.hidden = receiptHost.hidden = !message;
       messagePanel.querySelector('[data-original="message"]').hidden = !message;
-      if(message) {
-        const recipient=messageMeta.querySelector('[data-recipient]');
-        recipient.textContent=moment.kind==='read'?names.get(moment.actor):messageSource(message);
-        recipient.style.color=moment.kind==='read'?color(moment.actor):'#a7b5c5';
-        recipient.title=moment.kind==='read'?'Read by '+names.get(moment.actor)+' at '+moment.time:'Posted to '+messageSource(message);
-        messageKind.hidden=moment.kind==='send';
-      }
       messageNumber.textContent = message
         ? String(moment.index + 1).padStart(2, '0') + ' / ' + messages.length
         : (eventIndex.get(event.id) + 1) + ' / ' + events.length;
+      const observed=new Set(message?[]:event.reads);
+      chatLog.hidden=!message && !observed.size;
+      empty.hidden=!chatLog.hidden;
+      if(!empty.hidden)empty.textContent=noMessages?'No messages in this run.':'No message in this action.';
+
+      for(const item of messages) {
+        const row=chatRows.get(item.id),selected=item===message,isRead=selected && moment.kind==='read' || observed.has(item.id);
+        row.classList.toggle('is-current',selected);
+        row.classList.toggle('is-observed',observed.has(item.id));
+        row.classList.toggle('is-future',item.event>event.id);
+        row.toggleAttribute('data-current-message',selected);
+        if(selected)row.setAttribute('aria-current','step');
+        else row.removeAttribute('aria-current');
+        row.querySelector('[data-message-body]').toggleAttribute('data-original-text',selected);
+        row.querySelector('.obs-chat-select').setAttribute('aria-pressed',String(selected));
+        const recipient=row.querySelector('[data-chat-recipient]');
+        recipient.textContent=isRead?names.get(event.actor):messageSource(item);
+        recipient.style.color=isRead?color(event.actor):'';
+        recipient.title=isRead?'Read by '+names.get(event.actor)+' at '+event.time:'Posted to '+messageSource(item);
+        for(const button of row.querySelectorAll('[data-obs-receipt]')) {
+          const order=Number(button.dataset.obsReceipt);
+          button.setAttribute('aria-current',order===current?'step':'false');
+          button.classList.toggle('is-received',order<=current);
+        }
+      }
       const key = message?.id ?? event.id;
       if (key !== displayedMessage) {
         displayedMessage = key;
-        documentPanel.scrollTop = 0;
-        reply.replaceChildren();
-        returned.replaceChildren();
-        empty.hidden = true;
-        text.textContent = '';
-        if (message) {
-          messageMeta.querySelector('[data-author]').textContent = names.get(message.actor);
-          messageMeta.querySelector('[data-author]').title = contexts.get(message.actor);
-          messageMeta.querySelector('time').textContent = message.time;
-          messageKind.textContent = messageSource(message);
-          text.textContent = message.body;
-          // Follow only explicit reply references, never messages inferred from timing.
-          const chain=earlierMessages(message),parent=chain.at(-1);
-          if(parent) {
-            reply.innerHTML=`<button type="button" class="obs-reply-link" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to Message ${messageNumberById.get(parent.id)}</button><details class="obs-thread"><summary>Thread</summary><ol>${chain.map(item=>`<li><button type="button" data-message="${esc(item.id)}" aria-label="Open Message ${messageNumberById.get(item.id)} from ${esc(names.get(item.actor))}"><span class="obs-thread-meta"><strong style="color:${color(item.actor)}">${esc(names.get(item.actor))}</strong><span>Message ${messageNumberById.get(item.id)}</span></span><span class="obs-thread-text">${esc(item.body)}</span></button></li>`).join('')}</ol></details>`;
-          }
-          renderReaders(message);
-        } else {
-          const observed = event.reads.map(id => messageById.get(id)).filter(Boolean);
-          for (const item of observed) {
-            const entry = document.createElement('details');
-            entry.open = observed.length === 1;
-            entry.innerHTML = `<summary>From ${esc(names.get(item.actor))} to ${esc(names.get(event.actor))} · ${esc(messageSource(item))}</summary><blockquote>${esc(item.body)}</blockquote>`;
-            returned.append(entry);
-          }
-          empty.hidden = observed.length > 0;
-          if (!empty.hidden) empty.textContent = noMessages ? 'No messages in this run.' : 'No message in this action.';
-        }
-      }
-      if (message) {
-        // Preserve button focus as the same message passes between its readers.
-        for (const button of receiptHost.querySelectorAll('button')) {
-          const order = Number(button.dataset.obsReceipt);
-          button.setAttribute('aria-current', order === current ? 'step' : 'false');
-          button.classList.toggle('is-received', order <= current);
-          button.querySelector('b').textContent = order <= current ? '✓' : '·';
-        }
+        const anchor=message || messageById.get(event.reads[0]);
+        if(anchor)scrollToMessage(anchor);
       }
     }
 
@@ -385,9 +354,6 @@
         host.querySelector(`[data-actor-count="${a.id}"]`).textContent=noMessages?`${events.filter(e=>e.actor===a.id&&e.id<=m.event).length} actions`:`${sent} sent · ${reads} read`;
       });
       activity.forEach(a=>a.bars.forEach((bar,i)=>bar.classList.toggle('is-past',a.bins[i].some(id=>id<=m.event))));
-      indexButtons.forEach(button=>{const selected=button.dataset.message===message?.id;button.setAttribute('aria-pressed',String(selected));button.classList.toggle('is-future',sendIndex.get(button.dataset.message)>current);});
-      const selectedRow=indexButtons.find(button=>button.dataset.message===message?.id);
-      if(selectedRow){const list=selectedRow.parentElement,row=selectedRow.getBoundingClientRect(),box=list.getBoundingClientRect();if(row.top<box.top)list.scrollTop+=row.top-box.top;else if(row.bottom>box.bottom)list.scrollTop+=row.bottom-box.bottom;}
       updateControls();draw();ensureFrame();
     }
     function stop() {
@@ -819,7 +785,8 @@
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
-    for (const area of [inspector, host.querySelector('.obs-index')]) {
+    on(documentPanel,'pointerdown',()=>documentPanel.focus({preventScroll:true}));
+    for (const area of [inspector]) {
       on(area,'pointerenter',event=>{if(event.pointerType==='mouse'){reading=true;updateControls();}});
       on(area,'pointerleave',()=>{reading=false;updateControls();});
       on(area,'focusin',()=>{focused=true;updateControls();});

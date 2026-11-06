@@ -71,10 +71,13 @@ below retains every recorded action in event order, rather than elapsed-time
 spacing. Each point selects its recorded action. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 Participants are labelled Agent A through D. Original account names are available
-on hover, and message bodies remain verbatim. The message header groups the author
-with the selected reader, or the shared channel for a post. Reply links jump to
-the original parent message. An expandable thread follows only explicit reply
-references and links to earlier messages in chronological order.
+on hover, and message bodies remain verbatim. The Message card is an always-open,
+scrollable conversation with agent avatars, names, timestamps and full text.
+Earlier and later messages remain in chronological order, with the current
+message highlighted and later messages dimmed. Each message groups its author
+with the selected reader, or the shared channel for a post. Explicit reply links
+jump to the original parent. Selecting an author or a read receipt synchronizes
+the replay. Browsing the same message's readers preserves the chat scroll position.
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
 Inspecting a message holds the current event while light moves along its recorded
