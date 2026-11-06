@@ -71,8 +71,10 @@ below retains every recorded action in event order, rather than elapsed-time
 spacing. Each point selects its recorded action. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 Participants are labelled Agent A through D. Original account names are available
-on hover, and message bodies remain verbatim. Explicit replies can be expanded
-in place.
+on hover, and message bodies remain verbatim. The message header groups the author
+with the selected reader, or the shared channel for a post. Reply links jump to
+the original parent message. An expandable thread follows only explicit reply
+references and links to earlier messages in chronological order.
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
 Inspecting a message holds the current event while light moves along its recorded

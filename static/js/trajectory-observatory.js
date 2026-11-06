@@ -23,6 +23,7 @@
     const eventIndex=new Map(events.map((e,i)=>[e.id,i]));
     const eventById=new Map(events.map(e=>[e.id,e]));
     const messageById=new Map(messages.map(m=>[m.id,m]));
+    const messageNumberById=new Map(messages.map((m,i)=>[m.id,i+1]));
     const color=id=>palette[actorIndex.get(id)]||'#e0b785';
     const noMessages=!messages.length;
     const channel=messages.some(m=>m.kind==='Shared-file note')?'Shared notes':'Shared channel';
@@ -106,6 +107,23 @@
       return message.kind === 'Message' ? 'Shared channel' : message.kind;
     }
 
+    function replyParent(message) {
+      const parent=messageById.get(message.replyTo);
+      const reference=message.replyReference ?? eventById.get(message.event)?.arguments?.reply_to;
+      return parent && reference && (!parent.sourceReference || reference===parent.sourceReference) ? parent : null;
+    }
+
+    function earlierMessages(message) {
+      const chain=[],seen=new Set([message.id]);
+      let parent=replyParent(message);
+      while(parent && !seen.has(parent.id)) {
+        seen.add(parent.id);
+        chain.unshift(parent);
+        parent=replyParent(parent);
+      }
+      return chain;
+    }
+
     function participantRole(actor, moment) {
       if (moment.message?.actor === actor) return moment.message.kind === 'Message' ? 'Sender' : 'Author';
       if (moment.kind === 'read' && moment.actor === actor) return 'Reader';
@@ -129,7 +147,7 @@
           </section>
           <section class="obs-message-panel" data-message-panel aria-label="Message">
             <header class="obs-panel-heading"><h5>Message</h5>${noMessages?'':stepControls}<button class="obs-source-link" type="button" data-original="message" aria-label="View message record" title="View message record">↗</button></header>
-            <div class="obs-record-meta" data-message-meta><span>From</span><strong data-author></strong><time data-record-time></time></div>
+            <div class="obs-record-meta" data-message-meta><div class="obs-message-participants"><span>From</span><strong data-author></strong><span>to</span><strong data-recipient></strong></div><time data-record-time></time></div>
             <div class="obs-document" tabindex="0" role="region" aria-label="Message content">
               <div class="obs-document-kicker" data-document-kicker></div>
               <div class="obs-reply" data-reply></div>
@@ -293,6 +311,13 @@
 
       messageMeta.hidden = messageKind.hidden = text.hidden = receiptHost.hidden = !message;
       messagePanel.querySelector('[data-original="message"]').hidden = !message;
+      if(message) {
+        const recipient=messageMeta.querySelector('[data-recipient]');
+        recipient.textContent=moment.kind==='read'?names.get(moment.actor):messageSource(message);
+        recipient.style.color=moment.kind==='read'?color(moment.actor):'#a7b5c5';
+        recipient.title=moment.kind==='read'?'Read by '+names.get(moment.actor)+' at '+moment.time:'Posted to '+messageSource(message);
+        messageKind.hidden=moment.kind==='send';
+      }
       messageNumber.textContent = message
         ? String(moment.index + 1).padStart(2, '0') + ' / ' + messages.length
         : (eventIndex.get(event.id) + 1) + ' / ' + events.length;
@@ -310,11 +335,10 @@
           messageMeta.querySelector('time').textContent = message.time;
           messageKind.textContent = messageSource(message);
           text.textContent = message.body;
-          // Only display a conversation parent if the source records an explicit reply.
-          const parent = messageById.get(message.replyTo);
-          const reference = message.replyReference ?? eventById.get(message.event).arguments?.reply_to;
-          if (parent && reference && (!parent.sourceReference || reference === parent.sourceReference)) {
-            reply.innerHTML = `<details><summary>Reply to ${esc(names.get(parent.actor))}</summary><blockquote>${esc(parent.body)}</blockquote></details>`;
+          // Follow only explicit reply references, never messages inferred from timing.
+          const chain=earlierMessages(message),parent=chain.at(-1);
+          if(parent) {
+            reply.innerHTML=`<button type="button" class="obs-reply-link" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to Message ${messageNumberById.get(parent.id)}</button><details class="obs-thread"><summary>Thread</summary><ol>${chain.map(item=>`<li><button type="button" data-message="${esc(item.id)}" aria-label="Open Message ${messageNumberById.get(item.id)} from ${esc(names.get(item.actor))}"><span class="obs-thread-meta"><strong style="color:${color(item.actor)}">${esc(names.get(item.actor))}</strong><span>Message ${messageNumberById.get(item.id)}</span></span><span class="obs-thread-text">${esc(item.body)}</span></button></li>`).join('')}</ol></details>`;
           }
           renderReaders(message);
         } else {
@@ -322,7 +346,7 @@
           for (const item of observed) {
             const entry = document.createElement('details');
             entry.open = observed.length === 1;
-            entry.innerHTML = `<summary>From ${esc(names.get(item.actor))} · ${esc(messageSource(item))}</summary><blockquote>${esc(item.body)}</blockquote>`;
+            entry.innerHTML = `<summary>From ${esc(names.get(item.actor))} to ${esc(names.get(event.actor))} · ${esc(messageSource(item))}</summary><blockquote>${esc(item.body)}</blockquote>`;
             returned.append(entry);
           }
           empty.hidden = observed.length > 0;
