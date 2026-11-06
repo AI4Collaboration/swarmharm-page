@@ -1,8 +1,6 @@
 (() => {
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const palette = ['#79b5ee','#b4a0e5','#80cbb7','#e5a08b'];
-  const travelMs = 1450;
-  const arrivalMs = 420;
   const playIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z"/></svg>';
   const pauseIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12"/></svg>';
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
@@ -29,7 +27,13 @@
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
       message.reads.forEach(read=>moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index}));
     });
-    if(noMessages)events.forEach(event=>moments.push({kind:'action',event:event.id,actor:event.actor,time:event.time,turn:event.turn,action:event}));
+    // Every action is selectable. Autoplay follows communication when the run contains it.
+    const exchangeEvents = new Set(moments.map(moment => moment.event));
+    for (const event of events) {
+      if (!exchangeEvents.has(event.id)) {
+        moments.push({kind:'action', event:event.id, actor:event.actor, time:event.time, turn:event.turn, action:event});
+      }
+    }
     moments.sort((a,b)=>a.event-b.event||Number(a.kind!=='send')-Number(b.kind!=='send'));
     moments.forEach((m,i)=>{m.order=i;});
     const sendIndex=new Map(moments.filter(m=>m.kind==='send').map(m=>[m.message.id,m.order]));
@@ -73,7 +77,7 @@
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
-    let previewingTransfer = false;
+    let signalSeconds = 0, cameraOffset = 0;
     let reading=false,focused=false,hovered=null,drag=null;
     let yaw=-.16,pitch=.72,viewWidth=760,viewHeight=510,flowWidth=1000,dpr=1;
     let verticalScale = 1, verticalOrigin = 0;
@@ -83,24 +87,56 @@
     const active=()=>moments[current];
     const holding=()=>reading||focused||!!hovered||!!drag;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
-    const running=()=>(playing || previewingTransfer) && isVisible();
+    const running=()=>playing && isVisible();
+
+    const firstPlayback = messages.length ? sendIndex.get(messages[0].id) : 0;
+    function nextPlayback() {
+      let next = current + 1;
+      while (!noMessages && moments[next]?.kind === 'action') next++;
+      return next;
+    }
+    function messageSource(message) {
+      const surface = eventById.get(message.event)?.arguments?.channel;
+      if (surface === 'private') return 'Private discussion';
+      if (surface === 'public') return 'Public discussion';
+      return message.kind === 'Message' ? 'Shared channel' : message.kind;
+    }
 
     function participantRole(actor, moment) {
-      if (moment.message?.actor === actor) return 'Sender';
+      if (moment.message?.actor === actor) return moment.message.kind === 'Message' ? 'Sender' : 'Author';
       if (moment.kind === 'read' && moment.actor === actor) return 'Reader';
       if (moment.kind === 'action' && moment.actor === actor) return 'Acting';
       return '';
     }
 
     host.classList.add('trajectory-observatory');
+    const stepControls = `<div class="obs-step-buttons" data-inspector-nav>
+      <button type="button" data-prev-message aria-label="Previous ${noMessages?'action':'message'}">${arrow(-1)}</button>
+      <span data-message-number></span>
+      <button type="button" data-next-message aria-label="Next ${noMessages?'action':'message'}">${arrow(1)}</button>
+    </div>`;
     host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>Trajectory observatory</h4><span class="obs-run">${esc(data.id)}</span></div><div class="obs-top-stats"><span><b>${actors.length}</b> agents</span><span><b>${messages.length}</b> messages</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
       <div class="obs-workbench">
-        <section class="obs-inspector" aria-label="Original message and verified receipts">
-          <header class="obs-panel-heading"><h5>${noMessages?'Recorded action':'Original message'}</h5><div class="obs-step-buttons"><button type="button" data-prev-message aria-label="Previous ${noMessages?'action':'message'}">${arrow(-1)}</button><span data-message-number></span><button type="button" data-next-message aria-label="Next ${noMessages?'action':'message'}">${arrow(1)}</button></div></header>
-          <div class="obs-record-meta"><span class="obs-author-dot" data-author-dot></span><strong data-author></strong><time data-record-time></time></div>
-          <div class="obs-document" tabindex="0" role="region" aria-label="Complete original text"><div class="obs-document-kicker" data-document-kicker></div><blockquote data-original-text></blockquote></div>
-          <div class="obs-receipts" data-receipts></div>
-          <footer class="obs-record-footer"><span data-reading-status>Verbatim from the record</span><button type="button" data-original>Original record ↗</button></footer>
+        <section class="obs-inspector" aria-label="Selected record">
+          <section class="obs-action-panel" data-action-panel aria-label="Action">
+            <header class="obs-panel-heading"><h5>Action</h5><small data-action-stamp></small>${noMessages?stepControls:''}</header>
+            <div class="obs-action-line"><strong data-action-actor></strong><span data-action-label></span></div>
+            <details class="obs-action-args" data-action-args hidden><summary>Tool arguments</summary><pre></pre></details>
+          </section>
+          <section class="obs-message-panel" data-message-panel aria-label="Message">
+            <header class="obs-panel-heading"><h5>Message</h5>${noMessages?'':stepControls}</header>
+            <div class="obs-record-meta" data-message-meta><span>From</span><strong data-author></strong><time data-record-time></time></div>
+            <div class="obs-document" tabindex="0" role="region" aria-label="Message content">
+              <div class="obs-document-kicker" data-document-kicker></div>
+              <div class="obs-reply" data-reply></div>
+              <blockquote data-original-text></blockquote>
+              <div class="obs-returned-messages" data-returned-messages></div>
+              <p class="obs-message-empty" data-message-empty hidden></p>
+            </div>
+            <div class="obs-receipts" data-receipts></div>
+          </section>
+          <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><h5>Outcome</h5><p>${esc(meta.outcome)}</p></section>
+          <footer class="obs-record-footer"><span data-reading-status></span><button type="button" data-original>Open action record ↗</button></footer>
         </section>
         <section class="obs-spatial" aria-label="Spatial view of recorded agent actions">
           <header class="obs-panel-heading"><h5>${noMessages?'Action landscape':'Communication window'}<span>${stageEvents.length} actions</span></h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
@@ -141,10 +177,15 @@
       host.classList.toggle('is-playing',playing);
       host.classList.toggle('is-holding',holding());
       const button=host.querySelector('[data-play]');
-      button.innerHTML=`${playing?pauseIcon:playIcon}<span>${playing?'Pause':m.kind==='outcome'?'Replay':'Play'}</span>`;
-      button.setAttribute('aria-label',playing?'Pause trajectory':m.kind==='outcome'?'Replay trajectory':'Play trajectory');
-      host.querySelector('[data-status]').textContent=playing?(holding()?'Reading':'Replaying'):'Paused';
-      host.querySelector('[data-reading-status]').textContent=reading||focused?'Paused for reading':m.kind==='action'?'Recorded tool arguments':m.kind==='outcome'?'Recorded outcome':'Verbatim from the record';
+      const verb = playing ? 'Pause' : m.kind === 'outcome' ? 'Replay' : 'Play';
+      const label = verb + ' trajectory';
+      // Keep the pointer target alive when focus moves from the inspector to this button.
+      if (button.getAttribute('aria-label') !== label) {
+        button.innerHTML = (playing ? pauseIcon : playIcon) + '<span>' + verb + '</span>';
+        button.setAttribute('aria-label', label);
+      }
+      host.querySelector('[data-status]').textContent=playing?(holding()?'Inspecting':'Replaying'):'Paused';
+      host.querySelector('[data-reading-status]').textContent=playing&&holding()?'Holding this event':'';
       host.querySelector('[data-previous]').disabled=current===0;
       host.querySelector('[data-next]').disabled=current===moments.length-1;
       host.querySelector('[data-current-time]').textContent=m.time;
@@ -179,7 +220,7 @@
         recipient.textContent = names.get(moment.actor);
         recipient.style.color = color(moment.actor);
       } else {
-        recipient.textContent = channel;
+        recipient.textContent = messageSource(message);
       }
       verb.textContent = '→';
       const description = moment.kind === 'read' ? 'read by' : 'posted to';
@@ -194,24 +235,115 @@
       routeQuote.textContent = '“' + excerpt + '”';
     }
 
-    function select(index, preview = false) {
-      current=clamp(index,0,moments.length-1);elapsed=0;
-      const m=active(),message=m.message,id=message?.actor||m.actor;
-      previewingTransfer = preview && Boolean(message) && !reduced;
-      host.style.setProperty('--signal',color(id));
-      host.dataset.moment=m.kind;
-      host.querySelector('[data-author-dot]').style.background=color(id);
-      host.querySelector('[data-author]').textContent=m.kind==='outcome'?'Recorded outcome':names.get(id);
-      host.querySelector('[data-record-time]').textContent=message?.time||m.time;
-      host.querySelector('[data-message-number]').textContent=message?`${String(m.index+1).padStart(2,'0')} / ${messages.length}`:m.kind==='outcome'?'Result':`${current+1} / ${events.length}`;
-      host.querySelector('[data-document-kicker]').textContent=message?`${message.kind} · Turn ${message.turn}`:m.kind==='outcome'?'End of the recorded run':`Turn ${m.turn} · ${m.action.operation}`;
-      const content=message?.body||(m.kind==='outcome'?meta.outcome:typeof m.action.arguments==='string'?m.action.arguments:JSON.stringify(m.action.arguments,null,2)||m.action.resultText||m.action.label);
-      if(displayedMessage!==(message?.id||m.event)) {text.textContent=content;documentPanel.scrollTop=0;displayedMessage=message?.id||m.event;}
-      host.querySelector('[data-original]').textContent=m.kind==='outcome'?'Outcome details ↗':m.kind==='read'?'Read record ↗':'Original record ↗';
-      receiptHost.innerHTML=message?`<span>${message.reads.length?'Verified readers':'No verified cross-agent read'}</span><div>${message.reads.map(read=>{
-        const readIndex=moments.findIndex(v=>v.kind==='read'&&v.event===read.event&&v.message.id===message.id);
-        return `<button type="button" data-obs-receipt="${readIndex}" aria-current="${readIndex===current?'step':'false'}" class="${readIndex<=current?'is-received':''}" style="--agent:${color(read.actor)}" aria-label="${esc(names.get(read.actor))} reads this message at turn ${read.turn}"><i>${read.actor}</i><span>${esc(names.get(read.actor))}</span><b>${readIndex<=current?'✓':'·'}</b></button>`;
-      }).join('')}</div>`:noMessages&&m.kind!=='outcome'?'<span>No authored messages in this run</span>':'<span>Source records remain available below</span>';
+    const actionPanel = host.querySelector('[data-action-panel]');
+    const actionArgs = actionPanel.querySelector('[data-action-args]');
+    const messagePanel = host.querySelector('[data-message-panel]');
+    const outcomePanel = host.querySelector('[data-inspector-outcome]');
+    const messageMeta = messagePanel.querySelector('[data-message-meta]');
+    const messageKind = messagePanel.querySelector('[data-document-kicker]');
+    const reply = messagePanel.querySelector('[data-reply]');
+    const returned = messagePanel.querySelector('[data-returned-messages]');
+    const empty = messagePanel.querySelector('[data-message-empty]');
+    const nav = host.querySelector('[data-inspector-nav]');
+    const messageNumber = host.querySelector('[data-message-number]');
+
+    function renderReaders(message) {
+      receiptHost.replaceChildren();
+      const label = document.createElement('span');
+      label.textContent = message.reads.length ? 'Read receipts' : 'No verified reader';
+      const list = document.createElement('div');
+      for (const read of message.reads) {
+        const step = connections.find(item => item.kind === 'read' && item.message === message && item.event === read.event);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.obsReceipt = step.order;
+        button.style.setProperty('--agent', color(read.actor));
+        button.setAttribute('aria-label', names.get(read.actor) + ' reads this message at turn ' + read.turn);
+        button.innerHTML = `<i>${esc(read.actor)}</i><span>${esc(names.get(read.actor))}</span><b aria-hidden="true"></b>`;
+        list.append(button);
+      }
+      receiptHost.append(label, list);
+    }
+
+    function renderInspector(moment) {
+      const event = eventById.get(moment.event);
+      const message = moment.message;
+      actionPanel.hidden = messagePanel.hidden = !event;
+      outcomePanel.hidden = Boolean(event);
+      nav.hidden = !event || (!message && !noMessages);
+      host.querySelector('[data-original]').textContent = event ? 'Open action record ↗' : 'Outcome record ↗';
+      if (!event) {
+        displayedMessage = null;
+        return;
+      }
+
+      // A read belongs to the reader. The message below belongs to its original author.
+      actionPanel.style.setProperty('--actor-ink', color(event.actor));
+      actionPanel.querySelector('[data-action-actor]').textContent = names.get(event.actor);
+      actionPanel.querySelector('[data-action-label]').textContent = event.label;
+      actionPanel.querySelector('[data-action-stamp]').textContent = 'Turn ' + event.turn + ' · ' + event.time;
+      const args = event.arguments;
+      const hasArgs = args != null && (typeof args !== 'object' || Object.keys(args).length > 0);
+      actionArgs.hidden = Boolean(message) || !hasArgs;
+      if (!actionArgs.hidden) {
+        actionArgs.querySelector('pre').textContent = typeof args === 'string' ? args : JSON.stringify(args, null, 2);
+      }
+
+      messageMeta.hidden = messageKind.hidden = text.hidden = receiptHost.hidden = !message;
+      messageNumber.textContent = message
+        ? String(moment.index + 1).padStart(2, '0') + ' / ' + messages.length
+        : (eventIndex.get(event.id) + 1) + ' / ' + events.length;
+      const key = message?.id ?? event.id;
+      if (key !== displayedMessage) {
+        displayedMessage = key;
+        documentPanel.scrollTop = 0;
+        reply.replaceChildren();
+        returned.replaceChildren();
+        empty.hidden = true;
+        text.textContent = '';
+        if (message) {
+          messageMeta.querySelector('[data-author]').textContent = names.get(message.actor);
+          messageMeta.querySelector('time').textContent = message.time;
+          messageKind.textContent = messageSource(message);
+          text.textContent = message.body;
+          // Only display a conversation parent if the source records an explicit reply.
+          const parent = messageById.get(message.replyTo);
+          const reference = message.replyReference ?? eventById.get(message.event).arguments?.reply_to;
+          if (parent && reference && (!parent.sourceReference || reference === parent.sourceReference)) {
+            reply.innerHTML = `<details><summary>Reply to ${esc(names.get(parent.actor))}</summary><blockquote>${esc(parent.body)}</blockquote></details>`;
+          }
+          renderReaders(message);
+        } else {
+          const observed = event.reads.map(id => messageById.get(id)).filter(Boolean);
+          for (const item of observed) {
+            const entry = document.createElement('details');
+            entry.open = observed.length === 1;
+            entry.innerHTML = `<summary>From ${esc(names.get(item.actor))} · ${esc(messageSource(item))}</summary><blockquote>${esc(item.body)}</blockquote>`;
+            returned.append(entry);
+          }
+          empty.hidden = observed.length > 0;
+          if (!empty.hidden) empty.textContent = noMessages ? 'No messages in this run.' : 'No message in this action.';
+        }
+      }
+      if (message) {
+        // Preserve button focus as the same message passes between its readers.
+        for (const button of receiptHost.querySelectorAll('button')) {
+          const order = Number(button.dataset.obsReceipt);
+          button.setAttribute('aria-current', order === current ? 'step' : 'false');
+          button.classList.toggle('is-received', order <= current);
+          button.querySelector('b').textContent = order <= current ? '✓' : '·';
+        }
+      }
+    }
+
+    function select(index) {
+      current = clamp(index, 0, moments.length - 1);
+      elapsed = 0;
+      const m = active(), message = m.message;
+      if (m.kind === 'outcome') playing = false;
+      host.style.setProperty('--signal', color(message?.actor || m.actor));
+      host.dataset.moment = m.kind;
+      renderInspector(m);
       showExchange(m);
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
@@ -230,9 +362,30 @@
       if(selectedRow){const list=selectedRow.parentElement,row=selectedRow.getBoundingClientRect(),box=list.getBoundingClientRect();if(row.top<box.top)list.scrollTop+=row.top-box.top;else if(row.bottom>box.bottom)list.scrollTop+=row.bottom-box.bottom;}
       updateControls();draw();ensureFrame();
     }
-    function stop(){playing=false;previewingTransfer=false;lastFrame=0;updateControls();cancelAnimationFrame(frame);frame=0;draw();}
-    function seek(index){started=true;stop();hovered=null;hideTooltips();select(index,true);}
-    function togglePlay(){started=true;if(playing){stop();return;}if(active().kind==='outcome')select(0);previewingTransfer=false;playing=true;lastFrame=0;updateControls();ensureFrame();}
+    function stop() {
+      playing = false;
+      lastFrame = 0;
+      cancelAnimationFrame(frame);
+      frame = 0;
+      updateControls();
+      draw();
+    }
+    function seek(index) {
+      if (!started) playing = !reduced;
+      started = true;
+      hovered = null;
+      hideTooltips();
+      select(index);
+    }
+    function togglePlay() {
+      started = true;
+      if (playing) { stop(); return; }
+      if (active().kind === 'outcome') select(firstPlayback);
+      playing = true;
+      lastFrame = 0;
+      updateControls();
+      ensureFrame();
+    }
     function openOriginal(){stop();const m=active();openRecord(m.kind==='outcome'?null:[m.event]);}
     function moveMessage(direction){const m=active();if(noMessages){seek(current+direction);return;}const at=m.message?m.index:messages.length;const next=at+direction;if(next>=messages.length)seek(moments.length-1);else seek(sendIndex.get(messages[Math.max(0,next)].id));}
 
@@ -254,9 +407,10 @@
       verticalScale = Math.min(Math.max(.65, (viewWidth - 70) / 830), available / span);
       verticalOrigin = top + (available - span * verticalScale) / 2 - lowest * verticalScale;
     }
+    let viewSine = Math.sin(yaw), viewCosine = Math.cos(yaw);
     function project([x, y, z]) {
-      const depth = x * Math.sin(yaw) + y * Math.cos(yaw);
-      const across = x * Math.cos(yaw) - y * Math.sin(yaw);
+      const depth = x * viewSine + y * viewCosine;
+      const across = x * viewCosine - y * viewSine;
       const horizontalScale = (viewWidth - 70) / 830;
       return [
         viewWidth / 2 + across * horizontalScale * (1 + depth * .00038),
@@ -276,47 +430,77 @@
     function drawLabel(label,p,c,small=false) {
       ctx.font=`${small?'10':'11'}px ${fontFamily}`;ctx.fillStyle=c;ctx.fillText(label,p[0],p[1]);
     }
-    function drawTransfer(moment) {
-      const points = moment.samples.map(project);
-      const start = points[0];
-      const end = points.at(-1);
-      const senderColor = color(moment.message.actor);
-      const endColor = color(moment.actor);
-      const gradient = ctx.createLinearGradient(...start, ...end);
-      gradient.addColorStop(0, senderColor);
-      gradient.addColorStop(1, endColor);
+    function drawStream(points, senderColor, readerColor, junction) {
+      const lengths = [0];
+      for (let i = 1; i < points.length; i++) {
+        const dx = points[i][0] - points[i - 1][0];
+        const dy = points[i][1] - points[i - 1][1];
+        lengths.push(lengths[i - 1] + Math.hypot(dx, dy));
+      }
+      const length = lengths.at(-1);
+      if (length < 1) return;
+      function pointAt(distance) {
+        let end = 1;
+        while (end < lengths.length - 1 && lengths[end] < distance) end++;
+        const start = end - 1;
+        const t = (distance - lengths[start]) / Math.max(.001, lengths[end] - lengths[start]);
+        return {segment:start, point:points[start].map((v, axis) => mix(v, points[end][axis], t))};
+      }
 
+      const count = length < 75 ? 1 : length < 185 ? 2 : 3;
+      const cycle = clamp(length / 82, 1.7, 4.6);
+      const phase = signalSeconds / cycle;
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < count; i++) {
+        const distance = ((phase + i / count) % 1) * length;
+        const head = pointAt(distance);
+        const tail = pointAt(Math.max(0, distance - Math.min(26, length * .22)));
+        const ink = head.segment < junction ? senderColor : readerColor;
+        const light = ctx.createLinearGradient(...tail.point, ...head.point);
+        light.addColorStop(0, ink + '00');
+        light.addColorStop(.65, ink + 'bc');
+        light.addColorStop(1, '#f5faff');
+        const streak = [tail.point, ...points.slice(tail.segment + 1, head.segment + 1), head.point];
+        strokePoints(ctx, streak, light, 2.6);
+        glow(ctx, ...head.point, 19, ink, .85);
+        dot(ctx, ...head.point, 2.6, '#f8fbff');
+      }
+      const arrival = (phase * count) % 1;
+      ctx.globalAlpha = (1 - arrival) * .58;
+      dot(ctx, ...points.at(-1), 8 + 12 * arrival, readerColor, false);
+      ctx.restore();
+    }
+
+    function drawTransfer(moment, originalSend) {
+      const points = moment.samples.map(project);
+      const earlier = moment.kind === 'read' ? originalSend.samples.map(project) : [];
+      const senderColor = color(originalSend.actor);
+      const readerColor = color(moment.actor);
+      const gradient = ctx.createLinearGradient(...points[0], ...points.at(-1));
+      gradient.addColorStop(0, senderColor);
+      gradient.addColorStop(1, readerColor);
       ctx.save();
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      strokePoints(ctx, points, senderColor + '12', 9);
-      strokePoints(ctx, points, gradient, 2.3);
+      if (earlier.length) {
+        strokePoints(ctx, earlier, senderColor + '16', 6);
+        strokePoints(ctx, earlier, senderColor + 'ba', 1.45);
+      }
+      strokePoints(ctx, points, senderColor + '12', 11);
+      strokePoints(ctx, points, readerColor + '25', 5);
+      strokePoints(ctx, points, gradient, 2);
 
-      // Direction stays legible when the reader pauses or requests reduced motion.
-      const arrowIndex = Math.floor(points.length * .62);
-      const ahead = points[arrowIndex + 1];
-      const behind = points[arrowIndex - 1];
+      const i = Math.floor(points.length * .66);
       ctx.save();
-      ctx.translate(...points[arrowIndex]);
-      ctx.rotate(Math.atan2(ahead[1] - behind[1], ahead[0] - behind[0]));
-      strokePoints(ctx, [[-4, -3.5], [1, 0], [-4, 3.5]], '#edf5ff', 1.8);
+      ctx.translate(...points[i]);
+      ctx.rotate(Math.atan2(points[i + 1][1] - points[i - 1][1], points[i + 1][0] - points[i - 1][0]));
+      strokePoints(ctx, [[-4, -3.5], [1, 0], [-4, 3.5]], '#edf5ff', 1.6);
       ctx.restore();
 
-      const progress = reduced ? 1 : clamp(elapsed / travelMs, 0, 1);
-      if (progress < 1) {
-        const position = progress * (points.length - 1);
-        const index = Math.floor(position);
-        const fraction = position - index;
-        const next = points[index + 1];
-        const head = points[index].map((v, axis) => mix(v, next[axis], fraction));
-        const tail = points.slice(Math.max(0, index - 4), index + 1);
-        strokePoints(ctx, [...tail, head], '#f4f8ffb0', 2.8);
-        glow(ctx, ...head, 18, endColor);
-        dot(ctx, ...head, 3, '#ffffff');
-      } else if (!reduced && elapsed < travelMs + arrivalMs) {
-        const arrival = (elapsed - travelMs) / arrivalMs;
-        ctx.globalAlpha = 1 - arrival;
-        dot(ctx, ...end, 10 + 11 * arrival, endColor, false);
+      if (!reduced) {
+        const route = earlier.length ? earlier.slice(0, -1).concat(points) : points;
+        drawStream(route, senderColor, readerColor, earlier.length ? earlier.length - 1 : points.length);
       }
       ctx.restore();
     }
@@ -360,38 +544,57 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, viewWidth, viewHeight);
       sceneHits = [];
+      viewSine = Math.sin(yaw + cameraOffset);
+      viewCosine = Math.cos(yaw + cameraOffset);
       const moment = active();
       const focused = moment.kind !== 'outcome';
       const endY = actors.length * 51;
       const originalSend = moment.message && moments[sendIndex.get(moment.message.id)];
+      const actionIndex = eventIndex.get(moment.event);
+      const inWindow = actionIndex >= windowStart && actionIndex <= windowEnd;
 
       for (let i = 0; i <= 10; i++) {
         const x = mix(-390, 390, i / 10);
         strokePoints(ctx, [project([x, -endY, 0]), project([x, endY, 0])], '#b7c7e00d', .6);
       }
+      for (let y = -endY; y <= endY; y += 51) {
+        strokePoints(ctx, [project([-390, y, 0]), project([390, y, 0])], '#b7c7e00c', .6);
+      }
+      if (inWindow) {
+        const x = worldX(moment.event);
+        const face = [[x,-endY,0],[x,endY,0],[x,endY,122],[x,-endY,122]].map(project);
+        ctx.beginPath();
+        face.forEach(([sx,sy], i) => i ? ctx.lineTo(sx,sy) : ctx.moveTo(sx,sy));
+        ctx.closePath();
+        ctx.fillStyle = '#b6cee809';
+        ctx.fill();
+        strokePoints(ctx, face.slice(0,2), '#b9d9ff4d', 1);
+      }
 
       // Other exchanges stay behind the rails and never carry moving packets.
       for (const connection of connections) {
         if (connection === moment || connection === originalSend) continue;
-        let ink = '#9baabc0a';
-        if (connection.event <= moment.event) ink = '#9baabc1c';
-        if (!focused) ink = color(connection.message.actor) + '56';
+        let alpha = connection.order <= current ? '4e' : '22';
+        if (connection.message === moment.message && connection.order < current) alpha = '77';
+        if (!focused) alpha = '62';
+        const ink = color(connection.message.actor) + alpha;
         strokePoints(ctx, connection.samples.map(project), ink, .75);
       }
 
       for (const actor of actors) {
         const role = participantRole(actor.id, moment);
         const lit = Boolean(role) || !focused;
-        const ink = lit ? color(actor.id) : '#78899b';
+        const ink = color(actor.id);
         const rail = lanePaths.get(actor.id).map(project);
-        if (lit) strokePoints(ctx, rail, ink + '16', 7);
-        strokePoints(ctx, rail, ink + (lit ? 'a6' : '43'), lit ? 1.2 : .8);
+        strokePoints(ctx, rail, ink + (lit ? '0e' : '08'), 16);
+        strokePoints(ctx, rail, ink + (lit ? '26' : '13'), 6);
+        strokePoints(ctx, rail, ink + (lit ? 'ad' : '68'), lit ? 1.2 : .8);
         const y = laneY(actor.id);
         const label = project([-390, y, 0]);
         ctx.textAlign = 'center';
         drawLabel(actor.id, [label[0], label[1] + 4], ink);
         ctx.textAlign = 'left';
-        if (!focused && viewWidth > 460) {
+        if (viewWidth > 580) {
           const name = project([-350, y, -20]);
           drawLabel(short(actor.name, 22), [name[0], name[1] + 12], lit ? ink : '#73808e', true);
         }
@@ -400,7 +603,7 @@
       if (!noMessages) {
         const left = project([-380, 0, channelHeight]);
         strokePoints(ctx, [left, project([380, 0, channelHeight])], '#b6c3d139', .7);
-        drawLabel(channel, [left[0], left[1] + 14], '#85909e', true);
+        drawLabel(channel, [left[0], left[1] - 10], '#c3bdad', true);
       }
 
       for (const event of stageEvents) {
@@ -409,32 +612,34 @@
         const read = event.reads.length > 0;
         const participant = participantRole(event.actor, moment);
         const actorInk = color(event.actor);
-        let ink = '#8290a13b';
-        if (participant) ink = actorInk + '70';
-        if (!focused) ink = actorInk + 'b8';
-        if (focused && event.id > moment.event) ink = '#8290a12c';
+        let ink = actorInk + (participant ? 'b3' : '7c');
+        if (!focused) ink = actorInk + 'ce';
+        if (focused && event.id > moment.event) ink = actorInk + '42';
+        if (sent || read) {
+          const foot = project(lanePoint(worldX(event.id), event.actor));
+          strokePoints(ctx, [foot, [x,y]], actorInk + (event.id <= moment.event ? '48' : '24'), .7);
+        }
         dot(ctx, x, y, sent ? 2.8 : read ? 2.4 : 1.4, ink, !read || sent);
         sceneHits.push({x, y, event: event.id, r: sent ? 8 : 6});
       }
 
       for (const message of messages) {
         const [x, y] = project(hubPoint(message));
-        dot(ctx, x, y, 2.1, focused ? '#9aaabb51' : color(message.actor));
+        dot(ctx, x, y, 2.3, color(message.actor) + (message.event <= moment.event ? 'ca' : '52'));
         sceneHits.push({x, y, message: message.id, event: message.event, r: 7});
       }
 
       if (originalSend) {
-        // A read starts at the stored message. Its earlier send is a static trace.
-        if (moment.kind === 'read') {
-          strokePoints(ctx, originalSend.samples.map(project), color(originalSend.actor) + 'ae', 1.2);
-        }
-        drawTransfer(moment);
-        markParticipant(originalSend, 'Sent', true);
+        drawTransfer(moment, originalSend);
+        const authored = moment.message.kind === 'Message' ? 'Sent' : 'Posted';
+        markParticipant(originalSend, authored, true);
         if (moment.kind === 'read') markParticipant(moment, 'Read', false);
 
         const [x, y] = project(hubPoint(moment.message));
         const ink = color(originalSend.actor);
-        glow(ctx, x, y, 17, ink);
+        const pulse = reduced ? .5 : (1 + Math.sin(signalSeconds * 3)) / 2;
+        glow(ctx, x, y, 19 + 9 * pulse, ink);
+        dot(ctx, x, y, 9 + 4 * pulse, ink + '61', false);
         ctx.fillStyle = '#18202b';
         ctx.strokeStyle = ink;
         ctx.lineWidth = 1.3;
@@ -447,7 +652,7 @@
         drawLabel('Message ' + String(moment.index + 1).padStart(2, '0'), [labelX, labelY], '#e7ecf4');
         ctx.textAlign = 'left';
         sceneHits.push({x, y, r: 9, event: originalSend.event, moment: originalSend.order});
-      } else if (moment.kind === 'action') {
+      } else if (moment.kind === 'action' && inWindow) {
         markParticipant(moment, 'Action', false);
       }
 
@@ -507,19 +712,20 @@
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
-      if (previewingTransfer || !holding()) {
-        const moment = active();
-        const moving = moment.message && !reduced && elapsed < travelMs + arrivalMs;
+      if (!reduced && !drag) {
+        signalSeconds += dt * speed / 1000;
+        if (!hovered) cameraOffset = Math.sin(signalSeconds * .22) * .028;
+      }
+      if (!holding()) {
         elapsed += dt * speed;
-        if (previewingTransfer && elapsed >= travelMs + arrivalMs) previewingTransfer = false;
-        const duration = {send: 7200, read: 3100, outcome: 5500, action: 1800}[moment.kind];
-        if (playing && elapsed >= duration) {
+        const duration = {send: 7200, read: 3100, outcome: 5500, action: 1800}[active().kind];
+        if (elapsed >= duration) {
           if (current === moments.length - 1) { stop(); return; }
-          select(current + 1);
-        } else if (moving && ctx) {
-          drawSpatial();
+          select(nextPlayback());
+          return;
         }
       }
+      if (!reduced && !drag && ctx) drawSpatial();
       ensureFrame();
     }
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
@@ -560,7 +766,7 @@
       on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
       on(surface,'keydown',event=>{const next={ArrowLeft:current-1,ArrowRight:current+1,Home:0,End:moments.length-1}[event.key];if(next!==undefined){event.preventDefault();seek(next);}else if(event.key===' '){event.preventDefault();togglePlay();}});
     });
-    on(scene,'pointerdown',event=>{if(event.button!==0)return;started=true;stop();drag={x:event.clientX,y:event.clientY,yaw,pitch,moved:false};scene.setPointerCapture(event.pointerId);});
+    on(scene,'pointerdown',event=>{if(event.button!==0)return;hovered=null;hideTooltips();drag={x:event.clientX,y:event.clientY,yaw,pitch,moved:false};scene.setPointerCapture(event.pointerId);});
     on(scene,'pointerup',event=>{if(!drag)return;const moved=drag.moved;drag=null;scene.releasePointerCapture(event.pointerId);if(!moved)pick(scene,event);updateControls();});
     on(scene,'pointercancel',()=>{drag=null;hovered=null;hideTooltips();updateControls();});
     on(flow,'click',event=>pick(flow,event));
@@ -574,20 +780,22 @@
       else if(button.hasAttribute('data-message'))seek(sendIndex.get(button.dataset.message));
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal();
-      else if(button.hasAttribute('data-outcome')){seek(moments.length-1);documentPanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=-.16;pitch=.72;fitCamera();draw();}
+      else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
+      else if(button.hasAttribute('data-reset')){yaw=-.16;pitch=.72;cameraOffset=0;fitCamera();draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
-    on(inspector,'pointerenter',event=>{if(event.pointerType==='mouse'){reading=true;updateControls();}});
-    on(inspector,'pointerleave',()=>{reading=false;updateControls();});
-    on(inspector,'focusin',()=>{focused=true;updateControls();});
-    on(inspector,'focusout',event=>{if(!inspector.contains(event.relatedTarget)){focused=false;updateControls();}});
+    for (const area of [inspector, host.querySelector('.obs-index')]) {
+      on(area,'pointerenter',event=>{if(event.pointerType==='mouse'){reading=true;updateControls();}});
+      on(area,'pointerleave',()=>{reading=false;updateControls();});
+      on(area,'focusin',()=>{focused=true;updateControls();});
+      on(area,'focusout',event=>{if(!area.contains(event.relatedTarget)){focused=false;updateControls();}});
+    }
     on(document,'visibilitychange',()=>{lastFrame=0;ensureFrame();});
-    on(motion,'change',()=>{reduced=motion.matches;if(reduced)stop();draw();});
+    on(motion,'change',()=>{reduced=motion.matches;if(reduced){cameraOffset=0;stop();}draw();});
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resizeObserver.observe(flowStage);
     const visibilityObserver=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible&&!started&&!reduced){playing=true;started=true;}lastFrame=0;updateControls();ensureFrame();},{threshold:.18});visibilityObserver.observe(stage);
-    select(0);resize();
+    select(firstPlayback);resize();
     return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
 })();

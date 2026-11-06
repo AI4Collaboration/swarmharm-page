@@ -68,14 +68,18 @@ actions beside the complete original message text. Four agent lanes connect to
 a shared channel; animated packets follow recorded sends and verified reads.
 The spatial view focuses on the communication window, while the full event flow
 below retains every recorded action in event order, rather than elapsed-time
-spacing. Each point opens its message or source record. Drag to rotate, select
+spacing. Each point selects its recorded action. The Action panel shows who ran
+it and when. Message shows original posts, file notes or updates with their
+authors and recorded sources. Explicit replies can be expanded in place.
+Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
-Hovering or focusing the message holds playback for reading. Reduced motion
-disables autoplay, and offscreen views stop drawing. Cases without messages
+Inspecting a message holds the current event while light moves along its recorded
+route. Pause freezes both the replay and the light. Reduced motion disables
+autoplay and moving lights. Offscreen views stop drawing. Cases without messages
 show recorded actions and tool arguments, with no invented communication links.
-The full turn grid and action log remain in collapsed evidence disclosures;
-the Original record and Read record buttons open the selected event's underlying
-logs. Detailed outcomes and Settings & evidence follow the replay. They load one case
+The full turn grid and action log are available in the evidence disclosures.
+Open action record shows the selected event's underlying logs. Detailed outcomes
+and Settings & evidence follow the replay. The viewer loads one case
 at a time. For example,
 `?case=r261&phase=2` selects the current record-change case. Findings links use
 the same selector. Earlier r199/r74/r187 Phase 2 links still open their original
