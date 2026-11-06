@@ -68,7 +68,7 @@
 @keyframes finding-step { 0%,100% { opacity:1; } 15%,70% { stroke:var(--diagram-risk); stroke-width:4; } }
 @media(prefers-reduced-motion:reduce) { .is-playing [data-diagram-step] { animation:none; } .diagram-replay { display:none; } .finding-visual:has(.diagram-replay) figcaption { padding-right:0; } }
 
-/* Consistent, simple heads leave the scene objects to explain the failure. */
+/* Original field-guide robots use simple expressions and scenario props. */
 .failure-scene > svg { aspect-ratio:480/260; }
 .diagram-erased { fill:none; stroke:var(--diagram-paper); stroke-width:9; stroke-linecap:butt; }
 .diagram-eraser { fill:var(--diagram-risk); stroke:currentColor; stroke-width:1.8; }

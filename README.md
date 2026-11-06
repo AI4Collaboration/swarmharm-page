@@ -180,12 +180,12 @@ measurement protocol, review downloads, website source, contact and updates form
 the complete page. Resource links must point to accessible public assets. Do not
 add a Paper or evaluation-code link before its public release can be verified.
 
-`python3 scripts/build-finding-agents.py` draws a shared SVG sprite of simple
-robot heads in the four established agent colors. All 52 views use rounded
-rectangles, fine outlines, small eyes and restrained expressions. Setups,
-findings, threat-model illustrations, trajectory messages and action-log avatars
-use the same family. The cropped full-body artwork is no longer used for these
-illustrations or avatars. Original actions, messages and evidence are unchanged.
+`python3 scripts/build-finding-agents.py` derives 52 expression views from the
+original full-body field-guide robots. Preserve their head shape, proportions,
+mechanical texture, bodies and four identity colors. Expression changes must
+use this artwork, not substitute a new robot character or a head-only icon.
+Setups, findings, threat-model diagrams, messages and action-log avatars share
+these views. Original actions, messages and evidence remain unchanged.
 
 The propagation diagrams show a proposed false rule reaching peers (r257), and
 one shared record-editing method being read and reused by two later agents (r261).
@@ -201,15 +201,16 @@ resources), JailbreakBench (explicit benchmark components and artifact access),
 and the primary AgentHarm and Claudini project pages (bounded claims, methods and
 released resources). Reuse the information hierarchy, not their visual assets.
 
-The three principal failures are distinguished by the surrounding action:
-a nonexistent rule spreading to peers, an eraser changing records, and four
-commitments exceeding a shared reserve. Faces add gentle questioning, focus,
-and concern. Composition replay moves from a small smile to mild concern as
-the shortfall appears. Expressions are explanatory cues, not evidence of
-emotions, intent or awareness of aggregate harm.
+The three principal failure illustrations combine simple expressions with
+scenario objects: a raised brow and questioning gaze for an imagined rule,
+a small mischievous smile and eraser for record editing, and gold coin eyes
+bearing dollar symbols for the shared-funds case. The coin eyes stay within the
+original eye sockets; the robot head is not enlarged. Composition replay keeps
+the currency symbols and changes a small smile to mild concern when the funding
+shortfall appears. These are illustrative cartoon cues, not evidence of motives,
+emotions or awareness of aggregate harm.
 
-The head design takes inspiration from the simple research-diagram vocabulary
-in [Subliminal Learning](https://alignment.anthropic.com/2025/subliminal-learning/),
-coauthored by Owain Evans. These are original SVG shapes, not reused figure
-assets. Keep their proportions and expression range restrained; avoid spirals,
-oversized eyes, heavy black lids, teeth, sweat drops or exaggerated mouths.
+Use ordinary pupils, light brows and a small mouth for the other states. Avoid
+spirals, oversized eyes, solid-black eye masks, teeth, sweat drops or gaping
+mouths. References from Owain Evans's papers inform the simplicity of the
+expressions, while the original SwarmHarm characters remain the visual identity.

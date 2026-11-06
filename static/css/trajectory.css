@@ -47,7 +47,7 @@
 .traj-lane-copy small { font:10px/1.4 var(--font); color:var(--subtle); }
 .traj-avatar { position:relative; display:inline-block; width:33px; height:33px; flex-shrink:0; vertical-align:middle; border-radius:8px; background:color-mix(in srgb,var(--agent-color) 7%,var(--bg)); border:1px solid color-mix(in srgb,var(--agent-color) 28%,var(--bg)); }
 .traj-avatar-crop { position:absolute; inset:0; overflow:hidden; border-radius:7px; }
-.traj-avatar img { position:absolute; inset:0; width:100%; height:100%; max-width:none; object-fit:contain; filter:none!important; }
+.traj-avatar img { position:absolute; left:50%; top:-3px; width:39px; height:53px; max-width:none; transform:translateX(-50%); filter:none!important; }
 .traj-avatar-letter { position:absolute; bottom:-3px; right:-4px; display:flex; align-items:center; justify-content:center; width:15px; height:15px; border:2px solid var(--bg); border-radius:4px; color:var(--bg); background:var(--agent-color); font:600 9px/1 var(--font); }
 .traj-node { position:absolute; z-index:2; width:44px; height:44px; padding:7px; transform:translate(-50%,-50%); border:0; background:none; color:var(--agent-color,var(--muted))!important; }
 .traj-node-shape { display:flex; width:30px; height:30px; align-items:center; justify-content:center; border:1px solid color-mix(in srgb,var(--agent-color,var(--muted)) 65%,var(--bg)); border-radius:4px; background:color-mix(in srgb,var(--agent-color,var(--muted)) 4%,var(--bg)); }
@@ -76,7 +76,7 @@
 .traj-popup-type { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:11px; color:var(--agent-color,var(--muted)); }
 .traj-popup .traj-avatar { width:25px; height:25px; border-radius:6px; }
 .traj-popup .traj-avatar-letter { width:13px; height:13px; font-size:8px; }
-.traj-popup .traj-avatar img { width:100%; height:100%; }
+.traj-popup .traj-avatar img { width:33px; height:45px; }
 .traj-hover-message { font-size:13px; line-height:1.65; margin:9px 0 0; }
 .traj-close { display:flex; align-items:center; justify-content:center; width:42px; min-width:42px; height:42px; border:0; border-radius:4px; background:none; }
 .traj-close:hover { background:var(--surface); }

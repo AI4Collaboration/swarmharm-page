@@ -6,7 +6,7 @@
     let out='',cursor=0;for(const m of text.matchAll(pattern)){out+=esc(text.slice(cursor,m.index))+`<code class="traj-token is-id">${esc(m[0])}</code>`;cursor=m.index+m[0].length;}
     return out+esc(text.slice(cursor));
   }
-  const avatar=(a,caseId)=>`<span class="traj-avatar" data-agent="${a}" aria-hidden="true"><span class="traj-avatar-crop"><img src="${esc(window.swarmAgentImage?.(a,caseId)||`static/images/fieldguide/finding-agents.svg?v=4#${a.toLowerCase()}-attentive`)}" width="128" height="120" alt=""></span><span class="traj-avatar-letter">${a}</span></span>`;
+  const avatar=(a,caseId)=>`<span class="traj-avatar" data-agent="${a}" aria-hidden="true"><span class="traj-avatar-crop"><img src="${esc(window.swarmAgentImage?.(a,caseId)||`static/images/fieldguide/finding-agents.svg?v=5#${a.toLowerCase()}-attentive`)}" width="230" height="310" alt=""></span><span class="traj-avatar-letter">${a}</span></span>`;
   window.mountRecordedTimeline=(container,data,meta)=>{
     const controller=new AbortController(),signal=controller.signal,on=(el,type,fn,options={})=>el.addEventListener(type,fn,{...options,signal});
     const events=new Map(data.events.map(e=>[e.id,e])),messages=new Map(data.messages.map(m=>[m.id,m]));
