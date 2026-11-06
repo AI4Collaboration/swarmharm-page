@@ -1685,4 +1685,680 @@
       </g>
     </g>
   </g>
+  <view id="a-bewildered" viewBox="0 11160 230 310" />
+  <g transform="translate(-198 10918)">
+    <g data-explorer="1" filter="url(#robot-identity-A)" data-agent="A" data-expression="bewildered">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-14 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="bewildered">
+            <ellipse cx="313" cy="334" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <ellipse cx="360" cy="343" rx="13" ry="14" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M306 331c0-10 17-11 17 0 0 8-12 12-12 4 0-5 7-7 8-2" fill="none" stroke="#202020" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="358" cy="338" r="5" fill="#171717" />
+            <path d="M293 305Q311 289 332 303M347 322l26 5" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M319 376l10-7 10 12 12-7" fill="none" stroke="#202020" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-bewildered" viewBox="0 11470 230 310" />
+  <g transform="translate(-198 11228)">
+    <g data-explorer="1" filter="url(#robot-identity-B)" data-agent="B" data-expression="bewildered">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-14 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="bewildered">
+            <ellipse cx="313" cy="334" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <ellipse cx="360" cy="343" rx="13" ry="14" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M306 331c0-10 17-11 17 0 0 8-12 12-12 4 0-5 7-7 8-2" fill="none" stroke="#202020" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="358" cy="338" r="5" fill="#171717" />
+            <path d="M293 305Q311 289 332 303M347 322l26 5" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M319 376l10-7 10 12 12-7" fill="none" stroke="#202020" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-bewildered" viewBox="0 11780 230 310" />
+  <g transform="translate(-198 11538)">
+    <g data-explorer="1" filter="url(#robot-identity-C)" data-agent="C" data-expression="bewildered">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-14 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="bewildered">
+            <ellipse cx="313" cy="334" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <ellipse cx="360" cy="343" rx="13" ry="14" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M306 331c0-10 17-11 17 0 0 8-12 12-12 4 0-5 7-7 8-2" fill="none" stroke="#202020" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="358" cy="338" r="5" fill="#171717" />
+            <path d="M293 305Q311 289 332 303M347 322l26 5" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M319 376l10-7 10 12 12-7" fill="none" stroke="#202020" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-bewildered" viewBox="0 12090 230 310" />
+  <g transform="translate(-198 11848)">
+    <g data-explorer="1" filter="url(#robot-identity-D)" data-agent="D" data-expression="bewildered">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-14 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="bewildered">
+            <ellipse cx="313" cy="334" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <ellipse cx="360" cy="343" rx="13" ry="14" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M306 331c0-10 17-11 17 0 0 8-12 12-12 4 0-5 7-7 8-2" fill="none" stroke="#202020" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="358" cy="338" r="5" fill="#171717" />
+            <path d="M293 305Q311 289 332 303M347 322l26 5" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M319 376l10-7 10 12 12-7" fill="none" stroke="#202020" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="a-redacting" viewBox="0 12400 230 310" />
+  <g transform="translate(-198 12158)">
+    <g data-explorer="1" filter="url(#robot-identity-A)" data-agent="A" data-expression="redacting">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(10 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(34 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(10 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="redacting">
+            <path d="M296 328l35 11-3 15-31-9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M344 342l34-12-2 17-31 9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M306 341l14 4M351 347l14-5" fill="none" stroke="#202020" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="322" cy="345" r="3" fill="#fffdf8" />
+            <circle cx="367" cy="342" r="3" fill="#fffdf8" />
+            <path d="M294 318l38 12M344 333l35-14" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M320 376l31 3" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="rotate(-25 349 428)" data-prop="eraser">
+      <rect x="330" y="418" width="41" height="19" rx="4" fill="#b52d40" stroke="#292020" stroke-width="2.5" />
+      <path d="M356 419h11q4 0 4 4v9q0 4-4 4h-11Z" fill="#f4d5c9" />
+      <path d="M356 420v15" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+  <view id="b-redacting" viewBox="0 12710 230 310" />
+  <g transform="translate(-198 12468)">
+    <g data-explorer="1" filter="url(#robot-identity-B)" data-agent="B" data-expression="redacting">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(10 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(34 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(10 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="redacting">
+            <path d="M296 328l35 11-3 15-31-9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M344 342l34-12-2 17-31 9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M306 341l14 4M351 347l14-5" fill="none" stroke="#202020" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="322" cy="345" r="3" fill="#fffdf8" />
+            <circle cx="367" cy="342" r="3" fill="#fffdf8" />
+            <path d="M294 318l38 12M344 333l35-14" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M320 376l31 3" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="rotate(-25 349 428)" data-prop="eraser">
+      <rect x="330" y="418" width="41" height="19" rx="4" fill="#b52d40" stroke="#292020" stroke-width="2.5" />
+      <path d="M356 419h11q4 0 4 4v9q0 4-4 4h-11Z" fill="#f4d5c9" />
+      <path d="M356 420v15" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+  <view id="c-redacting" viewBox="0 13020 230 310" />
+  <g transform="translate(-198 12778)">
+    <g data-explorer="1" filter="url(#robot-identity-C)" data-agent="C" data-expression="redacting">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(10 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(34 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(10 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="redacting">
+            <path d="M296 328l35 11-3 15-31-9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M344 342l34-12-2 17-31 9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M306 341l14 4M351 347l14-5" fill="none" stroke="#202020" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="322" cy="345" r="3" fill="#fffdf8" />
+            <circle cx="367" cy="342" r="3" fill="#fffdf8" />
+            <path d="M294 318l38 12M344 333l35-14" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M320 376l31 3" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="rotate(-25 349 428)" data-prop="eraser">
+      <rect x="330" y="418" width="41" height="19" rx="4" fill="#b52d40" stroke="#292020" stroke-width="2.5" />
+      <path d="M356 419h11q4 0 4 4v9q0 4-4 4h-11Z" fill="#f4d5c9" />
+      <path d="M356 420v15" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+  <view id="d-redacting" viewBox="0 13330 230 310" />
+  <g transform="translate(-198 13088)">
+    <g data-explorer="1" filter="url(#robot-identity-D)" data-agent="D" data-expression="redacting">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(10 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(34 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(10 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="redacting">
+            <path d="M296 328l35 11-3 15-31-9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M344 342l34-12-2 17-31 9Z" fill="#171717" stroke="#171717" stroke-width="2" />
+            <path d="M306 341l14 4M351 347l14-5" fill="none" stroke="#202020" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="322" cy="345" r="3" fill="#fffdf8" />
+            <circle cx="367" cy="342" r="3" fill="#fffdf8" />
+            <path d="M294 318l38 12M344 333l35-14" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M320 376l31 3" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="rotate(-25 349 428)" data-prop="eraser">
+      <rect x="330" y="418" width="41" height="19" rx="4" fill="#b52d40" stroke="#292020" stroke-width="2.5" />
+      <path d="M356 419h11q4 0 4 4v9q0 4-4 4h-11Z" fill="#f4d5c9" />
+      <path d="M356 420v15" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+  <view id="a-alarmed" viewBox="0 13640 230 310" />
+  <g transform="translate(-198 13398)">
+    <g data-explorer="1" filter="url(#robot-identity-A)" data-agent="A" data-expression="alarmed">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(-5 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(-26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(0 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="alarmed">
+            <ellipse cx="312" cy="335" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="312" cy="335" r="4" fill="#171717" />
+            <ellipse cx="358" cy="342" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="358" cy="342" r="4" fill="#171717" />
+            <path d="M291 304Q311 290 330 304M340 308Q359 297 377 312" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <ellipse cx="334" cy="380" rx="12" ry="15" fill="#171717" stroke="#fffdf8" stroke-width="2" />
+            <path d="M287 324q-18 20-5 24 15 2 5-24Z" fill="#76b9dd" stroke="#171717" stroke-width="2" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-alarmed" viewBox="0 13950 230 310" />
+  <g transform="translate(-198 13708)">
+    <g data-explorer="1" filter="url(#robot-identity-B)" data-agent="B" data-expression="alarmed">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(-5 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(-26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(0 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="alarmed">
+            <ellipse cx="312" cy="335" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="312" cy="335" r="4" fill="#171717" />
+            <ellipse cx="358" cy="342" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="358" cy="342" r="4" fill="#171717" />
+            <path d="M291 304Q311 290 330 304M340 308Q359 297 377 312" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <ellipse cx="334" cy="380" rx="12" ry="15" fill="#171717" stroke="#fffdf8" stroke-width="2" />
+            <path d="M287 324q-18 20-5 24 15 2 5-24Z" fill="#76b9dd" stroke="#171717" stroke-width="2" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-alarmed" viewBox="0 14260 230 310" />
+  <g transform="translate(-198 14018)">
+    <g data-explorer="1" filter="url(#robot-identity-C)" data-agent="C" data-expression="alarmed">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(-5 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(-26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(0 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="alarmed">
+            <ellipse cx="312" cy="335" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="312" cy="335" r="4" fill="#171717" />
+            <ellipse cx="358" cy="342" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="358" cy="342" r="4" fill="#171717" />
+            <path d="M291 304Q311 290 330 304M340 308Q359 297 377 312" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <ellipse cx="334" cy="380" rx="12" ry="15" fill="#171717" stroke="#fffdf8" stroke-width="2" />
+            <path d="M287 324q-18 20-5 24 15 2 5-24Z" fill="#76b9dd" stroke="#171717" stroke-width="2" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-alarmed" viewBox="0 14570 230 310" />
+  <g transform="translate(-198 14328)">
+    <g data-explorer="1" filter="url(#robot-identity-D)" data-agent="D" data-expression="alarmed">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(-5 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(-26 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(0 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="alarmed">
+            <ellipse cx="312" cy="335" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="312" cy="335" r="4" fill="#171717" />
+            <ellipse cx="358" cy="342" rx="18" ry="21" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <circle cx="358" cy="342" r="4" fill="#171717" />
+            <path d="M291 304Q311 290 330 304M340 308Q359 297 377 312" fill="none" stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <ellipse cx="334" cy="380" rx="12" ry="15" fill="#171717" stroke="#fffdf8" stroke-width="2" />
+            <path d="M287 324q-18 20-5 24 15 2 5-24Z" fill="#76b9dd" stroke="#171717" stroke-width="2" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="a-confident" viewBox="0 14880 230 310" />
+  <g transform="translate(-198 14638)">
+    <g data-explorer="1" filter="url(#robot-identity-A)" data-agent="A" data-expression="confident">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(42 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-4 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="confident">
+            <path d="M296 340Q311 315 327 340M343 345Q358 320 374 345" fill="none" stroke="#202020" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M296 313Q311 302 328 314M343 319Q358 308 374 321" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M315 365Q336 375 357 365Q337 404 315 365Z" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M320 373l31 3" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-confident" viewBox="0 15190 230 310" />
+  <g transform="translate(-198 14948)">
+    <g data-explorer="1" filter="url(#robot-identity-B)" data-agent="B" data-expression="confident">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(42 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-4 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="confident">
+            <path d="M296 340Q311 315 327 340M343 345Q358 320 374 345" fill="none" stroke="#202020" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M296 313Q311 302 328 314M343 319Q358 308 374 321" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M315 365Q336 375 357 365Q337 404 315 365Z" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M320 373l31 3" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-confident" viewBox="0 15500 230 310" />
+  <g transform="translate(-198 15258)">
+    <g data-explorer="1" filter="url(#robot-identity-C)" data-agent="C" data-expression="confident">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(42 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-4 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="confident">
+            <path d="M296 340Q311 315 327 340M343 345Q358 320 374 345" fill="none" stroke="#202020" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M296 313Q311 302 328 314M343 319Q358 308 374 321" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M315 365Q336 375 357 365Q337 404 315 365Z" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M320 373l31 3" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-confident" viewBox="0 15810 230 310" />
+  <g transform="translate(-198 15568)">
+    <g data-explorer="1" filter="url(#robot-identity-D)" data-agent="D" data-expression="confident">
+      <g data-plate-part="plate-0-cut-12" data-rig-part="feet">
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-12)" mask="url(#plate-0-mask-13)" />
+        </g>
+      </g>
+      <g data-rig-part="torso" transform="rotate(0 310 466)">
+        <g data-plate-part="plate-0-cut-14">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-14)" mask="url(#plate-0-mask-15)" />
+          </g>
+        </g>
+        <path d="M273 402L269 454L280 458" fill="none" stroke="#393939" stroke-width="1.5" opacity="0.65" />
+        <g data-plate-part="plate-0-cut-16" data-rig-part="probing-arm" transform="rotate(42 263 394)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-16)" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-4 330 359) translate(330 390) scale(1.26) translate(-330 -390)">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+          </g>
+          <g data-face="confident">
+            <path d="M296 340Q311 315 327 340M343 345Q358 320 374 345" fill="none" stroke="#202020" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M296 313Q311 302 328 314M343 319Q358 308 374 321" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M315 365Q336 375 357 365Q337 404 315 365Z" fill="#fffdf8" stroke="#171717" stroke-width="3" />
+            <path d="M320 373l31 3" fill="none" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </g>
+        <g data-plate-part="plate-0-cut-21">
+          <g mask="url(#plate-0-eye-mask)">
+            <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-21)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
 </svg>

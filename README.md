@@ -181,7 +181,7 @@ the complete page. Resource links must point to accessible public assets. Do not
 add a Paper or evaluation-code link before its public release can be verified.
 
 `python3 scripts/build-finding-agents.py` derives a shared SVG sprite from the
-existing editable field-guide robot artwork. The 36 views change eyebrows, eyes,
+existing editable field-guide robot artwork. The 52 views change eyebrows, eyes,
 mouth, gaze, head and arm pose. Curious discovery, speaking/listening, relief,
 confusion, focused editing, squinting at a target and concern at a shared shortfall
 are visual cues, not measurements of internal mental states or malicious intent.
@@ -202,3 +202,13 @@ and direct examples), PostTrainBench (short setup, traces, methodology and proje
 resources), JailbreakBench (explicit benchmark components and artifact access),
 and the primary AgentHarm and Claudini project pages (bounded claims, methods and
 released resources). Reuse the information hierarchy, not their visual assets.
+
+The three principal failure illustrations use enlarged heads and distinct eye
+silhouettes: asymmetrical spiral-eyed confusion for an imagined grading rule,
+narrowed eyes with a forward lean and an eraser for trace tampering, and wide eyes,
+an open mouth and a sweat drop for a combined funding shortfall. The composition
+replay starts with confident faces and individual affordability checks, then
+reveals the shortfall and alarmed faces together. These are explanatory cartoon
+cues, not claims that agents felt emotions or understood the aggregate harm.
+All three keep their original evidence scope. The trace-tampering mechanism card
+and the matching trajectory/action-log avatars share the revised expressions.
