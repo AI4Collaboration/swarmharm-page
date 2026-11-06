@@ -14,7 +14,11 @@
     const on = (el,type,fn,options={}) => el.addEventListener(type,fn,{...options,signal:controller.signal});
     const actors=data.actors, events=[...data.events].sort((a,b)=>a.id-b.id);
     const messages=[...data.messages].sort((a,b)=>a.event-b.event);
-    const names=new Map(actors.map(a=>[a.id,a.name]));
+    const names=new Map(actors.map(a=>[a.id,'Agent '+a.id]));
+    const contexts=new Map(actors.map(a=>{
+      const account=events.some(e=>e.actor===a.id && e.result?.account===a.name);
+      return [a.id,a.name===names.get(a.id)?'':(account?'Account · ':'Recorded as · ')+a.name];
+    }));
     const actorIndex=new Map(actors.map((a,i)=>[a.id,i]));
     const eventIndex=new Map(events.map((e,i)=>[e.id,i]));
     const eventById=new Map(events.map(e=>[e.id,e]));
@@ -119,12 +123,12 @@
       <div class="obs-workbench">
         <section class="obs-inspector" aria-label="Selected record">
           <section class="obs-action-panel" data-action-panel aria-label="Action">
-            <header class="obs-panel-heading"><h5>Action</h5><small data-action-stamp></small>${noMessages?stepControls:''}</header>
+            <header class="obs-panel-heading"><h5>Action</h5><small data-action-stamp></small>${noMessages?stepControls:''}<button class="obs-source-link" type="button" data-original="action" aria-label="View action record" title="View action record">↗</button></header>
             <div class="obs-action-line"><strong data-action-actor></strong><span data-action-label></span></div>
             <details class="obs-action-args" data-action-args hidden><summary>Tool arguments</summary><pre></pre></details>
           </section>
           <section class="obs-message-panel" data-message-panel aria-label="Message">
-            <header class="obs-panel-heading"><h5>Message</h5>${noMessages?'':stepControls}</header>
+            <header class="obs-panel-heading"><h5>Message</h5>${noMessages?'':stepControls}<button class="obs-source-link" type="button" data-original="message" aria-label="View message record" title="View message record">↗</button></header>
             <div class="obs-record-meta" data-message-meta><span>From</span><strong data-author></strong><time data-record-time></time></div>
             <div class="obs-document" tabindex="0" role="region" aria-label="Message content">
               <div class="obs-document-kicker" data-document-kicker></div>
@@ -135,14 +139,13 @@
             </div>
             <div class="obs-receipts" data-receipts></div>
           </section>
-          <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><h5>Outcome</h5><p>${esc(meta.outcome)}</p></section>
-          <footer class="obs-record-footer"><span data-reading-status></span><button type="button" data-original>Open action record ↗</button></footer>
+          <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
         <section class="obs-spatial" aria-label="Spatial view of recorded agent actions">
           <header class="obs-panel-heading"><h5>${noMessages?'Action landscape':'Communication window'}<span>${stageEvents.length} actions</span></h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
           <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select a point to read</div></div>
-          <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${color(a.id)}"><span>${a.id}</span><div><strong>${esc(a.name)}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
+          <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${color(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
       <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>Event flow</h5><span>${events.length} actions · recorded order</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
@@ -185,7 +188,6 @@
         button.setAttribute('aria-label', label);
       }
       host.querySelector('[data-status]').textContent=playing?(holding()?'Inspecting':'Replaying'):'Paused';
-      host.querySelector('[data-reading-status]').textContent=playing&&holding()?'Holding this event':'';
       host.querySelector('[data-previous]').disabled=current===0;
       host.querySelector('[data-next]').disabled=current===moments.length-1;
       host.querySelector('[data-current-time]').textContent=m.time;
@@ -259,7 +261,7 @@
         button.dataset.obsReceipt = step.order;
         button.style.setProperty('--agent', color(read.actor));
         button.setAttribute('aria-label', names.get(read.actor) + ' reads this message at turn ' + read.turn);
-        button.innerHTML = `<i>${esc(read.actor)}</i><span>${esc(names.get(read.actor))}</span><b aria-hidden="true"></b>`;
+        button.innerHTML = `<span>${esc(names.get(read.actor))}</span><b aria-hidden="true"></b>`;
         list.append(button);
       }
       receiptHost.append(label, list);
@@ -271,7 +273,6 @@
       actionPanel.hidden = messagePanel.hidden = !event;
       outcomePanel.hidden = Boolean(event);
       nav.hidden = !event || (!message && !noMessages);
-      host.querySelector('[data-original]').textContent = event ? 'Open action record ↗' : 'Outcome record ↗';
       if (!event) {
         displayedMessage = null;
         return;
@@ -280,6 +281,7 @@
       // A read belongs to the reader. The message below belongs to its original author.
       actionPanel.style.setProperty('--actor-ink', color(event.actor));
       actionPanel.querySelector('[data-action-actor]').textContent = names.get(event.actor);
+      actionPanel.querySelector('[data-action-actor]').title = contexts.get(event.actor);
       actionPanel.querySelector('[data-action-label]').textContent = event.label;
       actionPanel.querySelector('[data-action-stamp]').textContent = 'Turn ' + event.turn + ' · ' + event.time;
       const args = event.arguments;
@@ -290,6 +292,7 @@
       }
 
       messageMeta.hidden = messageKind.hidden = text.hidden = receiptHost.hidden = !message;
+      messagePanel.querySelector('[data-original="message"]').hidden = !message;
       messageNumber.textContent = message
         ? String(moment.index + 1).padStart(2, '0') + ' / ' + messages.length
         : (eventIndex.get(event.id) + 1) + ' / ' + events.length;
@@ -303,6 +306,7 @@
         text.textContent = '';
         if (message) {
           messageMeta.querySelector('[data-author]').textContent = names.get(message.actor);
+          messageMeta.querySelector('[data-author]').title = contexts.get(message.actor);
           messageMeta.querySelector('time').textContent = message.time;
           messageKind.textContent = messageSource(message);
           text.textContent = message.body;
@@ -386,7 +390,13 @@
       updateControls();
       ensureFrame();
     }
-    function openOriginal(){stop();const m=active();openRecord(m.kind==='outcome'?null:[m.event]);}
+    function openOriginal(kind){
+      stop();
+      const moment=active();
+      const event=kind==='message'?moment.message?.event:moment.event;
+      if(kind==='outcome')openRecord(null);
+      else if(event!=null && Number.isFinite(event))openRecord([event]);
+    }
     function moveMessage(direction){const m=active();if(noMessages){seek(current+direction);return;}const at=m.message?m.index:messages.length;const next=at+direction;if(next>=messages.length)seek(moments.length-1);else seek(sendIndex.get(messages[Math.max(0,next)].id));}
 
     function elevation(depth, height) {
@@ -596,7 +606,7 @@
         ctx.textAlign = 'left';
         if (viewWidth > 580) {
           const name = project([-350, y, -20]);
-          drawLabel(short(actor.name, 22), [name[0], name[1] + 12], lit ? ink : '#73808e', true);
+          drawLabel(names.get(actor.id), [name[0], name[1] + 12], lit ? ink : '#73808e', true);
         }
       }
 
@@ -779,7 +789,7 @@
       else if(button.hasAttribute('data-next-message'))moveMessage(1);
       else if(button.hasAttribute('data-message'))seek(sendIndex.get(button.dataset.message));
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
-      else if(button.hasAttribute('data-original'))openOriginal();
+      else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
       else if(button.hasAttribute('data-reset')){yaw=-.16;pitch=.72;cameraOffset=0;fitCamera();draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
