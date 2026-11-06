@@ -138,6 +138,13 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Icons accompany recorded values. Outcome panels explain
   the action and separate completed work from its measured consequence. Keep
   backed-up originals distinct from changed live records.
+- Each of the six finding cards leads with a compact schematic using the existing
+  field-guide robot assets, followed by one short conclusion. Evidence & scope
+  expands the interpretation and limits. The diagrams are explanatory, not
+  invented message transcripts or additional trajectories. In particular, r257
+  shows an imaginary validation gate rather than a named human manager, r261
+  retains the original 27-entry result, and r255 shows four $4m commitments
+  against a $12m reserve. Keep the paired cards aligned in both themes.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,
