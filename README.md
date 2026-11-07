@@ -73,12 +73,13 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-`static/js/trajectory-observatory.js` renders a spatial view of recorded agent
-actions beside the complete original message text. Four agent lanes connect to
-a shared channel; animated packets follow recorded sends and verified reads.
-The spatial view focuses on the communication window, while the full event flow
-below retains every recorded action in event order, rather than elapsed-time
-spacing. Each point selects its recorded action. Separate Action and Message
+The replay shows each agent as a small planet.
+`static/js/trajectory-orbits.js` places every recorded tool action on its owner's
+spiral, ordered by that agent's action sequence. At each replay position, the planet
+advances to its latest action. A selected message travels from the recorded post
+to the discussion or shared notes, then to the selected verified read. The original
+send stays anchored to its action even after the sending planet moves on. The full
+timeline underneath orders all actors' actions together. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 Participants are labelled Agent A through D. Original account names are available
 on hover, and message bodies remain verbatim. The Message card is an always-open,

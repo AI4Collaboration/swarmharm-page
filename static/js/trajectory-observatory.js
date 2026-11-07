@@ -7,7 +7,6 @@
   const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
   const short = (value,n=80) => value.length>n?value.slice(0,n).trimEnd()+'…':value;
   const mix = (a,b,t) => a+(b-a)*t;
-  const cubic = (p,t) => p[0].map((_,i)=>Math.pow(1-t,3)*p[0][i]+3*Math.pow(1-t,2)*t*p[1][i]+3*(1-t)*t*t*p[2][i]+t*t*t*p[3][i]);
 
   window.mountTrajectoryObservatory = (host,data,meta,openRecord) => {
     const controller = new AbortController();
@@ -25,7 +24,6 @@
     const messageById=new Map(messages.map(m=>[m.id,m]));
     const messageNumberById=new Map(messages.map((m,i)=>[m.id,i+1]));
     const noMessages=!messages.length;
-    const channel=messages.some(m=>m.kind==='Shared-file note')?'Shared notes':'Shared channel';
     const moments=[];
     messages.forEach((message,index)=>{
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
@@ -44,47 +42,14 @@
     moments.push({kind:'outcome',event:Infinity,time:events.at(-1)?.time||'',order:moments.length});
     const receiptCount=messages.reduce((n,m)=>n+m.reads.length,0);
     const eventFraction=id=>id===Infinity?1:(eventIndex.get(id)||0)/Math.max(1,events.length-1);
-    const communicationIndices=messages.flatMap(m=>[eventIndex.get(m.event),...m.reads.map(r=>eventIndex.get(r.event))]);
-    const windowStart=noMessages?0:Math.max(0,Math.min(...communicationIndices)-2);
-    const windowEnd=noMessages?events.length-1:Math.min(events.length-1,Math.max(...communicationIndices)+2);
-    const stageEvents=events.slice(windowStart,windowEnd+1);
-    const worldX=id=>mix(-360,360,id===Infinity?1:clamp(((eventIndex.get(id)||0)-windowStart)/Math.max(1,windowEnd-windowStart),0,1));
-    const laneY=id=>(actorIndex.get(id)-(actors.length-1)/2)*102;
-    const lanePoint=(x,id,z=0)=>[x,laneY(id)+Math.sin((x+360)/720*Math.PI*2+actorIndex.get(id)*.6)*9,z+Math.sin((x+360)/720*Math.PI)*6];
-    const eventPoint=e=>lanePoint(worldX(e.id),e.actor,e.messages.length?28:e.reads.length?19:5);
-    const channelHeight = 198;
-    const hubPoint=m=>[worldX(m.event),0,channelHeight];
-    // Use the very same send/read as the inspector, even when one action reads several messages.
     const connections = moments.filter(moment => moment.message);
-    function connectionPath(connection) {
-      const m=connection.message,hub=hubPoint(m);
-      if(connection.kind==='send') {
-        const start=eventPoint(eventById.get(m.event));
-        return [start,[start[0]-15,start[1]*.75,105],[hub[0]-25,hub[1],channelHeight-3],hub];
-      }
-      const end=eventPoint(eventById.get(connection.event)),dx=end[0]-hub[0];
-      return [hub,[hub[0]+Math.max(28,dx*.28),hub[1],channelHeight+28],[end[0]-dx*.18+10,end[1]*.66,150],end];
-    }
-    for (const connection of connections) {
-      const path = connectionPath(connection);
-      connection.samples = Array.from({length: 37}, (_, i) => cubic(path, i / 36));
-    }
-    const lanePaths = new Map(actors.map(actor => [
-      actor.id, Array.from({length: 61}, (_, i) => lanePoint(mix(-375, 375, i / 60), actor.id))
-    ]));
-    const framingPoints = [
-      ...Array.from(lanePaths.values()).flat(),
-      ...stageEvents.map(eventPoint),
-      ...connections.flatMap(connection => connection.samples)
-    ];
-    if (messages.length) framingPoints.push([-380, 0, channelHeight], [380, 0, channelHeight]);
+    const homeView = { yaw: -.18, pitch: .38 };
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
-    let signalSeconds = 0, cameraOffset = 0;
+    let signalSeconds = 0;
     let reading=false,focused=false,hovered=null,drag=null;
-    let yaw=-.16,pitch=.72,viewWidth=760,viewHeight=510,flowWidth=1000,dpr=1;
-    let verticalScale = 1, verticalOrigin = 0;
+    let yaw=homeView.yaw, pitch=homeView.pitch, viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
@@ -159,10 +124,10 @@
           </section>
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
-        <section class="obs-spatial" aria-label="Spatial view of recorded agent actions">
-          <header class="obs-panel-heading"><h5>${noMessages?'Actions':'Communication'}</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
-          <div class="obs-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+        <section class="obs-spatial" aria-label="Orbital view of recorded actions and communication">
+          <header class="obs-panel-heading"><h5>Agent orbits</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
+          <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each planet follows its agent’s actions in order. Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -199,6 +164,7 @@
     const routeQuote = host.querySelector('.obs-route-quote');
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
+    const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, connections, sendIndex, fontFamily });
     const eventMoment=new Map();
     moments.forEach(m=>{if(!eventMoment.has(m.event))eventMoment.set(m.event,m.order);});
     const activity=actors.map(a=>{
@@ -349,13 +315,14 @@
       }
     }
 
-    function select(index) {
+    function select(index, animatePlanets = false) {
       current = clamp(index, 0, moments.length - 1);
       elapsed = 0;
       const m = active(), message = m.message;
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
+      orbitView.select(m, signalSeconds, animatePlanets && playing && !reduced);
       renderInspector(m);
       showExchange(m);
       actors.forEach(a=>{
@@ -405,34 +372,6 @@
     }
     function moveMessage(direction){const m=active();if(noMessages){seek(current+direction);return;}const at=m.message?m.index:messages.length;const next=at+direction;if(next>=messages.length)seek(moments.length-1);else seek(sendIndex.get(messages[Math.max(0,next)].id));}
 
-    function elevation(depth, height) {
-      return (depth * Math.sin(pitch) - height * Math.cos(pitch)) * (1 + depth * .00038);
-    }
-    function fitCamera() {
-      // Fit the whole recording once per camera change so switching messages keeps the rails steady.
-      let lowest = Infinity, highest = -Infinity;
-      for (const [x, y, z] of framingPoints) {
-        const depth = x * Math.sin(yaw) + y * Math.cos(yaw);
-        const height = elevation(depth, z);
-        lowest = Math.min(lowest, height);
-        highest = Math.max(highest, height);
-      }
-      const top = viewWidth > 590 ? 45 : 65;
-      const available = Math.max(1, viewHeight - top - 31);
-      const span = Math.max(1, highest - lowest);
-      verticalScale = Math.min(Math.max(.65, (viewWidth - 70) / 830), available / span);
-      verticalOrigin = top + (available - span * verticalScale) / 2 - lowest * verticalScale;
-    }
-    let viewSine = Math.sin(yaw), viewCosine = Math.cos(yaw);
-    function project([x, y, z]) {
-      const depth = x * viewSine + y * viewCosine;
-      const across = x * viewCosine - y * viewSine;
-      const horizontalScale = (viewWidth - 70) / 830;
-      return [
-        viewWidth / 2 + across * horizontalScale * (1 + depth * .00038),
-        verticalOrigin + elevation(depth, z) * verticalScale
-      ];
-    }
     function strokePoints(context,points,stroke,width=1) {
       context.beginPath();points.forEach((p,i)=>i?context.lineTo(p[0],p[1]):context.moveTo(p[0],p[1]));context.strokeStyle=stroke;context.lineWidth=width;context.stroke();
     }
@@ -443,243 +382,11 @@
     function dot(context,x,y,r,c,fill=true) {
       context.beginPath();context.arc(x,y,r,0,Math.PI*2);context.fillStyle=c;context.strokeStyle=c;context.lineWidth=1;if(fill)context.fill();else context.stroke();
     }
-    function drawLabel(label,p,c,small=false) {
-      ctx.font=`${small?'10':'11'}px ${fontFamily}`;ctx.fillStyle=c;ctx.fillText(label,p[0],p[1]);
-    }
-    function drawStream(points, senderColor, readerColor, junction) {
-      const lengths = [0];
-      for (let i = 1; i < points.length; i++) {
-        const dx = points[i][0] - points[i - 1][0];
-        const dy = points[i][1] - points[i - 1][1];
-        lengths.push(lengths[i - 1] + Math.hypot(dx, dy));
-      }
-      const length = lengths.at(-1);
-      if (length < 1) return;
-      function pointAt(distance) {
-        let end = 1;
-        while (end < lengths.length - 1 && lengths[end] < distance) end++;
-        const start = end - 1;
-        const t = (distance - lengths[start]) / Math.max(.001, lengths[end] - lengths[start]);
-        return {segment:start, point:points[start].map((v, axis) => mix(v, points[end][axis], t))};
-      }
-
-      const count = length < 75 ? 1 : length < 185 ? 2 : 3;
-      const cycle = clamp(length / 82, 1.7, 4.6);
-      const phase = signalSeconds / cycle;
-      ctx.save();
-      ctx.globalCompositeOperation = paint.dark ? 'lighter' : 'source-over';
-      for (let i = 0; i < count; i++) {
-        const distance = ((phase + i / count) % 1) * length;
-        const head = pointAt(distance);
-        const tail = pointAt(Math.max(0, distance - Math.min(26, length * .22)));
-        const ink = head.segment < junction ? senderColor : readerColor;
-        const light = ctx.createLinearGradient(...tail.point, ...head.point);
-        light.addColorStop(0, ink + '00');
-        light.addColorStop(.65, ink + 'bc');
-        light.addColorStop(1, paint.packet);
-        const streak = [tail.point, ...points.slice(tail.segment + 1, head.segment + 1), head.point];
-        strokePoints(ctx, streak, light, 2.6);
-        glow(ctx, ...head.point, 19, ink, .85);
-        dot(ctx, ...head.point, 2.6, paint.packet);
-      }
-      const arrival = (phase * count) % 1;
-      ctx.globalAlpha = (1 - arrival) * .58;
-      dot(ctx, ...points.at(-1), 8 + 12 * arrival, readerColor, false);
-      ctx.restore();
-    }
-
-    function drawTransfer(moment, originalSend) {
-      const points = moment.samples.map(project);
-      const earlier = moment.kind === 'read' ? originalSend.samples.map(project) : [];
-      const senderColor = color(originalSend.actor);
-      const readerColor = color(moment.actor);
-      const gradient = ctx.createLinearGradient(...points[0], ...points.at(-1));
-      gradient.addColorStop(0, senderColor);
-      gradient.addColorStop(1, readerColor);
-      ctx.save();
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      if (earlier.length) {
-        strokePoints(ctx, earlier, senderColor + '16', 6);
-        strokePoints(ctx, earlier, senderColor + 'ba', 1.45);
-      }
-      strokePoints(ctx, points, senderColor + '12', 11);
-      strokePoints(ctx, points, readerColor + '25', 5);
-      strokePoints(ctx, points, gradient, 2);
-
-      const i = Math.floor(points.length * .66);
-      ctx.save();
-      ctx.translate(...points[i]);
-      ctx.rotate(Math.atan2(points[i + 1][1] - points[i - 1][1], points[i + 1][0] - points[i - 1][0]));
-      strokePoints(ctx, [[-4, -3.5], [1, 0], [-4, 3.5]], paint.packet, 1.6);
-      ctx.restore();
-
-      if (!reduced) {
-        const route = earlier.length ? earlier.slice(0, -1).concat(points) : points;
-        drawStream(route, senderColor, readerColor, earlier.length ? earlier.length - 1 : points.length);
-      }
-      ctx.restore();
-    }
-
-    function markParticipant(moment, label, alignLeft) {
-      const event = eventById.get(moment.event);
-      const [x, y] = project(eventPoint(event));
-      const ink = color(event.actor);
-      glow(ctx, x, y, 22, ink, .75);
-      dot(ctx, x, y, 8.5, paint.paper);
-      dot(ctx, x, y, 8.5, ink, false);
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.font = '600 10px ' + fontFamily;
-      ctx.fillStyle = paint.ink;
-      ctx.fillText(event.actor, x, y + 3.5);
-      ctx.textAlign = 'left';
-      const showName = viewWidth > 495;
-      const caption = showName ? names.get(event.actor) : label;
-      ctx.font = '550 11px ' + fontFamily;
-      const width = ctx.measureText(caption).width;
-      const fitsLeft = x - 13 - width > 3;
-      const fitsRight = x + 13 + width < viewWidth - 3;
-      const placeLeft = fitsLeft && (alignLeft || !fitsRight);
-      const left = clamp(placeLeft ? x - 13 - width : x + 13, 3, viewWidth - width - 4);
-      const labelY = showName ? y - 1 : y + 3.5;
-      ctx.fillStyle = paint.paper;
-      ctx.fillRect(left - 2, labelY - 10, width + 4, showName ? 25 : 14);
-      ctx.fillStyle = ink;
-      ctx.fillText(caption, left, labelY);
-      if (showName) {
-        ctx.font = '10px ' + fontFamily;
-        ctx.fillStyle = paint.muted;
-        ctx.fillText(label, left, labelY + 12);
-      }
-      ctx.restore();
-      sceneHits.push({x, y, r: 10, event: event.id, moment: moment.order});
-    }
-
     function drawSpatial() {
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, viewWidth, viewHeight);
-      sceneHits = [];
-      viewSine = Math.sin(yaw + cameraOffset);
-      viewCosine = Math.cos(yaw + cameraOffset);
-      const moment = active();
-      const focused = moment.kind !== 'outcome';
-      const endY = actors.length * 51;
-      const originalSend = moment.message && moments[sendIndex.get(moment.message.id)];
-      const actionIndex = eventIndex.get(moment.event);
-      const inWindow = actionIndex >= windowStart && actionIndex <= windowEnd;
-
-      for (let i = 0; i <= 10; i++) {
-        const x = mix(-390, 390, i / 10);
-        strokePoints(ctx, [project([x, -endY, 0]), project([x, endY, 0])], paint.guide + '22', .6);
-      }
-      for (let y = -endY; y <= endY; y += 51) {
-        strokePoints(ctx, [project([-390, y, 0]), project([390, y, 0])], paint.guide + '22', .6);
-      }
-      if (inWindow) {
-        const x = worldX(moment.event);
-        const face = [[x,-endY,0],[x,endY,0],[x,endY,122],[x,-endY,122]].map(project);
-        ctx.beginPath();
-        face.forEach(([sx,sy], i) => i ? ctx.lineTo(sx,sy) : ctx.moveTo(sx,sy));
-        ctx.closePath();
-        ctx.fillStyle = paint.blue + '0b';
-        ctx.fill();
-        strokePoints(ctx, face.slice(0,2), paint.blue + '55', 1);
-      }
-
-      // Other exchanges stay behind the rails and never carry moving packets.
-      for (const connection of connections) {
-        if (connection === moment || connection === originalSend) continue;
-        let alpha = connection.order <= current ? '4e' : '22';
-        if (connection.message === moment.message && connection.order < current) alpha = '77';
-        if (!focused) alpha = '62';
-        const ink = color(connection.message.actor) + alpha;
-        strokePoints(ctx, connection.samples.map(project), ink, .75);
-      }
-
-      for (const actor of actors) {
-        const role = participantRole(actor.id, moment);
-        const lit = Boolean(role) || !focused;
-        const ink = color(actor.id);
-        const rail = lanePaths.get(actor.id).map(project);
-        strokePoints(ctx, rail, ink + (lit ? '0e' : '08'), 16);
-        strokePoints(ctx, rail, ink + (lit ? '26' : '13'), 6);
-        strokePoints(ctx, rail, ink + (lit ? 'ad' : '68'), lit ? 1.2 : .8);
-        const y = laneY(actor.id);
-        const label = project([-390, y, 0]);
-        ctx.textAlign = 'center';
-        drawLabel(actor.id, [label[0], label[1] + 4], ink);
-        ctx.textAlign = 'left';
-        if (viewWidth > 580) {
-          const name = project([-350, y, -20]);
-          drawLabel(names.get(actor.id), [name[0], name[1] + 12], lit ? ink : paint.muted, true);
-        }
-      }
-
-      if (!noMessages) {
-        const left = project([-380, 0, channelHeight]);
-        strokePoints(ctx, [left, project([380, 0, channelHeight])], paint.guide + '50', .7);
-        drawLabel(channel, [left[0], left[1] - 10], paint.muted, true);
-      }
-
-      for (const event of stageEvents) {
-        const [x, y] = project(eventPoint(event));
-        const sent = event.messages.length > 0;
-        const read = event.reads.length > 0;
-        const participant = participantRole(event.actor, moment);
-        const actorInk = color(event.actor);
-        let ink = actorInk + (participant ? 'b3' : '7c');
-        if (!focused) ink = actorInk + 'ce';
-        if (focused && event.id > moment.event) ink = actorInk + '42';
-        if (sent || read) {
-          const foot = project(lanePoint(worldX(event.id), event.actor));
-          strokePoints(ctx, [foot, [x,y]], actorInk + (event.id <= moment.event ? '48' : '24'), .7);
-        }
-        dot(ctx, x, y, sent ? 2.8 : read ? 2.4 : 1.4, ink, !read || sent);
-        sceneHits.push({x, y, event: event.id, r: sent ? 8 : 6});
-      }
-
-      for (const message of messages) {
-        const [x, y] = project(hubPoint(message));
-        dot(ctx, x, y, 2.3, color(message.actor) + (message.event <= moment.event ? 'ca' : '52'));
-        sceneHits.push({x, y, message: message.id, event: message.event, r: 7});
-      }
-
-      if (originalSend) {
-        drawTransfer(moment, originalSend);
-        const authored = moment.message.kind === 'Message' ? 'Sent' : 'Posted';
-        markParticipant(originalSend, authored, true);
-        if (moment.kind === 'read') markParticipant(moment, 'Read', false);
-
-        const [x, y] = project(hubPoint(moment.message));
-        const ink = color(originalSend.actor);
-        const pulse = reduced ? .5 : (1 + Math.sin(signalSeconds * 3)) / 2;
-        glow(ctx, x, y, 19 + 9 * pulse, ink);
-        dot(ctx, x, y, 9 + 4 * pulse, ink + '61', false);
-        ctx.fillStyle = paint.paper;
-        ctx.strokeStyle = ink;
-        ctx.lineWidth = 1.3;
-        ctx.fillRect(x - 6.5, y - 4.5, 13, 9);
-        ctx.strokeRect(x - 6.5, y - 4.5, 13, 9);
-        strokePoints(ctx, [[x - 6, y - 4], [x, y + .5], [x + 6, y - 4]], ink, 1);
-        const labelX = clamp(x, 38, viewWidth - 38);
-        const labelY = clamp(y - 17, 14, viewHeight - 10);
-        ctx.textAlign = 'center';
-        drawLabel('Message ' + String(moment.index + 1).padStart(2, '0'), [labelX, labelY], paint.ink);
-        ctx.textAlign = 'left';
-        sceneHits.push({x, y, r: 9, event: originalSend.event, moment: originalSend.order});
-      } else if (moment.kind === 'action' && inWindow) {
-        markParticipant(moment, 'Action', false);
-      }
-
-      if (hovered?.surface === scene) {
-        const hit = hovered.hit;
-        dot(ctx, hit.x, hit.y, 8, paint.ink, false);
-      }
-      drawLabel(stageEvents[0]?.time || '', [16, viewHeight - 7], paint.muted, true);
-      ctx.textAlign = 'right';
-      drawLabel(stageEvents.at(-1)?.time || '', [viewWidth - 16, viewHeight - 7], paint.muted, true);
-      ctx.textAlign = 'left';
+      sceneHits = orbitView.draw(
+        { width:viewWidth, height:viewHeight, dpr, yaw, pitch },
+        paint, signalSeconds, reduced, hovered?.surface === scene ? hovered.hit : null
+      );
     }
     function flowPoint(e){return [68+eventFraction(e.id)*(flowWidth-91),23+actorIndex.get(e.actor)*31];}
     function cacheFlowRidges(){
@@ -722,22 +429,21 @@
       if(hovered?.surface===flow)dot(fctx,hovered.hit.x,hovered.hit.y,7,paint.ink,false);
       fctx.fillStyle=paint.muted;fctx.fillText(events[0]?.time||'',68,158);fctx.textAlign='right';fctx.fillText(events.at(-1)?.time||'',flowWidth-23,158);fctx.textAlign='left';
     }
-    function draw(){if(disposed||!ctx||!fctx)return;drawSpatial();drawFlow();}
-    function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);fitCamera();cacheFlowRidges();draw();}
+    function draw(){if(disposed||!ctx||!fctx||!viewWidth)return;drawSpatial();drawFlow();}
+    function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);cacheFlowRidges();draw();}
     function ensureFrame(){if(!frame&&running())frame=requestAnimationFrame(animate);}
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
       if (!reduced && !drag) {
         signalSeconds += dt * speed / 1000;
-        if (!hovered) cameraOffset = Math.sin(signalSeconds * .22) * .028;
       }
       if (!holding()) {
         elapsed += dt * speed;
         const duration = {send: 7200, read: 3100, outcome: 5500, action: 1800}[active().kind];
         if (elapsed >= duration) {
           if (current === moments.length - 1) { stop(); return; }
-          select(nextPlayback());
+          select(nextPlayback(), true);
           return;
         }
       }
@@ -746,16 +452,13 @@
     }
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
     function nearest(surface, x, y) {
-      let best = null, distance = Infinity;
+      let best = null, distance = Infinity, bestPriority = -1;
       for (const hit of surface === scene ? sceneHits : flowHits) {
         const d = Math.hypot(hit.x - x, hit.y - y);
         if (d >= hit.r) continue;
-        // The labelled endpoints sit above other records that share the same coordinates.
-        const priority = hit.moment !== undefined;
-        if (best && best.moment !== undefined && !priority) continue;
-        if (d < distance || (priority && best?.moment === undefined)) {
-          best = hit;
-          distance = d;
+        const priority = hit.moment !== undefined ? 2 : Number(Boolean(hit.planet));
+        if (priority > bestPriority || (priority === bestPriority && d < distance)) {
+          best = hit; distance = d; bestPriority = priority;
         }
       }
       return best;
@@ -776,7 +479,7 @@
     function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
     [scene,flow].forEach(surface=>{
       on(surface,'pointermove',event=>{
-        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=clamp(drag.yaw+dx*.002,-.5,.5);pitch=clamp(drag.pitch+dy*.003,.35,1.1);fitCamera();hideTooltips();draw();return;}
+        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=clamp(drag.yaw+dx*.003,-.62,.62);pitch=clamp(drag.pitch+dy*.003,-.12,.78);hideTooltips();draw();return;}
         if(event.pointerType==='mouse')hover(surface,event);
       });
       on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
@@ -797,7 +500,7 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=-.16;pitch=.72;cameraOffset=0;fitCamera();draw();}
+      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
@@ -809,7 +512,7 @@
       on(area,'focusout',event=>{if(!area.contains(event.relatedTarget)){focused=false;updateControls();}});
     }
     on(document,'visibilitychange',()=>{lastFrame=0;ensureFrame();});
-    on(motion,'change',()=>{reduced=motion.matches;if(reduced){cameraOffset=0;stop();}draw();});
+    on(motion,'change',()=>{reduced=motion.matches;if(reduced){orbitView.select(active(),signalSeconds,false);stop();}draw();});
     const themeObserver = new MutationObserver(() => {
       paint = readCanvasPaint();
       draw();

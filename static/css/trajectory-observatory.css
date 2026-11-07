@@ -97,17 +97,18 @@
 .trajectory-observatory .obs-chat-readers button { min-height:25px; padding:3px 5px; border:1px solid var(--scene-line); border-radius:5px; background:var(--scene-bg); color:var(--scene-muted); font:9px/1.5 var(--font); }
 .obs-chat-readers button.is-received { color:var(--scene-ink); border-color:var(--scene-line); }
 .obs-chat-readers button[aria-current="step"] { color:var(--reader); border-color:var(--reader); background:color-mix(in srgb,var(--reader) 9%,transparent); }
-.obs-spatial { min-width:0; display:flex; flex-direction:column; background:radial-gradient(ellipse at 52% 41%,color-mix(in srgb,var(--scene-guide) 5%,transparent),transparent 67%); }
+.obs-spatial { min-width:0; display:flex; flex-direction:column; background:var(--scene-bg); }
 .obs-spatial > .obs-panel-heading { padding-right:12px; }
 .obs-reset { display:grid; place-items:center; width:28px; height:28px; padding:0; border:1px solid var(--scene-line); border-radius:4px; background:none; color:var(--scene-muted)!important; }
 .obs-reset svg { width:14px; height:14px; }
-.obs-stage { position:relative; flex:1; min-height:320px; overflow:hidden; }
+.obs-stage { position:relative; flex:1; min-height:320px; overflow:hidden; background:radial-gradient(ellipse at 23% 31%,color-mix(in srgb,var(--agent-a) 4%,transparent),transparent 53%),radial-gradient(ellipse at 74% 68%,color-mix(in srgb,var(--agent-c) 3%,transparent),transparent 48%),var(--scene-bg); }
 .obs-space-canvas { display:block; width:100%; height:100%; position:absolute; inset:0; touch-action:pan-y; cursor:grab; }
 .obs-space-canvas:active { cursor:grabbing; }
 .obs-stage-key { display:flex; gap:15px; position:absolute; top:9px; left:18px; color:var(--scene-muted); font:9px/1.4 var(--font); pointer-events:none; }
 .obs-stage-key > span { display:flex; align-items:center; gap:6px; }
 .obs-stage-key i { width:5px; height:5px; border-radius:50%; background:var(--scene-guide); }
-.obs-stage-key .obs-key-action { width:3px; height:3px; opacity:.7; }
+.obs-stage-key .obs-key-action { width:4px; height:4px; }
+.obs-stage-key .obs-key-send { border-radius:0; transform:rotate(45deg); }
 .obs-stage-key .obs-key-read { border:1px solid var(--scene-guide); background:none; }
 .obs-stage-hint { position:absolute; right:18px; top:9px; color:var(--scene-muted); font:9px/1.4 var(--font); pointer-events:none; }
 .obs-route { flex:none; min-height:54px; padding:2px 18px 8px; }
