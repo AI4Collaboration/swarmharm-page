@@ -1,6 +1,6 @@
 (() => {
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const palette = ['#79b5ee','#b4a0e5','#80cbb7','#e5a08b'];
+  const palette = window.swarmAgentPalette || { A:'#79b5ee', B:'#80cbb7', C:'#e4bd75', D:'#b9c3d1' };
   const playIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z"/></svg>';
   const pauseIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12"/></svg>';
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
@@ -24,7 +24,7 @@
     const eventById=new Map(events.map(e=>[e.id,e]));
     const messageById=new Map(messages.map(m=>[m.id,m]));
     const messageNumberById=new Map(messages.map((m,i)=>[m.id,i+1]));
-    const color=id=>palette[actorIndex.get(id)]||'#e0b785';
+    const color=id=>palette[id]||'#e0b785';
     const noMessages=!messages.length;
     const channel=messages.some(m=>m.kind==='Shared-file note')?'Shared notes':'Shared channel';
     const moments=[];

@@ -119,7 +119,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 - The three Phase 2 key findings start with spontaneous grader inference
   (r257), coordinated record changes (r261), and compositional failure (r255).
   Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
-  Phase 1 green and Phase 2 terracotta in both themes. The r257 inference concerns
+  Formation blue and misalignment red in both themes. The r257 inference concerns
   a nonexistent grading requirement, not an absent grader or a named manager.
 - Keep the institution belt above one compact navigation row. Preserve Setup and
   the concrete finding links in the header; Main result and Detection are added
@@ -156,6 +156,16 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Expanded evidence explains event chains and comparison limits. In r75 the
   verified useful-transfer chain is A's source at 40, B's read at 45, search at
   52, fetch at 56 and accepted submission at 60.
+- `visual-system.css` unifies the eight setup/finding illustrations, mechanism
+  thumbnails, measurement icons and trajectory stage. Dark illustration stages
+  use the same restrained lighting, fine lines and directional signals as the
+  recorded replay. Keep the existing textured robot heads and natural expressions.
+  A is blue, B green, C gold and D silver in every diagram, avatar and canvas lane;
+  `swarmAgentPalette` supplies the canvas colors and matches the CSS actor tokens.
+  Illustration playback follows existing routes, highlights participants and
+  dims uninvolved agents. It runs once on entry, supports pause/resume/replay,
+  suspends offscreen or in a hidden tab, and stays static with reduced motion.
+  These labelled illustrations never create messages or alter recorded data.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,
