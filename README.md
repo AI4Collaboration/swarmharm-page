@@ -145,6 +145,17 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   shows an imaginary validation gate rather than a named human manager, r261
   retains the original 27-entry result, and r255 shows four $4m commitments
   against a $12m reserve. Keep the paired cards aligned in both themes.
+- Result presentation follows the claim, evidence, example and interpretation
+  hierarchy used in [Stolen Thoughts](https://stolen-thoughts.com/) and
+  [Maksym's PostTrainBench article](https://aisagroup.substack.com/p/posttrainbench-measuring-ai-ability).
+  Each card uses a short category, a concrete conclusion, the existing schematic,
+  two visible evidence values and an explicit View trace link. The figures are
+  case-specific observations, never population rates or a model leaderboard.
+  Keep r257's no-publication result and r261's retained backups visible. Link
+  r263's no-message composition result directly from the composition card.
+  Expanded evidence explains event chains and comparison limits. In r75 the
+  verified useful-transfer chain is A's source at 40, B's read at 45, search at
+  52, fetch at 56 and accepted submission at 60.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,

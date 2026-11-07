@@ -77,6 +77,30 @@
 .project-contact a { color:var(--text); text-decoration:none; font:500 clamp(22px,3vw,36px)/1.3 var(--font); letter-spacing:-.035em; }
 .project-contact .contact-email { color:var(--discovery); }
 .site-header nav a[href="#resources"] { --nav-selected:#49684e; --nav-selected-dark:#b2d6ad; }
+/* Lead with the claim, show its evidence, then offer the original trace. */
+.finding-heading { display:grid; gap:7px; min-width:0; }
+.finding-category { font:500 10px/1.4 var(--font); letter-spacing:.07em; text-transform:uppercase; }
+.findings .finding h4 { align-items:center; padding-block:18px; font-size:23px; }
+.findings .finding-marker { align-self:center; }
+.finding-title { text-wrap:pretty; }
+.findings .finding-copy { display:flex; flex-direction:column; gap:0; }
+.finding-copy .finding-visual > svg { aspect-ratio:480/260; }
+.finding-copy .finding-visual figcaption { margin-top:12px; font-size:15px; font-weight:400; }
+.finding-evidence { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:18px 0 0; padding:14px 0; border-block:1px solid var(--finding-line); }
+.finding-evidence > div { display:flex; flex-direction:column-reverse; justify-content:flex-end; gap:5px; min-width:0; }
+.finding-evidence > div + div { padding-left:16px; border-left:1px solid var(--finding-line); }
+.finding-evidence dt { color:var(--muted); font:12px/1.45 var(--font); }
+.finding-evidence dd { margin:0; color:var(--finding-ink); font:550 clamp(18px,1.7vw,24px)/1.25 var(--font); letter-spacing:-.025em; font-variant-numeric:tabular-nums; }
+.findings .finding-scope-note { max-width:none; margin:10px 0 16px; color:var(--muted); font:12px/1.6 var(--font); }
+.finding-scope-note a { display:inline-flex; align-items:center; gap:6px; min-height:44px; margin-block:-8px; font:inherit; }
+.finding-copy .finding-settings-visual { margin-top:auto; padding-top:4px; padding-bottom:12px; }
+.findings .domain-case { display:grid; justify-items:end; gap:4px; }
+.domain-case > .case-link-label { padding:0; font:500 12px/1.4 var(--font); }
+.domain-case small { color:var(--muted); font-size:10px; }
+.threat-models-intro { margin:-10px 0 20px; color:var(--muted); font:14px/1.6 var(--font); }
+@media(min-width:761px) {
+ .finding-copy .finding-visual figcaption { min-height:3.1em; }
+}
 @media(max-width:760px) {
  .hero .hero-layout { padding-top:4px; padding-bottom:20px; }
  .hero-copy .emergence-title { width:min(100%,420px); margin:-8px auto -4px; }
@@ -104,5 +128,13 @@
  .project-contact > div { width:100%; }
  .setup-visual { padding:8px 0; }
  .setup-visual figcaption { font-size:12px; }
+ .findings .finding h4 { font-size:21px; }
+ .finding-category { font-size:9px; }
+ .finding-evidence { gap:10px; }
+ .finding-evidence > div + div { padding-left:12px; }
+ .finding-evidence dd { font-size:21px; }
+ .finding-evidence dt { font-size:11px; }
+ .finding-copy .finding-visual figcaption { font-size:14px; }
+ .finding-copy .finding-settings-visual { margin-top:0; }
 }
 @media print { .project-actions,.diagram-replay { display:none; } }
