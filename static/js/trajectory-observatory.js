@@ -7,7 +7,7 @@
   const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
   const short = (value,n=80) => value.length>n?value.slice(0,n).trimEnd()+'…':value;
   const homeView = {yaw:-.35, pitch:.99};
-  const clockwiseRate = 2*Math.PI/96_000; // radians per millisecond of visible playback
+  const clockwiseRate = 2*Math.PI/192_000; // radians per millisecond of visible playback
   const cameras = new WeakMap();
 
   window.mountTrajectoryObservatory = (host,data,meta,openRecord) => {
@@ -32,7 +32,8 @@
     messages.forEach((message,index)=>{
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
       for (const read of [...message.reads, ...(message.repeatReads || [])]) {
-        moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index});
+        moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index,
+          firstRead:message.reads.includes(read)});
       }
     });
     // Autoplay and manual stepping use the same complete sequence of actions, posts and reads.
@@ -61,6 +62,29 @@
     const eventFraction = id => id === Infinity ? 1 : duration ? (eventTimes.get(id)-startTime)/duration :
       (eventIndex.get(id)||0)/Math.max(1,events.length-1);
     const connections = moments.filter(moment => moment.message);
+    const reads = connections.filter(step => step.kind === 'read' && step.message.actor !== step.actor);
+    const firstReads = reads.filter(step => step.firstRead).reverse();
+
+    // Show up to three distinct routes. Prefer other readers of the selected message.
+    function earlierReadsAt(moment) {
+      const earlier = firstReads.filter(step => step.order < moment.order);
+      const candidates = moment.message ? [
+        ...earlier.filter(step => step.message === moment.message),
+        ...earlier.filter(step => step.message !== moment.message)
+      ] : earlier;
+      const route = step => step.message.actor + ':' + step.actor;
+      const seen = new Set(moment.kind === 'read' ? [route(moment)] : []);
+      const history = [];
+      for (const step of candidates) {
+        const pair = route(step);
+        if (seen.has(pair)) continue;
+        history.push(step);
+        seen.add(pair);
+        if (seen.size === 3) break;
+      }
+      return history;
+    }
+
     const viewer = host.closest('.trajectory-viewer') || host;
     const camera = cameras.get(viewer) || {...homeView};
     cameras.set(viewer,camera);
@@ -154,7 +178,7 @@
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths share a tilted disk. Pins mark recorded actions.${noMessages?'':' A verified read temporarily connects the sender’s action to the reader’s.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths share a tilted disk. Pins mark recorded actions.${noMessages?'':' A solid arc shows the current read. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -207,7 +231,7 @@
     const routeQuote = host.querySelector('.obs-route-quote');
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
-    const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, sendIndex, fontFamily });
+    const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, reads, sendIndex, fontFamily });
     const eventMoment=new Map();
     moments.forEach(m=>{if(!eventMoment.has(m.event))eventMoment.set(m.event,m.order);});
     const activity=actors.map(a=>{
@@ -240,7 +264,7 @@
       host.querySelector('[data-prev-message]').disabled=noMessages?current===0:(m.index??messages.length)===0;
       host.querySelector('[data-next-message]').disabled=m.kind==='outcome';
     }
-    function showExchange(moment) {
+    function showExchange(moment, history) {
       const message = moment.message;
       routeHeading.replaceChildren();
       routeQuote.hidden = !message;
@@ -272,6 +296,12 @@
       verb.setAttribute('role', 'img');
       verb.setAttribute('aria-label', description);
       routeHeading.append(number, sender, verb, recipient);
+      const peers = history.filter(step => step.message === message).map(step => step.actor).sort();
+      if (peers.length) {
+        const prior = document.createElement('small');
+        prior.textContent = 'Also read by ' + peers.join(' and ');
+        routeHeading.append(prior);
+      }
 
       const body = message.body.trim();
       const prefix = body.slice(0, 170);
@@ -363,12 +393,13 @@
       current = clamp(index, 0, moments.length - 1);
       elapsed = 0;
       const m = active(), message = m.message;
+      const history = earlierReadsAt(m);
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
-      orbitView.select(m, signalSeconds, animatePaths && playing && !reduced);
+      orbitView.select(m, signalSeconds, animatePaths && playing && !reduced, history);
       renderInspector(m);
-      showExchange(m);
+      showExchange(m, history);
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
         const role = participantRole(a.id, m);
@@ -550,7 +581,7 @@
       for (const hit of surface === scene ? sceneHits : flowHits) {
         const d = Math.hypot(hit.x - x, hit.y - y);
         if (d >= hit.r) continue;
-        const priority = hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
+        const priority = hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
         if (priority > bestPriority || (priority === bestPriority && d < distance)) {
           best = hit; distance = d; bestPriority = priority;
         }
@@ -631,7 +662,7 @@
       on(area,'focusout',event=>{if(!area.contains(event.relatedTarget)){focused=false;updateControls();}});
     }
     on(document,'visibilitychange',()=>{lastFrame=0;ensureFrame();});
-    on(motion,'change',()=>{reduced=motion.matches;if(reduced){orbitView.select(active(),signalSeconds,false);stop();}draw();});
+    on(motion,'change',()=>{reduced=motion.matches;if(reduced){orbitView.select(active(),signalSeconds,false,earlierReadsAt(active()));stop();}draw();});
     const themeObserver = new MutationObserver(() => {
       paint = readCanvasPaint();
       if (viewWidth && ctx && fctx && !disposed) { drawSpatial(); drawFlow(); }

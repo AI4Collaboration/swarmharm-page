@@ -1,4 +1,4 @@
-/* One stellar arm per recorded agent. Only the selected verified read joins two arms. */
+/* One stellar arm per recorded agent. Cross-arm routes come from verified reads. */
 (() => {
   const TAU = 2 * Math.PI;
   const STEPS = 152;
@@ -253,15 +253,30 @@
     ctx.fillStyle = shadow; ctx.fillRect(-1,-1,2,2); ctx.restore();
   }
 
-  function drawRead(ctx, post, reader, arc, projection, paint, progress, hits, moment) {
+  function drawRead(ctx, arc, projection, paint, progress, hits) {
+    const {post,reader,receipt} = arc;
     const a = post.screenTip, b = reader.screenTip;
     const points = arc.path.map(projection.project);
-    const point = t => projection.project(arc.at(t));
     const from = paint.agents.get(post.event.actor), to = paint.agents.get(reader.event.actor);
     const gradient = ctx.createLinearGradient(...a, ...b);
     gradient.addColorStop(0,from); gradient.addColorStop(1,to);
     ctx.beginPath(); ctx.moveTo(...points[0]);
     for (let i=1; i<points.length; i++) ctx.lineTo(...points[i]);
+    const earlierRead = progress === null;
+    for (let i=1; i<points.length-1; i++) {
+      const [x,y] = points[i];
+      hits.push({x,y,r:7,event:receipt.event,moment:receipt.order,message:receipt.message.id,earlierRead});
+    }
+    if (earlierRead) {
+      ctx.save();
+      ctx.setLineDash([4,3]);
+      ctx.globalAlpha = paint.dark ? .68 : .61;
+      ctx.strokeStyle = gradient; ctx.lineWidth = 1.35; ctx.stroke();
+      ctx.restore();
+      return;
+    }
+
+    const point = t => projection.project(arc.at(t));
     if (!paint.dark) {
       ctx.strokeStyle=paint.paper; ctx.lineWidth=4.8; ctx.globalAlpha=.94; ctx.stroke();
     }
@@ -291,10 +306,6 @@
       circle(ctx,...head,4.2*size,paint.paper);
       circle(ctx,...head,2.9*size,paint.packet);
     }
-    for (let i=2; i<points.length-1; i+=2) {
-      const [x,y] = points[i];
-      hits.push({x,y,r:5,event:reader.event.id,moment:moment.order,message:moment.message.id});
-    }
   }
 
   function drawCallouts(ctx, items, width, height, paint, font) {
@@ -314,7 +325,7 @@
     });
   }
 
-  window.createTrajectoryOrbitView = ({canvas, actors, actorEvents, sendIndex, fontFamily}) => {
+  window.createTrajectoryOrbitView = ({canvas, actors, actorEvents, reads, sendIndex, fontFamily}) => {
     const ctx = canvas.getContext('2d');
     const plate = document.createElement('canvas');
     const floor = document.createElement('div');
@@ -346,12 +357,17 @@
       return track;
     });
     const backToFront = Array.from(nodes.values());
-    let moment, arc, selectedAt = 0, initialTravel = 0, camera, framing, projection, platePaint;
+    const readArcs = new Map();
+    for (const receipt of reads) {
+      const post = nodes.get(receipt.message.event), reader = nodes.get(receipt.event);
+      if (post && reader) readArcs.set(receipt,{...readArc(post,reader),post,reader,receipt});
+    }
+    let moment, arc, earlierArcs = [], selectedAt = 0, initialTravel = 0, camera, framing, projection, platePaint;
 
-    function select(next, seconds, animate) {
+    function select(next, seconds, animate, history) {
       moment = next; selectedAt = seconds; initialTravel = animate ? 0 : .54;
-      const post = next.message && nodes.get(next.message.event), reader = nodes.get(next.event);
-      arc = next.kind === 'read' && post && reader && post.event.actor !== reader.event.actor ? readArc(post,reader) : null;
+      arc = readArcs.get(next);
+      earlierArcs = history.map(receipt => readArcs.get(receipt)).filter(Boolean);
       for (const track of tracks) {
         const last = track.nodes.findLast(node => node.event.id <= next.event);
         if (animate && last === track.last) continue;
@@ -446,6 +462,7 @@
       if (post) groundShadow(ctx,post.tip,projection,framing,paint);
       if (selected && selected !== post) groundShadow(ctx,selected.tip,projection,framing,paint);
       if (arc) groundShadow(ctx,arc.at(travel),projection,framing,paint);
+      for (const earlier of earlierArcs) drawRead(ctx,earlier,projection,paint,null,hits);
 
       for (const node of backToFront) {
         const {track,size} = node, ink = paint.agents.get(track.id) || paint.muted;
@@ -469,7 +486,7 @@
         if (raised) hits.push({...hit,x:node.foot[0],y:node.foot[1],r:4});
       }
       ctx.globalAlpha = 1;
-      if (arc) drawRead(ctx,post,selected,arc,projection,paint,travel,hits,moment);
+      if (arc) drawRead(ctx,arc,projection,paint,travel,hits);
       if (post) {
         const ink = paint.agents.get(post.event.actor);
         bloom(ctx,...post.screenTip,12*post.size,ink,'54');

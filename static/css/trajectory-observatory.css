@@ -123,6 +123,7 @@
 .obs-route-number { margin-right:2px; color:var(--signal); font:550 11px/1.5 var(--font); }
 .obs-route-number::after { content:"·"; margin-left:9px; color:var(--scene-muted); }
 .obs-route-heading strong { color:var(--scene-ink); font-weight:600; }
+.obs-route-heading small { margin-inline-start:4px; color:var(--scene-muted); font:400 11px/1.5 var(--font); }
 .obs-route-verb { color:var(--scene-muted); font-size:11px; }
 .trajectory-observatory .obs-route-quote { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:1; overflow:hidden; overflow-wrap:anywhere; margin:4px 0 0; padding:0 0 0 9px; border:0; border-left:2px solid color-mix(in srgb,var(--signal) 65%,transparent); color:var(--scene-ink); font:400 14px/1.5 var(--font); }
 .obs-agent-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-top:1px solid var(--scene-line); min-height:74px; }

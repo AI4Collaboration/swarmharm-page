@@ -81,9 +81,12 @@ The four agents share one tilted disk. Each has one colored arm whose trail
 advances when the agent acts. The grain surface, raised pins and message arc
 share a perspective camera. Foreground pins appear larger and overlap distant
 ones as the disk turns. Posts have diamond tips and reads have hollow tips.
-A verified read lights one directed arc between the original post and the reader's event.
-The arc clears at the next step.
-The disk turns clockwise at a steady rate during playback. Dragging sets the
+A verified read lights the arc from the original post to the reader. Up to three
+sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
+open their original read when selected. Other readers of the current message
+take priority, and a reread uses the same route. Scrubbing rebuilds the routes
+from the reads reached at that point.
+The disk turns clockwise once every 192 seconds of active playback. Dragging sets the
 viewing angle. Playback continues clockwise from the release angle. Theme and
 case changes preserve that angle, and Reset restores the default view. Light
 mode uses stronger distant marks and a dark signal on a white-edged read arc.
