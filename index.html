@@ -30,20 +30,20 @@
   <link rel="stylesheet" href="static/css/research-layout.css?v=13">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=10">
   <link rel="stylesheet" href="static/css/trajectory-observatory.css?v=14">
-  <link rel="stylesheet" href="static/css/findings.css?v=33">
+  <link rel="stylesheet" href="static/css/findings.css?v=34">
   <link rel="stylesheet" href="static/css/finding-visuals.css?v=8">
   <link rel="stylesheet" href="static/css/domain-coverage.css?v=2">
   <link rel="stylesheet" href="static/css/institution-belt.css?v=15">
   <link rel="stylesheet" href="static/css/sidebar.css?v=13">
-  <link rel="stylesheet" href="static/css/project-page.css?v=6">
+  <link rel="stylesheet" href="static/css/project-page.css?v=7">
   <link rel="stylesheet" href="static/css/visual-system.css?v=6">
   <script src="static/js/finding-diagrams.js?v=11" defer></script>
   <script src="static/js/swarmharm_title_demo_v3.js?v=16" defer></script>
-  <script src="static/js/trajectory-cases-data.js?v=30" defer></script>
+  <script src="static/js/trajectory-cases-data.js?v=31" defer></script>
   <script src="static/js/trajectory-orbits.js?v=5" defer></script>
   <script src="static/js/trajectory-observatory.js?v=21" defer></script>
   <script src="static/js/recorded-timeline.js?v=22" defer></script>
-  <script src="static/js/trajectory-cases.js?v=21" defer></script>
+  <script src="static/js/trajectory-cases.js?v=22" defer></script>
   <script src="static/js/signup.js?v=1" defer></script>
 </head>
 <body>
@@ -106,7 +106,7 @@
       <a href="#finding-1-1">Discovery</a>
       <a href="#finding-1-2">Communication</a>
       <a href="#finding-1-3">Propagation</a>
-      <a href="#finding-2-3">Imagined Review</a>
+      <a href="#finding-2-3">Imagined Grader</a>
       <a href="#finding-2-1">Record Errors</a>
       <a href="#finding-2-2">Compositional Failure</a>
       <a href="#trajectory">Trajectories</a>
@@ -137,16 +137,13 @@
       <section class="findings findings-primary" id="findings" aria-label="Research findings">
         <div class="life-halves">
           <section class="life-half">
-            <header class="finding-study-header">
-              <h2 class="life-phase p1" id="form-the-swarm">Swarm Formation</h2>
-              <dl class="finding-settings-visual" id="finding-settings-1" aria-label="Experiment settings">
-                <div class="finding-setting setting-model"><dt>Model</dt><dd><span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span></dd></div>
-                <div class="finding-setting" data-setting="reasoning" data-value="high"><dt>Reasoning</dt><dd>High</dd></div>
-              </dl>
-            </header>
-            <div class="phase-findings formation-findings" role="group" aria-describedby="finding-settings-1" aria-label="Swarm Formation steps">
+            <h2 class="life-phase p1" id="form-the-swarm">Swarm Formation</h2>
+            <div class="phase-findings formation-findings" role="group" aria-label="Swarm Formation steps">
 <article class="finding" id="finding-1-1">
-  <h4 id="finding-1-1-title">Agents discover unannounced peers</h4>
+  <header class="finding-heading">
+    <h4 id="finding-1-1-title">Agents discover unannounced peers</h4>
+    <span class="model-tag"><span class="sr-only">Model </span><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span>
+  </header>
   <figure class="finding-visual" data-finding-diagram="f11">
       <div class="diagram-stage"><svg viewBox="0 0 480 220" role="img" aria-labelledby="f11-title f11-desc">
         <title id="f11-title">Discover peers without being told they exist.</title><desc id="f11-desc">Schematic illustration. Agents in separate sandboxes find traces of one another.</desc>
@@ -160,7 +157,10 @@
   </div>
 </article>
 <article class="finding" id="finding-1-2">
-  <h4 id="finding-1-2-title">Shared records become a channel</h4>
+  <header class="finding-heading">
+    <h4 id="finding-1-2-title">Shared records become a channel</h4>
+    <span class="model-tag"><span class="sr-only">Model </span><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span>
+  </header>
   <figure class="finding-visual" data-finding-diagram="f12">
       <div class="diagram-stage"><svg viewBox="0 0 480 220" role="img" aria-labelledby="f12-title f12-desc">
         <title id="f12-title">Shared records become a two-way channel.</title><desc id="f12-desc">Schematic illustration. Two agents send a request and a reply through a shared record.</desc>
@@ -174,7 +174,10 @@
   </div>
 </article>
 <article class="finding" id="finding-1-3">
-  <h4 id="finding-1-3-title">Useful information spreads through shared notes</h4>
+  <header class="finding-heading">
+    <h4 id="finding-1-3-title">Useful information spreads through shared notes</h4>
+    <span class="model-tag"><span class="sr-only">Model </span><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span>
+  </header>
   <figure class="finding-visual" data-finding-diagram="f13">
     <div class="diagram-stage"><svg viewBox="0 0 480 250" role="img" aria-labelledby="f13-title f13-desc">
       <title id="f13-title">A lookup clue spreads through a shared note.</title><desc id="f13-desc">A posts a lookup clue. D, B and C read it. B then searches for the source, fetches it and submits an accepted reconciliation.</desc>
@@ -203,23 +206,23 @@
 </div>
           </section>
           <section class="life-half">
-            <header class="finding-study-header">
-              <h2 class="life-phase p2" id="cause-harm">Collective Misalignment</h2>
-              <dl class="finding-settings-visual" id="finding-settings-2" aria-label="Experiment settings">
-                <div class="finding-setting setting-model"><dt>Models</dt><dd><span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 5.6</span> / <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span></dd></div>
-                <div class="finding-setting" data-setting="reasoning" data-value="high"><dt>Reasoning</dt><dd>High</dd></div>
-              </dl>
-            </header>
-            <div class="phase-findings misalignment-findings" id="core-findings" role="group" aria-describedby="finding-settings-2" aria-label="Collective Misalignment findings"><article class="finding" id="finding-2-3">
-  <h4 id="finding-2-3-title">Agents rely on a review process that does not exist</h4>
-  <figure class="finding-visual failure-scene" data-finding-diagram="f23"><div class="diagram-stage"><svg viewBox="0 0 480 260" role="img" aria-labelledby="f23-title f23-desc"><title id="f23-title">A proposed Quality Review handoff spreads.</title><desc id="f23-desc">Schematic illustration. A proposes a scheduled Quality Review handoff. D, C and B read the note and each files a request. The system has no process that handles those requests.</desc><defs><marker id="f23-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="m2 1 6 4-6 4" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker></defs><rect class="diagram-imagined" x="4" y="8" width="240" height="66" rx="12" /><text x="124" y="35" text-anchor="middle" class="diagram-rule">Quality Review handoff</text><text x="124" y="59" text-anchor="middle" class="diagram-label diagram-risk">No such process</text><circle class="diagram-thought-dot" cx="68" cy="84" r="4" /><circle class="diagram-thought-dot" cx="60" cy="94" r="2.5" /><ellipse class="diagram-agent-halo" data-diagram-agent="A" cx="57.0" cy="162.94268" rx="44.519999999999996" ry="34.82844" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#a-questioning" x="4" y="116" width="106" height="75.714" data-diagram-agent="A" data-phase-faces="questioning speaking attentive-right" /><ellipse class="diagram-agent-halo" data-diagram-agent="D" cx="261.0" cy="162.97134" rx="36.96" ry="28.91422" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#d-focused-down" x="217" y="124" width="88" height="62.857" data-diagram-agent="D" data-phase-faces="focused-down attentive focused-left" /><ellipse class="diagram-agent-halo" data-diagram-agent="C" cx="344.0" cy="172.97134" rx="36.96" ry="28.91422" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#c-focused-left" x="300" y="134" width="88" height="62.857" data-diagram-agent="C" data-phase-faces="focused-down attentive focused-left" /><ellipse class="diagram-agent-halo" data-diagram-agent="B" cx="427.0" cy="159.97134" rx="36.96" ry="28.91422" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#b-attentive" x="383" y="121" width="88" height="62.857" data-diagram-agent="B" data-phase-faces="focused-down attentive focused-left" /><path d="M111 157H212" class="diagram-arrow" marker-end="url(#f23-arrow)" data-diagram-step="1" /><text x="163" y="140" text-anchor="middle" class="diagram-label">Share</text><path class="diagram-line" d="M246 211v9h174v-9" data-diagram-step="2" /><text x="57" y="247" text-anchor="middle" class="diagram-label">Propose</text><text x="335" y="247" text-anchor="middle" class="diagram-label">File their own requests</text><text class="diagram-agent-id" data-diagram-agent="A" x="57.0" y="109.0" text-anchor="middle" aria-hidden="true">A</text><text class="diagram-agent-id" data-diagram-agent="D" x="261.0" y="117.0" text-anchor="middle" aria-hidden="true">D</text><text class="diagram-agent-id" data-diagram-agent="C" x="344.0" y="127.0" text-anchor="middle" aria-hidden="true">C</text><text class="diagram-agent-id" data-diagram-agent="B" x="427.0" y="114.0" text-anchor="middle" aria-hidden="true">B</text></svg></div></figure>
+            <h2 class="life-phase p2" id="cause-harm">Collective Misalignment</h2>
+            <div class="phase-findings misalignment-findings" id="core-findings" role="group" aria-label="Collective Misalignment findings"><article class="finding" id="finding-2-3">
+  <header class="finding-heading">
+    <h4 id="finding-2-3-title">Agents collectively inferred a non-existing grader</h4>
+    <span class="model-tag"><span class="sr-only">Model </span><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 5.6</span>
+  </header>
+  <figure class="finding-visual failure-scene" data-finding-diagram="f23"><div class="diagram-stage"><svg viewBox="0 0 480 260" role="img" aria-labelledby="f23-title f23-desc"><title id="f23-title">Four agents expect a Quality Review receipt.</title><desc id="f23-desc">A asks Quality Review for a receipt. D, C and B read the note and each files a request. No reviewer exists to issue the receipts.</desc><defs><marker id="f23-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="m2 1 6 4-6 4" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker></defs><rect class="diagram-imagined" x="4" y="8" width="240" height="66" rx="12" /><text x="124" y="35" text-anchor="middle" class="diagram-rule">Quality Review</text><text x="124" y="59" text-anchor="middle" class="diagram-label diagram-risk">No such grader</text><circle class="diagram-thought-dot" cx="68" cy="84" r="4" /><circle class="diagram-thought-dot" cx="60" cy="94" r="2.5" /><ellipse class="diagram-agent-halo" data-diagram-agent="A" cx="57.0" cy="162.94268" rx="44.519999999999996" ry="34.82844" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#a-questioning" x="4" y="116" width="106" height="75.714" data-diagram-agent="A" data-phase-faces="questioning speaking attentive-right" /><ellipse class="diagram-agent-halo" data-diagram-agent="D" cx="261.0" cy="162.97134" rx="36.96" ry="28.91422" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#d-focused-down" x="217" y="124" width="88" height="62.857" data-diagram-agent="D" data-phase-faces="focused-down attentive focused-left" /><ellipse class="diagram-agent-halo" data-diagram-agent="C" cx="344.0" cy="172.97134" rx="36.96" ry="28.91422" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#c-focused-left" x="300" y="134" width="88" height="62.857" data-diagram-agent="C" data-phase-faces="focused-down attentive focused-left" /><ellipse class="diagram-agent-halo" data-diagram-agent="B" cx="427.0" cy="159.97134" rx="36.96" ry="28.91422" aria-hidden="true" /><image class="diagram-agent " href="static/images/fieldguide/finding-agents.svg?v=8#b-attentive" x="383" y="121" width="88" height="62.857" data-diagram-agent="B" data-phase-faces="focused-down attentive focused-left" /><path d="M111 157H212" class="diagram-arrow" marker-end="url(#f23-arrow)" data-diagram-step="1" /><text x="163" y="140" text-anchor="middle" class="diagram-label">Share</text><path class="diagram-line" d="M246 211v9h174v-9" data-diagram-step="2" /><text x="57" y="247" text-anchor="middle" class="diagram-label">Propose</text><text x="335" y="247" text-anchor="middle" class="diagram-label">File their own requests</text><text class="diagram-agent-id" data-diagram-agent="A" x="57.0" y="109.0" text-anchor="middle" aria-hidden="true">A</text><text class="diagram-agent-id" data-diagram-agent="D" x="261.0" y="117.0" text-anchor="middle" aria-hidden="true">D</text><text class="diagram-agent-id" data-diagram-agent="C" x="344.0" y="127.0" text-anchor="middle" aria-hidden="true">C</text><text class="diagram-agent-id" data-diagram-agent="B" x="427.0" y="114.0" text-anchor="middle" aria-hidden="true">B</text></svg></div></figure>
   <div class="finding-foot">
     <a class="finding-trace" href="?case=r72&amp;phase=2&amp;event=238#trajectory" data-show-case="r72" data-show-phase="2" aria-describedby="finding-2-3-title">View trace <span aria-hidden="true">↗</span></a>
-    <details class="finding-explanation"><summary>Evidence</summary><p>In <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 5.6</span>, A proposes a scheduled Quality Review handoff. D, C and B read the note and file their own requests. The system inventory confirms that no worker processes these notes or issues the expected receipt. The paired <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span> run did not invent that prerequisite.</p></details>
+    <details class="finding-explanation"><summary>Evidence</summary><p>A asked Quality Review for a receipt. D, C and B read A’s note and each filed a request. The system had no worker to issue those receipts.</p></details>
   </div>
 </article>
 <article class="finding" id="finding-2-1">
-  <h4 id="finding-2-1-title">Agents coordinate and leave inaccurate records</h4>
+  <header class="finding-heading">
+    <h4 id="finding-2-1-title">Agents coordinate and leave inaccurate records</h4>
+    <span class="model-tag"><span class="sr-only">Model </span><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 5.6</span>
+  </header>
   <figure class="finding-visual" data-finding-diagram="f21">
     <div class="diagram-stage"><svg viewBox="0 0 480 250" role="img" aria-labelledby="f21-title f21-desc">
       <title id="f21-title">Agents coordinate on a forecast while dispatch records become inaccurate.</title><desc id="f21-desc">B shares a forecast version. C reads it and reconciles that version. At the end of the run, dispatch records say work was completed without matching dispatch executions.</desc>
@@ -240,16 +243,19 @@
   </figure>
   <div class="finding-foot">
     <a class="finding-trace" href="?case=r68&amp;phase=2&amp;event=178#trajectory" data-show-case="r68" data-show-phase="2" aria-describedby="finding-2-1-title">View trace <span aria-hidden="true">↗</span></a>
-    <details class="finding-explanation"><summary>Evidence</summary><p>In <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 5.6</span>, B shares a forecast version at event 153. C reads it at 178, reconciles it at 185 and selects it at 191. Independent replay finds eight dispatch entries marked complete without matching executions. The paired <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span> run also left record errors, with no authored note or verified peer adoption.</p></details>
+    <details class="finding-explanation"><summary>Evidence</summary><p>B shares a forecast version at event 153. C reads it at 178, reconciles it at 185 and selects it at 191. Independent replay finds eight dispatch entries marked complete without matching executions.</p></details>
   </div>
 </article>
 <article class="finding" id="finding-2-2">
-  <h4 id="finding-2-2-title">Safe individual actions can delay reports together</h4>
+  <header class="finding-heading">
+    <h4 id="finding-2-2-title">Safe individual actions can delay reports together</h4>
+    <span class="model-tag"><span class="sr-only">Model </span><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span>
+  </header>
   <figure class="finding-visual failure-scene" data-finding-diagram="f22"><div class="diagram-stage"><svg viewBox="0 0 480 260" role="img" aria-labelledby="f22-title f22-desc"><title id="f22-title">Individual dispatches combine to delay reports.</title><desc id="f22-desc">Schematic illustration. Each complete dispatch sequence runs safely on its own. Running all four together delays two of eight operations reports. The agents exchange no notes.</desc><defs><marker id="f22-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="m2 1 6 4-6 4" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker></defs><ellipse class="diagram-agent-halo" data-diagram-agent="A" cx="62.0" cy="77.82866" rx="45.36" ry="35.48578" aria-hidden="true" /><image class="diagram-agent" href="static/images/fieldguide/finding-agents.svg?v=8#a-focused" x="8" y="30" width="108" height="77.143" data-diagram-agent="A" /><text x="52" y="137" text-anchor="middle" class="diagram-emphasis">Solo</text><circle class="diagram-solo-check-bg" cx="89" cy="130" r="10" /><path class="diagram-solo-check" d="m84 130 4 4 7-8" /><path d="M62 148V174" class="diagram-arrow" marker-end="url(#f22-arrow)" data-diagram-step="1" /><ellipse class="diagram-agent-halo" data-diagram-agent="B" cx="177.0" cy="77.82866" rx="45.36" ry="35.48578" aria-hidden="true" /><image class="diagram-agent" href="static/images/fieldguide/finding-agents.svg?v=8#b-focused-down" x="123" y="30" width="108" height="77.143" data-diagram-agent="B" /><text x="167" y="137" text-anchor="middle" class="diagram-emphasis">Solo</text><circle class="diagram-solo-check-bg" cx="204" cy="130" r="10" /><path class="diagram-solo-check" d="m199 130 4 4 7-8" /><path d="M177 148V174" class="diagram-arrow" marker-end="url(#f22-arrow)" data-diagram-step="1" /><ellipse class="diagram-agent-halo" data-diagram-agent="C" cx="292.0" cy="77.82866" rx="45.36" ry="35.48578" aria-hidden="true" /><image class="diagram-agent" href="static/images/fieldguide/finding-agents.svg?v=8#c-focused-left" x="238" y="30" width="108" height="77.143" data-diagram-agent="C" /><text x="282" y="137" text-anchor="middle" class="diagram-emphasis">Solo</text><circle class="diagram-solo-check-bg" cx="319" cy="130" r="10" /><path class="diagram-solo-check" d="m314 130 4 4 7-8" /><path d="M292 148V174" class="diagram-arrow" marker-end="url(#f22-arrow)" data-diagram-step="1" /><ellipse class="diagram-agent-halo" data-diagram-agent="D" cx="407.0" cy="77.82866" rx="45.36" ry="35.48578" aria-hidden="true" /><image class="diagram-agent" href="static/images/fieldguide/finding-agents.svg?v=8#d-focused-down" x="353" y="30" width="108" height="77.143" data-diagram-agent="D" /><text x="397" y="137" text-anchor="middle" class="diagram-emphasis">Solo</text><circle class="diagram-solo-check-bg" cx="434" cy="130" r="10" /><path class="diagram-solo-check" d="m429 130 4 4 7-8" /><path d="M407 148V174" class="diagram-arrow" marker-end="url(#f22-arrow)" data-diagram-step="1" /><rect class="diagram-reserve" x="7" y="183" width="348" height="37" rx="6" data-diagram-step="2" /><path d="M123 183v37m116-37v37" class="diagram-reserve-divider" /><text x="181" y="208" text-anchor="middle" class="diagram-bar-label">On time</text><text x="181" y="250" text-anchor="middle" class="diagram-label">Operations reports after dispatch</text><g class="composition-impact"><rect class="diagram-overflow" x="355" y="183" width="116" height="37" rx="6" data-diagram-step="3" /><text x="413" y="208" text-anchor="middle" class="diagram-overflow-label">Delayed</text></g><text class="diagram-agent-id" data-diagram-agent="A" x="62.0" y="23.0" text-anchor="middle" aria-hidden="true">A</text><text class="diagram-agent-id" data-diagram-agent="B" x="177.0" y="23.0" text-anchor="middle" aria-hidden="true">B</text><text class="diagram-agent-id" data-diagram-agent="C" x="292.0" y="23.0" text-anchor="middle" aria-hidden="true">C</text><text class="diagram-agent-id" data-diagram-agent="D" x="407.0" y="23.0" text-anchor="middle" aria-hidden="true">D</text></svg></div></figure>
   <div class="finding-foot">
     <a class="finding-trace" href="?case=r69&amp;phase=2&amp;event=59#trajectory" data-show-case="r69" data-show-phase="2" aria-describedby="finding-2-2-title">View trace <span aria-hidden="true">↗</span></a>
-    <details class="finding-explanation"><summary>Evidence</summary><p>In <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 6.1</span>, each agent’s complete sequence of dispatches runs safely alone. Together the four sequences delay two of eight operations reports. No business notes were exchanged. The paired <span class="model-tag"><img class="model-logo model-logo-openai" src="static/images/openai.svg?v=2" alt="" width="16" height="16">Sol 5.6</span> run also delayed reports. Some action statuses did not reproduce in its solo replay.</p></details>
-    <p class="finding-scope-note"><a href="?case=r263&amp;phase=2#trajectory" aria-label="Earlier Haiku finance case with no messages" data-show-case="r263" data-show-phase="2"><span class="model-tag"><img class="model-logo model-logo-claude" src="static/images/claude.svg" alt="" width="16" height="16">Haiku</span> finance case without messages <span aria-hidden="true">↗</span></a></p>
+    <details class="finding-explanation"><summary>Evidence</summary><p>Each agent’s complete sequence of dispatches runs safely alone. Together the four sequences delay two of eight operations reports. No business notes were exchanged.</p></details>
+    <p class="finding-scope-note"><a href="?case=r263&amp;phase=2#trajectory" aria-label="Earlier finance case without messages" data-show-case="r263" data-show-phase="2">Finance case without messages <span aria-hidden="true">↗</span></a></p>
   </div>
 </article></div>
           </section>

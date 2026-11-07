@@ -152,7 +152,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   reviewed rollout. The communication diagram follows B's request and A's reply
   in r74. The propagation diagram differentiates the three readers from B's
   subsequent use in r75.
-- Each study header lists the models and reasoning effort used in that column. Each illustrated conclusion links directly to its trace and
+- Each finding shows its linked trace’s model beside the headline and links directly to its trace and
   supporting evidence. Quantitative details
   stay in the underlying evidence. The figures are
   case-specific observations, never population rates or a model leaderboard.
@@ -190,8 +190,7 @@ Model labels use the OpenAI mark for Sol and the Claude mark for Haiku, from
 
 The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result.
 
-Study headers show the primary case models and reasoning effort. Individual
-findings keep the illustration, evidence disclosure and trace link together.
+Individual findings keep the illustration, evidence disclosure and trace link together.
 
 ## Project page structure and visual language
 
@@ -228,9 +227,7 @@ Illustrations use the recorded action as their cue. In r72 the proposer
 looks toward the imagined handoff and the readers turn to their own requests.
 In r68 the sender explains a forecast version and the recipient concentrates on
 applying it. The record check is shown separately. In r69 all four agents attend
-to their own dispatches. The timing bar shows the joint consequence. Study
-headers and trajectory settings pair a brain icon with the reasoning level.
-High appears in red.
+to their own dispatches. The timing bar shows the joint consequence.
 
 Design references reviewed for this revision: Stolen Thoughts (result-led sections
 and direct examples), PostTrainBench (short setup, traces, methodology and project

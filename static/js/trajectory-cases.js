@@ -21,20 +21,15 @@
     Harness:'<rect x="3" y="5" width="26" height="22" rx="4"/><path d="m8 12 4 4-4 4m9 0h7"/>',
     Feedback:'<rect x="3" y="5" width="26" height="20" rx="4"/><path d="m9 25-3 5v-5m3-13h14M9 18h9"/>'
   };
-  // Keep recorded goal settings in source data and downloads, outside the presentation.
-  const visibleSettings=rows=>(rows||[]).filter(([key])=>!/^goal\b/i.test(key));
+  // The page omits goal and reasoning settings from both the summary and the evidence panel.
+  const visibleSettings = rows => (rows || []).filter(([key]) => !/^(?:goal|reasoning)\b/i.test(key));
   function settingsMarkup(item){
-    const settings=visibleSettings(item.settings).map(row=>[...row]);
-    const reasoning=item.parameters?.find(([key])=>key==='Reasoning effort');
-    if(reasoning&&!settings.some(([key])=>key==='Reasoning')){
-      const value=reasoning[1];settings.splice(3,0,['Reasoning',value.charAt(0).toUpperCase()+value.slice(1)]);
-    }
+    const settings = visibleSettings(item.settings);
+    if (!settings.length) return '';
     const fields = settings.map(([key, value]) => {
-      const icon = key === 'Reasoning' ? '' : `<span class="case-setting-icon" aria-hidden="true">
-        <svg viewBox="0 0 32 34">${icons[key] || icons.Feedback}</svg>
-      </span>`;
       return `<div class="case-setting" data-setting="${escape(key.toLowerCase())}" data-value="${escape(value.toLowerCase())}">
-        ${icon}<dt>${escape(key)}</dt><dd>${escape(value)}</dd>
+        <span class="case-setting-icon" aria-hidden="true"><svg viewBox="0 0 32 34">${icons[key] || icons.Feedback}</svg></span>
+        <dt>${escape(key)}</dt><dd>${escape(value)}</dd>
       </div>`;
     });
     return `<dl class="case-settings" style="--settings-count:${settings.length}" aria-label="Recorded experiment settings">${fields.join('')}</dl>`;
