@@ -78,9 +78,10 @@ case only after its new native run has matching reviewed evidence.
 The replay starts at the first recorded action and plays every action in order.
 A finding link with an explicit event opens paused at that cited action or read.
 The four agents share one tilted disk. Each has one colored arm whose trail
-advances when the agent acts. Dense runs leave clusters of grains around their
-action points. Posts have diamond tips and reads have hollow tips. A verified
-read lights one directed arc between the original post and the reader's event.
+advances when the agent acts. The grain surface, raised pins and message arc
+share a perspective camera. Foreground pins appear larger and overlap distant
+ones as the disk turns. Posts have diamond tips and reads have hollow tips.
+A verified read lights one directed arc between the original post and the reader's event.
 The arc clears at the next step.
 The disk turns slowly during playback. Dragging sets the viewing angle, and
 Reset restores the default view. The four bands below are positioned by recorded
