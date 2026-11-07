@@ -78,13 +78,14 @@ agent through its first pre-communication action, then follows posts and exact r
 A scan passes over the selected record and lands on its pin in a single inclined
 spiral. Each arm follows one agent's ordered actions. Gaps reflect time between
 records. Action pin heights reflect activity in the preceding ten seconds, and
-posts rise as exact reads are verified through the current step. A planet
-advances along its colored arm around the shared nucleus. `static/js/trajectory-orbits.js` uses the same
-disk coordinates for the stars, action marks, planets and communication routes.
+posts rise as exact reads are verified through the current step. The colored
+action paths extend as the replay advances. Agent names identify recorded action
+points. `static/js/trajectory-orbits.js` draws these paths and the communication
+arcs on the same disk.
 Only the recorded actions and messages are selectable. The disk turns during replay
 and holds its orientation while a record is inspected. A selected message travels from the recorded post
 to the discussion or shared notes, then to the selected verified read. The original
-send stays anchored to its action even after the sending planet moves on. The full
+send stays anchored to its action even after the sender takes further actions. The full
 timeline underneath orders all actors' actions together. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 Participants are labelled Agent A through D. Original account names are available
@@ -186,6 +187,7 @@ Run a local preview with `python3 -m http.server 8765 --bind 127.0.0.1`.
 Based on [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template)
 and [Nerfies](https://nerfies.github.io/), under CC BY-SA 4.0. Retain local font and
 icon licenses. Institutional marks identify team affiliations.
+The trajectory visualization is adapted from [AI Safety HOT](https://aisafetyhot.com/en).
 Princeton's shield-and-wordmark signatures use the University's [light](https://www.princeton.edu/themes/custom/hobbes/logo.svg) and [dark](https://www.princeton.edu/themes/custom/hobbes/images/logo-white.svg) website assets.
 OpenAI model badges use the monochrome logo from [SVGL](https://github.com/pheralb/svgl),
 with its license retained beside the asset. Reasoning badges show High with three filled bars.

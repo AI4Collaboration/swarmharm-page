@@ -5,112 +5,12 @@
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
   const lerp = (a, b, t) => a + (b - a) * t;
   const ease = t => t * t * (3 - 2 * t);
-  const textures = new Map();
-  const bodies = [
-    { size: 1.02, low: [18, 67, 123], high: [154, 206, 230] },
-    { size: 1.10, low: [24, 85, 78], high: [174, 221, 186] },
-    { size: .99, low: [136, 78, 44], high: [249, 215, 150] },
-    { size: .92, low: [74, 83, 103], high: [211, 214, 208] }
-  ];
+  const agentIds = ['A','B','C','D'];
 
   function hash(x, y) {
     let n = Math.imul(x + 1777, 374761393) ^ Math.imul(y + 397, 668265263);
     n = Math.imul(n ^ (n >>> 13), 1274126177);
     return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
-  }
-  function noise(x, y) {
-    const ix = Math.floor(x), iy = Math.floor(y);
-    const u = ease(x - ix), v = ease(y - iy);
-    return lerp(lerp(hash(ix, iy), hash(ix + 1, iy), u),
-      lerp(hash(ix, iy + 1), hash(ix + 1, iy + 1), u), v);
-  }
-  function terrain(u, v) {
-    return .55 * noise(u, v) + .28 * noise(2.1 * u + 8, 2.1 * v) +
-      .13 * noise(4.4 * u, 4.4 * v + 17) + .04 * noise(9 * u, 9 * v);
-  }
-
-  // Cache surface maps and sphere lighting. Rotation then only samples the maps.
-  const MAP_WIDTH = 256, MAP_HEIGHT = 112, DISC_SIZE = 116;
-  let disc = null;
-  function sphereDisc() {
-    if (disc) return disc;
-    disc = [];
-    for (let py=0; py<DISC_SIZE; py++) for (let px=0; px<DISC_SIZE; px++) {
-      const x=(2*px+1)/DISC_SIZE-1, y=(2*py+1)/DISC_SIZE-1, rho=x*x+y*y;
-      if (rho>=1) continue;
-      const z=Math.sqrt(1-rho), sun=Math.max(0,-.62*x-.46*y+.63*z);
-      disc.push({
-        offset:4*(py*DISC_SIZE+px),
-        u:Math.floor((Math.atan2(x,z)/TAU+.5)*MAP_WIDTH),
-        row:Math.floor((Math.asin(y)/Math.PI+.5)*MAP_HEIGHT)*MAP_WIDTH,
-        shade:.17+.88*sun**.75,
-        rim:(1-z)**3*(.19+.25*sun),
-        alpha:255*clamp((1-Math.sqrt(rho))*DISC_SIZE/2,0,1)
-      });
-    }
-    return disc;
-  }
-  function surfaceMap(index) {
-    const material=bodies[index], map=new Uint8ClampedArray(MAP_WIDTH*MAP_HEIGHT*3);
-    const craters=Array.from({length:100},(_,i)=>{
-      const a=TAU*hash(i,1), h=2*hash(i,2)-1, cos=Math.sqrt(1-h*h);
-      const radius=.035+hash(i,3)**3*.18;
-      return {x:Math.sin(a)*cos, y:h, z:Math.cos(a)*cos, radius};
-    });
-    for (let iy=0; iy<MAP_HEIGHT; iy++) {
-      const v=((iy+.5)/MAP_HEIGHT-.5)*Math.PI, y=Math.sin(v), cos=Math.cos(v);
-      for (let ix=0; ix<MAP_WIDTH; ix++) {
-        const u=((ix+.5)/MAP_WIDTH-.5)*TAU, x=Math.sin(u)*cos, z=Math.cos(u)*cos;
-        const relief=terrain(x*4+z*1.8+11*index,y*4.3+z*2.7+4);
-        const latitude=v+x*(index===1?.25:-.13);
-        let tint=relief, detail=0;
-        if (index===0) {
-          const ice=ease(clamp((relief-.45)*5,0,1));
-          const cloud=terrain(x*5.7+3*relief+z,v*10+2*Math.sin(u));
-          tint=.13+.55*ice+.32*ease(clamp((cloud-.49)*6,0,1));
-        } else if (index===1 || index===2) {
-          const swirl=Math.sin(u*2+v*4)*.16+relief*.43;
-          const bands=.5+.5*Math.sin(14*latitude+6*swirl);
-          tint=.22+.40*bands+.24*relief+.11*Math.sin(35*latitude+8*swirl);
-        } else {
-          tint=.21+.76*relief;
-          for (const crater of craters) {
-            const dx=x-crater.x, dy=y-crater.y, dz=z-crater.z;
-            const distance=dx*dx+dy*dy+dz*dz;
-            if (distance>1.32*crater.radius*crater.radius) continue;
-            const d=Math.sqrt(distance)/crater.radius;
-            detail-=.32*Math.max(0,1-d*d);
-            detail+=.38*Math.max(0,1-Math.abs(d-.85)*5)*(.5-(dx+dy)/(2*crater.radius));
-          }
-        }
-        const grain=(hash(ix+index*MAP_WIDTH,iy)-.5)*(index===3?18:6);
-        const offset=3*(iy*MAP_WIDTH+ix);
-        for (let c=0; c<3; c++) {
-          map[offset+c]=lerp(material.low[c],material.high[c],clamp(tint,0,1))*(1+detail)+grain;
-        }
-      }
-    }
-    return map;
-  }
-  function texture(index, seconds) {
-    let sprite=textures.get(index);
-    if (!sprite) {
-      const canvas=document.createElement('canvas');
-      canvas.width=canvas.height=DISC_SIZE;
-      const context=canvas.getContext('2d');
-      sprite={canvas,context,map:surfaceMap(index),pixels:context.createImageData(DISC_SIZE,DISC_SIZE),step:-1};
-      textures.set(index,sprite);
-    }
-    const speeds=[6,8,7,3], step=Math.floor(seconds*speeds[index])%MAP_WIDTH;
-    if (sprite.step===step) return sprite.canvas;
-    const pixels=sprite.pixels.data, material=bodies[index];
-    for (const p of sphereDisc()) {
-      const at=3*(p.row+(p.u+step)%MAP_WIDTH);
-      for (let c=0; c<3; c++) pixels[p.offset+c]=sprite.map[at+c]*p.shade+material.high[c]*p.rim;
-      pixels[p.offset+3]=p.alpha;
-    }
-    sprite.context.putImageData(sprite.pixels,0,0);sprite.step=step;
-    return sprite.canvas;
   }
 
   function line(ctx, points, ink, width = 1) {
@@ -129,39 +29,10 @@
     g.addColorStop(0, ink + alpha); g.addColorStop(.42, ink + '12'); g.addColorStop(1, ink + '00');
     ctx.fillStyle = g; ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
   }
-  function rings(ctx, x, y, radius, front, dark) {
-    const bands = [[1.29, .035, '#b9925e'], [1.42, .095, '#d4b786'],
-      [1.56, .062, '#a18159'], [1.68, .04, '#dec99f']];
-    ctx.save(); ctx.translate(x, y); ctx.rotate(-.30);
-    ctx.globalAlpha *= dark ? .93 : .88;
-    for (const [span, weight, ink] of bands) {
-      ctx.beginPath();
-      ctx.ellipse(0, 0, radius * span, radius * span * .275, 0,
-        front ? 0 : Math.PI, front ? Math.PI : TAU);
-      ctx.strokeStyle = ink; ctx.lineWidth = Math.max(.65, radius * weight); ctx.stroke();
-    }
-    ctx.restore();
-  }
-  function planet(ctx, x, y, radius, index, ink, active, dark, seconds) {
-    const ringed = index % bodies.length === 2;
-    ctx.save();
-    if (active) {
-      bloom(ctx, x, y, radius * 2.15, ink, dark ? '69' : '38');
-      const rim = radius + 4;
-      ctx.strokeStyle = ink + (dark ? 'af' : '92'); ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(x,y,rim,-2.95,-1.95); ctx.stroke();
-      ctx.beginPath(); ctx.arc(x,y,rim,.22,1.2); ctx.stroke();
-    }
-    if (ringed) rings(ctx, x, y, radius, false, dark);
-    ctx.drawImage(texture(index,seconds), x - radius, y - radius, radius * 2, radius * 2);
-    circle(ctx, x, y, radius - .3, ink + (active ? '96' : '61'), true);
-    if (ringed) rings(ctx, x, y, radius, true, dark);
-    ctx.restore();
-  }
 
   const DISK_RADIUS = 230;
   const ATLAS_RADIUS = 278;
-  const ARM_ANGLE = TAU / 4;
+  const ARM_ANGLE = TAU / agentIds.length;
 
   function orbitPoint(track, progress) {
     const radius = lerp(32 + 4 * track.index, track.extent, progress);
@@ -247,10 +118,10 @@
     const base = document.createElement('canvas'), ground = base.getContext('2d');
     const longest = Math.max(1,...actors.map(actor=>actorEvents.get(actor.id).length));
     const tracks = actors.map((actor, i) => {
-      const identity = ['A','B','C','D'].indexOf(actor.id);
-      const index = identity < 0 ? i % bodies.length : identity;
+      const identity = agentIds.indexOf(actor.id);
+      const index = identity < 0 ? i % agentIds.length : identity;
       const events = actorEvents.get(actor.id);
-      const track = { id: actor.id, index, material: bodies[index], events,
+      const track = { id: actor.id, index, events,
         extent:DISK_RADIUS * (.55 + .45 * events.length / longest), from: 0, to: 0, last: null };
       track.path = Array.from({ length: STEPS + 1 }, (_, j) => orbitPoint(track, j / STEPS));
       return track;
@@ -354,12 +225,9 @@
       for (const track of tracks) {
         const ink = paint.agents.get(track.id) || paint.muted;
         const relevant = track.id === moment.actor || track.id === moment.message?.actor || moment.kind === 'outcome';
-        const cut = Math.floor(track.to * STEPS), boundary = orbitPoint(track,track.to);
-        const past = track.path.slice(0,cut+1).concat([boundary]);
         ground.setLineDash([2*pen,3.7*pen]);
-        line(ground,[boundary,...track.path.slice(cut+1)],ink+(relevant?'43':'2c'),.65*pen);
+        line(ground,track.path,ink+(relevant?'43':'2c'),.65*pen);
         ground.setLineDash([]);
-        line(ground,past,ink+(relevant?'64':'40'),.85*pen);
         for (const node of track.nodes) {
           const e = node.event, [x,y] = node.point;
           const inkHere = ink + (e.id > moment.event ? '48' : relevant ? 'bd' : '92');
@@ -492,6 +360,17 @@
       ctx.setTransform(dpr,0,0,dpr,0,0);
       ctx.clearRect(0,0,width,height);
       ctx.save(); ctx.transform(...matrix);
+      ctx.lineCap='round';
+      // The completed portion of each agent's path advances to its next recorded action.
+      for (const track of tracks) {
+        if (!track.last) continue;
+        const reached = progress(track,seconds);
+        const past = track.path.slice(0,Math.floor(reached * STEPS)+1);
+        past.push(orbitPoint(track,reached));
+        const ink = paint.agents.get(track.id) || paint.muted;
+        const active = track.id===moment.actor || track.id===moment.message?.actor;
+        line(ctx,past,ink+(active?'bb':'82'),(active?1.35:1.05)/scale);
+      }
       ctx.drawImage(base,-ATLAS_RADIUS,-ATLAS_RADIUS,2*ATLAS_RADIUS,2*ATLAS_RADIUS);
       ctx.restore();
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -513,7 +392,7 @@
         for (const node of track.nodes) {
           const future=node.t>frontier;
           const event=node.event, foot=project(node.point), head=project(node.pin);
-          const selected=event.id===moment.event;
+          const selected=event.id===moment.event, latest=node===track.last;
           const exchange=event.messages.length || event.reads.length;
           line(ctx,[foot,head],ink+(future?'55':selected?'ec':exchange?'b8':primary?'8c':'72'),selected?1.45:.83);
           if (event.reads.length) {
@@ -523,26 +402,22 @@
             const [x,y]=head, r=selected?3.8:2.8;
             ctx.fillStyle=ink+(future?'6a':'eb');ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r,y);
             ctx.lineTo(x,y+r);ctx.lineTo(x-r,y);ctx.closePath();ctx.fill();
-          } else circle(ctx,...head,selected?3.5:1.35+.13*Math.min(5,node.density),ink+(future?'76':selected?'ff':primary?'d3':'a9'));
-          hits.push({x:head[0],y:head[1],event:event.id,pin:true,r:selected?8:4});
+          } else circle(ctx,...head,selected?3.5:latest?2.5:1.35+.13*Math.min(5,node.density),ink+(future?'76':selected?'ff':primary?'d3':'a9'));
+          const hit={x:head[0],y:head[1],event:event.id,pin:true,latest,r:selected||latest?8:4};
+          if (selected) hit.moment=moment.order;
+          hits.push(hit);
         }
       }
       const activeLink = cache.link ? drawTransfer(cache.link,project,paint,hits) : null;
-      const planetRadius = clamp(Math.min(width,height)*.029,7.5,12.6);
       for (const track of tracks) {
         if (!track.last) continue;
-        const [x,y] = project(orbitPoint(track,progress(track,seconds)));
         const active = track.id===moment.actor || track.id===moment.message?.actor;
-        const ink=paint.agents.get(track.id)||paint.muted, radius=planetRadius*track.material.size;
-        ctx.save();ctx.globalAlpha=active||moment.kind==='outcome'?1:.84;
-        planet(ctx,x,y,radius,track.index,ink,active,paint.dark,reduced?0:seconds);ctx.restore();
-        occupied.push({x:x-radius-2,y:y-radius-2,w:2*radius+4,h:2*radius+4});
-        if (!gutter || !active) labels.push({text:'Agent '+track.id,x,y,radius:radius*(track.index%4===2?1.45:1),ink:active?ink:paint.muted});
-        if (track.last) {
-          const hit={x,y,event:track.last.event.id,r:radius+3,planet:true};
-          if (hit.event===moment.event && track.id===moment.actor) hit.moment=moment.order;
-          hits.push(hit);
-        }
+        // Label the recorded endpoints of the exchange, even if its author has acted since.
+        const anchor = track.id===moment.message?.actor && track.id!==moment.actor
+          ? nodes.get(moment.message.event) : track.last;
+        const [x,y]=project(anchor.pin);
+        occupied.push({x:x-5,y:y-5,w:10,h:10});
+        if (!gutter || !active) labels.push({text:'Agent '+track.id,x,y,radius:4,ink:active?paint.agents.get(track.id):paint.muted});
       }
       if (activeLink) {
         const link=activeLink, [x,y]=link.posted.at(-1), ink=paint.agents.get(moment.message.actor);

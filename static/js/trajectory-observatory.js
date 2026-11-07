@@ -134,10 +134,10 @@
           </section>
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
-        <section class="obs-spatial" aria-label="Shared galactic view of recorded actions and communication">
+        <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four planets share one galactic disk. Each colored arm traces an agent’s actions in order. Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each colored path traces one agent’s actions in order.${noMessages?'':' Arcs connect posted messages to their verified reads.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -329,14 +329,14 @@
       }
     }
 
-    function select(index, animatePlanets = false) {
+    function select(index, animatePaths = false) {
       current = clamp(index, 0, moments.length - 1);
       elapsed = 0;
       const m = active(), message = m.message;
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
-      orbitView.select(m, signalSeconds, animatePlanets && playing && !reduced);
+      orbitView.select(m, signalSeconds, animatePaths && playing && !reduced);
       renderInspector(m);
       if (intakeSource) intakeSource.removeAttribute('data-scanning');
       intakeSource = m.kind==='outcome' ? null : message ? chatRows.get(message.id) : actionPanel;
@@ -541,7 +541,7 @@
       for (const hit of surface === scene ? sceneHits : flowHits) {
         const d = Math.hypot(hit.x - x, hit.y - y);
         if (d >= hit.r) continue;
-        const priority = hit.moment !== undefined ? 2 : Number(Boolean(hit.planet));
+        const priority = hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
         if (priority > bestPriority || (priority === bestPriority && d < distance)) {
           best = hit; distance = d; bestPriority = priority;
         }
