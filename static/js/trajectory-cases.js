@@ -6,7 +6,16 @@
   const details=root.querySelector('[data-case-details]');
   const cache=new Map();let version=0,dispose=null,request=null;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const modelName=model=>({'gpt-6.1-sol':'Sol 6.1','gpt-5.6-sol':'Sol 5.6','claude-haiku-5.5':'Haiku 5.5'}[model]||model);
+  const models={
+    'gpt-6.1-sol':{name:'Sol 6.1',logo:'openai'},
+    'gpt-5.6-sol':{name:'Sol 5.6',logo:'openai'},
+    'claude-haiku-5.5':{name:'Haiku 5.5',logo:'claude'}
+  };
+  function modelLabel(id){
+    const model=models[id];
+    if(!model)return escape(id);
+    return `<span class="model-tag"><img class="model-logo model-logo-${model.logo}" src="static/images/${model.logo}.svg?v=2" width="16" height="16" alt="">${model.name}</span>`;
+  }
   const icons={
     Agents:'<circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/>',
     Harness:'<rect x="3" y="5" width="26" height="22" rx="4"/><path d="m8 12 4 4-4 4m9 0h7"/>',
@@ -41,9 +50,9 @@
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
-    intro.innerHTML=`<div class="case-setup">${item.variants?'':`<p class="case-meta">${escape(modelName(item.model))}</p>`}<p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>`;
+    intro.innerHTML=`<div class="case-setup">${item.variants?'':`<p class="case-meta">${modelLabel(item.model)}</p>`}<p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>`;
     details.innerHTML=item.composition?'':outcomeMarkup(item);
-    if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${escape(modelName(c.model))}</button>`;}).join('')}</div>`);
+    if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${modelLabel(c.model)}</button>`;}).join('')}</div>`);
     if(item.composition){
       const p=item.composition;
       details.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);

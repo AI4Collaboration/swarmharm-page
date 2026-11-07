@@ -35,15 +35,6 @@
 .finding-visual .diagram-bar-label { fill:var(--text); font-size:15px; }
 .finding-visual .diagram-overflow-label { fill:var(--diagram-risk); font-size:17px; font-weight:600; }
 .finding-visual figcaption { margin:16px 0 0; color:var(--text); font:500 16px/1.55 var(--font); text-wrap:pretty; }
-.findings .finding-copy { gap:14px; }
-.findings .finding-explanation { margin-top:0; color:var(--muted); }
-.finding-explanation > summary { display:flex; align-items:center; justify-content:space-between; min-height:44px; padding:8px 0; box-sizing:border-box; list-style:none; border-top:1px solid var(--finding-line); color:var(--muted); font:500 12px/1.5 var(--font); cursor:pointer; }
-.finding-explanation > summary::-webkit-details-marker { display:none; }
-.finding-explanation > summary::after { content:"+"; font-size:19px; font-weight:400; }
-.finding-explanation[open] > summary::after { content:"−"; }
-.finding-explanation > summary:hover { color:var(--finding-ink); }
-.finding-explanation > summary:focus-visible { outline:2px solid var(--finding-ink); outline-offset:3px; }
-.findings .finding-explanation > p { margin:0; color:var(--muted); font:13px/1.65 var(--font); }
 @media(max-width:600px) {
   .finding-visual figcaption { margin-top:12px; font-size:15px; }
   .finding-visual .diagram-label { font-size:20px; }
@@ -90,14 +81,14 @@
 .eraser-tip-top { fill:#f3e5d3; }
 .eraser-tip-side { fill:#dac2ad; }
 .eraser-seam { fill:none; opacity:.55; }
-.is-playing .eraser-motion { animation:erase-contact 6.2s linear both; }
-.is-playing .record-wipe-1 { animation:erase-first 6.2s linear both; }
-.is-playing .record-wipe-2 { animation:erase-second 6.2s linear both; }
-.is-playing .record-wipe-3 { animation:erase-third 6.2s linear both; }
-.is-playing :is(.record-residue-1,.record-crumbs-1) { animation:erase-debris-first 6.2s linear both; }
-.is-playing :is(.record-residue-2,.record-crumbs-2) { animation:erase-debris-second 6.2s linear both; }
-.is-playing :is(.record-residue-3,.record-crumbs-3) { animation:erase-debris-third 6.2s linear both; }
-.is-playing .record-replacement { animation:record-replaced 6.2s linear both; }
+.is-playing .eraser-motion { animation:erase-contact var(--diagram-duration,4.6s) linear both; }
+.is-playing .record-wipe-1 { animation:erase-first var(--diagram-duration,4.6s) linear both; }
+.is-playing .record-wipe-2 { animation:erase-second var(--diagram-duration,4.6s) linear both; }
+.is-playing .record-wipe-3 { animation:erase-third var(--diagram-duration,4.6s) linear both; }
+.is-playing :is(.record-residue-1,.record-crumbs-1) { animation:erase-debris-first var(--diagram-duration,4.6s) linear both; }
+.is-playing :is(.record-residue-2,.record-crumbs-2) { animation:erase-debris-second var(--diagram-duration,4.6s) linear both; }
+.is-playing :is(.record-residue-3,.record-crumbs-3) { animation:erase-debris-third var(--diagram-duration,4.6s) linear both; }
+.is-playing .record-replacement { animation:record-replaced var(--diagram-duration,4.6s) linear both; }
 @keyframes erase-contact {
   0%,36%,90%,100% { transform:translate(424px,177px); }
   40% { transform:translate(388px,114px); }

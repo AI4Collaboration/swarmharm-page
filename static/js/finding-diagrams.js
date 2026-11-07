@@ -39,11 +39,12 @@
   let frame = 0, lastFrame = 0;
   const canRun = s => s.playing && s.visible && !document.hidden && !motion.matches;
   function control(s) {
+    s.figure.classList.toggle('is-paused', s.elapsed < s.duration && !canRun(s));
+    if (!s.button) return;
     const label = s.playing ? 'Pause' : s.elapsed > 0 && s.elapsed < s.duration ? 'Resume' : 'Replay';
     s.button.querySelector('span').textContent = label;
     s.button.setAttribute('aria-label', `${label} illustration: ${s.title}`);
     s.button.querySelector('path').setAttribute('d', s.playing ? 'M7 4v12M13 4v12' : 'M4 6a7 7 0 1 1-1 6M4 2v5h5');
-    s.figure.classList.toggle('is-paused', s.elapsed < s.duration && !canRun(s));
   }
   function render(s) {
     const fraction = Math.min(1, s.elapsed / s.duration);
@@ -105,7 +106,7 @@
   document.querySelectorAll('.finding-visual[data-finding-diagram]').forEach(figure=>{
     const steps=sequences[figure.dataset.findingDiagram];
     const svg=figure.querySelector('.diagram-stage > svg'), button=figure.querySelector('.diagram-replay');
-    if(!steps || !svg || !button)return;
+    if(!steps || !svg)return;
     const routes=[...svg.querySelectorAll('.diagram-arrow')].map(path=>{
       const signal=document.createElementNS(ns,'path');
       signal.setAttribute('d',path.getAttribute('d')); signal.setAttribute('pathLength','100');
@@ -119,9 +120,10 @@
       return {path,signal,packet,length:path.getTotalLength()};
     });
     const s={figure,svg,button,steps,routes,agents:[...svg.querySelectorAll('[data-diagram-agent]')],ticks:[...figure.querySelectorAll('.diagram-progress i')],title:svg.querySelector('title').textContent,duration:Number(figure.dataset.diagramDuration)||4200,elapsed:0,playing:false,visible:false,seen:false};
-    figure.style.setProperty('--diagram-duration',s.duration+'ms'); button.hidden=motion.matches;
+    figure.style.setProperty('--diagram-duration',s.duration+'ms');
+    if(button)button.hidden=motion.matches;
     control(s); states.push(s);
-    button.addEventListener('click',()=>{if(s.playing){s.playing=false;control(s);}else start(s);});
+    button?.addEventListener('click',()=>{if(s.playing){s.playing=false;control(s);}else start(s);});
   });
   const observer='IntersectionObserver' in window ? new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
@@ -131,6 +133,6 @@
     schedule();
   },{threshold:.55}) : null;
   states.forEach(s=>{if(observer)observer.observe(s.figure);else s.visible=true;});
-  motion.addEventListener('change',()=>{states.forEach(s=>{finish(s);s.button.hidden=motion.matches;});});
+  motion.addEventListener('change',()=>{states.forEach(s=>{finish(s);if(s.button)s.button.hidden=motion.matches;});});
   document.addEventListener('visibilitychange',()=>{states.forEach(control);schedule();});
 })();

@@ -147,8 +147,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   shows an imaginary validation gate rather than a named human manager, r261
   retains the original 27-entry result, and r255 shows four $4m commitments
   against a $12m reserve. Keep the paired cards aligned in both themes.
-- Each card uses a concrete conclusion, the existing schematic,
-  two visible evidence values and an explicit View trace link. The figures are
+- Each finding pairs its illustrated conclusion with a case link. Model, reasoning
+  effort and runner share one compact row with Evidence. Quantitative details
+  stay in the underlying evidence. The figures are
   case-specific observations, never population rates or a model leaderboard.
   Keep r257's no-publication result and r261's retained backups in Evidence. Link
   r263's no-message composition result directly from the composition card.
@@ -163,8 +164,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   A is blue, B green, C gold and D silver in every diagram, avatar and canvas lane.
   CSS defines both palettes and the canvas reads the active colors.
   Illustration playback follows existing routes, highlights participants and
-  dims uninvolved agents. It runs once on entry, supports pause/resume/replay,
-  suspends offscreen or in a hidden tab, and stays static with reduced motion.
+  dims uninvolved agents. Each finding runs once on entry and settles into its
+  complete still. Setup illustrations also offer playback controls. Both suspend
+  offscreen or in a hidden tab and stay static with reduced motion.
   These illustrations never create messages or alter recorded data.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
@@ -181,8 +183,8 @@ and [Nerfies](https://nerfies.github.io/), under CC BY-SA 4.0. Retain local font
 icon licenses. Institutional marks identify team affiliations.
 The trajectory visualization is adapted from [AI Safety HOT](https://aisafetyhot.com/en).
 Princeton's shield-and-wordmark signatures use the University's [light](https://www.princeton.edu/themes/custom/hobbes/logo.svg) and [dark](https://www.princeton.edu/themes/custom/hobbes/images/logo-white.svg) website assets.
-OpenAI model badges use the monochrome logo from [SVGL](https://github.com/pheralb/svgl),
-with its license retained beside the asset. Reasoning badges show High with three filled bars.
+Model labels use the OpenAI mark for Sol and the Claude mark for Haiku, from
+[SVGL](https://github.com/pheralb/svgl), with licenses beside both assets. Reasoning badges show High with three filled bars.
 
 The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result. The three finding rows remain unchanged.
 
@@ -223,12 +225,12 @@ The propagation diagrams show a proposed false rule reaching peers (r257), and
 one shared record-editing method being read and reused by two later agents (r261).
 The eraser rests on the record, with each contact pass progressively clearing a
 source-reference segment and leaving faint residue and rubber crumbs. The record
-body remains present. Its 6.2-second replay stops offscreen, with a complete static
+body remains present. Its 4.6-second animation stops offscreen, with a complete static
 result when motion is reduced.
 The 27 changed entries are the whole-run result, including two independent initial
 edits. Composition remains four individual commitments aggregating to a shortfall;
-no communication is invented to explain it. Arrow emphasis plays once on entry,
-stops offscreen and can be replayed. Reduced motion shows the full static diagram.
+no communication is invented to explain it. Arrow emphasis plays once on entry
+and stops offscreen. Reduced motion shows the full static diagram.
 High reasoning bars and text are red in finding cards and trajectory settings.
 
 Design references reviewed for this revision: Stolen Thoughts (result-led sections
