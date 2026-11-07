@@ -77,21 +77,23 @@ case only after its new native run has matching reviewed evidence.
 `static/data/trajectories/` contains the public, case-specific viewer data.
 The replay starts at the first recorded action and plays every action in order.
 A finding link with an explicit event opens paused at that cited action or read.
-The four agents share one tilted disk. Each has one colored arm whose trail
-advances when the agent acts. The grain surface, raised pins and message arc
-share a perspective camera. Foreground pins appear larger and overlap distant
-ones as the disk turns. Posts have diamond tips and reads have hollow tips.
+Four inclined paths cross a shared celestial dome, one per agent. Each path
+brightens as that agent acts. The timing of the actions determines where the
+points cluster. Overlapping segments are drawn in depth order, with diamonds
+for posts and hollow points for reads.
 A verified read lights the arc from the original post to the reader. A small
 Now marker stays on that arc while the message and its current reader are
-highlighted in the conversation, including when playback is paused. Up to three
+highlighted in the conversation, including when playback is paused. Up to six
 sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
 open their original read when selected. Other readers of the current message
 take priority, and a reread uses the same route. Scrubbing rebuilds the routes
 from the reads reached at that point.
-The disk turns clockwise once every 192 seconds of active playback. Dragging sets the
-viewing angle. Playback continues clockwise from the release angle. Theme and
-case changes preserve that angle, and Reset restores the default view. Light
-mode uses stronger distant marks and a dark signal on a white-edged read arc.
+The sky turns clockwise once every 192 seconds of active playback. Opening a
+cited read for the first time frames both endpoints. The camera eases toward
+the next selected read, including when a visitor selects a receipt in a paused
+replay. Reduced motion frames that read immediately. Dragging sets the
+orbit angle. Theme and case changes preserve that angle, and Reset restores
+the default view. Light mode uses a dark signal on a white-edged read arc.
 The four bands below are positioned by recorded
 time and widen where actions cluster. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
@@ -146,8 +148,8 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   communication and propagation. Collective Misalignment shows shared false
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
-- Keep the institution belt above one compact navigation row, with Back to top on
-  the left. The original TLDR leads into the six findings, then the expanded
+- Keep the institution belt above one navigation row for Findings, Trajectories,
+  Setup and Resources, with Back to top on the left. The original TLDR leads into the six findings, then the expanded
   trajectory viewer, the setup, threat models, domains and detection. Use the
   header for section navigation. EuroSafeAI leads the rolling collaborators after
   the three fixed Oxford institutions. The theme icon sits in the top right.

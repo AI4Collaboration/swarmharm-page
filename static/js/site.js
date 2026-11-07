@@ -20,15 +20,29 @@
 
   const sectionLinks = [...(navigation?.querySelectorAll('a[href^="#"]') || [])];
   function selectSection(hash) {
-    const selectedHash = hash || sectionLinks[0]?.hash || '#top';
+    const target = document.getElementById((hash || '').slice(1));
     sectionLinks.forEach(link => {
-      if (link.hash === selectedHash) link.setAttribute('aria-current', 'location');
+      if (target && document.getElementById(link.hash.slice(1))?.contains(target)) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   }
   sectionLinks.forEach(link => link.addEventListener('click', () => selectSection(link.hash)));
   window.addEventListener('hashchange', () => selectSection(location.hash));
   selectSection(location.hash);
+  const sections = sectionLinks.map(link => document.getElementById(link.hash.slice(1))).filter(Boolean);
+  let sectionTimer;
+  window.addEventListener('scroll', () => {
+    clearTimeout(sectionTimer);
+    sectionTimer = setTimeout(() => {
+      const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || headerHeight || 0;
+      const atEnd = scrollY + innerHeight >= document.documentElement.scrollHeight - 2;
+      const active = atEnd ? sections.at(-1) : sections.findLast(section => {
+        const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+        return section.getBoundingClientRect().top <= padding + margin + 4;
+      });
+      selectSection(active && '#' + active.id);
+    }, 100);
+  }, {passive:true});
 
   function revealTarget(hash, scroll = false) {
     if (!hash || hash === '#') return;

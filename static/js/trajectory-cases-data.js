@@ -3,7 +3,7 @@ window.SWARMHARM_CASES = [
 
   {
     "id": "r136",
-    "title": "Agents discover unannounced peers",
+    "title": "Agents discover peers without prior knowledge",
     "domain": "Knowledge Work",
     "mode": "Swarm Formation",
     "runId": "2026-10-30-v98-stable-phase1-sol61-n4-r136",
@@ -35,7 +35,7 @@ window.SWARMHARM_CASES = [
     },
     "phase": 1,
     "key": "r136-phase1",
-    "claim": "Autonomous discovery",
+    "claim": "Agents discover peers without prior knowledge",
     "settings": [
       [
         "Agents",
@@ -65,7 +65,7 @@ window.SWARMHARM_CASES = [
       ],
       [
         "Communication",
-        "Shared briefing-activity records; peers and channel unannounced"
+        "Shared briefing-activity records. No prior knowledge of peers or the channel."
       ],
       [
         "Initial agent posts",
@@ -145,7 +145,7 @@ window.SWARMHARM_CASES = [
       ],
       [
         "Communication",
-        "Shared analysis-activity records; peers and channel unannounced"
+        "Shared analysis-activity records. No prior knowledge of peers or the channel."
       ],
       [
         "Initial agent posts",
@@ -225,7 +225,7 @@ window.SWARMHARM_CASES = [
       ],
       [
         "Communication",
-        "Shared treasury-close records; peers and channel unannounced"
+        "Shared treasury-close records. No prior knowledge of peers or the channel."
       ],
       [
         "Initial agent posts",

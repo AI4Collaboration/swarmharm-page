@@ -6,7 +6,7 @@
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
   const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
   const short = (value,n=80) => value.length>n?value.slice(0,n).trimEnd()+'…':value;
-  const homeView = {yaw:-.35, pitch:.99};
+  const homeView = {yaw:-.35, pitch:1.14};
   const clockwiseRate = 2*Math.PI/192_000; // radians per millisecond of visible playback
   const cameras = new WeakMap();
 
@@ -65,7 +65,7 @@
     const reads = connections.filter(step => step.kind === 'read' && step.message.actor !== step.actor);
     const firstReads = reads.filter(step => step.firstRead).reverse();
 
-    // Show up to three distinct routes. Prefer other readers of the selected message.
+    // Keep a small history of distinct routes, with the selected message's other readers first.
     function earlierReadsAt(moment) {
       const earlier = firstReads.filter(step => step.order < moment.order);
       const candidates = moment.message ? [
@@ -80,7 +80,7 @@
         if (seen.has(pair)) continue;
         history.push(step);
         seen.add(pair);
-        if (seen.size === 3) break;
+        if (seen.size === 6) break;
       }
       return history;
     }
@@ -100,7 +100,7 @@
     const active=()=>moments[current];
     const holding=()=>reading||focused||!!hovered||!!drag;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
-    const running=()=>playing && isVisible();
+    const running=()=>isVisible() && (playing || orbitView.focusing);
 
     // Compress long stretches of independent work and hold exchanges long enough to read.
     for (let i = 0; i < moments.length;) {
@@ -178,7 +178,7 @@
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths share a tilted disk. Pins mark recorded actions.${noMessages?'':' The solid arc marked Now shows the current read. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths cross a celestial dome. Points mark recorded actions.${noMessages?'':' The solid arc marked Now shows the current read. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -398,7 +398,7 @@
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
-      orbitView.select(m, signalSeconds, animatePaths && playing && !reduced, history);
+      orbitView.select(m, signalSeconds, animatePaths && playing && !reduced, history, isVisible() && !reduced);
       renderInspector(m);
       showExchange(m, history);
       actors.forEach(a=>{
@@ -421,6 +421,7 @@
     }
     function stop() {
       playing = false;
+      orbitView.holdFocus();
       lastFrame = 0;
       cancelAnimationFrame(frame);
       frame = 0;
@@ -439,6 +440,7 @@
       if (playing) { stop(); return; }
       if (active().kind === 'outcome') select(0);
       playing = true;
+      orbitView.resumeFocus(!reduced);
       lastFrame = 0;
       updateControls();
       ensureFrame();
@@ -561,7 +563,9 @@
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?clamp(now-lastFrame,0,80):0;lastFrame=now;
-      if (!holding()) {
+      const refocused = !reduced && !drag && orbitView.advanceFocus(dt);
+      const advancing = playing && !holding();
+      if (advancing) {
         if (!reduced) {
           signalSeconds += dt * speed / 1000;
           camera.yaw += dt * clockwiseRate;
@@ -573,7 +577,8 @@
           return;
         }
       }
-      if (!reduced && !holding() && ctx) drawSpatial();
+      if ((refocused || (advancing && !reduced)) && ctx) drawSpatial();
+      if (!playing && !orbitView.focusing) lastFrame=0;
       ensureFrame();
     }
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
@@ -616,7 +621,7 @@
           if (!drag.moved && Math.abs(dx)+Math.abs(dy)<=4) return;
           drag.moved=true;
           camera.yaw=drag.yaw+dx*.004;
-          camera.pitch=clamp(drag.pitch+dy*.003,.20,1.12);
+          camera.pitch=clamp(drag.pitch+dy*.003,.22,1.29);
           hideTooltips(); draw(); return;
         }
         if(event.pointerType==='mouse')hover(surface,event);
@@ -627,6 +632,7 @@
     on(scene,'pointerdown',event=>{
       if (event.button!==0 || drag) return;
       hovered=null; hideTooltips();
+      orbitView.holdFocus();
       drag={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:camera.yaw,pitch:camera.pitch,moved:false};
       scene.setPointerCapture(event.pointerId);
     });
@@ -656,7 +662,7 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){Object.assign(camera,homeView);draw();}
+      else if(button.hasAttribute('data-reset')){Object.assign(camera,homeView);orbitView.resetFocus();draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
@@ -678,9 +684,17 @@
       attributeFilter: ['data-theme', 'data-darkreader-scheme']
     });
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resizeObserver.observe(flowStage);
-    const visibilityObserver=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible&&!started&&!reduced){playing=true;started=true;}lastFrame=0;updateControls();if(visible)draw();ensureFrame();},{threshold:.18});visibilityObserver.observe(stage);
+    const visibilityObserver=new IntersectionObserver(entries=>{
+      visible=entries.some(e=>e.isIntersecting);
+      if (visible) camera.seen=true;
+      if (visible && !started && !reduced) { playing=true; started=true; }
+      lastFrame=0; updateControls(); if(visible)draw(); ensureFrame();
+    },{threshold:.18});visibilityObserver.observe(stage);
     const citedMoment=eventMoment.get(meta.focusEvent);
-    if(citedMoment!==undefined)started=true;
+    if(citedMoment!==undefined){
+      started=true;
+      if(!camera.seen)camera.yaw=orbitView.entryYaw(moments[citedMoment],camera.pitch) ?? camera.yaw;
+    }
     select(citedMoment??0);resize();
     return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
