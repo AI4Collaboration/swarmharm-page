@@ -1,8 +1,7 @@
-/* Four action lanes share one celestial dome. Only verified reads bridge the lanes. */
+/* One action spiral per agent on the floor, with verified reads arching through the sky above. */
 (() => {
   const TAU = 2 * Math.PI;
   const STEPS = 152;
-  const agentIds = ['A', 'B', 'C', 'D'];
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const lerp = (a, b, t) => a + (b - a) * t;
 
@@ -31,25 +30,35 @@
 
 
   const SKY_RADIUS = 230, SKY_HEIGHT = 197;
+  const ATLAS_RADIUS = 278;
   const EYE_DISTANCE = SKY_RADIUS * 4.8;
   const CENTER = [0,0,SKY_HEIGHT*.44];
   const DEGREES = 180 / Math.PI;
-  const INCLINATIONS = [1.09,.80,1.24,.91];
 
   function skyPoint(bearing, altitude) {
     const radius = SKY_RADIUS*Math.cos(altitude);
     return [radius*Math.cos(bearing),radius*Math.sin(bearing),SKY_HEIGHT*Math.sin(altitude)];
   }
-  function laneBearing(track,t) {
-    return track.bearing+track.sweep*((t-.5)*4.65+.18*Math.sin(TAU*t));
-  }
-  function laneAltitude(track,t) {
-    return track.inclination*Math.sin(Math.PI*(t+track.skew*Math.sin(Math.PI*t)));
-  }
-  // Alternating passes rise to different altitudes and cross the face of the dome.
+
+  // The neutral guides describe the vault. Directional arcs are added only for actual reads.
+  const skyGuides = [1.09,.80,1.24,.91].map((inclination,index) => {
+    const bearing = -.19 + index*Math.PI/2 + .14*Math.sin(2.1*index);
+    const sweep = index%2 ? -1 : 1;
+    const skew = .095*Math.sin(index*2+.3);
+    return Array.from({length:77},(_,i) => {
+      const t=i/76;
+      return skyPoint(bearing+sweep*((t-.5)*4.65+.18*Math.sin(TAU*t)),
+        inclination*Math.sin(Math.PI*(t+skew*Math.sin(Math.PI*t))));
+    });
+  });
+
   function orbitPoint(track, progress) {
-    return skyPoint(laneBearing(track,progress),laneAltitude(track,progress));
+    const radius = lerp(26 + 3*track.index, track.extent, progress);
+    const r = radius / SKY_RADIUS;
+    const angle = track.phase + .35 - 5.55*r**.75 + .25*Math.sin(4.1*r + 1.7*track.index);
+    return [radius*Math.cos(angle),radius*Math.sin(angle),0];
   }
+
   const horizon = Array.from({length:97},(_,i)=>skyPoint(TAU*i/96,0));
   const shellSamples = Array.from({length:13},(_,row)=>
     Array.from({length:64},(_,i)=>skyPoint(TAU*i/64,row*Math.PI/24))).flat();
@@ -97,7 +106,7 @@
     const scale=Math.min((width-gutter-2*edge)/(right-left),(height-roof-foot)/(bottom-top))*.88;
     const cx=(width+gutter)/2-scale*(left+right)/2, cy=(height+roof-foot)/2-scale*(top+bottom)/2;
     const screen = new DOMMatrix().translate(cx,cy).scale(scale).multiply(lens);
-    return {tilt,screen,outline:shellOutline(points),scale,gutter,cx,cy};
+    return {tilt,screen,outline:shellOutline(points),scale,gutter};
   }
 
   function projectDome(frame,yaw,focus) {
@@ -110,7 +119,9 @@
     const aim=new DOMMatrix().translate(0,0,EYE_DISTANCE).rotate(-elevation*DEGREES,0,0)
       .rotate(0,heading*DEGREES,0).translate(0,0,-EYE_DISTANCE);
     const shell=frame.screen.multiply(aim).multiply(frame.tilt);
-    return {...projector(shell.rotate(0,0,yaw*DEGREES)),shell:projector(shell).project};
+    const world=shell.rotate(0,0,yaw*DEGREES);
+    return {...projector(world),shell:projector(shell).project,
+      floorTransform:world.translate(-ATLAS_RADIUS,-ATLAS_RADIUS).toString()};
   }
 
   function drawSky(ctx,frame,projection,paint) {
@@ -124,6 +135,9 @@
     for (const p of outline.slice(1)) ctx.lineTo(...p);
     ctx.closePath();ctx.fillStyle=air;ctx.fill();
     ctx.strokeStyle=paint.guide+(paint.dark?'52':'55');ctx.lineWidth=.8;ctx.stroke();
+    for (const guide of skyGuides) {
+      line(ctx,guide.map(projection.project),paint.guide+(paint.dark?'43':'45'),.78);
+    }
     line(ctx,horizon.map(projection.shell),paint.guide+(paint.dark?'51':'52'),.85);
     for (let i=0;i<48;i++) {
       const [x,y] = horizon[i*2], scale=i%4===0?1.029:1.014;
@@ -199,21 +213,69 @@
       while (times[first] < times[i] - 10) first++;
       const density = i - first + 1;
       const point = orbitPoint(track, t);
-
+      const ahead = orbitPoint(track, t + .001);
+      const angle = Math.atan2(ahead[1] - point[1], ahead[0] - point[0]);
       const type = event.messages.length ? 'post' : event.reads.length ? 'read' : 'action';
-      const lift = (type === 'action' ? (event.important ? 4 : 2) : 8) + Math.min(5,(density-1)*.9);
-      const tip = [point[0]*(1+lift/SKY_RADIUS),point[1]*(1+lift/SKY_RADIUS),point[2]*(1+lift/SKY_HEIGHT)];
-      return {track,event,t,point,tip,type,density,raised:type!=='action' || i%stride===0};
+      const baseHeight = type === 'post' ? 38 : type === 'read' ? 27 : event.important ? 16 : 8;
+      const height = baseHeight + Math.min(26, (density - 1) * 3.8);
+      return {track, event, t, point, tip:[point[0], point[1], height], type, density,
+        tx:Math.cos(angle), ty:Math.sin(angle), raised:type !== 'action' || i % stride === 0};
     });
   }
 
-  // Fine grains cluster around real action times and follow the curvature of their lane.
-  function actionGrain(node,i) {
-    const seed=node.event.id, track=node.track;
-    const t=clamp(node.t+(hash(seed,i+3)-.5)*.042,0,1);
-    const across=(hash(seed,i+103)+hash(seed,i+189)-1)*(5+Math.min(node.density,6));
-    const point=skyPoint(laneBearing(track,t),Math.max(0,laneAltitude(track,t)+across/SKY_RADIUS));
-    return {point,size:.52+1.04*hash(seed,i+263),alpha:.26+.62*hash(seed,i+349)};
+  function actionGrain(node, i) {
+    const seed = node.event.id, spread = 5+Math.min(node.density,5);
+    const along = (hash(seed,i+3)-.5)*25;
+    const across = (hash(seed,i+103)+hash(seed,i+189)-1)*spread;
+    return {
+      x:node.point[0]+along*node.tx-across*node.ty,
+      y:node.point[1]+along*node.ty+across*node.tx,
+      size:.44+hash(seed,i+263)*1.15,
+      alpha:(.30+.53*hash(seed,i+349))*(1-.45*Math.abs(across/spread))
+    };
+  }
+
+  // A compact stellar core leaves the silhouette of the disk to the recorded nodes.
+  function drawNucleus(context, dark) {
+    const glow = context.createRadialGradient(0,0,0,0,0,62);
+    glow.addColorStop(0,dark?'#f3d8ad99':'#ae825343');
+    glow.addColorStop(.20,dark?'#c7a48249':'#bc9a7427');
+    glow.addColorStop(1,'#a58e7100');
+    context.fillStyle=glow;context.fillRect(-62,-62,124,124);
+    context.fillStyle=dark?'#f5d9b189':'#805d3776';
+    for (let i=0; i<1200; i++) {
+      const r=-Math.log(Math.max(.003,hash(i,68)))*15.4, a=TAU*hash(i,67);
+      const size=.25+.74*hash(i,65);
+      context.fillRect(r*Math.cos(a),r*Math.sin(a),size,size);
+    }
+  }
+
+  // The static grains stay on one cached plane while action heads and pins are projected above it.
+  function paintDisk(surface, tracks, size, paint, liftedPerAction) {
+    surface.width = surface.height = size;
+    const g = surface.getContext('2d');
+    const unit = size / (2*ATLAS_RADIUS);
+    g.setTransform(unit,0,0,unit,size/2,size/2);
+    drawNucleus(g,paint.dark);
+
+    for (const track of tracks) {
+      if (!track.nodes.length) continue;
+      const ink = paint.agents.get(track.id) || paint.muted;
+      g.globalAlpha = .055;
+      line(g, track.path, ink, 4);
+      g.globalAlpha = paint.dark ? .29 : .33;
+      line(g, track.path, ink, .8);
+      g.fillStyle = ink;
+      for (const node of track.nodes) {
+        const grains = 48 + Math.min(24, node.density * 3);
+        for (let i=liftedPerAction; i<grains; i++) {
+          const grain = actionGrain(node,i);
+          g.globalAlpha = Math.min(1,grain.alpha*(paint.dark ? 1 : 1.2));
+          g.fillRect(grain.x,grain.y,grain.size,grain.size);
+        }
+      }
+    }
+    g.globalAlpha = 1;
   }
   function pinCap(ctx, type, p, radius, color, paper) {
     const [x, y] = p;
@@ -229,30 +291,25 @@
   }
 
 
-  // Interpolate on the sky, with enough lift to distinguish a read from an action lane.
+  // The same path is used for the stroke, the travelling signal, picking and camera framing.
+  // It leaves the post's pin, follows the upper shell, then descends to the reader's pin.
   function readArc(post,reader) {
-    const axes=[SKY_RADIUS,SKY_RADIUS,SKY_HEIGHT];
-    const a=post.tip.map((v,i)=>v/axes[i]), b=reader.tip.map((v,i)=>v/axes[i]);
-    const ra=Math.hypot(...a), rb=Math.hypot(...b);
-    const u=a.map(n=>n/ra), v=b.map(n=>n/rb);
-    const dot=clamp(u.reduce((sum,n,i)=>sum+n*v[i],0),-1,1), angle=Math.acos(dot);
-    let tangent=v.map((n,i)=>n-dot*u[i]);
-    if (Math.hypot(...tangent)<1e-6) {
-      const axis=Math.abs(u[2])<.9?2:0;
-      tangent=u.map((n,i)=>Number(i===axis)-u[axis]*n);
-    }
-    const length=Math.hypot(...tangent);
-    tangent=tangent.map(n=>n/length);
-    const normal=[u[1]*tangent[2]-u[2]*tangent[1],u[2]*tangent[0]-u[0]*tangent[2],u[0]*tangent[1]-u[1]*tangent[0]];
-    const span=Math.sin(angle/2), lift=.085+.065*(1-span), bow=(normal[2]<0?-1:1)*(.07+.09*(1-span));
+    const a = post.tip, b = reader.tip;
+    const dx = b[0]-a[0], dy = b[1]-a[1];
+    const controlX = (a[0]+b[0])*.36 - dy*.20;
+    const controlY = (a[1]+b[1])*.36 + dx*.20;
     function at(t) {
-      if (t===0) return post.tip;
-      if (t===1) return reader.tip;
-      const hump=Math.sin(Math.PI*t), c=Math.cos(angle*t),s=Math.sin(angle*t);
-      const bend=bow*hump, radius=lerp(ra,rb,t)+lift*hump;
-      return u.map((n,i)=>axes[i]*radius*((n*c+tangent[i]*s)*Math.cos(bend)+normal[i]*Math.sin(bend)));
+      if (t===0) return a;
+      if (t===1) return b;
+      const s = 1-t, mid = 2*s*t;
+      const x = s*s*a[0] + mid*controlX + t*t*b[0];
+      const y = s*s*a[1] + mid*controlY + t*t*b[1];
+      const ceiling = SKY_HEIGHT*Math.sqrt(Math.max(0,1-(x*x+y*y)/(SKY_RADIUS*SKY_RADIUS)));
+      const baseline = lerp(a[2],b[2],t);
+      const rise = Math.sin(Math.PI*t);
+      return [x,y,lerp(baseline,ceiling,rise*(2-rise))];
     }
-    return {at,focus:at(.5),path:Array.from({length:49},(_,i)=>at(i/48))};
+    return {at,focus:at(.5),path:Array.from({length:65},(_,i)=>at(i/64))};
   }
   function drawRead(ctx, arc, projection, paint, progress, hits, historyAlpha) {
     const {post,reader,receipt} = arc;
@@ -330,23 +387,34 @@
   window.createTrajectoryOrbitView = ({canvas, actors, actorEvents, reads, sendIndex, fontFamily}) => {
     const ctx = canvas.getContext('2d');
 
-    const eventCount=actors.reduce((sum,actor)=>sum+actorEvents.get(actor.id).length,0);
-    const grainsPerAction=clamp(Math.floor(2500/Math.max(1,eventCount)),1,32);
-    const nodes=new Map(), segments=[];
-    const tracks=actors.map((actor,i)=>{
-      const events=actorEvents.get(actor.id);
-      const index=agentIds.includes(actor.id)?agentIds.indexOf(actor.id):i%agentIds.length;
-      const bearing=-.19+index*Math.PI/2+.14*Math.sin(2.1*index);
-      const track={id:actor.id,bearing,sweep:index%2?-1:1,inclination:INCLINATIONS[index],skew:.095*Math.sin(index*2+.3),
-        from:0,to:0,duration:0,last:null,grains:[]};
-      track.path=Array.from({length:STEPS+1},(_,j)=>orbitPoint(track,j/STEPS));
-      track.nodes=actionNodes(track,events);
+    const plate = document.createElement('canvas');
+    const floor = document.createElement('div');
+    floor.className = 'obs-disk-floor';
+    floor.setAttribute('aria-hidden','true');
+    plate.style.width = plate.style.height = (2*ATLAS_RADIUS)+'px';
+    floor.append(plate);
+    canvas.before(floor);
+    let platePaint;
+
+    const eventCount = actors.reduce((sum,actor)=>sum+actorEvents.get(actor.id).length,0);
+    const liftedPerAction = clamp(Math.floor(900/Math.max(1,eventCount)),1,6);
+    const longest = Math.max(1,...actors.map(actor=>actorEvents.get(actor.id).length));
+    const nodes = new Map();
+    const tracks = actors.map((actor,index) => {
+      const events = actorEvents.get(actor.id);
+      const track = {
+        id:actor.id,index,phase:index*TAU/actors.length,extent:SKY_RADIUS*(.72+.28*events.length/longest),
+        from:0,to:0,duration:0,last:null,grains:[]
+      };
+      track.path = Array.from({length:STEPS+1},(_,j)=>orbitPoint(track,j/STEPS));
+      track.nodes = actionNodes(track,events);
       for (const node of track.nodes) {
         nodes.set(node.event.id,node);
-        for (let j=0;j<grainsPerAction;j++) track.grains.push(actionGrain(node,j));
-      }
-      if (track.nodes.length) {
-        for (let start=0;start<STEPS;start+=8) segments.push({track,start,end:Math.min(STEPS,start+8)});
+        for (let j=0;j<liftedPerAction;j++) {
+          const grain = actionGrain(node,j);
+          const height = (3+12*(1-node.t))*hash(node.event.id,j+431);
+          track.grains.push({point:[grain.x,grain.y,height],size:grain.size,alpha:grain.alpha});
+        }
       }
       return track;
     });
@@ -412,6 +480,7 @@
       if (!camera || ['width','height','pitch'].some(k=>camera[k]!==view[k])) framing=frameDome(view);
       camera=view; projectedFocus=focus;
       projection=projectDome(framing,view.yaw,focus);
+      plate.style.transform=projection.floorTransform;
       const {project,magnification}=projection;
       for (const track of tracks) {
         track.screen=track.path.map(project);
@@ -423,51 +492,56 @@
           node.foot=project(node.point); node.screenTip=project(node.tip); node.size=magnification(node.tip);
         }
       }
-      for (const segment of segments) {
-        const {track,start,end}=segment;
-        segment.depth=magnification(track.path[(start+end)>>1]);
-        segment.points=track.screen.slice(start,end+1);
-      }
-      segments.sort((a,b)=>a.depth-b.depth);
       backToFront.sort((a,b)=>a.size-b.size);
     }
 
-    // Draw short sections back to front so two crossing lanes visibly pass over and under each other.
-    function drawLanes(seconds,paint) {
+    function drawSpirals(seconds,paint) {
       for (const track of tracks) {
-        track.reached=trackProgress(track,seconds);
-        track.head=projection.project(orbitPoint(track,track.reached));
-        track.involved=track.id===moment.actor || track.id===moment.message?.actor;
-        track.quiet=arc && !track.involved;
-        track.ink=paint.agents.get(track.id) || paint.muted;
-        ctx.fillStyle=track.ink;
+        if (!track.nodes.length) continue;
+        const ink = paint.agents.get(track.id) || paint.muted;
+        const involved = track.id === moment.actor || track.id === moment.message?.actor;
+        const quiet = arc && !involved;
+        const reached = trackProgress(track,seconds);
+        const head = projection.project(orbitPoint(track,reached));
+        track.reached = reached;
+        track.head = head;
+        track.ink = ink;
+        track.involved = involved;
+
+        ctx.fillStyle = ink;
         for (const grain of track.grains) {
-          ctx.globalAlpha=grain.alpha*(track.quiet ? .44 : .77);
+          ctx.globalAlpha = grain.alpha*(quiet ? .50 : .75);
           ctx.fillRect(...grain.screen,grain.diameter,grain.diameter);
         }
+        ctx.globalAlpha = 1;
+        if (!track.last) continue;
+        const past = track.screen.slice(0,Math.floor(reached*STEPS)+1);
+        past.push(head);
+        ctx.globalAlpha = quiet ? .57 : .85;
+        line(ctx,past,ink,quiet ? 1.12 : 1.48);
+        if (involved && past.length>2) {
+          const tail = past.slice(-15);
+          const light = ctx.createLinearGradient(...tail[0],...head);
+          light.addColorStop(0,ink+'00'); light.addColorStop(1,ink);
+          ctx.globalAlpha = .18; line(ctx,tail,light,5.5);
+          ctx.globalAlpha = .92; line(ctx,tail,light,2);
+        }
+        ctx.globalAlpha = 1;
       }
-      for (const {track,start,end,depth,points} of segments) {
-        const near=clamp((depth-.82)/.45,0,1);
-        ctx.globalAlpha=.65;
-        line(ctx,points,paint.paper,2.5+near*1.2);
-        ctx.globalAlpha=(track.quiet ? .19 : .28)+near*.14;
-        line(ctx,points,track.ink,.65+near*.55);
-        const reached=track.reached*STEPS;
-        if (!track.last || reached<=start) continue;
-        const past=reached>=end?points:[...track.screen.slice(start,Math.floor(reached)+1),track.head];
-        ctx.globalAlpha=track.quiet ? .04 : .09;
-        line(ctx,past,track.ink,3.2+near*1.6);
-        ctx.globalAlpha=(track.quiet ? .38 : .69)+near*.19;
-        line(ctx,past,track.ink,1.05+near*.65);
-      }
-      ctx.globalAlpha=1;
     }
+
     function draw(view, paint, seconds, reduced, hover) {
       if (!ctx || !moment || view.width <= 0 || view.height <= 0) return [];
       layout(view);
       const {width,height,dpr} = view;
       const {project,magnification} = projection;
-      const {gutter,cx,cy} = framing;
+      const {gutter} = framing;
+      const center = project([0,0,0]);
+      const size = clamp(Math.ceil(width*dpr/128)*128,512,1536);
+      if (platePaint!==paint || plate.width!==size) {
+        paintDisk(plate,tracks,size,paint,liftedPerAction);
+        platePaint=paint;
+      }
 
       ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,width,height);
       ctx.lineCap='round'; ctx.lineJoin='round';
@@ -475,7 +549,7 @@
       const travel=reduced ? .60 : clamp(initialTravel+(seconds-selectedAt)/1.5,0,1);
       const hits=[],labels=[],occupied=[],callouts=[];
       drawSky(ctx,framing,projection,paint);
-      drawLanes(seconds,paint);
+      drawSpirals(seconds,paint);
 
       for (const track of tracks) {
         if (!track.nodes.length) continue;
@@ -485,17 +559,12 @@
           circle(ctx,...track.head,(involved?3.1:2.1)*size,ink);
           if (involved) circle(ctx,...track.head,1.25*size,paint.paper);
         }
-        const endpoint = track.id === post?.event.actor ? post : track.id === moment.actor ? selected : null;
-        if (!gutter || !endpoint) {
-          const rim = track.screen[Math.floor(STEPS*.9)];
-          const dx = rim[0]-cx, dy = rim[1]-cy, length = Math.hypot(dx,dy) || 1;
-          const anchor = endpoint?.screenTip || [rim[0]+7*dx/length,rim[1]+7*dy/length];
-          labels.push({text:'Agent '+track.id,at:anchor,color:involved || !arc ? ink : paint.muted});
-          occupied.push({x:anchor[0]-4,y:anchor[1]-4,w:8,h:8});
-        }
+        const rim = track.screen[Math.floor(STEPS*.94)];
+        const dx = rim[0]-center[0], dy = rim[1]-center[1], length = Math.hypot(dx,dy) || 1;
+        const anchor = [rim[0]+6*dx/length,rim[1]+6*dy/length];
+        labels.push({text:'Agent '+track.id,at:anchor,color:ink});
+        occupied.push({x:anchor[0]-4,y:anchor[1]-4,w:8,h:8});
       }
-
-
       for (const [i,earlier] of earlierArcs.entries()) {
         const related=earlier.receipt.message===moment.message;
         const alpha=related ? .63 : (i<2 ? .46 : .32);

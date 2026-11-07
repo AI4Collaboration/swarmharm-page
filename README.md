@@ -77,11 +77,12 @@ case only after its new native run has matching reviewed evidence.
 `static/data/trajectories/` contains the public, case-specific viewer data.
 The replay starts at the first recorded action and plays every action in order.
 A finding link with an explicit event opens paused at that cited action or read.
-Four inclined paths cross a shared celestial dome, one per agent. Each path
-brightens as that agent acts. The timing of the actions determines where the
-points cluster. Overlapping segments are drawn in depth order, with diamonds
-for posts and hollow points for reads.
-A verified read lights the arc from the original post to the reader. A small
+Each agent has a colored spiral on the lower disk. Its head advances when the
+agent acts. Action times determine where the pins and dust cluster along that
+spiral. Diamonds mark posts and hollow points mark reads.
+Above the disk, faint guides trace a celestial dome. Each verified read rises
+from the original post on one spiral, crosses the vault and returns to the
+reader's pin on another spiral. Both layers share the same camera. A small
 Now marker stays on that arc while the message and its current reader are
 highlighted in the conversation, including when playback is paused. Up to six
 sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
