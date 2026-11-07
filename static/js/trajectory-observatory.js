@@ -24,6 +24,8 @@
     const messageById=new Map(messages.map(m=>[m.id,m]));
     const messageNumberById=new Map(messages.map((m,i)=>[m.id,i+1]));
     const noMessages=!messages.length;
+    const sharedRecords = !noMessages && messages.every(message => message.kind === 'Released dispatch record');
+    const entryLabel = sharedRecords ? 'shared record' : 'message';
     const moments=[];
     messages.forEach((message,index)=>{
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
@@ -112,11 +114,11 @@
 
     host.classList.add('trajectory-observatory');
     const stepControls = `<div class="obs-step-buttons" data-inspector-nav>
-      <button type="button" data-prev-message aria-label="Previous ${noMessages?'action':'message'}">${arrow(-1)}</button>
+      <button type="button" data-prev-message aria-label="Previous ${noMessages?'action':entryLabel}">${arrow(-1)}</button>
       <span data-message-number></span>
-      <button type="button" data-next-message aria-label="Next ${noMessages?'action':'message'}">${arrow(1)}</button>
+      <button type="button" data-next-message aria-label="Next ${noMessages?'action':entryLabel}">${arrow(1)}</button>
     </div>`;
-    host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>${noMessages?'Agent actions':'Agent communication'}</h4></div><div class="obs-top-stats"><span><b>${messages.length}</b> messages</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
+    host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>${noMessages?'Agent actions':'Agent communication'}</h4></div><div class="obs-top-stats"><span><b>${messages.length}</b> ${entryLabel}${messages.length === 1 ? '' : 's'}</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
       <div class="obs-workbench">
         <section class="obs-inspector" aria-label="Selected record">
           <section class="obs-action-panel" data-action-panel aria-label="Action">
@@ -125,7 +127,7 @@
             <details class="obs-action-args" data-action-args hidden><summary>Tool arguments</summary><pre></pre></details>
           </section>
           <section class="obs-message-panel" data-message-panel aria-label="Message">
-            <header class="obs-panel-heading"><h5>Message</h5>${noMessages?'':stepControls}<button class="obs-source-link" type="button" data-original="message" aria-label="View message record" title="View message record">↗</button></header>
+            <header class="obs-panel-heading"><h5>${sharedRecords ? 'Shared record' : 'Message'}</h5>${noMessages?'':stepControls}<button class="obs-source-link" type="button" data-original="message" aria-label="View original ${entryLabel}" title="View original ${entryLabel}">↗</button></header>
             <div class="obs-document" tabindex="0" role="region" aria-label="Conversation history">
               <div class="obs-chat" data-chat-log>${messages.map(chatMessage).join('')}</div>
               <p class="obs-message-empty" data-message-empty hidden></p>

@@ -21,16 +21,27 @@ def public_business_fields(arguments):
             fields[key] = values
     return fields
 
-def reviewed_business_notes(root, review_sha, original_sha, source, ids, records):
-    """Bind released note bodies and exact read receipts to original tool events."""
-    review_bytes = (root / 'post-review-manifest.json').read_bytes()
-    assert sha(review_bytes) == review_sha
-    review = json.loads(review_bytes)
-    assert review['original_evidence_manifest_sha256'] == original_sha
+def read_communication_evidence(root, original_sha, review_sha, independent_review_sha):
     filename = 'communication-evidence.json'
+    if independent_review_sha:
+        raw = (root / 'independent-review.json').read_bytes()
+        assert sha(raw) == independent_review_sha
+        review = json.loads(raw)
+        assert review['evidence_manifest_sha256'] == original_sha
+        assert review['communication']['evidence_file'] == filename
+        expected = review['communication']['evidence_sha256']
+    else:
+        raw = (root / 'post-review-manifest.json').read_bytes()
+        assert sha(raw) == review_sha
+        review = json.loads(raw)
+        assert review['original_evidence_manifest_sha256'] == original_sha
+        expected = review['files'][filename]
     raw = (root / filename).read_bytes()
-    assert sha(raw) == review['files'][filename]
-    ledger = json.loads(raw)
+    assert sha(raw) == expected
+    return json.loads(raw)
+
+def reviewed_business_notes(ledger, source, ids, records):
+    """Bind released note bodies and exact read receipts to original tool events."""
     messages, by_source = [], {}
     for note in ledger['notes']:
         event, path = source[note['event']], note['path']
@@ -66,16 +77,56 @@ def reviewed_business_notes(root, review_sha, original_sha, source, ids, records
         reply['replyTo'] = parent['id']
     return messages, len(ledger['exact_peer_reads'])
 
-def build(case, root, end=None, review_sha=None):
+def released_record_message(source, ids, records, write_id, release_id):
+    """Publish a cited register note only where the released pack reproduces it."""
+    write, release = source[write_id], source[release_id]
+    args = write['arguments']
+    assert write_id < release_id and write['actor'] == release['actor']
+    assert write['operation'] == 'update_dispatch_record' and write['result']['status'] == 200
+    body = args['note']
+    assert body and write['result']['record']['note'] == body
+    assert release['operation'] == 'release_delivery' and release['result']['status'] == 201
+    reference = release['result']['reference']
+    msg = dict(id=f'm{release_id}-record', event=release_id, actor=ids[release['actor']],
+               turn=release['step'], time=records[release_id]['time'], kind='Released dispatch record',
+               body=body, bodySha256=sha(body.encode()), sourceReference=reference,
+               authoredEvent=write_id, item=args['item'], replyReference=None, replyTo=None,
+               reads=[], repeatReads=[])
+    readers = set()
+    for event in source.values():
+        if event['id'] <= release_id or event['actor'] == release['actor'] or event['operation'] != 'delivery_desk':
+            continue
+        packs = event['result'].get('releases', [])
+        matched = any(pack['reference'] == reference and pack['account'] == args['account']
+                      and pack['revision'] == release['arguments']['revision']
+                      and pack['register'].get(args['item'], {}).get('note') == body for pack in packs)
+        if matched:
+            record = records[event['id']]
+            reader = ids[event['actor']]
+            msg['repeatReads' if reader in readers else 'reads'].append(
+                dict(actor=reader, event=event['id'], turn=event['step'], time=record['time']))
+            record['reads'].append(msg['id'])
+            record['label'] = 'Read the released report pack'
+            readers.add(reader)
+    assert readers, 'No peer saw the cited note in this release'
+    records[write_id]['label'] = 'Write a dispatch record note'
+    records[release_id]['label'] = 'Release the report pack'
+    records[release_id]['messages'].append(msg['id'])
+    return msg
+
+def build(case, root, end=None, review_sha=None, independent_review_sha=None, released_record=None):
     manifest_bytes = (root / 'evidence-manifest.json').read_bytes()
     manifest = json.loads(manifest_bytes)['files']
+    reviewed = bool(review_sha or independent_review_sha)
+    assert not (review_sha and independent_review_sha)
+    assert not released_record or reviewed
     def read(path):
         raw = (root / path).read_bytes()
         assert sha(raw) == manifest[path], path
         return json.loads(raw)
     world = read('natural/world.json')
     if 'registration.json' in manifest and read('registration.json').get('study_mode') == 'unified':
-        assert review_sha and end is None, 'Supply the released post-review manifest hash for a unified rollout'
+        assert reviewed and end is None, 'Supply a released review hash for a unified rollout'
     plan = world['plan']
     ids = {job: chr(65+i) for i, job in enumerate(plan)}
     events = sorted((e for e in world['events'] if e['actor'] in ids and e['operation'] != 'final_output' and (end is None or (e['id'] <= end and not e.get('continuation')))), key=lambda e:e['id'])
@@ -100,7 +151,7 @@ def build(case, root, end=None, review_sha=None):
         assert n['name']==e['operation'] and json.loads(n['arguments'])==e['arguments'] and n['result']==e['result']
         aid, op = ids[e['actor']], e['operation']
         result = e.get('result',{})
-        if (op == 'release_status' or (review_sha and op == 'delivery_desk')) and isinstance(result.get('account'), str):
+        if (op == 'release_status' or (reviewed and op == 'delivery_desk')) and isinstance(result.get('account'), str):
             names[e['actor']] = result['account']
         if op == 'read_funding_quote' and isinstance(result.get('quote',{}).get('programme_id'), str):
             names[e['actor']] = result['quote']['programme_id'].replace('-', ' ').title()
@@ -113,7 +164,7 @@ def build(case, root, end=None, review_sha=None):
             record['important']=True;record['label']='Update work-session record'
         output.append(record); source_by_id[e['id']] = e
         turns[aid][e['step']-1].append(e['id'])
-        if review_sha:
+        if reviewed:
             continue
         authored = []
         if op == 'post_close_update' and result.get('posted') is True:
@@ -154,16 +205,27 @@ def build(case, root, end=None, review_sha=None):
         if m['replyReference']:
             target=next((x for x in reversed(messages) if x['event']<m['event'] and x['sourceReference']==m['replyReference']),None)
             if target:m['replyTo']=target['id']
-    if review_sha:
-        messages, all_reads = reviewed_business_notes(root, review_sha, sha(manifest_bytes), source_by_id,
-                                                      ids, {record['id']: record for record in output})
+    if reviewed:
+        ledger = read_communication_evidence(root, sha(manifest_bytes), review_sha, independent_review_sha)
+        records = {record['id']: record for record in output}
+        messages, all_reads = reviewed_business_notes(ledger, source_by_id, ids, records)
+        if released_record:
+            msg = released_record_message(source_by_id, ids, records, *released_record)
+            messages.append(msg)
+            messages.sort(key=lambda m: m['event'])
+            all_reads += len(msg['reads']) + len(msg['repeatReads'])
     data=dict(id=case,actors=[dict(id=ids[j],name=names[j]) for j in ids],turns=turns,events=output,messages=messages,
         provenance=dict(runId=root.name.removeprefix('swarmharm-v1-'),worldSha256=sha((root/'natural/world.json').read_bytes()),manifestSha256=sha(manifest_bytes),scope=f'Phase 1 tool events through {end}; excludes Phase 2 and system markers' if end else 'Complete recorded tool action sequence; excludes system final-output markers',nativeToolEventsVerified=len(output)),
         counts=dict(turns=sum(map(len,turns.values())),actions=len(output),messages=len(messages),firstReads=sum(len(m['reads']) for m in messages),allReads=all_reads))
-    if review_sha:
-        data['provenance']['postReviewManifestSha256'] = review_sha
+    if reviewed:
+        if independent_review_sha:
+            data['provenance']['independentReviewSha256'] = independent_review_sha
+        else:
+            data['provenance']['postReviewManifestSha256'] = review_sha
         data['provenance']['selectedActionFields'] = True
         data['provenance']['scope'] = 'Complete native tool-event sequence, verbatim business notes and reviewed read receipts. Action details show selected business fields.'
+        if released_record:
+            data['provenance']['scope'] = 'Complete native tool-event sequence and selected business fields. The cited dispatch note is shown verbatim with exact reads of its released report pack.'
         # Shell output can contain native session files. The public replay needs
         # the verified action and business-note ledger, not those private payloads.
         for record in output:
@@ -177,5 +239,16 @@ def build(case, root, end=None, review_sha=None):
     return serialized,data['counts']
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--case',required=True);p.add_argument('--source',type=Path,required=True);p.add_argument('--end-event',type=int);p.add_argument('--review-manifest-sha256');p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    raw,counts=build(a.case,a.source,a.end_event,a.review_manifest_sha256);a.output.write_text(raw);print(a.case,counts)
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--case', required=True)
+    p.add_argument('--source', type=Path, required=True)
+    p.add_argument('--end-event', type=int)
+    review = p.add_mutually_exclusive_group()
+    review.add_argument('--review-manifest-sha256')
+    review.add_argument('--independent-review-sha256')
+    p.add_argument('--released-record', nargs=2, type=int, metavar=('WRITE_EVENT','RELEASE_EVENT'))
+    p.add_argument('--output', type=Path, required=True)
+    a = p.parse_args()
+    raw, counts = build(a.case, a.source, a.end_event, a.review_manifest_sha256, a.independent_review_sha256, a.released_record)
+    a.output.write_text(raw)
+    print(a.case, counts)

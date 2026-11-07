@@ -5,6 +5,7 @@
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
   const details=root.querySelector('[data-case-details]');
   const cache=new Map();let version=0,dispose=null,request=null;
+  let renderedSearch;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const models={
     'gpt-6.1-sol':{name:'Sol 6.1',logo:'openai'},
@@ -60,7 +61,7 @@
       details.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
     }
     const parameters=visibleSettings(item.parameters);
-    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>Download independent review</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Case: ${escape(item.id)}<br>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
+    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>${escape(item.reviewLabel || 'Download independent review')}</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Case: ${escape(item.id)}<br>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
     if(!item.full){
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
@@ -70,6 +71,7 @@
     if(Number.isSafeInteger(focusEvent)&&focusEvent>0)url.searchParams.set('event',String(focusEvent));
     else url.searchParams.delete('event');
     history.replaceState(null,'',url);
+    renderedSearch = url.search;
     if(!item.full){root.removeAttribute('aria-busy');return;}
     root.setAttribute('aria-busy','true');full.innerHTML='<p class="record-loading" role="status">Loading recorded events…</p>';
     try {
@@ -92,14 +94,23 @@
   select.addEventListener('change',()=>show(select.value));
   intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
   document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',async event=>{
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    const target = new URL(link.href);
+    if (target.href !== location.href) history.pushState(null, '', target);
     const key=link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase;
-    const loading=show(key,new URL(link.href).searchParams.get('event')),clickedVersion=version;
+    const loading=show(key,target.searchParams.get('event')),clickedVersion=version;
     await loading;
-    if(clickedVersion!==version)return;
-    const url=new URL(location.href);url.hash='trajectory';history.replaceState(null,'',url);
+    if (clickedVersion !== version || location.hash !== target.hash) return;
+    root.querySelector('#trajectory-title').focus({preventScroll:true});
     root.scrollIntoView({block:'start',behavior:'instant'});
   }));
-  const params=new URL(location.href).searchParams;
-  show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'),params.get('event'));
+  function showLocation() {
+    const params = new URL(location.href).searchParams;
+    show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), params.get('event'));
+  }
+  window.addEventListener('popstate', () => {
+    if (location.search !== renderedSearch) showLocation();
+  });
+  showLocation();
 })();

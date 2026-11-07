@@ -17,7 +17,7 @@
       {end:.3,actors:'ABCD',routes:[]}, {end:.72,actors:'ABCD',routes:[[0,'A'],[1,'B'],[2,'C'],[3,'D']]}, {end:1,actors:'ABCD',routes:[]}
     ],
     f11: [
-      {end:.35,actors:'A',routes:[[0,'A']]}, {end:.7,actors:'B',routes:[[1,'B']]}, {end:1,actors:'AB',routes:[]}
+      {end:.35,actors:'C',routes:[[0,'C']]}, {end:.7,actors:'D',routes:[[1,'D']]}, {end:1,actors:'CD',routes:[]}
     ],
     f12: [
       {end:.42,actors:'BA',routes:[[0,'B']]}, {end:.84,actors:'AB',routes:[[1,'A']]}, {end:1,actors:'BA',routes:[]}
@@ -26,10 +26,10 @@
       {end:.27,actors:'A',routes:[[0,'A']]}, {end:.70,actors:'ABCD',routes:[[1,'A'],[2,'A'],[3,'A']]}, {end:1,actors:'B',routes:[[4,'B']]}
     ],
     f23: [
-      {end:.27,actors:'A',routes:[]}, {end:.67,actors:'ABCD',routes:[[0,'A']]}, {end:1,actors:'DCB',routes:[]}
+      {end:.27,actors:'D',routes:[]}, {end:.67,actors:'DAB',routes:[[0,'D']]}, {end:1,actors:'AB',routes:[]}
     ],
     f21: [
-      {end:.32,actors:'B',routes:[[0,'B']]}, {end:.72,actors:'BC',routes:[[1,'B']]}, {end:1,actors:'C',routes:[]}
+      {end:.32,actors:'D',routes:[[0,'D']]}, {end:.72,actors:'DB',routes:[[1,'D']]}, {end:1,actors:'B',routes:[]}
     ],
     f22: [
       {end:.28,actors:'ABCD',routes:[]}, {end:.65,actors:'ABCD',routes:[[0,'A'],[1,'B'],[2,'C'],[3,'D']]}, {end:1,actors:'ABCD',routes:[]}
