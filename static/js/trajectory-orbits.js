@@ -308,15 +308,76 @@
     function at(t) {
       if (t===0) return a;
       if (t===1) return b;
-      const s = 1-t, mid = 2*s*t;
-      const x = s*s*a[0] + mid*controlX + t*t*b[0];
-      const y = s*s*a[1] + mid*controlY + t*t*b[1];
+      // Begin vertically above the sender, then pitch over toward the reader.
+      const downrange = t*t*(2-t), s = 1-downrange, mid = 2*s*downrange;
+      const x = s*s*a[0] + mid*controlX + downrange*downrange*b[0];
+      const y = s*s*a[1] + mid*controlY + downrange*downrange*b[1];
       const ceiling = SKY_HEIGHT*Math.sqrt(Math.max(0,1-(x*x+y*y)/(SKY_RADIUS*SKY_RADIUS)));
       const baseline = lerp(a[2],b[2],t);
       const rise = Math.sin(Math.PI*t);
-      return [x,y,lerp(baseline,ceiling,rise*(2-rise))];
+      return [x,y,lerp(baseline,ceiling,rise*(1.35-.35*rise))];
     }
     return {at,focus:at(.5),path:Array.from({length:65},(_,i)=>at(i/64))};
+  }
+  function drawLaunch(ctx, arc, projection, points, paint, progress, gradient) {
+    const world = arc.at(progress), head = projection.project(world);
+    const index = progress*(points.length-1);
+    const flown = points.slice(0,Math.ceil(index));
+    flown.push(head);
+    line(ctx,flown,gradient,4.6);
+    line(ctx,flown,paint.packet,1.8);
+    if (progress >= 1) return;
+
+    const size = clamp(projection.magnification(world),.8,1.16);
+    const flame = paint.dark ? '#ffb166' : '#af4e22';
+    const sender = paint.agents.get(arc.post.event.actor) || paint.muted;
+    const fade = Math.min(1,(1-progress)/.045);
+    ctx.save();
+    if (progress < .12) {
+      const ignition = 1-progress/.12;
+      ctx.globalAlpha = ignition;
+      bloom(ctx,...points[0],17*size,flame,'a0');
+      ctx.beginPath();
+      ctx.ellipse(...points[0],(6+8*(1-ignition))*size,3*size,0,0,TAU);
+      ctx.strokeStyle = flame; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    // Follow the projected curve backwards for a fixed length of fading exhaust.
+    const wakeLength = 42*size;
+    let previous = head, distance = 0;
+    for (let i=Math.ceil(index)-1; i>=0 && distance<wakeLength; i--) {
+      const p = points[i], segment = Math.hypot(p[0]-previous[0],p[1]-previous[1]);
+      if (segment === 0) continue;
+      const step = Math.min(segment,wakeLength-distance);
+      const end = [lerp(previous[0],p[0],step/segment),lerp(previous[1],p[1],step/segment)];
+      const strength = 1-(distance+.5*step)/wakeLength;
+      ctx.globalAlpha = fade*strength*.72;
+      line(ctx,[previous,end],flame,(1+5*strength)*size);
+      distance += step; previous = end;
+    }
+
+    const before = projection.project(arc.at(Math.max(0,progress-.005)));
+    const after = projection.project(arc.at(Math.min(1,progress+.005)));
+    const heading = Math.atan2(after[1]-before[1],after[0]-before[0]);
+    ctx.globalAlpha = fade;
+    ctx.translate(...head); ctx.rotate(heading); ctx.scale(size,size);
+    const tail = -11-17*Math.min(1,progress/.10);
+    const exhaust = ctx.createLinearGradient(tail,0,-4,0);
+    exhaust.addColorStop(0,flame+'00'); exhaust.addColorStop(.50,flame+'c2');
+    exhaust.addColorStop(.78,flame); exhaust.addColorStop(1,'#fff1cf');
+    ctx.beginPath(); ctx.moveTo(-4,-1.6);
+    ctx.bezierCurveTo(-9,-4,tail*.75,-1,tail,0);
+    ctx.bezierCurveTo(tail*.75,1,-9,4,-4,1.6);
+    ctx.closePath(); ctx.fillStyle=exhaust; ctx.fill();
+
+    ctx.beginPath(); ctx.moveTo(9,0);
+    ctx.quadraticCurveTo(5,-2.7,-.5,-2.7);
+    ctx.lineTo(-6,-4.7); ctx.lineTo(-4.6,-1.4); ctx.lineTo(-4.6,1.4); ctx.lineTo(-6,4.7);
+    ctx.lineTo(-.5,2.7); ctx.quadraticCurveTo(5,2.7,9,0); ctx.closePath();
+    ctx.strokeStyle=paint.paper; ctx.lineWidth=1.8; ctx.stroke();
+    ctx.fillStyle=paint.packet; ctx.fill();
+    line(ctx,[[-3,0],[3,0]],sender,1.2);
+    ctx.restore();
   }
   function drawRead(ctx, arc, projection, paint, hits, {state, alpha = 1, progress = 0}) {
     const {post,reader,receipt} = arc;
@@ -344,37 +405,16 @@
       return;
     }
 
-    const point = t => projection.project(arc.at(t));
     if (!paint.dark) {
       ctx.strokeStyle=paint.paper; ctx.lineWidth=8; ctx.globalAlpha=.98; ctx.stroke();
     }
     ctx.strokeStyle = gradient;
-    const strokes = paint.dark ? [[14,.10],[8,.26],[4.6,1]] : [[6,.35],[4.6,1]];
+    const strokes = paint.dark ? [[12,.09],[7,.23],[3.6,1]] : [[5.8,.32],[3.6,1]];
     for (const [width, alpha] of strokes) {
       ctx.globalAlpha = alpha; ctx.lineWidth = width; ctx.stroke();
     }
-    ctx.strokeStyle = paint.packet; ctx.lineWidth = 1.9; ctx.stroke();
-
-    const arrow = point(.78), prior = point(.76);
-    ctx.save(); ctx.translate(...arrow);
-    ctx.rotate(Math.atan2(arrow[1]-prior[1],arrow[0]-prior[0]));
-    line(ctx,[[-6,-4],[0,0],[-6,4]],paint.packet,2.4); ctx.restore();
-
-    const start = Math.max(0,progress-Math.min(.27,32/Math.max(1,Math.hypot(b[0]-a[0],b[1]-a[1]))));
-    const pulse = progress < .5 ? from : to;
-    for (let i=0; i<10; i++) {
-      ctx.globalAlpha=.14+i*.075;
-      line(ctx,[point(lerp(start,progress,i/10)),point(lerp(start,progress,(i+1)/10))],pulse,1.5+i*.18);
-    }
-    ctx.globalAlpha=1;
-    const world=arc.at(progress), head=projection.project(world), size=projection.magnification(world);
-    if (paint.dark) {
-      bloom(ctx,...head,14*size,pulse,'90');
-      circle(ctx,...head,4*size,pulse); circle(ctx,...head,2.2*size,paint.packet);
-    } else {
-      circle(ctx,...head,4.2*size,paint.paper);
-      circle(ctx,...head,2.9*size,paint.packet);
-    }
+    ctx.strokeStyle = paint.packet; ctx.lineWidth = 1.3; ctx.stroke();
+    drawLaunch(ctx,arc,projection,points,paint,progress,gradient);
   }
 
   function drawCallouts(ctx, items, width, height, paint, font) {
@@ -468,8 +508,8 @@
       return true;
     }
 
-    function select(next,seconds,animate,history,easeFocus) {
-      moment=next; selectedAt=seconds; initialTravel=animate?0:.54;
+    function select(next,seconds,history,{animate=false,easeFocus=false,launch=false}={}) {
+      moment=next; selectedAt=seconds; initialTravel=launch?0:.50;
       arc=readArcs.get(next);
       featured=arc || readArcs.get(reads.findLast(read=>read.order<next.order));
       const receipt=featured?.receipt;
@@ -563,7 +603,9 @@
       ctx.lineCap='round'; ctx.lineJoin='round';
       const selected=nodes.get(moment.event), post=moment.message && nodes.get(moment.message.event);
       const travelSeconds=(moment.duration/1000)*.8;
-      const travel=reduced ? .60 : clamp(initialTravel+(seconds-selectedAt)/travelSeconds,0,1);
+      const flight=reduced ? .50 : clamp(initialTravel+(seconds-selectedAt)/travelSeconds,0,1);
+      const burn=clamp((flight-.05)/.95,0,1);
+      const travel=burn*burn*(2-burn);
       const hits=[],labels=[],occupied=[],callouts=[];
       drawSky(ctx,projection,paint);
       drawSpirals(seconds,paint);
@@ -613,6 +655,10 @@
         const receipt=featured.receipt;
         const pair=receipt.message.actor+' → '+receipt.actor;
         drawRead(ctx,featured,projection,paint,hits,arc ? {state:'current',progress:travel} : {state:'last',alpha:.86});
+        if (arc && travel<1) {
+          const [x,y]=project(arc.at(travel));
+          occupied.push({x:x-12,y:y-12,w:24,h:24});
+        }
         for (let i=4;i<featured.path.length;i+=5) {
           const [x,y]=project(featured.path[i]);
           occupied.push({x:x-4,y:y-4,w:8,h:8});

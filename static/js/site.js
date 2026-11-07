@@ -21,7 +21,7 @@
   const sections = sectionLinks.map(link => ({link, element:document.getElementById(link.hash.slice(1))}))
     .filter(item => item.element);
   const findingsMenu = navigation?.querySelector('.nav-findings');
-  const compactNav = matchMedia('(max-width: 1199px)');
+  const compactNav = matchMedia('(max-width: 1050px)');
 
   function arrangeNavigation() {
     if (!findingsMenu) return;

@@ -399,7 +399,10 @@
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
-      orbitView.select(m, signalSeconds, animatePaths && playing && !reduced, history, isVisible() && !reduced);
+      const inMotion = playing && !reduced;
+      orbitView.select(m, signalSeconds, history, {
+        animate: animatePaths && inMotion, easeFocus: isVisible() && !reduced, launch: inMotion
+      });
       renderInspector(m, animatePaths && playing && visible);
       showExchange(m, history);
       actors.forEach(a=>{
@@ -703,7 +706,7 @@
       if (!isVisible() || started || reduced) return;
       playing=true; started=true;
       const m=active();
-      orbitView.select(m,signalSeconds,true,earlierReadsAt(m),false);
+      orbitView.select(m,signalSeconds,earlierReadsAt(m),{animate:true,launch:true});
       if(m.message)scrollToMessage(m.message,false);
     }
     on(document,'visibilitychange',()=>{lastFrame=0;startIfVisible();updateControls();ensureFrame();});
@@ -711,7 +714,7 @@
       reduced=motion.matches;
       if (reduced) {
         if (playing) started=false;
-        orbitView.select(active(),signalSeconds,false,earlierReadsAt(active()));
+        orbitView.select(active(),signalSeconds,earlierReadsAt(active()));
         stop();
       } else {
         startIfVisible(); updateControls(); ensureFrame();

@@ -88,8 +88,10 @@ Above the disk, faint guides trace a celestial dome. Each verified read rises
 from the original post on one spiral, crosses the vault and returns to the
 reader's pin on another spiral. Both layers share the same camera. The solid
 arc names the sender and reader and follows the selected message in the chat.
-During a read, a signal travels toward its reader. The highlight remains visible
-when paused. Between reads, a quieter solid arc marks the last verified
+During a read, the signal ignites at the sender, lifts vertically and turns
+toward the reader. Its short exhaust follows the arc and fades at arrival.
+Pause holds the flight in place. Reduced motion shows a still view of the ascent.
+Between reads, a quieter solid arc marks the last verified
 exchange. Selecting it returns to that receipt. Up to six
 sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
 open their original read when selected. Other readers of the current message
@@ -158,9 +160,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   communication and propagation. Collective Misalignment shows shared false
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
-- Keep the institution belt above one navigation row for the six findings,
-  Trajectories and Resources, with Back to top on the left and Get in touch
-  linking to the contact form on the right. Smaller screens group
+- Keep the institution belt above one centered navigation row for the six findings,
+  Trajectories, Resources and Get in touch. Space the labels evenly and link
+  Get in touch to the contact form. Smaller screens group
   the six finding links under Findings. The original TLDR leads into the six findings,
   the expanded trajectory viewer, the four domain examples and detection. Use the
   header for section navigation. EuroSafeAI leads the rolling collaborators after
