@@ -1,6 +1,7 @@
 /* The lead institutions stay still; collaborators retain the continuous belt. */
 .institutions.institution-band {
   display: grid;
+  background: var(--bg);
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 24px;
   padding: 12px 28px;
@@ -52,7 +53,7 @@
 .institution-band .institution-lead-list a {
   overflow:hidden;
   border-radius:3px;
-  background:#f5f7fa;
+  background:transparent;
 }
 .institution-band .institution-lead-list img {
   width: 52px;
@@ -123,10 +124,11 @@
 }
 .institution-band .institution-ucl img { filter:brightness(0); }
 :root[data-theme="dark"] .institution-band .institution-ucl img { filter: none; }
-:root[data-theme="dark"] .institution-band .institution-cmu img { filter:none; mix-blend-mode:normal; }
+:root[data-theme="dark"] .institution-band :is(.institution-aim,.institution-cmu) img { filter:none; mix-blend-mode:normal; opacity:1; }
 :root[data-theme="dark"] .institution-band .institution-ellis img { filter:none; mix-blend-mode:normal; opacity:1; }
-:root[data-theme="dark"] .institution-band .institution-lead-list a { background:#f5f7fa; }
 :root[data-theme="dark"] .institution-band .institution-lead-list img { filter:none; mix-blend-mode:normal; opacity:1; }
+:root[data-theme="dark"] .institution-band .institution-oii a { background:#0e2050; }
+:root[data-theme="dark"] .institution-band .institution-lead-list .institution-oii img { filter:brightness(0) invert(1); }
 @media (max-width: 1050px) {
   .institutions.institution-band { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .institution-leads { justify-content: center; }

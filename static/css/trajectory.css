@@ -1,6 +1,5 @@
 /* Recorded actions and authored messages. Summaries remain separate from originals. */
-.trajectory-viewer { margin-top:48px; color:var(--text); --traj-a:#3d688a; --traj-b:#3d6f5e; --traj-c:#775f32; --traj-d:#60636a; }
-:root[data-theme="dark"] .trajectory-viewer { --traj-a:#98b9d4; --traj-b:#99beb0; --traj-c:#c4b290; --traj-d:#b1b4ba; }
+.trajectory-viewer { margin-top:48px; color:var(--text); --traj-a:var(--agent-a); --traj-b:var(--agent-b); --traj-c:var(--agent-c); --traj-d:var(--agent-d); }
 .trajectory-viewer [data-agent="A"] { --agent-color:var(--traj-a); }
 .trajectory-viewer [data-agent="B"] { --agent-color:var(--traj-b); }
 .trajectory-viewer [data-agent="C"] { --agent-color:var(--traj-c); }

@@ -15,10 +15,8 @@ case disclosure and provenance.
 Phase 1 and Phase 2 are independent studies. The overview illustrates their
 separate designs; it does not combine results into one trajectory.
 
-The public storyline is **Discover → Propagate → Consequences**. Lead with the
-main result: agents find one another, methods spread, and harm can follow. The three
-steps are supported by separate reviewed cases and must not be presented as one
-end-to-end trajectory.
+The opening uses the project's TLDR directly below the wordmark. It introduces
+autonomous discovery across separate sandboxes and names the three threat models.
 
 The selector keeps four Phase 1 cases and five Phase 2 cases:
 
@@ -121,16 +119,10 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
   Formation blue and misalignment red in both themes. The r257 inference concerns
   a nonexistent grading requirement, not an absent grader or a named manager.
-- Keep the institution belt above one compact navigation row. Preserve Setup and
-  the concrete finding links in the header; Main result and Detection are added
-  anchors, not replacements. Put Trajectories immediately after Main result in
-  both the navigation and page flow. Keep Back to top on the left. The study
-  names stay in the page's section headings.
+- Keep the institution belt above one compact navigation row, with Back to top on
+  the left. TLDR and Trajectories lead into Setup, the findings and Detection.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
-- Put the concise main result and three linked story steps first. Keep the
-  setup and evidence in their own sections. The opening states the initiative and evaluation gap;
-  do not add a separate RQ section.
 - Keep visible copy useful: one conclusion per card, no repeated figure captions
   or decorative labels. Put case IDs, parameters and detailed qualifications in
   evidence disclosures. Lead with the main claims; keep backup retention and
@@ -152,10 +144,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   shows an imaginary validation gate rather than a named human manager, r261
   retains the original 27-entry result, and r255 shows four $4m commitments
   against a $12m reserve. Keep the paired cards aligned in both themes.
-- Result presentation follows the claim, evidence, example and interpretation
-  hierarchy used in [Stolen Thoughts](https://stolen-thoughts.com/) and
-  [Maksym's PostTrainBench article](https://aisagroup.substack.com/p/posttrainbench-measuring-ai-ability).
-  Each card uses a concrete conclusion, the existing schematic,
+- Each card uses a concrete conclusion, the existing schematic,
   two visible evidence values and an explicit View trace link. The figures are
   case-specific observations, never population rates or a model leaderboard.
   Keep r257's no-publication result and r261's retained backups in Evidence. Link
@@ -164,11 +153,12 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   verified useful-transfer chain is A's source at 40, B's read at 45, search at
   52, fetch at 56 and accepted submission at 60.
 - `visual-system.css` unifies the eight setup/finding illustrations, mechanism
-  thumbnails, measurement icons and trajectory stage. Dark illustration stages
-  use the same restrained lighting, fine lines and directional signals as the
-  recorded replay. Keep the existing textured robot heads and natural expressions.
-  A is blue, B green, C gold and D silver in every diagram, avatar and canvas lane;
-  `swarmAgentPalette` supplies the canvas colors and matches the CSS actor tokens.
+  thumbnails, measurement icons and trajectory stage. Illustrations and the replay
+  share the page’s light or dark surface, fine lines and directional signals.
+  Changing theme repaints the current frame. Keep the existing textured robot
+  heads and natural expressions.
+  A is blue, B green, C gold and D silver in every diagram, avatar and canvas lane.
+  CSS defines both palettes and the canvas reads the active colors.
   Illustration playback follows existing routes, highlights participants and
   dims uninvolved agents. It runs once on entry, supports pause/resume/replay,
   suspends offscreen or in a hidden tab, and stays static with reduced motion.

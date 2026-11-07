@@ -233,14 +233,6 @@
 @media(max-width:760px) { .mechanism-cases { grid-template-columns:1fr; } .mechanism-case { padding:18px; } }
 
 /* The headline leads with the result; the rest of the page supplies its evidence. */
-.main-result { max-width:860px; box-sizing:border-box; margin:0 auto 20px; padding:clamp(24px,4vw,42px); border:1px solid color-mix(in srgb,var(--discovery) 35%,var(--line)); border-left:4px solid var(--discovery); border-radius:16px; background:linear-gradient(135deg,color-mix(in srgb,var(--discovery) 9%,var(--bg)),color-mix(in srgb,var(--risk) 5%,var(--bg))); }
-.main-result-label { margin:0 0 12px; color:var(--discovery); font:650 12px/1.4 var(--font); letter-spacing:.1em; text-transform:uppercase; }
-.main-result h2 { margin:0; color:var(--text); font:500 clamp(27px,3.6vw,43px)/1.15 var(--display); letter-spacing:-.035em; text-wrap:balance; }
-.result-path { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:28px 0 0; padding:0; list-style:none; }
-.result-path li { position:relative; display:grid; gap:2px; min-width:0; padding:12px 36px 12px 14px; border-radius:9px; background:color-mix(in srgb,var(--bg) 76%,transparent); }
-.result-path li:not(:last-child)::after { content:"→"; position:absolute; top:50%; right:10px; color:var(--muted); transform:translateY(-50%); }
-.result-path strong { color:var(--text); font:600 14px/1.4 var(--font); }
-.result-path span { color:var(--muted); font:12px/1.45 var(--font); }
 .original-tldr { max-width:860px; margin-top:0; }
 .trajectory-promoted { margin:0 0 44px; scroll-margin-top:100px; }
 
@@ -260,11 +252,6 @@
 .claim-verdict strong { font:650 13px/1.4 var(--font); white-space:nowrap; }
 .claim-verdict span { padding-left:12px; border-left:1px solid color-mix(in srgb,var(--bg) 25%,transparent); font:12px/1.45 var(--font); }
 @media(max-width:760px) {
-  .main-result { padding:24px 20px; border-radius:12px; }
-  .main-result h2 { font-size:clamp(25px,8vw,34px); }
-  .result-path { grid-template-columns:1fr; gap:8px; }
-  .result-path li { padding:10px 14px; }
-  .result-path li:not(:last-child)::after { content:"↓"; top:auto; right:16px; bottom:-13px; z-index:1; }
   .detection-section { margin-top:36px; padding:24px 18px; border-radius:12px; }
   .monitor-grid { grid-template-columns:1fr; }
   .monitor-card { grid-template-columns:44px minmax(0,1fr); padding:18px; }

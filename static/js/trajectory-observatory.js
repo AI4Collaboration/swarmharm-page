@@ -1,6 +1,6 @@
 (() => {
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const palette = window.swarmAgentPalette || { A:'#79b5ee', B:'#80cbb7', C:'#e4bd75', D:'#b9c3d1' };
+  const actorStyle = id => window.swarmAgentPalette?.[id] || 'var(--scene-muted)';
   const playIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z"/></svg>';
   const pauseIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12"/></svg>';
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
@@ -24,7 +24,6 @@
     const eventById=new Map(events.map(e=>[e.id,e]));
     const messageById=new Map(messages.map(m=>[m.id,m]));
     const messageNumberById=new Map(messages.map((m,i)=>[m.id,i+1]));
-    const color=id=>palette[id]||'#e0b785';
     const noMessages=!messages.length;
     const channel=messages.some(m=>m.kind==='Shared-file note')?'Shared notes':'Shared channel';
     const moments=[];
@@ -117,9 +116,9 @@
       const number=messageNumberById.get(message.id),parent=replyParent(message);
       const receipts=message.reads.map(read=>{
         const step=connections.find(item=>item.kind==='read' && item.message===message && item.event===read.event);
-        return `<button type="button" data-obs-receipt="${step.order}" style="--reader:${color(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
+        return `<button type="button" data-obs-receipt="${step.order}" style="--reader:${actorStyle(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
       }).join('');
-      return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${color(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
+      return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${actorStyle(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
         <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,'message')||`static/images/fieldguide/finding-agents.svg?v=7#${message.actor.toLowerCase()}-speaking`)}" width="210" height="150" alt=""></span>
         <div class="obs-chat-content">
           <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}" aria-label="Select message ${number} from ${esc(names.get(message.actor))}"><span>From</span><strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong><span>to</span><strong data-chat-recipient>${esc(messageSource(message))}</strong></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
@@ -164,7 +163,7 @@
           <header class="obs-panel-heading"><h5>${noMessages?'Actions':'Communication'}</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
           <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
-          <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${color(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
+          <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
       <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>All actions</h5><span>${events.length} actions</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
@@ -178,6 +177,24 @@
     const tooltips=new Map([[scene,host.querySelector('.obs-graph-tooltip')],[flow,host.querySelector('.obs-flow-tooltip')]]);
     const chatRows=new Map([...host.querySelectorAll('[data-chat-message]')].map(row=>[row.dataset.chatMessage,row]));
     const fontFamily=getComputedStyle(host).fontFamily;
+    // CSS resolves the active theme for both canvases, including a paused frame.
+    function readCanvasPaint() {
+      const style = getComputedStyle(host);
+      const read = name => style.getPropertyValue(name).trim();
+      const muted = read('--scene-muted');
+      return {
+        agents: new Map(actors.map(({id}) => [id, read('--agent-' + id.toLowerCase()) || muted])),
+        paper: read('--scene-bg'),
+        ink: read('--scene-ink'),
+        muted,
+        guide: read('--scene-guide'),
+        blue: read('--scene-blue'),
+        packet: read('--scene-packet'),
+        dark: read('--scene-scheme') === 'dark'
+      };
+    }
+    let paint = readCanvasPaint();
+    const color = id => paint.agents.get(id) || paint.muted;
     const routeHeading = host.querySelector('.obs-route-heading');
     const routeQuote = host.querySelector('.obs-route-quote');
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
@@ -231,13 +248,13 @@
       number.textContent = 'Message ' + String(moment.index + 1).padStart(2, '0');
       const sender = document.createElement('strong');
       sender.textContent = names.get(message.actor);
-      sender.style.color = color(message.actor);
+      sender.style.color = actorStyle(message.actor);
       const verb = document.createElement('span');
       verb.className = 'obs-route-verb';
       const recipient = document.createElement('strong');
       if (moment.kind === 'read') {
         recipient.textContent = names.get(moment.actor);
-        recipient.style.color = color(moment.actor);
+        recipient.style.color = actorStyle(moment.actor);
       } else {
         recipient.textContent = messageSource(message);
       }
@@ -283,7 +300,7 @@
       }
 
       // A read belongs to the reader. The message below belongs to its original author.
-      actionPanel.style.setProperty('--actor-ink', color(event.actor));
+      actionPanel.style.setProperty('--actor-ink', actorStyle(event.actor));
       actionPanel.querySelector('[data-action-actor]').textContent = names.get(event.actor);
       actionPanel.querySelector('[data-action-actor]').title = contexts.get(event.actor);
       actionPanel.querySelector('[data-action-label]').textContent = event.label;
@@ -316,7 +333,7 @@
         row.querySelector('.obs-chat-select').setAttribute('aria-pressed',String(selected));
         const recipient=row.querySelector('[data-chat-recipient]');
         recipient.textContent=isRead?names.get(event.actor):messageSource(item);
-        recipient.style.color=isRead?color(event.actor):'';
+        recipient.style.color=isRead?actorStyle(event.actor):'';
         recipient.title=isRead?'Read by '+names.get(event.actor)+' at '+event.time:'Posted to '+messageSource(item);
         for(const button of row.querySelectorAll('[data-obs-receipt]')) {
           const order=Number(button.dataset.obsReceipt);
@@ -337,7 +354,7 @@
       elapsed = 0;
       const m = active(), message = m.message;
       if (m.kind === 'outcome') playing = false;
-      host.style.setProperty('--signal', color(message?.actor || m.actor));
+      host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
       renderInspector(m);
       showExchange(m);
@@ -450,7 +467,7 @@
       const cycle = clamp(length / 82, 1.7, 4.6);
       const phase = signalSeconds / cycle;
       ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalCompositeOperation = paint.dark ? 'lighter' : 'source-over';
       for (let i = 0; i < count; i++) {
         const distance = ((phase + i / count) % 1) * length;
         const head = pointAt(distance);
@@ -459,11 +476,11 @@
         const light = ctx.createLinearGradient(...tail.point, ...head.point);
         light.addColorStop(0, ink + '00');
         light.addColorStop(.65, ink + 'bc');
-        light.addColorStop(1, '#f5faff');
+        light.addColorStop(1, paint.packet);
         const streak = [tail.point, ...points.slice(tail.segment + 1, head.segment + 1), head.point];
         strokePoints(ctx, streak, light, 2.6);
         glow(ctx, ...head.point, 19, ink, .85);
-        dot(ctx, ...head.point, 2.6, '#f8fbff');
+        dot(ctx, ...head.point, 2.6, paint.packet);
       }
       const arrival = (phase * count) % 1;
       ctx.globalAlpha = (1 - arrival) * .58;
@@ -494,7 +511,7 @@
       ctx.save();
       ctx.translate(...points[i]);
       ctx.rotate(Math.atan2(points[i + 1][1] - points[i - 1][1], points[i + 1][0] - points[i - 1][0]));
-      strokePoints(ctx, [[-4, -3.5], [1, 0], [-4, 3.5]], '#edf5ff', 1.6);
+      strokePoints(ctx, [[-4, -3.5], [1, 0], [-4, 3.5]], paint.packet, 1.6);
       ctx.restore();
 
       if (!reduced) {
@@ -509,12 +526,12 @@
       const [x, y] = project(eventPoint(event));
       const ink = color(event.actor);
       glow(ctx, x, y, 22, ink, .75);
-      dot(ctx, x, y, 8.5, '#151b23');
+      dot(ctx, x, y, 8.5, paint.paper);
       dot(ctx, x, y, 8.5, ink, false);
       ctx.save();
       ctx.textAlign = 'center';
       ctx.font = '600 10px ' + fontFamily;
-      ctx.fillStyle = '#edf4fc';
+      ctx.fillStyle = paint.ink;
       ctx.fillText(event.actor, x, y + 3.5);
       ctx.textAlign = 'left';
       const showName = viewWidth > 495;
@@ -526,13 +543,13 @@
       const placeLeft = fitsLeft && (alignLeft || !fitsRight);
       const left = clamp(placeLeft ? x - 13 - width : x + 13, 3, viewWidth - width - 4);
       const labelY = showName ? y - 1 : y + 3.5;
-      ctx.fillStyle = '#10151df0';
+      ctx.fillStyle = paint.paper;
       ctx.fillRect(left - 2, labelY - 10, width + 4, showName ? 25 : 14);
       ctx.fillStyle = ink;
       ctx.fillText(caption, left, labelY);
       if (showName) {
         ctx.font = '10px ' + fontFamily;
-        ctx.fillStyle = '#b9c4d1';
+        ctx.fillStyle = paint.muted;
         ctx.fillText(label, left, labelY + 12);
       }
       ctx.restore();
@@ -554,10 +571,10 @@
 
       for (let i = 0; i <= 10; i++) {
         const x = mix(-390, 390, i / 10);
-        strokePoints(ctx, [project([x, -endY, 0]), project([x, endY, 0])], '#b7c7e00d', .6);
+        strokePoints(ctx, [project([x, -endY, 0]), project([x, endY, 0])], paint.guide + '22', .6);
       }
       for (let y = -endY; y <= endY; y += 51) {
-        strokePoints(ctx, [project([-390, y, 0]), project([390, y, 0])], '#b7c7e00c', .6);
+        strokePoints(ctx, [project([-390, y, 0]), project([390, y, 0])], paint.guide + '22', .6);
       }
       if (inWindow) {
         const x = worldX(moment.event);
@@ -565,9 +582,9 @@
         ctx.beginPath();
         face.forEach(([sx,sy], i) => i ? ctx.lineTo(sx,sy) : ctx.moveTo(sx,sy));
         ctx.closePath();
-        ctx.fillStyle = '#b6cee809';
+        ctx.fillStyle = paint.blue + '0b';
         ctx.fill();
-        strokePoints(ctx, face.slice(0,2), '#b9d9ff4d', 1);
+        strokePoints(ctx, face.slice(0,2), paint.blue + '55', 1);
       }
 
       // Other exchanges stay behind the rails and never carry moving packets.
@@ -595,14 +612,14 @@
         ctx.textAlign = 'left';
         if (viewWidth > 580) {
           const name = project([-350, y, -20]);
-          drawLabel(names.get(actor.id), [name[0], name[1] + 12], lit ? ink : '#73808e', true);
+          drawLabel(names.get(actor.id), [name[0], name[1] + 12], lit ? ink : paint.muted, true);
         }
       }
 
       if (!noMessages) {
         const left = project([-380, 0, channelHeight]);
-        strokePoints(ctx, [left, project([380, 0, channelHeight])], '#b6c3d139', .7);
-        drawLabel(channel, [left[0], left[1] - 10], '#c3bdad', true);
+        strokePoints(ctx, [left, project([380, 0, channelHeight])], paint.guide + '50', .7);
+        drawLabel(channel, [left[0], left[1] - 10], paint.muted, true);
       }
 
       for (const event of stageEvents) {
@@ -639,7 +656,7 @@
         const pulse = reduced ? .5 : (1 + Math.sin(signalSeconds * 3)) / 2;
         glow(ctx, x, y, 19 + 9 * pulse, ink);
         dot(ctx, x, y, 9 + 4 * pulse, ink + '61', false);
-        ctx.fillStyle = '#18202b';
+        ctx.fillStyle = paint.paper;
         ctx.strokeStyle = ink;
         ctx.lineWidth = 1.3;
         ctx.fillRect(x - 6.5, y - 4.5, 13, 9);
@@ -648,7 +665,7 @@
         const labelX = clamp(x, 38, viewWidth - 38);
         const labelY = clamp(y - 17, 14, viewHeight - 10);
         ctx.textAlign = 'center';
-        drawLabel('Message ' + String(moment.index + 1).padStart(2, '0'), [labelX, labelY], '#e7ecf4');
+        drawLabel('Message ' + String(moment.index + 1).padStart(2, '0'), [labelX, labelY], paint.ink);
         ctx.textAlign = 'left';
         sceneHits.push({x, y, r: 9, event: originalSend.event, moment: originalSend.order});
       } else if (moment.kind === 'action' && inWindow) {
@@ -657,11 +674,11 @@
 
       if (hovered?.surface === scene) {
         const hit = hovered.hit;
-        dot(ctx, hit.x, hit.y, 8, '#e4ecf6', false);
+        dot(ctx, hit.x, hit.y, 8, paint.ink, false);
       }
-      drawLabel(stageEvents[0]?.time || '', [16, viewHeight - 7], '#798594', true);
+      drawLabel(stageEvents[0]?.time || '', [16, viewHeight - 7], paint.muted, true);
       ctx.textAlign = 'right';
-      drawLabel(stageEvents.at(-1)?.time || '', [viewWidth - 16, viewHeight - 7], '#798594', true);
+      drawLabel(stageEvents.at(-1)?.time || '', [viewWidth - 16, viewHeight - 7], paint.muted, true);
       ctx.textAlign = 'left';
     }
     function flowPoint(e){return [68+eventFraction(e.id)*(flowWidth-91),23+actorIndex.get(e.actor)*31];}
@@ -674,22 +691,22 @@
     function drawFlow() {
       fctx.setTransform(dpr,0,0,dpr,0,0);fctx.clearRect(0,0,flowWidth,168);flowHits=[];const m=active();
       fctx.font=`10px ${fontFamily}`;
-      for(let i=0;i<=4;i++){const x=68+i*(flowWidth-91)/4;strokePoints(fctx,[[x,7],[x,139]],'#a7b7cc17',.6);}
+      for(let i=0;i<=4;i++){const x=68+i*(flowWidth-91)/4;strokePoints(fctx,[[x,7],[x,139]],paint.guide + '25',.6);}
       actors.forEach((a,i)=>{
         const y=23+i*31,c=color(a.id),own=actorEvents.get(a.id),x0=68,x1=flowWidth-23;
         const ridge=flowRidges[i]||[];
         fctx.beginPath();ridge.forEach(([x,h],i)=>i?fctx.lineTo(x,y-h):fctx.moveTo(x,y-h));[...ridge].reverse().forEach(([x,h])=>fctx.lineTo(x,y+h));fctx.closePath();fctx.fillStyle=c+'18';fctx.fill();strokePoints(fctx,[[x0,y],[x1,y]],c+'38',.7);
-        fctx.fillStyle=c;fctx.fillText(a.id,16,y+4);fctx.fillStyle='#6b7789';fctx.fillText(String(own.length),32,y+4);
+        fctx.fillStyle=c;fctx.fillText(a.id,16,y+4);fctx.fillStyle=paint.muted;fctx.fillText(String(own.length),32,y+4);
       });
-      const x=68+eventFraction(m.event)*(flowWidth-91);strokePoints(fctx,[[x,4],[x,137]],'#c9e2ff77',1);glow(fctx,x,70,65,color(m.message?.actor||m.actor),.25);
+      const x=68+eventFraction(m.event)*(flowWidth-91);strokePoints(fctx,[[x,4],[x,137]],paint.blue + '9c',1);glow(fctx,x,70,65,color(m.message?.actor||m.actor),.25);
       for (const event of events) {
         const point = flowPoint(event);
         const isEndpoint = event.id === m.event || event.id === m.message?.event;
         const participant = participantRole(event.actor, m);
         const ink = color(event.actor);
-        let dotColor = '#8292a25c';
+        let dotColor = paint.guide + '61';
         if (participant || m.kind === 'outcome') dotColor = ink + 'a0';
-        if (event.id > m.event) dotColor = '#8292a244';
+        if (event.id > m.event) dotColor = paint.guide + '44';
         let radius = event.messages.length ? 3 : event.reads.length ? 2.5 : 1.7;
         if (isEndpoint) {
           glow(fctx, ...point, 16, ink);
@@ -702,8 +719,8 @@
         else if (event.id === m.message?.event) hit.moment = sendIndex.get(m.message.id);
         flowHits.push(hit);
       }
-      if(hovered?.surface===flow)dot(fctx,hovered.hit.x,hovered.hit.y,7,'#e4ecf6',false);
-      fctx.fillStyle='#7e8794';fctx.fillText(events[0]?.time||'',68,158);fctx.textAlign='right';fctx.fillText(events.at(-1)?.time||'',flowWidth-23,158);fctx.textAlign='left';
+      if(hovered?.surface===flow)dot(fctx,hovered.hit.x,hovered.hit.y,7,paint.ink,false);
+      fctx.fillStyle=paint.muted;fctx.fillText(events[0]?.time||'',68,158);fctx.textAlign='right';fctx.fillText(events.at(-1)?.time||'',flowWidth-23,158);fctx.textAlign='left';
     }
     function draw(){if(disposed||!ctx||!fctx)return;drawSpatial();drawFlow();}
     function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);fitCamera();cacheFlowRidges();draw();}
@@ -753,7 +770,7 @@
       if (message) label = 'Select message';
       if (moment?.kind === 'read') label = 'Select recorded read';
       if (moment?.kind === 'action') label = 'Select action';
-      tip.innerHTML=`<strong style="color:${color(e.actor)}">${esc(names.get(e.actor))}<time>${esc(e.time)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
+      tip.innerHTML=`<strong style="color:${actorStyle(e.actor)}">${esc(names.get(e.actor))}<time>${esc(e.time)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
       tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';updateControls();draw();
     }
     function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
@@ -793,9 +810,17 @@
     }
     on(document,'visibilitychange',()=>{lastFrame=0;ensureFrame();});
     on(motion,'change',()=>{reduced=motion.matches;if(reduced){cameraOffset=0;stop();}draw();});
+    const themeObserver = new MutationObserver(() => {
+      paint = readCanvasPaint();
+      draw();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'data-darkreader-scheme']
+    });
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resizeObserver.observe(flowStage);
     const visibilityObserver=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible&&!started&&!reduced){playing=true;started=true;}lastFrame=0;updateControls();ensureFrame();},{threshold:.18});visibilityObserver.observe(stage);
     select(firstPlayback);resize();
-    return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
+    return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
 })();

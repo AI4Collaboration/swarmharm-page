@@ -1,6 +1,6 @@
 (() => {
   // The same identity colors follow an agent through illustrations, chat and canvas lanes.
-  window.swarmAgentPalette = Object.freeze({ A:'#79b5ee', B:'#80cbb7', C:'#e4bd75', D:'#b9c3d1' });
+  window.swarmAgentPalette = Object.freeze({ A:'var(--agent-a)', B:'var(--agent-b)', C:'var(--agent-c)', D:'var(--agent-d)' });
   window.swarmAgentImage = (actor, role = 'action') => {
     const mood = role === 'message' ? 'speaking' : role === 'read' ? 'attentive' : 'focused';
     return `static/images/fieldguide/finding-agents.svg?v=7#${String(actor).toLowerCase()}-${mood}`;
