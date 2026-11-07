@@ -6,7 +6,7 @@
     let out='',cursor=0;for(const m of text.matchAll(pattern)){out+=esc(text.slice(cursor,m.index))+`<code class="traj-token is-id">${esc(m[0])}</code>`;cursor=m.index+m[0].length;}
     return out+esc(text.slice(cursor));
   }
-  const avatar=(a,caseId)=>`<span class="traj-avatar" data-agent="${a}" aria-hidden="true"><span class="traj-avatar-crop"><img src="${esc(window.swarmAgentImage?.(a,caseId)||`static/images/fieldguide/finding-agents.svg?v=7#${a.toLowerCase()}-attentive`)}" width="210" height="150" alt=""></span><span class="traj-avatar-letter">${a}</span></span>`;
+  const avatar=(a,role)=>`<span class="traj-avatar" data-agent="${a}" aria-hidden="true"><span class="traj-avatar-crop"><img src="${esc(window.swarmAgentImage?.(a,role)||`static/images/fieldguide/finding-agents.svg?v=7#${a.toLowerCase()}-focused`)}" width="210" height="150" alt=""></span><span class="traj-avatar-letter">${a}</span></span>`;
   window.mountRecordedTimeline=(container,data,meta)=>{
     const controller=new AbortController(),signal=controller.signal,on=(el,type,fn,options={})=>el.addEventListener(type,fn,{...options,signal});
     const events=new Map(data.events.map(e=>[e.id,e])),messages=new Map(data.messages.map(m=>[m.id,m]));
@@ -29,10 +29,11 @@
     function readers(m){return m.reads.length?`<div class="record-readers"><span>Read by</span>${m.reads.map(r=>`<button type="button" data-receipt="${r.event}" data-message="${m.id}" data-agent="${r.actor}" aria-label="${esc(names.get(r.actor))} read this at turn ${r.turn}">${r.actor}<small>t${r.turn}</small></button>`).join('')}</div>`:'<p class="record-unread">No verified cross-agent read</p>';}
     function row(e){
       const ms=e.messages.map(id=>messages.get(id)),isRead=!ms.length&&e.reads.length;
+      const role=ms.length?'message':isRead?'read':'action';
       const kind=ms.length?ms.map(m=>m.kind).filter((x,i,a)=>a.indexOf(x)===i).join(' / '):isRead?'Read':'Action';
       const preview=(ms.length?ms.map(m=>`<div class="record-message"><p>${source(m.body.length>260?m.body.slice(0,260)+'…':m.body)}</p>${readers(m)}<button type="button" class="record-original-link" data-open-event="${e.id}" aria-controls="record-original" aria-expanded="false">Original message</button></div>`).join(''):isRead?`<p class="record-action-copy">Reads ${[...new Set(e.reads.map(id=>messages.get(id).actor))].map(a=>esc(names.get(a))).join(', ')}’s messages.</p>`:'')+(failed(e)?'<p class="record-failed">Request failed</p>':'');
       const title=ms[0]?.kind==='Shared-file note'?'Writes a shared source note':ms[0]?.kind==='Version comment'?'Files a section with a version comment':e.label;
-      return `<article class="record-event ${ms.length?'has-message':''}" data-event="${e.id}" data-agent="${e.actor}" data-event-kind="${ms.length?'message':isRead?'read':'action'}"><div class="record-who">${avatar(e.actor,data.id)}<span>${esc(names.get(e.actor))}</span><small>Turn ${e.turn}</small></div><div class="record-content"><button type="button" class="record-open" data-open-event="${e.id}" aria-controls="record-original" aria-expanded="false"><span class="record-type">${esc(kind)}</span><strong>${esc(title)}</strong><time>${esc(e.time)}</time></button>${preview}</div></article>`;
+      return `<article class="record-event ${ms.length?'has-message':''}" data-event="${e.id}" data-agent="${e.actor}" data-event-kind="${role}"><div class="record-who">${avatar(e.actor,role)}<span>${esc(names.get(e.actor))}</span><small>Turn ${e.turn}</small></div><div class="record-content"><button type="button" class="record-open" data-open-event="${e.id}" aria-controls="record-original" aria-expanded="false"><span class="record-type">${esc(kind)}</span><strong>${esc(title)}</strong><time>${esc(e.time)}</time></button>${preview}</div></article>`;
     }
     function render(){
       const filter=mode+":"+actor;if(renderedFilter===filter)return;renderedFilter=filter;

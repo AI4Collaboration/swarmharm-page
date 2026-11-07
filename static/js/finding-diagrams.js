@@ -1,11 +1,9 @@
 (() => {
-  // Scenario-specific illustration cues, not inferred emotions or intentions.
-  window.swarmAgentImage = (actor, caseId) => {
-    const moods = { r136:'curious', r74:'attentive', r75:'relieved', r65:'curious',
-      r257:'attentive', r261:'editing', r255:'money', r263:'money',
-      r165:'focused', r178:'squinting' };
+  // Recorded avatars describe the action shown, never the case's eventual result.
+  // Stylized failure expressions belong to the explanatory diagrams only.
+  window.swarmAgentImage = (actor, role = 'action') => {
     const letter = String(actor).toLowerCase();
-    const mood = moods[String(caseId).split('-')[0]] || 'attentive';
+    const mood = role === 'message' ? 'speaking' : role === 'read' ? 'attentive' : 'focused';
     return `static/images/fieldguide/finding-agents.svg?v=7#${letter}-${mood}`;
   };
   const motion = matchMedia('(prefers-reduced-motion: reduce)');

@@ -188,6 +188,15 @@ substitute a flat icon or a new character. Small head tilts vary across identiti
 Setups, findings, threat-model diagrams, messages and action-log avatars share
 these views. Original actions, messages and evidence remain unchanged.
 
+Recorded avatars are selected from the displayed event role, not its case label:
+authored messages use the speaking view, verified reads use the attentive view,
+and other actions use the focused view. The chat avatar always belongs to the
+message author, even when a reader's action is selected. An event that both reads
+and authors a message uses the authoring view, matching its displayed event type.
+Never assign record-editing, coin-eye or relieved faces to an entire trajectory
+based on its eventual finding. Those stylized cues stay in the explanatory scenes.
+Setup agents remain focused on their own tasks until the illustrated discovery.
+
 The propagation diagrams show a proposed false rule reaching peers (r257), and
 one shared record-editing method being read and reused by two later agents (r261).
 The eraser rests on the record, with each contact pass progressively clearing a
@@ -208,9 +217,13 @@ released resources). Reuse the information hierarchy, not their visual assets.
 
 The expressions follow the local action shown in each scene. Discovery uses an
 inquiring gaze and a small surprised mouth; communication pairs a slightly open
-speaking mouth with an attentive listener. Missing information uses a puzzled
-look, followed by a relaxed smile when a source is supplied. Focused work uses
-relaxed brows rather than an angry inward V.
+speaking mouth with an attentive listener. Information exchange pairs a focused
+source provider with a relieved recipient.
+The provider already has the source being shared; do not label that side as
+missing the source or give it the recipient's puzzled expression. The r75 example
+uses Agent A's source note at event 40, Agent B's verified read at event 45, and
+B's subsequent source lookup, fetch and accepted submission at events 52, 56 and 60.
+Focused work uses relaxed brows rather than an angry inward V.
 
 In the imagined-rule scene, the proposer looks upward in thought and the peers
 listen attentively as they adopt the rule. They do not all appear to doubt it.
