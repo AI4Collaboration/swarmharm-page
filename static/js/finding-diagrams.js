@@ -3,7 +3,7 @@
   window.swarmAgentPalette = Object.freeze({ A:'var(--agent-a)', B:'var(--agent-b)', C:'var(--agent-c)', D:'var(--agent-d)' });
   window.swarmAgentImage = (actor, role = 'action') => {
     const mood = role === 'message' ? 'speaking' : role === 'read' ? 'attentive' : 'focused';
-    return `static/images/fieldguide/finding-agents.svg?v=7#${String(actor).toLowerCase()}-${mood}`;
+    return `static/images/fieldguide/finding-agents.svg?v=8#${String(actor).toLowerCase()}-${mood}`;
   };
   const palette = window.swarmAgentPalette, motion = matchMedia('(prefers-reduced-motion: reduce)');
   const ns = 'http://www.w3.org/2000/svg';
@@ -20,16 +20,16 @@
       {end:.35,actors:'A',routes:[[0,'A']]}, {end:.7,actors:'B',routes:[[1,'B']]}, {end:1,actors:'AB',routes:[]}
     ],
     f12: [
-      {end:.42,actors:'AB',routes:[[0,'A']]}, {end:.84,actors:'AB',routes:[[1,'B']]}, {end:1,actors:'AB',routes:[]}
+      {end:.42,actors:'BA',routes:[[0,'B']]}, {end:.84,actors:'AB',routes:[[1,'A']]}, {end:1,actors:'BA',routes:[]}
     ],
     f13: [
-      {end:.24,actors:'A',routes:[]}, {end:.72,actors:'AB',routes:[[0,'A']]}, {end:1,actors:'B',routes:[]}
+      {end:.27,actors:'A',routes:[[0,'A']]}, {end:.70,actors:'ABCD',routes:[[1,'A'],[2,'A'],[3,'A']]}, {end:1,actors:'B',routes:[[4,'B']]}
     ],
     f23: [
-      {end:.27,actors:'C',routes:[]}, {end:.67,actors:'CB',routes:[[0,'C']]}, {end:1,actors:'BAD',routes:[[1,'B']]}
+      {end:.27,actors:'A',routes:[]}, {end:.67,actors:'ABCD',routes:[[0,'A']]}, {end:1,actors:'DCB',routes:[]}
     ],
     f21: [
-      {end:.2,actors:'D',routes:[[0,'D']]}, {end:.4,actors:'CB',routes:[[1,'C'],[2,'B']]}, {end:1,actors:'CB',routes:[[3,'C'],[4,'B']]}
+      {end:.32,actors:'B',routes:[[0,'B']]}, {end:.72,actors:'BC',routes:[[1,'B']]}, {end:1,actors:'C',routes:[]}
     ],
     f22: [
       {end:.28,actors:'ABCD',routes:[]}, {end:.65,actors:'ABCD',routes:[[0,'A'],[1,'B'],[2,'C'],[3,'D']]}, {end:1,actors:'ABCD',routes:[]}
@@ -51,7 +51,10 @@
     const index = Math.max(0, s.steps.findIndex(step => fraction <= step.end));
     const step = s.steps[index], start = index ? s.steps[index-1].end : 0;
     const progress = Math.max(0, Math.min(1, (fraction-start)/(step.end-start)));
-    s.figure.dataset.diagramPhase = String(index+1);
+    if (s.figure.dataset.diagramPhase !== String(index+1)) {
+      s.figure.dataset.diagramPhase = String(index+1);
+      for (const face of s.faces) face.image.setAttribute('href', face.views[index]);
+    }
     s.agents.forEach(el => el.toggleAttribute('data-active',step.actors.includes(el.dataset.diagramAgent)));
     s.ticks.forEach((el,i) => {
       el.toggleAttribute('data-active',i===index); el.toggleAttribute('data-complete',i<index);
@@ -73,6 +76,8 @@
   function finish(s) {
     s.elapsed=s.duration; s.playing=false;
     s.figure.classList.remove('is-playing','is-paused');
+    delete s.figure.dataset.diagramPhase;
+    for (const face of s.faces) face.image.setAttribute('href',face.still);
     s.agents.forEach(el=>el.removeAttribute('data-active'));
     s.routes.forEach(route=>{
       route.path.removeAttribute('data-active'); route.signal.setAttribute('hidden',''); route.packet.setAttribute('hidden','');
@@ -119,7 +124,12 @@
       svg.append(signal,packet);
       return {path,signal,packet,length:path.getTotalLength()};
     });
-    const s={figure,svg,button,steps,routes,agents:[...svg.querySelectorAll('[data-diagram-agent]')],ticks:[...figure.querySelectorAll('.diagram-progress i')],title:svg.querySelector('title').textContent,duration:Number(figure.dataset.diagramDuration)||4200,elapsed:0,playing:false,visible:false,seen:false};
+    const faces=[...svg.querySelectorAll('image[data-phase-faces]')].map(image=>{
+      const still=image.getAttribute('href'), actor=image.dataset.diagramAgent.toLowerCase();
+      const sheet=still.slice(0,still.indexOf('#'));
+      return {image,still,views:image.dataset.phaseFaces.split(' ').map(mood=>`${sheet}#${actor}-${mood}`)};
+    });
+    const s={figure,svg,button,steps,routes,faces,agents:[...svg.querySelectorAll('[data-diagram-agent]')],ticks:[...figure.querySelectorAll('.diagram-progress i')],title:svg.querySelector('title').textContent,duration:Number(figure.dataset.diagramDuration)||4200,elapsed:0,playing:false,visible:false,seen:false};
     figure.style.setProperty('--diagram-duration',s.duration+'ms');
     if(button)button.hidden=motion.matches;
     control(s); states.push(s);

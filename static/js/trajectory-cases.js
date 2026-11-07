@@ -37,12 +37,12 @@
     if(!visual)return `<div class="case-result" data-result="${item.phase===1?'formation':'impact'}"><span class="case-result-label">Outcome</span><p>${escape(item.outcome)}</p></div>`;
     return `<div class="case-result" data-result="${item.phase===1?'formation':'impact'}"><span class="case-result-label">Outcome</span><p>${escape(visual.action)}</p><dl class="case-result-metrics">${visual.metrics.map(m=>`<div data-tone="${escape(m.tone)}"><dt>${escape(m.label)}</dt><dd>${escape(m.value)}</dd></div>`).join('')}</dl>${visual.note?`<small class="case-result-note">${escape(visual.note)}</small>`:''}</div>`;
   }
-  for(const mode of ['Swarm Formation','Collective Misalignment']){
+  for(const mode of ['Swarm Formation','Collective Misalignment','Earlier outcomes']){
     const group=document.createElement('optgroup');group.label=mode;
-    cases.filter(c=>c.mode===mode&&!c.replication&&!c.archived).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain}`;group.append(option);});
+    cases.filter(c=>!c.replication&&!c.archived&&(c.earlier?'Earlier outcomes':c.mode)===mode).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain}`;group.append(option);});
     select.append(group);
   }
-  async function show(id){
+  async function show(id, requestedEvent){
     const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
     select.querySelector('[data-archived-option]')?.remove();
     if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
@@ -63,7 +63,10 @@
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
     // A shareable case selection, without scrolling or replaying the title.
+    const focusEvent = Number(requestedEvent);
     const url=new URL(location.href);url.searchParams.set('case',item.id);url.searchParams.set('phase',String(item.phase));
+    if(Number.isSafeInteger(focusEvent)&&focusEvent>0)url.searchParams.set('event',String(focusEvent));
+    else url.searchParams.delete('event');
     history.replaceState(null,'',url);
     if(!item.full){root.removeAttribute('aria-busy');return;}
     root.setAttribute('aria-busy','true');full.innerHTML='<p class="record-loading" role="status">Loading recorded events…</p>';
@@ -77,23 +80,24 @@
         cache.set(item.key,data);
       }
       if(current!==version)return;
-      dispose=window.mountRecordedTimeline(full,data,item);
+      dispose=window.mountRecordedTimeline(full,data,{...item,focusEvent});
     }catch(error){
       if(current!==version||error.name==='AbortError')return;
       full.innerHTML='<p class="record-loading" role="status">The trajectory could not be loaded.</p><button type="button" class="record-retry">Try again</button>';
-      full.querySelector('button').addEventListener('click',()=>show(item.key),{once:true});
+      full.querySelector('button').addEventListener('click',()=>show(item.key,requestedEvent),{once:true});
     }finally{if(current===version)root.removeAttribute('aria-busy');}
   }
   select.addEventListener('change',()=>show(select.value));
   intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
   document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',async event=>{
     event.preventDefault();
-    const loading=show(link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase),clickedVersion=version;
+    const key=link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase;
+    const loading=show(key,new URL(link.href).searchParams.get('event')),clickedVersion=version;
     await loading;
     if(clickedVersion!==version)return;
     const url=new URL(location.href);url.hash='trajectory';history.replaceState(null,'',url);
     root.scrollIntoView({block:'start',behavior:'instant'});
   }));
   const params=new URL(location.href).searchParams;
-  show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'));
+  show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'),params.get('event'));
 })();

@@ -69,7 +69,7 @@ def failure_face(face, mood):
         stroke(face, brow, 2.6)
     mouths = {
         'questioning': 'M320 363Q330 364 340 364',
-        'editing': 'M317 363Q332 373 346 358',
+        'editing': 'M319 363Q331 366 343 362',
         'money': 'M318 360Q331 373 344 360',
     }
     stroke(face, mouths[mood], 2.8)
@@ -96,21 +96,29 @@ defs.append(chin_clip)
 sprite.append(defs)
 original_head = next(n for n in base.iter() if n.get('data-rig-part') == 'head')
 
+directional_faces = {
+    'speaking-left': ('speaking', (-5, 0), 2),
+    'attentive-right': ('attentive', (5, 0), -3),
+    'focused-left': ('focused', (-4, 3), 3),
+    'focused-down': ('focused', (0, 4), 1),
+}
 VIEWS = [
     (letter, mood)
     for mood in ('curious', 'surprised', 'speaking', 'attentive', 'worried',
                  'relieved', 'confused', 'focused', 'squinting',
-                 'questioning', 'editing', 'money-concerned', 'money')
+                 'questioning', 'editing', 'money-concerned', 'money', *directional_faces)
     for letter in 'abcd'
 ]
 
-for index, (letter, mood) in enumerate(VIEWS):
-    name = f'{letter}-{mood}'
+for index, (letter, view) in enumerate(VIEWS):
+    name = f'{letter}-{view}'
+    direction = directional_faces.get(view)
+    mood = direction[0] if direction else view
     offset = index * 300  # Leave blank gutters between fragment views.
     sprite.append(element('view', {'id': name, 'viewBox': f'0 {offset} 210 150'}))
     frame = element('g', {'transform': f'translate(-214 {offset - 247})'})
     rig = element('g', {'filter': f'url(#robot-identity-{letter.upper()})',
-                        'data-agent': letter.upper(), 'data-expression': mood})
+                        'data-agent': letter.upper(), 'data-expression': view})
     head = deepcopy(original_head)
     rig.append(head)
     distinct = mood in ('questioning', 'editing', 'money-concerned', 'money')
@@ -129,7 +137,7 @@ for index, (letter, mood) in enumerate(VIEWS):
              'attentive': 7, 'relieved': -4, 'confused': 10,
              'focused': -5, 'worried': -6, 'squinting': 5,
              'questioning': -5, 'editing': 3, 'money-concerned': -2, 'money': -2}
-    tilt = tilts[mood]
+    tilt = direction[2] if direction else tilts[mood]
     if mood == 'confused' and letter in 'bd':
         tilt = -10
     # Subtle differences keep a group of the same expression from looking cloned.
@@ -164,6 +172,8 @@ for index, (letter, mood) in enumerate(VIEWS):
                     'speaking': (5, 0), 'attentive': (-5, 0),
                     'confused': (4, -3),
                     'focused': (5, 3), 'worried': (1, 3), 'squinting': (6, 0)}[mood]
+            if direction:
+                gaze = direction[1]
             face.append(element('ellipse', {
                 'cx': str(cx + gaze[0]), 'cy': str(cy + gaze[1]),
                 'rx': '4.2',
@@ -189,8 +199,8 @@ for index, (letter, mood) in enumerate(VIEWS):
 
     if mood in ('surprised', 'speaking'):
         face.append(element('ellipse', {
-            'cx': '330', 'cy': '362', 'rx': '5.5' if mood == 'surprised' else '8',
-            'ry': '7' if mood == 'surprised' else '3.8',
+            'cx': '330', 'cy': '362', 'rx': '4' if mood == 'surprised' else '7',
+            'ry': '3.4' if mood == 'surprised' else '3.2',
             'fill': '#252525', 'stroke': '#fffdf8', 'stroke-width': '1',
         }))
     elif mood == 'worried':

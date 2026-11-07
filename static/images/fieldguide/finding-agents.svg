@@ -242,7 +242,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="354" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M345 323Q358 316 371 323" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="5.5" ry="7" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="4" ry="3.4" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -265,7 +265,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="354" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M345 323Q358 316 371 323" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="5.5" ry="7" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="4" ry="3.4" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -288,7 +288,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="354" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M345 323Q358 316 371 323" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="5.5" ry="7" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="4" ry="3.4" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -311,7 +311,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="354" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M345 323Q358 316 371 323" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="5.5" ry="7" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="4" ry="3.4" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -334,7 +334,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="8" ry="3.8" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -357,7 +357,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="8" ry="3.8" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -380,7 +380,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="8" ry="3.8" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -403,7 +403,7 @@
           <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
           <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
           <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <ellipse cx="330" cy="362" rx="8" ry="3.8" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
         </g>
       </g>
     </g>
@@ -1080,7 +1080,7 @@
           <ellipse cx="362" cy="346" rx="4.2" ry="5.5" fill="#303030" />
           <path d="M347 341Q358 344 369 342" fill="none" stroke="#202020" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M347 326Q358 323 369 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M317 363Q332 373 346 358" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 363Q331 366 343 362" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
         </g>
       </g>
     </g>
@@ -1105,7 +1105,7 @@
           <ellipse cx="362" cy="346" rx="4.2" ry="5.5" fill="#303030" />
           <path d="M347 341Q358 344 369 342" fill="none" stroke="#202020" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M347 326Q358 323 369 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M317 363Q332 373 346 358" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 363Q331 366 343 362" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
         </g>
       </g>
     </g>
@@ -1130,7 +1130,7 @@
           <ellipse cx="362" cy="346" rx="4.2" ry="5.5" fill="#303030" />
           <path d="M347 341Q358 344 369 342" fill="none" stroke="#202020" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M347 326Q358 323 369 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M317 363Q332 373 346 358" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 363Q331 366 343 362" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
         </g>
       </g>
     </g>
@@ -1155,7 +1155,7 @@
           <ellipse cx="362" cy="346" rx="4.2" ry="5.5" fill="#303030" />
           <path d="M347 341Q358 344 369 342" fill="none" stroke="#202020" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M347 326Q358 323 369 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M317 363Q332 373 346 358" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 363Q331 366 343 362" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
         </g>
       </g>
     </g>
@@ -1374,6 +1374,374 @@
       </g>
       <path d="M346 324Q358 314 370 324" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
       <path d="M318 360Q331 373 344 360" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+  <view id="a-speaking-left" viewBox="0 15600 210 150" />
+  <g transform="translate(-214 15353)">
+    <g filter="url(#robot-identity-A)" data-agent="A" data-expression="speaking-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(0 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="speaking">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="310" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="353" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-speaking-left" viewBox="0 15900 210 150" />
+  <g transform="translate(-214 15653)">
+    <g filter="url(#robot-identity-B)" data-agent="B" data-expression="speaking-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(5 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="speaking">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="310" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="353" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-speaking-left" viewBox="0 16200 210 150" />
+  <g transform="translate(-214 15953)">
+    <g filter="url(#robot-identity-C)" data-agent="C" data-expression="speaking-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-2 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="speaking">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="310" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="353" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-speaking-left" viewBox="0 16500 210 150" />
+  <g transform="translate(-214 16253)">
+    <g filter="url(#robot-identity-D)" data-agent="D" data-expression="speaking-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(4 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="speaking">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="310" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="353" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="330" cy="362" rx="7" ry="3.2" fill="#252525" stroke="#fffdf8" stroke-width="1" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="a-attentive-right" viewBox="0 16800 210 150" />
+  <g transform="translate(-214 16553)">
+    <g filter="url(#robot-identity-A)" data-agent="A" data-expression="attentive-right">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-5 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="attentive">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="320" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M320 362Q330 367 341 363" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-attentive-right" viewBox="0 17100 210 150" />
+  <g transform="translate(-214 16853)">
+    <g filter="url(#robot-identity-B)" data-agent="B" data-expression="attentive-right">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(0 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="attentive">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="320" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M320 362Q330 367 341 363" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-attentive-right" viewBox="0 17400 210 150" />
+  <g transform="translate(-214 17153)">
+    <g filter="url(#robot-identity-C)" data-agent="C" data-expression="attentive-right">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-7 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="attentive">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="320" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M320 362Q330 367 341 363" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-attentive-right" viewBox="0 17700 210 150" />
+  <g transform="translate(-214 17453)">
+    <g filter="url(#robot-identity-D)" data-agent="D" data-expression="attentive-right">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-1 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="attentive">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="320" cy="337" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 317Q315 313 327 317" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="363" cy="345" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 325Q358 321 370 325" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M320 362Q330 367 341 363" fill="none" stroke="#202020" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="a-focused-left" viewBox="0 18000 210 150" />
+  <g transform="translate(-214 17753)">
+    <g filter="url(#robot-identity-A)" data-agent="A" data-expression="focused-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(1 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="311" cy="340" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="354" cy="348" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-focused-left" viewBox="0 18300 210 150" />
+  <g transform="translate(-214 18053)">
+    <g filter="url(#robot-identity-B)" data-agent="B" data-expression="focused-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(6 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="311" cy="340" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="354" cy="348" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-focused-left" viewBox="0 18600 210 150" />
+  <g transform="translate(-214 18353)">
+    <g filter="url(#robot-identity-C)" data-agent="C" data-expression="focused-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-1 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="311" cy="340" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="354" cy="348" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-focused-left" viewBox="0 18900 210 150" />
+  <g transform="translate(-214 18653)">
+    <g filter="url(#robot-identity-D)" data-agent="D" data-expression="focused-left">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(5 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="311" cy="340" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="354" cy="348" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="a-focused-down" viewBox="0 19200 210 150" />
+  <g transform="translate(-214 18953)">
+    <g filter="url(#robot-identity-A)" data-agent="A" data-expression="focused-down">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-1 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="315" cy="341" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="358" cy="349" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="b-focused-down" viewBox="0 19500 210 150" />
+  <g transform="translate(-214 19253)">
+    <g filter="url(#robot-identity-B)" data-agent="B" data-expression="focused-down">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(4 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="315" cy="341" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="358" cy="349" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="c-focused-down" viewBox="0 19800 210 150" />
+  <g transform="translate(-214 19553)">
+    <g filter="url(#robot-identity-C)" data-agent="C" data-expression="focused-down">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(-3 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="315" cy="341" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="358" cy="349" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <view id="d-focused-down" viewBox="0 20100 210 150" />
+  <g transform="translate(-214 19853)">
+    <g filter="url(#robot-identity-D)" data-agent="D" data-expression="focused-down">
+      <g data-plate-part="plate-0-cut-17" data-rig-part="head" transform="rotate(3 330 359)">
+        <g clip-path="url(#head-chin-repair)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" transform="translate(29 16)" />
+        </g>
+        <g mask="url(#plate-0-eye-mask)">
+          <use href="#still-separate-source-0" width="720" height="720" filter="url(#plate-0-ink)" clip-path="url(#plate-0-cut-17)" mask="url(#plate-0-mask-18)" />
+        </g>
+        <path d="M332 376L361 380" fill="none" stroke="#202020" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        <g data-face="focused">
+          <ellipse cx="315" cy="337" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="315" cy="341" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M303 318Q315 316 327 319" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <ellipse cx="358" cy="345" rx="13" ry="13" fill="#f8f6ef" stroke="#303030" stroke-width="2" />
+          <ellipse cx="358" cy="349" rx="4.2" ry="5.5" fill="#171717" />
+          <path d="M346 326Q358 324 370 327" fill="none" stroke="#202020" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M319 362l22 3" fill="none" stroke="#202020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+      </g>
     </g>
   </g>
 </svg>

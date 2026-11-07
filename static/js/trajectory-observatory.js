@@ -27,7 +27,9 @@
     const moments=[];
     messages.forEach((message,index)=>{
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
-      message.reads.forEach(read=>moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index}));
+      for (const read of [...message.reads, ...(message.repeatReads || [])]) {
+        moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index});
+      }
     });
     // Autoplay and manual stepping use the same complete sequence of actions, posts and reads.
     const exchangeEvents = new Set(moments.map(moment => moment.event));
@@ -40,7 +42,7 @@
     moments.forEach((m,i)=>{m.order=i;});
     const sendIndex=new Map(moments.filter(m=>m.kind==='send').map(m=>[m.message.id,m.order]));
     moments.push({kind:'outcome',event:Infinity,time:events.at(-1)?.time||'',order:moments.length});
-    const receiptCount=messages.reduce((n,m)=>n+m.reads.length,0);
+    const receiptCount=moments.filter(m=>m.kind==='read').length;
     const eventFraction=id=>id===Infinity?1:(eventIndex.get(id)||0)/Math.max(1,events.length-1);
     const connections = moments.filter(moment => moment.message);
     const homeView = { yaw: -.35, pitch: .88 };
@@ -91,7 +93,7 @@
         return `<button type="button" data-obs-receipt="${step.order}" style="--reader:${actorStyle(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
       }).join('');
       return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${actorStyle(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
-        <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,'message')||`static/images/fieldguide/finding-agents.svg?v=7#${message.actor.toLowerCase()}-speaking`)}" width="210" height="150" alt=""></span>
+        <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,'message')||`static/images/fieldguide/finding-agents.svg?v=8#${message.actor.toLowerCase()}-speaking`)}" width="210" height="150" alt=""></span>
         <div class="obs-chat-content">
           <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}" aria-label="Select message ${number} from ${esc(names.get(message.actor))}"><span>From</span><strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong><span>to</span><strong data-chat-recipient>${esc(messageSource(message))}</strong></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
           ${parent?`<button class="obs-chat-reply" type="button" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to #${messageNumberById.get(parent.id)}</button>`:''}
@@ -282,6 +284,7 @@
       const hasArgs = args != null && (typeof args !== 'object' || Object.keys(args).length > 0);
       actionArgs.hidden = Boolean(message) || !hasArgs;
       if (!actionArgs.hidden) {
+        actionArgs.querySelector('summary').textContent = data.provenance?.selectedActionFields ? 'Recorded business fields' : 'Tool arguments';
         actionArgs.querySelector('pre').textContent = typeof args === 'string' ? args : JSON.stringify(args, null, 2);
       }
 
@@ -531,7 +534,9 @@
     });
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resizeObserver.observe(flowStage);
     const visibilityObserver=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible&&!started&&!reduced){playing=true;started=true;}lastFrame=0;updateControls();if(visible)draw();ensureFrame();},{threshold:.18});visibilityObserver.observe(stage);
-    select(0);resize();
+    const citedMoment=eventMoment.get(meta.focusEvent);
+    if(citedMoment!==undefined)started=true;
+    select(citedMoment??0);resize();
     return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
 })();

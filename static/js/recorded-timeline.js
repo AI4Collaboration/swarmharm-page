@@ -6,11 +6,12 @@
     let out='',cursor=0;for(const m of text.matchAll(pattern)){out+=esc(text.slice(cursor,m.index))+`<code class="traj-token is-id">${esc(m[0])}</code>`;cursor=m.index+m[0].length;}
     return out+esc(text.slice(cursor));
   }
-  const avatar=(a,role)=>`<span class="traj-avatar" data-agent="${a}" aria-hidden="true"><span class="traj-avatar-crop"><img src="${esc(window.swarmAgentImage?.(a,role)||`static/images/fieldguide/finding-agents.svg?v=7#${a.toLowerCase()}-focused`)}" width="210" height="150" alt=""></span><span class="traj-avatar-letter">${a}</span></span>`;
+  const avatar=(a,role)=>`<span class="traj-avatar" data-agent="${a}" aria-hidden="true"><span class="traj-avatar-crop"><img src="${esc(window.swarmAgentImage?.(a,role)||`static/images/fieldguide/finding-agents.svg?v=8#${a.toLowerCase()}-focused`)}" width="210" height="150" alt=""></span><span class="traj-avatar-letter">${a}</span></span>`;
   window.mountRecordedTimeline=(container,data,meta)=>{
     const controller=new AbortController(),signal=controller.signal,on=(el,type,fn,options={})=>el.addEventListener(type,fn,{...options,signal});
     const events=new Map(data.events.map(e=>[e.id,e])),messages=new Map(data.messages.map(m=>[m.id,m]));
     const names=new Map(data.actors.map(a=>[a.id,'Agent '+a.id]));
+    const selectedFields=data.provenance?.selectedActionFields===true;
     const offset=a=>data.turnOffsets?.[a]||0;
     const turnIds=(a,n)=>data.turns[a][n-1-offset(a)];
     const failed=e=>Number(e.status)>=400||e.exitCode!=null&&e.exitCode!==0;
@@ -46,7 +47,7 @@
     function eventMarkup(e,requestedMessage){
       const original=e.messages.map(id=>messageMarkup(messages.get(id))).join('');
       const read=e.reads.filter(id=>!requestedMessage||requestedMessage===id).map(id=>messageMarkup(messages.get(id),true)).join('');
-      return `<section class="record-source-event" data-agent="${e.actor}"><h5><span class="record-author">${esc(names.get(e.actor))}</span> · Turn ${e.turn} · ${esc(e.label)}</h5>${original}${read}${e.resultText?`<div class="record-final">${source(e.resultText)}</div>`:''}${e.operation==='final_output'?'':`<details class="record-tool" open${failed(e)?' data-failed="true"':''}><summary><code>${esc(e.operation)}</code><span>Tool arguments${e.status!=null?` · <span class="record-status">status ${e.status}</span>`:''}</span></summary><dl>${argumentsMarkup(e.arguments)}</dl>${e.error?`<p class="record-failed">${source(typeof e.error==='string'?e.error:JSON.stringify(e.error))}</p>`:''}</details>`}${e.result?`<details class="record-tool"><summary>Original tool result</summary><pre class="record-result">${esc(JSON.stringify(e.result,null,2))}</pre></details>`:''}</section>`;
+      return `<section class="record-source-event" data-agent="${e.actor}"><h5><span class="record-author">${esc(names.get(e.actor))}</span> · Turn ${e.turn} · ${esc(e.label)}</h5>${original}${read}${e.resultText?`<div class="record-final">${source(e.resultText)}</div>`:''}${e.operation==='final_output'?'':selectedFields&&!Object.keys(e.arguments).length?`<p class="record-action-copy"><code>${esc(e.operation)}</code>${e.status!=null?' · status '+esc(e.status):''}</p>`:`<details class="record-tool" open${failed(e)?' data-failed="true"':''}><summary><code>${esc(e.operation)}</code><span>${selectedFields?'Recorded business fields':'Tool arguments'}${e.status!=null?` · <span class="record-status">status ${e.status}</span>`:''}</span></summary><dl>${argumentsMarkup(e.arguments)}</dl>${e.error?`<p class="record-failed">${source(typeof e.error==='string'?e.error:JSON.stringify(e.error))}</p>`:''}</details>`}${e.result?`<details class="record-tool"><summary>Original tool result</summary><pre class="record-result">${esc(JSON.stringify(e.result,null,2))}</pre></details>`:''}</section>`;
     }
     let returnFocus=null;
     function showDetail(){

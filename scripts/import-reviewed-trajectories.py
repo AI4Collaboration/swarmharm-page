@@ -8,7 +8,65 @@ from pathlib import Path
 
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
-def build(case, root, end=None):
+def public_business_fields(arguments):
+    """Retain the synthetic business identifiers needed to follow a dispatch."""
+    fields = {}
+    for key in ('account', 'item', 'state', 'reference', 'version_sha256', 'source_revision', 'revision'):
+        value = arguments.get(key)
+        if isinstance(value, int) or isinstance(value, str) and len(value) <= 80:
+            fields[key] = value
+    for key in ('items', 'pools'):
+        values = arguments.get(key)
+        if isinstance(values, list) and all(isinstance(v, str) and len(v) <= 80 for v in values):
+            fields[key] = values
+    return fields
+
+def reviewed_business_notes(root, review_sha, original_sha, source, ids, records):
+    """Bind released note bodies and exact read receipts to original tool events."""
+    review_bytes = (root / 'post-review-manifest.json').read_bytes()
+    assert sha(review_bytes) == review_sha
+    review = json.loads(review_bytes)
+    assert review['original_evidence_manifest_sha256'] == original_sha
+    filename = 'communication-evidence.json'
+    raw = (root / filename).read_bytes()
+    assert sha(raw) == review['files'][filename]
+    ledger = json.loads(raw)
+    messages, by_source = [], {}
+    for note in ledger['notes']:
+        event, path = source[note['event']], note['path']
+        assert event['actor'] == note['author']
+        change, = [c for c in event['shared_changes'] if c['path'] == path and c['sha256'] == note['sha256']]
+        contents = base64.b64decode(change['data'], validate=True)
+        assert sha(contents) == note['sha256'] and json.loads(contents)['text'] == note['text']
+        message = dict(id=f"m{event['id']}-{len(messages)}", event=event['id'], actor=ids[event['actor']],
+                       turn=event['step'], time=records[event['id']]['time'], kind='Business note',
+                       body=note['text'], bodySha256=sha(note['text'].encode()), reads=[], repeatReads=[],
+                       sourceReference=path, sourceSha256=note['sha256'], replyReference=note['responds_to'], replyTo=None)
+        by_source[(event['id'], path)] = message
+        messages.append(message)
+        record = records[event['id']]
+        record['label'] = 'Write a reporting note'
+        record['messages'].append(message['id'])
+    for read in sorted(ledger['exact_peer_reads'], key=lambda r:r['event']):
+        message = by_source[read['source_event'], read['path']]
+        event, record = source[read['event']], records[read['event']]
+        actor = ids[read['reader']]
+        assert event['actor'] == read['reader'] and ids[read['author']] == message['actor'] != actor
+        assert read['sha256'] == message['sourceSha256']
+        assert read['event'] > message['event'] and message['id'] not in record['reads']
+        receipt = dict(actor=actor, event=read['event'], turn=event['step'], time=record['time'])
+        seen = any(r['actor'] == actor for r in message['reads'])
+        message['repeatReads' if seen else 'reads'].append(receipt)
+        record['reads'].append(message['id'])
+        if record['operation'] == 'bash' and not record['messages']:
+            record['label'] = 'Read a reporting note'
+    for exchange in ledger['exchange_candidates']:
+        reply = by_source[exchange['event'], exchange['path']]
+        parent = by_source[exchange['source_event'], reply['replyReference']]
+        reply['replyTo'] = parent['id']
+    return messages, len(ledger['exact_peer_reads'])
+
+def build(case, root, end=None, review_sha=None):
     manifest_bytes = (root / 'evidence-manifest.json').read_bytes()
     manifest = json.loads(manifest_bytes)['files']
     def read(path):
@@ -16,6 +74,8 @@ def build(case, root, end=None):
         assert sha(raw) == manifest[path], path
         return json.loads(raw)
     world = read('natural/world.json')
+    if 'registration.json' in manifest and read('registration.json').get('study_mode') == 'unified':
+        assert review_sha and end is None, 'Supply the released post-review manifest hash for a unified rollout'
     plan = world['plan']
     ids = {job: chr(65+i) for i, job in enumerate(plan)}
     events = sorted((e for e in world['events'] if e['actor'] in ids and e['operation'] != 'final_output' and (end is None or (e['id'] <= end and not e.get('continuation')))), key=lambda e:e['id'])
@@ -40,7 +100,7 @@ def build(case, root, end=None):
         assert n['name']==e['operation'] and json.loads(n['arguments'])==e['arguments'] and n['result']==e['result']
         aid, op = ids[e['actor']], e['operation']
         result = e.get('result',{})
-        if op == 'release_status' and isinstance(result.get('account'), str):
+        if (op == 'release_status' or (review_sha and op == 'delivery_desk')) and isinstance(result.get('account'), str):
             names[e['actor']] = result['account']
         if op == 'read_funding_quote' and isinstance(result.get('quote',{}).get('programme_id'), str):
             names[e['actor']] = result['quote']['programme_id'].replace('-', ' ').title()
@@ -53,6 +113,8 @@ def build(case, root, end=None):
             record['important']=True;record['label']='Update work-session record'
         output.append(record); source_by_id[e['id']] = e
         turns[aid][e['step']-1].append(e['id'])
+        if review_sha:
+            continue
         authored = []
         if op == 'post_close_update' and result.get('posted') is True:
             # This service records authorship in the successful tool receipt,
@@ -92,9 +154,22 @@ def build(case, root, end=None):
         if m['replyReference']:
             target=next((x for x in reversed(messages) if x['event']<m['event'] and x['sourceReference']==m['replyReference']),None)
             if target:m['replyTo']=target['id']
+    if review_sha:
+        messages, all_reads = reviewed_business_notes(root, review_sha, sha(manifest_bytes), source_by_id,
+                                                      ids, {record['id']: record for record in output})
     data=dict(id=case,actors=[dict(id=ids[j],name=names[j]) for j in ids],turns=turns,events=output,messages=messages,
         provenance=dict(runId=root.name.removeprefix('swarmharm-v1-'),worldSha256=sha((root/'natural/world.json').read_bytes()),manifestSha256=sha(manifest_bytes),scope=f'Phase 1 tool events through {end}; excludes Phase 2 and system markers' if end else 'Complete recorded tool action sequence; excludes system final-output markers',nativeToolEventsVerified=len(output)),
         counts=dict(turns=sum(map(len,turns.values())),actions=len(output),messages=len(messages),firstReads=sum(len(m['reads']) for m in messages),allReads=all_reads))
+    if review_sha:
+        data['provenance']['postReviewManifestSha256'] = review_sha
+        data['provenance']['selectedActionFields'] = True
+        data['provenance']['scope'] = 'Complete native tool-event sequence, verbatim business notes and reviewed read receipts. Action details show selected business fields.'
+        # Shell output can contain native session files. The public replay needs
+        # the verified action and business-note ledger, not those private payloads.
+        for record in output:
+            record['arguments'] = public_business_fields(record['arguments'])
+            record['result'] = None
+            record['error'] = None
     serialized=json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n'
     # Fail rather than publish accidental credentials from an input bundle.
     import re
@@ -102,5 +177,5 @@ def build(case, root, end=None):
     return serialized,data['counts']
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--case',required=True);p.add_argument('--source',type=Path,required=True);p.add_argument('--end-event',type=int);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    raw,counts=build(a.case,a.source,a.end_event);a.output.write_text(raw);print(a.case,counts)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--case',required=True);p.add_argument('--source',type=Path,required=True);p.add_argument('--end-event',type=int);p.add_argument('--review-manifest-sha256');p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    raw,counts=build(a.case,a.source,a.end_event,a.review_manifest_sha256);a.output.write_text(raw);print(a.case,counts)
