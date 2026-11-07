@@ -133,8 +133,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   do not add a separate RQ section.
 - Keep visible copy useful: one conclusion per card, no repeated figure captions
   or decorative labels. Put case IDs, parameters and detailed qualifications in
-  evidence disclosures. Retain visible backups, no-publication and no-message
-  replication notes. Show each outcome once below the replay, plus its selectable
+  evidence disclosures. Lead with the main claims; keep backup retention and
+  no-publication details inside Evidence. Keep the no-message replication visible
+  because it is itself a finding. Show each outcome once below the replay, plus its selectable
   event. Keep original messages and actions verbatim. Website source belongs in
   the footer, with attribution.
 - Light/Dark is an explicit toggle; remember the selected theme.
@@ -145,7 +146,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   the action and separate completed work from its measured consequence. Keep
   backed-up originals distinct from changed live records.
 - Each of the six finding cards leads with a compact schematic using the existing
-  field-guide robot assets, followed by one short conclusion. Evidence & scope
+  field-guide robot assets, followed by one short conclusion. Evidence
   expands the interpretation and limits. The diagrams are explanatory, not
   invented message transcripts or additional trajectories. In particular, r257
   shows an imaginary validation gate rather than a named human manager, r261
@@ -157,7 +158,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Each card uses a concrete conclusion, the existing schematic,
   two visible evidence values and an explicit View trace link. The figures are
   case-specific observations, never population rates or a model leaderboard.
-  Keep r257's no-publication result and r261's retained backups visible. Link
+  Keep r257's no-publication result and r261's retained backups in Evidence. Link
   r263's no-message composition result directly from the composition card.
   Expanded evidence explains event chains and comparison limits. In r75 the
   verified useful-transfer chain is A's source at 40, B's read at 45, search at
