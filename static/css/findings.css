@@ -126,9 +126,9 @@
 
 /* Shared tracks align each pair of findings without fixed heights or clipped text. */
 @media (min-width:761px) {
-  .findings .life-halves { grid-template-rows:repeat(15,auto); column-gap:40px; row-gap:0; }
-  .findings .life-half { display:grid; grid-template-rows:subgrid; grid-row:span 15; }
-  .findings .phase-findings { display:grid; grid-template-rows:subgrid; grid-row:7 / span 9; }
+  .findings-primary .life-halves { grid-template-rows:repeat(10,auto); column-gap:40px; row-gap:0; }
+  .findings-primary .life-half { display:grid; grid-template-rows:subgrid; grid-row:span 10; }
+  .findings-primary .phase-findings { display:grid; grid-template-rows:subgrid; grid-row:2 / span 9; }
   .findings .finding { display:grid; grid-template-rows:subgrid; grid-row:span 3; }
   .findings .finding h4,.findings .finding p { align-self:start; }
   .findings .domain-plaques { margin-top:0; align-self:end; }
@@ -232,9 +232,11 @@
 .mechanism-case:focus-visible { outline:2px solid var(--misalignment-ink); outline-offset:4px; }
 @media(max-width:760px) { .mechanism-cases { grid-template-columns:1fr; } .mechanism-case { padding:18px; } }
 
-/* The headline leads with the result; the rest of the page supplies its evidence. */
-.original-tldr { max-width:860px; margin-top:0; }
-.trajectory-promoted { margin:0 0 44px; scroll-margin-top:100px; }
+.overview { padding-top:12px; }
+.findings-primary { padding:0 0 28px; }
+.findings-primary .life-phase { margin:0; padding-top:0; }
+#sample-steps { scroll-margin-top:80px; }
+#trajectory-title, #setup-title { margin:0 0 20px; color:var(--text); font:500 clamp(24px,3vw,32px)/1.2 var(--font); letter-spacing:-.025em; }
 
 /* The detection pair separates observable effects from transcript interpretation. */
 .detection-section { margin:48px 0 8px; padding:clamp(24px,4vw,40px); border-radius:16px; background:color-mix(in srgb,var(--discovery) 6%,var(--surface)); scroll-margin-top:100px; }
@@ -264,12 +266,13 @@
 .phase-summary { display:grid; gap:12px; min-width:0; margin:0 0 24px; padding:18px; border-left:3px solid var(--summary-line); background:var(--summary-fill); }
 .phase-summary.p1 { --summary-ink:var(--formation-ink); --summary-fill:var(--formation-fill); --summary-line:var(--formation-line); }
 .phase-summary.p2 { --summary-ink:var(--misalignment-ink); --summary-fill:var(--misalignment-fill); --summary-line:var(--misalignment-line); }
-.phase-summary h4 { margin:0; color:var(--summary-ink); font-size:16px; line-height:1.4; font-weight:600; }
+.phase-summary h3 { margin:0; color:var(--summary-ink); font-size:16px; line-height:1.4; font-weight:600; }
 .summary-item h5 { margin:0 0 3px; color:var(--text); font-size:14px; line-height:1.5; font-weight:600; }
 .summary-item p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
 @media(min-width:761px) {
-  .findings .phase-summary { grid-template-rows:subgrid; grid-row:2 / span 4; row-gap:12px; }
-  .findings .life-half > .life-pair { grid-row:6; }
+  .study-details .life-halves { grid-template-rows:auto auto; gap:0 40px; }
+  .study-details .life-half { display:grid; grid-template-rows:subgrid; grid-row:span 2; }
+  .study-details .life-pair { grid-row:2; }
 }
 
 /* Each finding has its own numbered banner and evidence block. */

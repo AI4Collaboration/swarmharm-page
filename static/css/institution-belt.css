@@ -4,7 +4,7 @@
   background: var(--bg);
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 24px;
-  padding: 12px 28px;
+  padding: 8px 10px 8px 24px;
 }
 .institution-leads,
 .institution-collaborators {
@@ -17,21 +17,11 @@
   border-left: 1px solid var(--line);
   padding-left: 24px;
 }
-.institution-eurosafe-fixed {
-  flex: none;
+.institution-collaborators .institution-eurosafe a {
+  display:flex; align-items:center; gap:6px; white-space:nowrap; text-decoration:none;
 }
-.institution-eurosafe-fixed a {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 52px;
-  text-decoration: none;
-}
-.institution-eurosafe-fixed img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-}
+.institution-collaborators .institution-list .institution-eurosafe img { width:32px; height:32px; flex:none; }
+:root[data-theme="dark"] .institution-band .institution-eurosafe img { filter:none; mix-blend-mode:normal; opacity:1; }
 .institution-caption {
   flex: none;
   color: var(--muted);
@@ -153,29 +143,26 @@
   .institution-band .institution-lead-list .institution-oxford img { width: 46px; height: 46px; }
 }
 
-/* Theme controls share the only top band. */
+/* One visible icon, with room for a finger or keyboard focus. */
 .institution-band > .theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-self: end;
-  gap: 2px;
-  width: auto;
-  height: 40px;
-  padding: 3px;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: var(--bg);
+  position:relative; display:grid; place-items:center; align-self:start; justify-self:end;
+  width:44px; height:44px; margin-top:-3px; padding:0; border:0; border-radius:50%; background:transparent;
 }
-.institution-band > .theme-toggle[hidden] { display: none; }
-.institution-band > .theme-toggle .theme-option svg { width: 15px; height: 15px; }
-@media (max-width: 1050px) {
-  .institutions.institution-band { grid-template-columns: minmax(0, 1fr) auto; }
-  .institution-leads { grid-column: 1; grid-row: 1; justify-content: flex-start; }
-  .institution-collaborators { grid-column: 1 / -1; grid-row: 2; }
-  .institution-band > .theme-toggle { grid-column: 2; grid-row: 1; }
+.institution-band > .theme-toggle::before {
+  content:""; position:absolute; width:28px; height:28px; border:1px solid var(--line);
+  border-radius:50%; background:var(--bg);
 }
-@media (max-width: 600px) {
-  .institution-band > .theme-toggle .theme-option > span { display: none; }
-  .institution-band > .theme-toggle .theme-option { padding: 6px; }
-  .institutions.institution-band { column-gap: 12px; }
+.institution-band > .theme-toggle:hover::before { border-color:var(--muted); }
+.institution-band > .theme-toggle[hidden], .institution-band .theme-toggle .theme-option { display:none; }
+:root[data-theme="light"] .institution-band .theme-option-dark,
+:root[data-theme="dark"] .institution-band .theme-option-light {
+  position:relative; display:grid; place-items:center; color:var(--text); padding:0; box-shadow:none; background:transparent;
 }
+.institution-band .theme-toggle .theme-option svg { display:block; width:14px; height:14px; }
+@media(max-width:1050px) {
+  .institutions.institution-band { grid-template-columns:minmax(0,1fr) 44px; }
+  .institution-leads { grid-column:1; grid-row:1; justify-content:flex-start; }
+  .institution-collaborators { grid-column:1/-1; grid-row:2; }
+  .institution-band > .theme-toggle { grid-column:2; grid-row:1; }
+}
+@media(max-width:600px) { .institutions.institution-band { column-gap:8px; padding-right:6px; } }

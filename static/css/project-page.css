@@ -1,12 +1,8 @@
 /* A complete project page, using the existing type, palette and illustration system. */
-.hero .hero-layout { padding-block:0 36px; }
-.hero-copy .emergence-title { width:min(100%,540px); margin:-12px auto -8px; }
+.hero .hero-layout { padding-block:0 16px; }
+.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/120; margin:-12px auto -8px; }
 .hero .hero-intro { margin:18px auto 0; scroll-margin-top:80px; }
-.project-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:22px 0 10px; }
-.project-actions a { display:inline-flex; align-items:center; justify-content:center; gap:14px; min-height:44px; padding:10px 16px; box-sizing:border-box; border:1px solid var(--line); border-radius:7px; color:var(--text); font:500 13px/1.5 var(--font); text-decoration:none; }
-.project-actions a.project-primary, .updates-fields button { background:color-mix(in srgb,var(--scene-blue) 6%,var(--bg)); color:var(--scene-blue); border-color:color-mix(in srgb,var(--scene-blue) 55%,var(--line)); }
-.project-actions a:hover { border-color:var(--discovery); }
-.project-actions a:focus-visible { outline:2px solid var(--discovery); outline-offset:4px; }
+.updates-fields button { background:color-mix(in srgb,var(--scene-blue) 6%,var(--bg)); color:var(--scene-blue); border-color:color-mix(in srgb,var(--scene-blue) 55%,var(--line)); }
 .findings .phase-summary { display:flex; flex-direction:column; gap:12px; margin-bottom:0; padding:18px; border-radius:0 8px 8px 0; }
 .phase-summary > p { margin:0; color:var(--text); font:14px/1.6 var(--font); }
 .setup-flow { display:flex; flex-wrap:wrap; gap:6px 16px; padding:0; margin:0; list-style:none; color:var(--summary-ink); font:500 11px/1.6 var(--font); }
@@ -14,7 +10,7 @@
 .findings .life-pair { display:block; min-width:0; margin:12px 0 0; }
 .setup-visual { --finding-fill:var(--formation-fill); --finding-ink:var(--formation-ink); --finding-line:var(--formation-line); padding:12px 16px; }
 .life-half:nth-child(2) .setup-visual { --finding-fill:var(--misalignment-fill); --finding-ink:var(--misalignment-ink); --finding-line:var(--misalignment-line); }
-.findings .phase-findings { margin-top:24px; }
+.findings-primary .phase-findings { margin-top:14px; }
 .diagram-paper-fill { fill:var(--bg); }
 .mechanism-visual { display:flex; align-items:center; gap:10px; padding:6px 0; --diagram-soft:color-mix(in srgb,var(--misalignment-ink) 5%,var(--bg)); --finding-line:var(--misalignment-line); --finding-ink:var(--misalignment-ink); --diagram-risk:var(--reasoning-high); }
 .mechanism-visual svg { width:55%; max-width:180px; height:auto; flex:none; color:var(--misalignment-ink); }
@@ -67,10 +63,8 @@
 .findings .domain-case { display:flex; align-items:center; gap:8px; }
 .domain-case > .case-link-label { padding:0; font:500 12px/1.4 var(--font); }
 @media(max-width:760px) {
- .hero .hero-layout { padding-top:4px; padding-bottom:20px; }
+ .hero .hero-layout { padding-top:0; padding-bottom:12px; }
  .hero-copy .emergence-title { width:min(100%,420px); margin:-8px auto -4px; }
- .project-actions { gap:8px; justify-content:flex-start; }
- .project-actions a { padding:9px 12px; font-size:12px; }
  .phase-summary > p { font-size:13px; }
  .setup-flow { font-size:10px; gap:6px 10px; }
  .setup-flow li:not(:last-child)::after { margin-left:6px; }
@@ -89,4 +83,4 @@
  .finding-evidence dt { font-size:11px; }
  .finding-copy .finding-settings-visual { margin-top:0; }
 }
-@media print { .project-actions,.diagram-replay { display:none; } }
+@media print { .diagram-replay { display:none; } }

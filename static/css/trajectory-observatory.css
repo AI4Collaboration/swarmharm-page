@@ -22,6 +22,19 @@
 .trajectory-observatory :is(button,input,canvas,[tabindex]):focus-visible { outline:2px solid var(--scene-blue); outline-offset:-3px; }
 .trajectory-observatory svg { display:block; width:17px; height:17px; stroke:currentColor; stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
 .obs-topbar { min-height:62px; display:flex; align-items:center; gap:20px; padding:11px 20px; border-bottom:1px solid var(--scene-line); }
+/* A scanned source and its plotted arrival share the replay clock. */
+.obs-intake-layer { position:absolute; inset:0; z-index:3; width:100%; height:100%; pointer-events:none; }
+.obs-intake-layer[hidden] { display:none; }
+.obs-chat-message, .obs-action-panel { position:relative; }
+.trajectory-observatory [data-scanning] { box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--signal) 50%,transparent); }
+.trajectory-observatory [data-scanning]::after {
+ content:""; position:absolute; z-index:1; left:4px; right:4px; top:clamp(2px,var(--intake-scan),calc(100% - 2px));
+ height:1px; pointer-events:none;
+ background:linear-gradient(90deg,transparent,var(--signal) 32%,var(--signal) 67%,transparent);
+ box-shadow:0 -2px 6px color-mix(in srgb,var(--signal) 40%,transparent);
+}
+.obs-agent-strip .obs-mini-bars i[data-current-bin] { background:var(--agent); transform-origin:bottom; transform:scaleY(var(--intake-lift,1)); }
+.obs-agent-strip [data-participant] .obs-mini-bars { opacity:.48; }
 .obs-title { display:flex; align-items:center; gap:10px; min-width:0; }
 .obs-title h4 { color:var(--scene-ink); font:550 16px/1.3 var(--font); letter-spacing:-.025em; white-space:nowrap; }
 .obs-title-mark { display:flex; align-items:center; gap:3px; width:23px; height:24px; transform:skewY(-20deg); }
@@ -36,7 +49,7 @@
 .obs-play svg { width:14px; height:14px; fill:currentColor; }
 .is-playing .obs-play { background:var(--scene-panel); color:var(--scene-ink)!important; }
 .is-playing .obs-play svg { fill:none; stroke-width:2; }
-.obs-workbench { display:grid; grid-template-columns:minmax(340px,1.1fr) minmax(0,1.8fr); }
+.obs-workbench { position:relative; display:grid; grid-template-columns:minmax(340px,1.1fr) minmax(0,1.8fr); }
 .obs-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:47px; padding:9px 17px; }
 .obs-panel-heading h5 { color:var(--scene-muted); font:500 12px/1.4 var(--font); letter-spacing:.01em; }
 .obs-panel-heading h5 > span { margin-left:10px; color:var(--scene-muted); font:10px/1.4 var(--font); }

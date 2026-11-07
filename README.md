@@ -73,8 +73,13 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The four agents share one inclined spiral galaxy. Each planet advances along a
-colored arm around the same nucleus. `static/js/trajectory-orbits.js` uses the same
+The replay opens with the first recorded action. It introduces each participating
+agent through its first pre-communication action, then follows posts and exact reads.
+A scan passes over the selected record and lands on its pin in a single inclined
+spiral. Each arm follows one agent's ordered actions. Gaps reflect time between
+records. Action pin heights reflect activity in the preceding ten seconds, and
+posts rise as exact reads are verified through the current step. A planet
+advances along its colored arm around the shared nucleus. `static/js/trajectory-orbits.js` uses the same
 disk coordinates for the stars, action marks, planets and communication routes.
 Only the recorded actions and messages are selectable. The disk turns during replay
 and holds its orientation while a record is inspected. A selected message travels from the recorded post
@@ -122,7 +127,10 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Formation blue and misalignment red in both themes. The r257 inference concerns
   a nonexistent grading requirement, not an absent grader or a named manager.
 - Keep the institution belt above one compact navigation row, with Back to top on
-  the left. TLDR and Trajectories lead into Setup, the findings and Detection.
+  the left. The original TLDR leads into the six findings, then the expanded
+  trajectory viewer, the setup, threat models, domains and detection. Use the
+  header for section navigation. EuroSafeAI leads the rolling collaborators after
+  the three fixed Oxford institutions. The theme icon sits in the top right.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
 - Keep visible copy useful: one conclusion per card, no repeated figure captions

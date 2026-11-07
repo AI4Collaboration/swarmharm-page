@@ -96,7 +96,7 @@
 .is-playing .composition-impact { animation-duration:var(--diagram-duration,4.2s); }
 .is-paused :is(.composition-impact,.eraser-motion,.record-wipe,.record-residue,.record-crumbs,.record-replacement) { animation-play-state:paused!important; }
 .finding-evidence { border-radius:8px; padding:14px 12px; border:1px solid var(--finding-line); background:var(--scene-bg); }
-.findings .domain-plaque,.domain-coverage-links a,.resource-card,.project-actions a { border-radius:8px; transition:border-color .2s,background .2s,box-shadow .2s; }
+.findings .domain-plaque,.domain-coverage-links a,.resource-card { border-radius:8px; transition:border-color .2s,background .2s,box-shadow .2s; }
 .findings .domain-plaque:hover,.domain-coverage-links a:hover,.resource-card:hover { box-shadow:0 7px 20px -17px currentColor; }
 .mechanism-visual { justify-content:center; --diagram-soft:var(--scene-panel); --diagram-paper:var(--scene-bg); --finding-line:var(--scene-edge); --finding-ink:var(--scene-red); --diagram-risk:var(--scene-red); margin:4px 0; padding:8px 12px; min-height:118px; box-sizing:border-box; border:1px solid var(--scene-line); border-radius:var(--scene-radius); background:var(--scene-bg); }
 .mechanism-visual > svg { color:var(--scene-red); }

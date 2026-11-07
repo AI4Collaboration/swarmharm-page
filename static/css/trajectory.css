@@ -6,17 +6,6 @@
 .trajectory-viewer [data-agent="D"] { --agent-color:var(--traj-d); }
 .trajectory-viewer button { font:inherit; color:var(--text); cursor:pointer; }
 .trajectory-viewer [hidden] { display:none!important; }
-.trajectory-disclosure { border-block:1px solid var(--line); }
-.trajectory-disclosure > summary { display:flex; align-items:center; justify-content:space-between; gap:24px; min-height:72px; padding:15px 0; cursor:pointer; list-style:none; }
-.trajectory-disclosure > summary::-webkit-details-marker { display:none; }
-.trajectory-disclosure > summary > :first-child { font:500 23px/1.4 var(--font); letter-spacing:-.02em; }
-.trajectory-toggle-action { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font:500 13px/1.4 var(--font); white-space:nowrap; }
-.trajectory-toggle-action svg { width:16px; height:16px; transition:transform .2s ease; }
-.trajectory-disclosure[open] .trajectory-toggle-action svg { transform:rotate(180deg); }
-.trajectory-toggle-action .when-open,.trajectory-disclosure[open] .trajectory-toggle-action .when-closed { display:none; }
-.trajectory-disclosure[open] .trajectory-toggle-action .when-open { display:inline; }
-.trajectory-disclosure > summary:hover .trajectory-toggle-action { color:var(--text); }
-.trajectory-disclosure > summary:focus-visible { outline:2px solid var(--accent); outline-offset:5px; }
 .trajectory-content { padding:2px 0 36px; }
 .traj-header { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:22px; }
 .traj-header h3 { font:500 23px/1.4 var(--font); margin:0; }
@@ -296,8 +285,6 @@
 .trajectory-viewer[data-case-mode="review"] :is(.traj-views,.traj-play) { display:none; }
 [data-case-full][hidden],[data-case-review][hidden] { display:none; }
 @media(max-width:600px) {
-  .trajectory-disclosure > summary { min-height:64px; gap:14px; }
-  .trajectory-disclosure > summary > :first-child { font-size:20px; }
   .trajectory-content { padding-bottom:28px; }
   .traj-header { display:grid; grid-template-columns:minmax(0,1fr) auto; }
   .traj-header h3 { grid-column:1; grid-row:1; }

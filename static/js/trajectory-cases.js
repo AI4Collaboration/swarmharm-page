@@ -1,7 +1,6 @@
 (() => {
   const root=document.querySelector('.trajectory-viewer'),cases=window.SWARMHARM_CASES?.concat(window.SWARMHARM_ARCHIVED_CASES||[]);
   if(!root||!cases?.length)return;
-  const disclosure=root.querySelector('[data-trajectory-disclosure]');
   const select=root.querySelector('[data-case-select]'),intro=root.querySelector('[data-case-intro]');
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
   const details=root.querySelector('[data-case-details]');
@@ -80,7 +79,6 @@
   intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
   document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',async event=>{
     event.preventDefault();
-    if(disclosure)disclosure.open=true;
     const loading=show(link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase),clickedVersion=version;
     await loading;
     if(clickedVersion!==version)return;
@@ -88,6 +86,5 @@
     root.scrollIntoView({block:'start',behavior:'instant'});
   }));
   const params=new URL(location.href).searchParams;
-  if(params.has('case')&&disclosure)disclosure.open=true;
   show(params.get('phase')?`${params.get('case')}-phase${params.get('phase')}`:params.get('case'));
 })();
