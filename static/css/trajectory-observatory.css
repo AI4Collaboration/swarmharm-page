@@ -118,7 +118,6 @@
 .obs-route-heading strong { color:var(--scene-ink); font-weight:600; }
 .obs-route-verb { color:var(--scene-muted); font-size:11px; }
 .trajectory-observatory .obs-route-quote { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:1; overflow:hidden; overflow-wrap:anywhere; margin:4px 0 0; padding:0 0 0 9px; border:0; border-left:2px solid color-mix(in srgb,var(--signal) 65%,transparent); color:var(--scene-ink); font:400 14px/1.5 var(--font); }
-.trajectory-observatory:is([data-moment="action"],[data-moment="outcome"]) .obs-route { min-height:34px; }
 .obs-agent-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-top:1px solid var(--scene-line); min-height:74px; }
 .obs-agent-strip > div { position:relative; min-width:0; padding:12px 10px 10px; display:flex; gap:6px; align-items:flex-start; border-right:1px solid var(--scene-line); overflow:hidden; }
 .obs-agent-strip > div:last-child { border-right:0; }
