@@ -128,9 +128,15 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   names stay in the page's section headings.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
-- Put the concise main result and three linked story steps first. Keep the original
-  TLDR under About SwarmHarm. The opening states the initiative and evaluation gap;
+- Put the concise main result and three linked story steps first. Keep the
+  setup and evidence in their own sections. The opening states the initiative and evaluation gap;
   do not add a separate RQ section.
+- Keep visible copy useful: one conclusion per card, no repeated figure captions
+  or decorative labels. Put case IDs, parameters and detailed qualifications in
+  evidence disclosures. Retain visible backups, no-publication and no-message
+  replication notes. Show each outcome once below the replay, plus its selectable
+  event. Keep original messages and actions verbatim. Website source belongs in
+  the footer, with attribution.
 - Light/Dark is an explicit toggle; remember the selected theme.
 - Use one font family throughout. Keep summaries short; put originals and
   structured tool results in disclosures.
@@ -148,7 +154,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 - Result presentation follows the claim, evidence, example and interpretation
   hierarchy used in [Stolen Thoughts](https://stolen-thoughts.com/) and
   [Maksym's PostTrainBench article](https://aisagroup.substack.com/p/posttrainbench-measuring-ai-ability).
-  Each card uses a short category, a concrete conclusion, the existing schematic,
+  Each card uses a concrete conclusion, the existing schematic,
   two visible evidence values and an explicit View trace link. The figures are
   case-specific observations, never population rates or a model leaderboard.
   Keep r257's no-publication result and r261's retained backups visible. Link
@@ -165,7 +171,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Illustration playback follows existing routes, highlights participants and
   dims uninvolved agents. It runs once on entry, supports pause/resume/replay,
   suspends offscreen or in a hidden tab, and stays static with reduced motion.
-  These labelled illustrations never create messages or alter recorded data.
+  These illustrations never create messages or alter recorded data.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,

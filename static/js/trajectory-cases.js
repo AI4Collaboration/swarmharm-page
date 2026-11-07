@@ -7,6 +7,7 @@
   const details=root.querySelector('[data-case-details]');
   const cache=new Map();let version=0,dispose=null,request=null;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const modelName=model=>({'gpt-6.1-sol':'Sol 6.1','gpt-5.6-sol':'Sol 5.6','claude-haiku-5.5':'Haiku 5.5'}[model]||model);
   const icons={
     Agents:'<circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/>',
     Harness:'<rect x="3" y="5" width="26" height="22" rx="4"/><path d="m8 12 4 4-4 4m9 0h7"/>',
@@ -30,7 +31,7 @@
   }
   for(const mode of ['Swarm Formation','Collective Misalignment']){
     const group=document.createElement('optgroup');group.label=mode;
-    cases.filter(c=>c.mode===mode&&!c.replication&&!c.archived).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain} · ${c.selectorCases||c.id}`;group.append(option);});
+    cases.filter(c=>c.mode===mode&&!c.replication&&!c.archived).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain}`;group.append(option);});
     select.append(group);
   }
   async function show(id){
@@ -41,15 +42,15 @@
     const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
     root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
-    intro.innerHTML=`<div class="case-setup"><p class="case-meta">${escape(item.model)} · ${escape(item.id)}</p><p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>`;
-    details.innerHTML=outcomeMarkup(item);
-    if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${c.id==='r263'?'Haiku 5.5':'Sol 5.6'} · ${escape(c.id)}</button>`;}).join('')}</div>`);
+    intro.innerHTML=`<div class="case-setup">${item.variants?'':`<p class="case-meta">${escape(modelName(item.model))}</p>`}<p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>`;
+    details.innerHTML=item.composition?'':outcomeMarkup(item);
+    if(item.variants)intro.insertAdjacentHTML('afterbegin',`<div class="case-variants" role="group" aria-label="Composition model cases">${item.variants.map(key=>{const c=cases.find(c=>c.key===key);return `<button type="button" data-case-variant="${escape(key)}" aria-pressed="${key===item.key}">${escape(modelName(c.model))}</button>`;}).join('')}</div>`);
     if(item.composition){
       const p=item.composition;
       details.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
     }
     const parameters=visibleSettings(item.parameters);
-    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><span class="when-closed">View details</span><span class="when-open">Hide details</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>Download independent review</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
+    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>Download independent review</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Case: ${escape(item.id)}<br>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
     if(!item.full){
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }

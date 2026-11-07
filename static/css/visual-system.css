@@ -51,7 +51,7 @@
 .diagram-packet .packet-core { fill:#edf7ff; filter:drop-shadow(0 0 3px currentColor); }
 .diagram-stage .diagram-signal[hidden],.diagram-stage .diagram-packet[hidden] { display:none; }
 .diagram-transport { display:flex; align-items:center; gap:12px; min-height:44px; padding:0 12px; border-top:1px solid var(--scene-line); background:#ffffff02; color:var(--scene-muted); font:10px/1.4 var(--font); }
-.diagram-progress { display:flex; align-items:center; gap:4px; margin-left:auto; }
+.diagram-progress { display:flex; align-items:center; gap:4px; margin-right:auto; }
 .diagram-progress i { display:block; width:18px; height:2px; border-radius:2px; background:#ffffff20; transition:background .2s,box-shadow .2s; }
 .diagram-progress i[data-complete] { background:color-mix(in srgb,var(--scene-accent) 45%,transparent); }
 .diagram-progress i[data-active] { background:var(--scene-accent); box-shadow:0 0 6px color-mix(in srgb,var(--scene-accent) 35%,transparent); }
@@ -72,9 +72,8 @@
 .result-path svg { box-sizing:border-box; padding:7px; width:44px; height:44px; border:1px solid #ffffff20; border-radius:8px; background:var(--scene-bg); stroke:var(--scene-blue); }
 .result-path li:nth-child(2) svg { stroke:var(--agent-c); }
 .result-path li:nth-child(3) svg { stroke:var(--scene-red); }
-.mechanism-visual { --diagram-soft:#1b293a99; --finding-line:#7187a33b; --finding-ink:var(--scene-red); --diagram-risk:var(--scene-red); margin:4px 0; padding:8px 12px; min-height:118px; box-sizing:border-box; border:1px solid #303d4d; border-radius:var(--scene-radius); background:radial-gradient(ellipse at 35% 50%,#273d5238,transparent 75%),var(--scene-bg); }
+.mechanism-visual { justify-content:center; --diagram-soft:#1b293a99; --finding-line:#7187a33b; --finding-ink:var(--scene-red); --diagram-risk:var(--scene-red); margin:4px 0; padding:8px 12px; min-height:118px; box-sizing:border-box; border:1px solid #303d4d; border-radius:var(--scene-radius); background:radial-gradient(ellipse at 35% 50%,#273d5238,transparent 75%),var(--scene-bg); }
 .mechanism-visual > svg { color:var(--scene-red); }
-.mechanism-visual > span { color:var(--scene-ink); font-size:14px; }
 .mechanism-case { background:var(--bg); border-radius:var(--scene-radius); }
 .monitor-card > svg { color:var(--scene-blue); border:1px solid #303d4d; background:var(--scene-bg); }
 .transcript-monitor > svg { color:var(--scene-red); }

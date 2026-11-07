@@ -143,7 +143,7 @@
       <span data-message-number></span>
       <button type="button" data-next-message aria-label="Next ${noMessages?'action':'message'}">${arrow(1)}</button>
     </div>`;
-    host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>Trajectory observatory</h4><span class="obs-run">${esc(data.id)}</span></div><div class="obs-top-stats"><span><b>${actors.length}</b> agents</span><span><b>${messages.length}</b> messages</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
+    host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>${noMessages?'Agent actions':'Agent communication'}</h4></div><div class="obs-top-stats"><span><b>${messages.length}</b> messages</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
       <div class="obs-workbench">
         <section class="obs-inspector" aria-label="Selected record">
           <section class="obs-action-panel" data-action-panel aria-label="Action">
@@ -161,15 +161,14 @@
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
         <section class="obs-spatial" aria-label="Spatial view of recorded agent actions">
-          <header class="obs-panel-heading"><h5>${noMessages?'Action landscape':'Communication window'}<span>${stageEvents.length} actions</span></h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
+          <header class="obs-panel-heading"><h5>${noMessages?'Actions':'Communication'}</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select a point to read</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent timelines. Drag to rotate. Click a point for its record. Arrow keys move through the replay."></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span><span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span></div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${color(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
-      <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>Event flow</h5><span>${events.length} actions · recorded order</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
-      <footer class="obs-transport"><button type="button" data-previous aria-label="Previous event">${arrow(-1)}</button><button type="button" data-next aria-label="Next event">${arrow(1)}</button><input type="range" min="0" max="${moments.length-1}" value="0" step="1" aria-label="Replay position"><span data-position></span><button type="button" data-speed aria-label="Playback speed: 1 times">1×</button><button class="obs-outcome-button" type="button" data-outcome>Outcome ↗</button></footer>
-      <div class="obs-bottom"><section class="obs-result" aria-label="Recorded outcome"><span>Recorded outcome</span><p>${esc(meta.outcome)}</p><button type="button" data-outcome>Inspect outcome ↗</button></section></div>`;
+      <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>All actions</h5><span>${events.length} actions</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
+      <footer class="obs-transport"><button type="button" data-previous aria-label="Previous event">${arrow(-1)}</button><button type="button" data-next aria-label="Next event">${arrow(1)}</button><input type="range" min="0" max="${moments.length-1}" value="0" step="1" aria-label="Replay position"><span data-position></span><button type="button" data-speed aria-label="Playback speed: 1 times">1×</button><button class="obs-outcome-button" type="button" data-outcome>Outcome ↗</button></footer>`;
 
     const scene=host.querySelector('.obs-space-canvas'),ctx=scene.getContext('2d');
     const flow=host.querySelector('.obs-flow-canvas'),fctx=flow.getContext('2d');
@@ -223,7 +222,7 @@
       if (!message) {
         routeHeading.textContent = moment.kind === 'action'
           ? names.get(moment.actor) + ' · ' + moment.action.label
-          : 'Recorded sequence complete';
+          : 'Outcome';
         return;
       }
 
