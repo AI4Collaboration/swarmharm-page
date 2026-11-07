@@ -6,6 +6,9 @@
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
   const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
   const short = (value,n=80) => value.length>n?value.slice(0,n).trimEnd()+'…':value;
+  const homeView = {yaw:-.35, pitch:.99};
+  const clockwiseRate = 2*Math.PI/96_000; // radians per millisecond of visible playback
+  const cameras = new WeakMap();
 
   window.mountTrajectoryObservatory = (host,data,meta,openRecord) => {
     const controller = new AbortController();
@@ -58,14 +61,15 @@
     const eventFraction = id => id === Infinity ? 1 : duration ? (eventTimes.get(id)-startTime)/duration :
       (eventIndex.get(id)||0)/Math.max(1,events.length-1);
     const connections = moments.filter(moment => moment.message);
-    const homeView = { yaw: -.35, pitch: .99 };
+    const viewer = host.closest('.trajectory-viewer') || host;
+    const camera = cameras.get(viewer) || {...homeView};
+    cameras.set(viewer,camera);
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
     let signalSeconds = 0;
     let reading=false,focused=false,hovered=null,drag=null;
-    let yaw=homeView.yaw, pitch=homeView.pitch, viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
-    let manualCamera = false;
+    let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
@@ -165,10 +169,26 @@
     const tooltips=new Map([[scene,host.querySelector('.obs-graph-tooltip')],[flow,host.querySelector('.obs-flow-tooltip')]]);
     const chatRows=new Map([...host.querySelectorAll('[data-chat-message]')].map(row=>[row.dataset.chatMessage,row]));
     const fontFamily=getComputedStyle(host).fontFamily;
-    // CSS resolves the active theme for both canvases, including a paused frame.
+    let paletteSample;
+    // Canvas gradients use hex alpha. Theme extensions can provide the same color in CSS functional notation.
+    function canvasColor(value) {
+      if (!value || /^#[\da-f]{6}$/i.test(value)) return value;
+      if (/^#[\da-f]{3}$/i.test(value)) return '#'+Array.from(value.slice(1),digit=>digit+digit).join('');
+      if (!paletteSample) {
+        const pixel = document.createElement('canvas');
+        pixel.width = pixel.height = 1;
+        paletteSample = pixel.getContext('2d',{willReadFrequently:true});
+      }
+      if (!paletteSample) return value;
+      paletteSample.clearRect(0,0,1,1);
+      paletteSample.fillStyle = value;
+      paletteSample.fillRect(0,0,1,1);
+      const [r,g,b] = paletteSample.getImageData(0,0,1,1).data;
+      return '#' + [r,g,b].map(channel=>channel.toString(16).padStart(2,'0')).join('');
+    }
     function readCanvasPaint() {
       const style = getComputedStyle(host);
-      const read = name => style.getPropertyValue(name).trim();
+      const read = name => canvasColor(style.getPropertyValue(name).trim());
       const muted = read('--scene-muted');
       return {
         agents: new Map(actors.map(({id}) => [id, read('--agent-' + id.toLowerCase()) || muted])),
@@ -178,7 +198,7 @@
         guide: read('--scene-guide'),
         blue: read('--scene-blue'),
         packet: read('--scene-packet'),
-        dark: read('--scene-scheme') === 'dark'
+        dark: style.getPropertyValue('--scene-scheme').trim() === 'dark'
       };
     }
     let paint = readCanvasPaint();
@@ -412,7 +432,7 @@
     }
     function drawSpatial() {
       sceneHits = orbitView.draw(
-        { width:viewWidth, height:viewHeight, dpr, yaw, pitch },
+        {width:viewWidth, height:viewHeight, dpr, yaw:camera.yaw, pitch:camera.pitch},
         paint, signalSeconds, reduced, hovered?.surface === scene ? hovered.hit : null
       );
     }
@@ -462,9 +482,9 @@
         band.closePath();
         const wash = fctx.createLinearGradient(0,y-11,0,y+11);
         wash.addColorStop(0,c+'25'); wash.addColorStop(.5,c); wash.addColorStop(1,c+'25');
-        fctx.fillStyle=wash; fctx.globalAlpha=.16; fctx.fill(band);
+        fctx.fillStyle=wash; fctx.globalAlpha=paint.dark ? .16 : .22; fctx.fill(band);
         fctx.save(); fctx.beginPath(); fctx.rect(68,y-12,Math.max(0,x-68),24); fctx.clip();
-        fctx.globalAlpha=.20; fctx.fill(band); fctx.restore(); fctx.globalAlpha=1;
+        fctx.globalAlpha=paint.dark ? .20 : .24; fctx.fill(band); fctx.restore(); fctx.globalAlpha=1;
         strokePoints(fctx,[[68,y],[flowWidth-23,y]],c+'46',.65);
         fctx.fillStyle=c; fctx.fillText(a.id,16,y+4);
         fctx.fillStyle=paint.muted; fctx.fillText(String(actorEvents.get(a.id).length),32,y+4);
@@ -477,7 +497,7 @@
         const ink = color(event.actor);
         let dotColor = ink + '92';
         if (participant || m.kind === 'outcome') dotColor = ink + 'ca';
-        if (event.id > m.event) dotColor = ink + '55';
+        if (event.id > m.event) dotColor = ink + (paint.dark ? '55' : '73');
         let radius = event.messages.length ? 3 : event.reads.length ? 2.5 : 1.7;
         if (isEndpoint) {
           glow(fctx, ...point, 16, ink);
@@ -508,11 +528,11 @@
     function ensureFrame(){if(!frame&&running())frame=requestAnimationFrame(animate);}
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
-      const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
+      const dt=lastFrame?clamp(now-lastFrame,0,80):0;lastFrame=now;
       if (!holding()) {
         if (!reduced) {
           signalSeconds += dt * speed / 1000;
-          if (!manualCamera) yaw += dt * .000028;
+          camera.yaw += dt * clockwiseRate;
         }
         elapsed += dt * speed;
         if (elapsed >= active().duration) {
@@ -553,15 +573,40 @@
     function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
     [scene,flow].forEach(surface=>{
       on(surface,'pointermove',event=>{
-        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4){drag.moved=true;manualCamera=true;}yaw=drag.yaw+dx*.004;pitch=clamp(drag.pitch+dy*.003,.20,1.12);hideTooltips();draw();return;}
+        if (drag && surface===scene) {
+          if (event.pointerId!==drag.id) return;
+          const dx=event.clientX-drag.x, dy=event.clientY-drag.y;
+          if (!drag.moved && Math.abs(dx)+Math.abs(dy)<=4) return;
+          drag.moved=true;
+          camera.yaw=drag.yaw+dx*.004;
+          camera.pitch=clamp(drag.pitch+dy*.003,.20,1.12);
+          hideTooltips(); draw(); return;
+        }
         if(event.pointerType==='mouse')hover(surface,event);
       });
       on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
       on(surface,'keydown',event=>{const next={ArrowLeft:current-1,ArrowRight:current+1,Home:0,End:moments.length-1}[event.key];if(next!==undefined){event.preventDefault();seek(next);}else if(event.key===' '){event.preventDefault();togglePlay();}});
     });
-    on(scene,'pointerdown',event=>{if(event.button!==0)return;hovered=null;hideTooltips();drag={x:event.clientX,y:event.clientY,yaw,pitch,moved:false};scene.setPointerCapture(event.pointerId);});
-    on(scene,'pointerup',event=>{if(!drag)return;const moved=drag.moved;drag=null;scene.releasePointerCapture(event.pointerId);if(!moved)pick(scene,event);updateControls();});
-    on(scene,'pointercancel',()=>{drag=null;hovered=null;hideTooltips();updateControls();});
+    on(scene,'pointerdown',event=>{
+      if (event.button!==0 || drag) return;
+      hovered=null; hideTooltips();
+      drag={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:camera.yaw,pitch:camera.pitch,moved:false};
+      scene.setPointerCapture(event.pointerId);
+    });
+    on(scene,'pointerup',event=>{
+      if (drag?.id!==event.pointerId) return;
+      const moved=drag.moved;
+      drag=null;
+      if (scene.hasPointerCapture(event.pointerId)) scene.releasePointerCapture(event.pointerId);
+      if (!moved) pick(scene,event);
+      updateControls();
+    });
+    function cancelDrag(event) {
+      if (drag?.id!==event.pointerId) return;
+      drag=null; hovered=null; hideTooltips(); updateControls();
+    }
+    on(scene,'pointercancel',cancelDrag);
+    on(scene,'lostpointercapture',cancelDrag);
     on(flow,'click',event=>pick(flow,event));
     on(host,'click',event=>{
       const button=event.target.closest('button');if(!button)return;
@@ -574,7 +619,7 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;manualCamera=false;draw();}
+      else if(button.hasAttribute('data-reset')){Object.assign(camera,homeView);draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
@@ -589,7 +634,7 @@
     on(motion,'change',()=>{reduced=motion.matches;if(reduced){orbitView.select(active(),signalSeconds,false);stop();}draw();});
     const themeObserver = new MutationObserver(() => {
       paint = readCanvasPaint();
-      draw();
+      if (viewWidth && ctx && fctx && !disposed) { drawSpatial(); drawFlow(); }
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,

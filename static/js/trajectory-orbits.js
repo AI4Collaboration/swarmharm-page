@@ -44,11 +44,11 @@
   // A compact stellar core leaves the silhouette of the disk to the recorded nodes.
   function drawNucleus(context, dark) {
     const glow = context.createRadialGradient(0,0,0,0,0,62);
-    glow.addColorStop(0,dark?'#f3d8ad99':'#94704769');
-    glow.addColorStop(.20,dark?'#c7a48249':'#997d6230');
+    glow.addColorStop(0,dark?'#f3d8ad99':'#ae825343');
+    glow.addColorStop(.20,dark?'#c7a48249':'#bc9a7427');
     glow.addColorStop(1,'#a58e7100');
     context.fillStyle=glow;context.fillRect(-62,-62,124,124);
-    context.fillStyle=dark?'#f5d9b189':'#735f4a56';
+    context.fillStyle=dark?'#f5d9b189':'#805d3776';
     for (let i=0; i<1200; i++) {
       const r=-Math.log(Math.max(.003,hash(i,68)))*15.4, a=TAU*hash(i,67);
       const size=.25+.74*hash(i,65);
@@ -181,7 +181,7 @@
     const guide = paint.guide;
     g.strokeStyle = guide;
     g.lineWidth = .65;
-    g.globalAlpha = paint.dark ? .21 : .16;
+    g.globalAlpha = paint.dark ? .21 : .22;
     for (const r of [DISK_RADIUS * .55, DISK_RADIUS * 1.04]) {
       g.beginPath(); g.arc(0, 0, r, 0, TAU); g.stroke();
     }
@@ -200,14 +200,14 @@
       const ink = paint.agents.get(track.id) || paint.muted;
       g.globalAlpha = .055;
       line(g, track.path, ink, 4);
-      g.globalAlpha = paint.dark ? .29 : .21;
+      g.globalAlpha = paint.dark ? .29 : .33;
       line(g, track.path, ink, .8);
       g.fillStyle = ink;
       for (const node of track.nodes) {
         const grains = 48 + Math.min(24, node.density * 3);
         for (let i=liftedPerAction; i<grains; i++) {
           const grain = actionGrain(node,i);
-          g.globalAlpha = grain.alpha;
+          g.globalAlpha = Math.min(1,grain.alpha*(paint.dark ? 1 : 1.2));
           g.fillRect(grain.x,grain.y,grain.size,grain.size);
         }
       }
@@ -262,8 +262,12 @@
     gradient.addColorStop(0,from); gradient.addColorStop(1,to);
     ctx.beginPath(); ctx.moveTo(...points[0]);
     for (let i=1; i<points.length; i++) ctx.lineTo(...points[i]);
+    if (!paint.dark) {
+      ctx.strokeStyle=paint.paper; ctx.lineWidth=4.8; ctx.globalAlpha=.94; ctx.stroke();
+    }
     ctx.strokeStyle = gradient;
-    for (const [width, alpha] of [[8,.10],[3.6,.28],[1.65,1]]) {
+    const strokes = paint.dark ? [[8,.10],[3.6,.28],[1.65,1]] : [[3.4,.16],[1.95,1]];
+    for (const [width, alpha] of strokes) {
       ctx.globalAlpha = alpha; ctx.lineWidth = width; ctx.stroke();
     }
 
@@ -280,8 +284,13 @@
     }
     ctx.globalAlpha=1;
     const world=arc.at(progress), head=projection.project(world), size=projection.magnification(world);
-    bloom(ctx,...head,12*size,pulse,'75');
-    circle(ctx,...head,3.4*size,pulse); circle(ctx,...head,1.6*size,paint.dark?'#fff8df':paint.paper);
+    if (paint.dark) {
+      bloom(ctx,...head,12*size,pulse,'75');
+      circle(ctx,...head,3.4*size,pulse); circle(ctx,...head,1.6*size,'#fff8df');
+    } else {
+      circle(ctx,...head,4.2*size,paint.paper);
+      circle(ctx,...head,2.9*size,paint.packet);
+    }
     for (let i=2; i<points.length-1; i+=2) {
       const [x,y] = points[i];
       hits.push({x,y,r:5,event:reader.event.id,moment:moment.order,message:moment.message.id});
@@ -293,7 +302,7 @@
     const top = (height - items.length*row) / 2 + 7;
     items.forEach((item,i) => {
       const y = top + i*row, mid = y + 11;
-      ctx.globalAlpha = .37;
+      ctx.globalAlpha = paint.dark ? .37 : .50;
       line(ctx,[[right,mid],[right+10,mid],item.at],item.ink,.75);
       ctx.globalAlpha = 1;
       line(ctx,[[left,y-1],[left,y+23]],item.ink,1.7);
@@ -445,7 +454,8 @@
         const past = node.t <= track.reached, raised = node.raised || active || latest;
         const at = raised ? node.screenTip : node.foot;
         const distanceFade = clamp((size-.76)*1.2+.57,.62,1.13);
-        const alpha = (past ? (quiet ? .48 : .85) : (quiet ? .18 : .36))*distanceFade;
+        const strength = (past ? (quiet ? .48 : .85) : (quiet ? .18 : .36))*distanceFade;
+        const alpha = paint.dark ? strength : Math.min(.98,strength*1.13+.045);
         ctx.globalAlpha = active ? .95 : alpha*.78;
         if (raised) line(ctx,[node.foot,at],ink,(active ? 1.35 : .75)*size);
         ctx.globalAlpha = active ? 1 : Math.min(1,alpha);

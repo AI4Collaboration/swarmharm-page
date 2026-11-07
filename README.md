@@ -83,8 +83,11 @@ share a perspective camera. Foreground pins appear larger and overlap distant
 ones as the disk turns. Posts have diamond tips and reads have hollow tips.
 A verified read lights one directed arc between the original post and the reader's event.
 The arc clears at the next step.
-The disk turns slowly during playback. Dragging sets the viewing angle, and
-Reset restores the default view. The four bands below are positioned by recorded
+The disk turns clockwise at a steady rate during playback. Dragging sets the
+viewing angle. Playback continues clockwise from the release angle. Theme and
+case changes preserve that angle, and Reset restores the default view. Light
+mode uses stronger distant marks and a dark signal on a white-edged read arc.
+The four bands below are positioned by recorded
 time and widen where actions cluster. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 The records case labels the quoted report-pack note as a Shared record.
