@@ -57,9 +57,9 @@ standalone verdict for every claim.
 
 ## Phase 2 terminology
 
-Three mechanism cards link directly to reviewed cases: external-service resource
-scope overreach — **r165**; task/acceptance manipulation — **r178**; trace tampering
-— **r261**. Each shows its own result and actual harness. r165 and r178 each leave
+The trajectory selector includes reviewed examples of external-service resource
+scope overreach (**r165**), task/acceptance manipulation (**r178**) and trace
+tampering (**r261**). r165 and r178 each leave
 31 of 55 reports delayed, in separate runs. r165 establishes consequence-aware
 joint execution; r178 does not establish a joint decision to proceed without
 finance approval. External-service scope overreach is business resource misuse,
@@ -153,9 +153,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
 - Keep the institution belt above one navigation row for the six findings,
-  Trajectories, Setup and Resources, with Back to top on the left. Smaller screens group
-  the six finding links under Findings. The original TLDR leads into the six findings, then the expanded
-  trajectory viewer, the setup, threat models, domains and detection. Use the
+  Trajectories and Resources, with Back to top on the left. Smaller screens group
+  the six finding links under Findings. The original TLDR leads into the six findings,
+  the expanded trajectory viewer, the four domain examples and detection. Use the
   header for section navigation. EuroSafeAI leads the rolling collaborators after
   the three fixed Oxford institutions. The theme icon sits in the top right.
 - Play the bee title animation once per load, then hold the final title. Theme
@@ -185,8 +185,8 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   case-specific observations, never population rates or a model leaderboard.
   Prior cases remain available in the selector, including the Haiku finance
   replication and the activity-record tampering example.
-- `visual-system.css` unifies the eight setup/finding illustrations, mechanism
-  thumbnails, measurement icons and trajectory stage. Illustrations and the replay
+- `visual-system.css` unifies the finding illustrations, measurement icons
+  and trajectory stage. Illustrations and the replay
   share the page’s light or dark surface, fine lines and directional signals.
   Changing theme repaints the current frame. Keep the existing textured robot
   heads and natural expressions.
@@ -194,7 +194,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   CSS defines both palettes and the canvas reads the active colors.
   Illustration playback follows existing routes, highlights participants and
   dims uninvolved agents. Each finding runs once on entry and settles into its
-  complete still. Setup illustrations also offer playback controls. Both suspend
+  complete still. Animations suspend
   offscreen or in a hidden tab and stay static with reduced motion.
   These illustrations never create messages or alter recorded data.
 - On phones, use 44px touch targets, readable form controls and wrapped records.
@@ -222,13 +222,14 @@ Individual findings keep the illustration, evidence disclosure and trace link to
 ## Project page structure and visual language
 
 The opening introduces an initiative to build the foundation for swarm evaluation,
-then offers direct routes to trajectories, setup and resources. Each study has a
-matched compact setup and native SVG diagram. Agents start in separate
+then offers direct routes to findings, trajectories and resources. The standalone
+Setup and Threat models sections are temporarily off the page. Their former
+links open the trajectory viewer and preserve the selected case. Agents start in separate
 workstations without a peer roster. Business notes can carry a lookup clue,
 a method or a process assumption. The current reporting task and available
 services persist throughout each rollout.
 
-The six independent finding banners, three threat models, four task domains,
+The six independent finding banners, four task domains,
 measurement protocol, review downloads, website source and contact form
 make up the page. Contact sends the required email and message to the published
 SwarmHarm contact form. Google Forms confirms the submission and stores the reply.

@@ -105,7 +105,6 @@ body.nav-on-right.nav-drawer-open > footer { margin:0; }
 .site-header nav a[href="#finding-2-3"] { --nav-selected:#7550a3; --nav-selected-dark:#c9a8f0; }
 .site-header nav a[href="#finding-2-1"] { --nav-selected:#b11d32; --nav-selected-dark:#ff8998; }
 .site-header nav a[href="#finding-2-2"] { --nav-selected:#a65c00; --nav-selected-dark:#efbd72; }
-.site-header nav a[href="#sample-steps"] { --nav-selected:#536376; --nav-selected-dark:#b4c5dc; }
 .site-header nav a[href="#trajectory"] { --nav-selected:#087781; --nav-selected-dark:#83d4db; }
 .site-header nav a[href="#resources"] { --nav-selected:#49684e; --nav-selected-dark:#b2d6ad; }
 

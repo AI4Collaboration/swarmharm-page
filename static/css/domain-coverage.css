@@ -1,5 +1,5 @@
 /* Task domains are separate from the three finding rows. */
-.domain-coverage { margin:0 0 36px; }
+.domain-coverage { margin:32px 0 36px; }
 .domain-coverage-links { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
 .domain-coverage-links a { display:grid; grid-template-columns:36px minmax(0,1fr) auto; align-items:center; gap:10px; padding:16px; border:1px solid var(--line); border-radius:10px; color:var(--text); background:var(--bg); font-size:15px; text-decoration:none; }
 .domain-coverage-links a:hover { background:var(--surface); border-color:var(--muted); }

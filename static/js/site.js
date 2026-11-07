@@ -70,6 +70,11 @@
     }, 100);
   }, {passive:true});
 
+  const formerReplayAnchors = [
+    'sample', 'sample-title', 'sample-result', 'sample-steps', 'incident-goal-drift',
+    'setup', 'p1-summary-title', 'p2-summary-title', 'threat-models', 'threat-models-title'
+  ];
+
   function revealTarget(hash, scroll = false) {
     if (!hash || hash === '#') return;
     let id;
@@ -78,7 +83,7 @@
     const original = id;
     if (id === 'stay-updated' || id === 'updates-title') id = 'contact';
     if (["research", "rq1", "rq2", "rq3"].includes(id)) id = "tldr";
-    if (id === 'sample' || id === 'sample-title' || id === 'sample-result' || id === 'incident-goal-drift' || id.startsWith('case-')) id = 'sample-steps';
+    if (formerReplayAnchors.includes(id) || id.startsWith('setup-') || id.startsWith('case-')) id = 'trajectory';
     const target = document.getElementById(id);
     if (!target) return;
     if (target instanceof HTMLDetailsElement) target.open = true;
@@ -87,7 +92,10 @@
       if (parent instanceof HTMLDetailsElement) parent.open = true;
       parent = parent.parentElement;
     }
-    if (id !== original) history.replaceState(null, '', `#${id}`);
+    if (id !== original) {
+      history.replaceState(null, '', `#${id}`);
+      selectSection(`#${id}`);
+    }
     // Direct fragment navigation may happen before a closed disclosure opens.
     if (scroll) requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
   }
