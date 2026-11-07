@@ -84,7 +84,6 @@
 .diagram-transport .diagram-replay:hover { color:var(--scene-accent); }
 .diagram-transport .diagram-replay:focus-visible { outline:2px solid var(--scene-accent); outline-offset:-3px; }
 .finding-visual:has(.diagram-replay) figcaption { padding-right:0; }
-.finding-copy .finding-visual figcaption { margin-top:14px; }
 .is-playing [data-diagram-step] { animation:none; }
 .is-playing[data-finding-diagram="f13"]:not([data-diagram-phase="3"]) .diagram-check { opacity:.12; }
 .is-playing[data-finding-diagram="f13"][data-diagram-phase="3"] .diagram-check { filter:drop-shadow(0 0 4px color-mix(in srgb,var(--agent-b) 50%,transparent)); }

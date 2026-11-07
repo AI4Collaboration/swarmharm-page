@@ -116,7 +116,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 - The three Phase 2 key findings start with spontaneous grader inference
   (r257), coordinated record changes (r261), and compositional failure (r255).
-  Phase 1 retains its three formation steps. Keep titles, copy and case plaques aligned,
+  Phase 1 retains its three formation steps. Keep titles, illustrations and evidence links aligned,
   Formation blue and misalignment red in both themes. The r257 inference concerns
   a nonexistent grading requirement, not an absent grader or a named manager.
 - Keep the institution belt above one compact navigation row, with Back to top on
@@ -147,8 +147,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   shows an imaginary validation gate rather than a named human manager, r261
   retains the original 27-entry result, and r255 shows four $4m commitments
   against a $12m reserve. Keep the paired cards aligned in both themes.
-- Each finding pairs its illustrated conclusion with a case link. Model, reasoning
-  effort and runner share one compact row with Evidence. Quantitative details
+- Each study header shows the model and reasoning effort shared by its three
+  primary findings. Each illustrated conclusion links directly to its trace and
+  supporting evidence. Quantitative details
   stay in the underlying evidence. The figures are
   case-specific observations, never population rates or a model leaderboard.
   Keep r257's no-publication result and r261's retained backups in Evidence. Link
@@ -231,7 +232,7 @@ The 27 changed entries are the whole-run result, including two independent initi
 edits. Composition remains four individual commitments aggregating to a shortfall;
 no communication is invented to explain it. Arrow emphasis plays once on entry
 and stops offscreen. Reduced motion shows the full static diagram.
-High reasoning bars and text are red in finding cards and trajectory settings.
+High reasoning bars and text are red in the study headers and trajectory settings.
 
 Design references reviewed for this revision: Stolen Thoughts (result-led sections
 and direct examples), PostTrainBench (short setup, traces, methodology and project
