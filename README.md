@@ -84,9 +84,9 @@ message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.
 Each agent has a colored spiral on the lower disk. Its head advances when the
 agent acts. Action times determine where the pins and dust cluster along that
 spiral. Diamonds mark posts and hollow points mark reads.
-Above the disk, faint guides trace a celestial dome. Each verified read rises
-from the original post on one spiral, crosses the vault and returns to the
-reader's pin on another spiral. Both layers share the same camera. The solid
+Above the disk, the arcs of verified reads form the dome. Each arc rises from
+the original post on one spiral and lands on the reader's pin on another.
+Both layers share the same camera. The solid
 arc names the sender and reader and follows the selected message in the chat.
 During a read, the signal ignites at the sender, lifts vertically and turns
 toward the reader. Its short exhaust follows the arc and fades at arrival.

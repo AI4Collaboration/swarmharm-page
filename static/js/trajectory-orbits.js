@@ -40,18 +40,6 @@
     return [radius*Math.cos(bearing),radius*Math.sin(bearing),SKY_HEIGHT*Math.sin(altitude)];
   }
 
-  // The neutral guides describe the vault. Directional arcs are added only for actual reads.
-  const skyGuides = [1.09,.80,1.24,.91].map((inclination,index) => {
-    const bearing = -.19 + index*Math.PI/2 + .14*Math.sin(2.1*index);
-    const sweep = index%2 ? -1 : 1;
-    const skew = .095*Math.sin(index*2+.3);
-    return Array.from({length:77},(_,i) => {
-      const t=i/76;
-      return skyPoint(bearing+sweep*((t-.5)*4.65+.18*Math.sin(TAU*t)),
-        inclination*Math.sin(Math.PI*(t+skew*Math.sin(Math.PI*t))));
-    });
-  });
-
   function orbitPoint(track, progress) {
     const radius = lerp(26 + 3*track.index, track.extent, progress);
     const r = radius / SKY_RADIUS;
@@ -59,12 +47,8 @@
     return [radius*Math.cos(angle),radius*Math.sin(angle),0];
   }
 
-  const horizon = Array.from({length:97},(_,i)=>skyPoint(TAU*i/96,0));
   const shellSamples = Array.from({length:13},(_,row)=>
     Array.from({length:64},(_,i)=>skyPoint(TAU*i/64,row*Math.PI/24))).flat();
-  const dust = Array.from({length:250},(_,i)=>({
-    point:skyPoint(TAU*hash(i,70),Math.asin(hash(i,71))),radius:.30+.58*hash(i,72),alpha:.14+.31*hash(i,73)
-  }));
 
   function projector(matrix) {
     const {m11,m12,m14,m21,m22,m24,m31,m32,m34,m41,m42,m44} = matrix;
@@ -76,7 +60,7 @@
     return {project,magnification};
   }
 
-  // The silhouette is the convex outline of the projected upper hemisphere.
+  // The camera uses the bounding silhouette to keep the entire flight volume in view.
   function shellOutline(points) {
     const ordered = points.slice().sort((a,b)=>a.x-b.x || a.y-b.y);
     function half(sequence) {
@@ -127,36 +111,8 @@
     const dy=Math.max(0,bounds.top-Math.min(...ys))+Math.min(0,bounds.bottom-Math.max(...ys));
     if (dx || dy) shell=new DOMMatrix().translate(dx,dy).multiply(shell);
     const world=shell.rotate(0,0,yaw*DEGREES);
-    return {...projector(world),shell:projector(shell).project,outline:outline.map(([x,y])=>[x+dx,y+dy]),
+    return {...projector(world),
       floorTransform:world.translate(-ATLAS_RADIUS,-ATLAS_RADIUS).toString()};
-  }
-
-  function drawSky(ctx,projection,paint) {
-    const outline=projection.outline;
-    const crown=projection.shell([0,0,SKY_HEIGHT]), base=projection.shell([0,0,0]);
-    const air=ctx.createLinearGradient(0,crown[1]-14,0,base[1]+40);
-    air.addColorStop(0,paint.blue+(paint.dark?'1d':'12'));
-    air.addColorStop(.52,paint.blue+(paint.dark?'0d':'08'));
-    air.addColorStop(1,paint.guide+'04');
-    ctx.beginPath();ctx.moveTo(...outline[0]);
-    for (const p of outline.slice(1)) ctx.lineTo(...p);
-    ctx.closePath();ctx.fillStyle=air;ctx.fill();
-    ctx.strokeStyle=paint.guide+(paint.dark?'52':'55');ctx.lineWidth=.8;ctx.stroke();
-    for (const guide of skyGuides) {
-      line(ctx,guide.map(projection.project),paint.guide+(paint.dark?'43':'45'),.78);
-    }
-    line(ctx,horizon.map(projection.shell),paint.guide+(paint.dark?'51':'52'),.85);
-    for (let i=0;i<48;i++) {
-      const [x,y] = horizon[i*2], scale=i%4===0?1.029:1.014;
-      line(ctx,[projection.project([x,y,0]),projection.project([x*scale,y*scale,0])],paint.guide+'54',.7);
-    }
-    ctx.fillStyle=paint.guide;
-    for (const star of dust) {
-      const [x,y]=projection.project(star.point);
-      ctx.globalAlpha=star.alpha;
-      ctx.fillRect(x,y,star.radius,star.radius);
-    }
-    ctx.globalAlpha=1;
   }
   function trackProgress(track, seconds) {
     if (!track.duration) return track.to;
@@ -607,7 +563,6 @@
       const burn=clamp((flight-.05)/.95,0,1);
       const travel=burn*burn*(2-burn);
       const hits=[],labels=[],occupied=[],callouts=[];
-      drawSky(ctx,projection,paint);
       drawSpirals(seconds,paint);
 
       for (const track of tracks) {
