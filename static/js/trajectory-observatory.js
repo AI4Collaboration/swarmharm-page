@@ -43,11 +43,11 @@
     const receiptCount=messages.reduce((n,m)=>n+m.reads.length,0);
     const eventFraction=id=>id===Infinity?1:(eventIndex.get(id)||0)/Math.max(1,events.length-1);
     const connections = moments.filter(moment => moment.message);
-    const homeView = { yaw: -.18, pitch: .38 };
+    const homeView = { yaw: -.30, pitch: .92 };
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
-    let signalSeconds = 0;
+    let signalSeconds = 0, diskRotation = 0;
     let reading=false,focused=false,hovered=null,drag=null;
     let yaw=homeView.yaw, pitch=homeView.pitch, viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
@@ -124,10 +124,10 @@
           </section>
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
-        <section class="obs-spatial" aria-label="Orbital view of recorded actions and communication">
-          <header class="obs-panel-heading"><h5>Agent orbits</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
+        <section class="obs-spatial" aria-label="Shared galactic view of recorded actions and communication">
+          <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each planet follows its agent’s actions in order. Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four planets share one galactic disk. Each colored arm traces an agent’s actions in order. Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -384,7 +384,7 @@
     }
     function drawSpatial() {
       sceneHits = orbitView.draw(
-        { width:viewWidth, height:viewHeight, dpr, yaw, pitch },
+        { width:viewWidth, height:viewHeight, dpr, yaw:yaw+diskRotation, pitch },
         paint, signalSeconds, reduced, hovered?.surface === scene ? hovered.hit : null
       );
     }
@@ -437,6 +437,7 @@
       const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
       if (!reduced && !drag) {
         signalSeconds += dt * speed / 1000;
+        if (!holding()) diskRotation += dt * speed * .000023;
       }
       if (!holding()) {
         elapsed += dt * speed;
@@ -479,7 +480,7 @@
     function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
     [scene,flow].forEach(surface=>{
       on(surface,'pointermove',event=>{
-        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=clamp(drag.yaw+dx*.003,-.62,.62);pitch=clamp(drag.pitch+dy*.003,-.12,.78);hideTooltips();draw();return;}
+        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=drag.yaw+dx*.004;pitch=clamp(drag.pitch+dy*.003,.20,1.12);hideTooltips();draw();return;}
         if(event.pointerType==='mouse')hover(surface,event);
       });
       on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
@@ -500,7 +501,7 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;draw();}
+      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;diskRotation=0;draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));

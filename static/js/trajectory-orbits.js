@@ -1,4 +1,4 @@
-/* Recorded actions form each planet's orbit. Only recorded posts and reads cross orbits. */
+/* Four agents share a galactic disk. Action nodes and message links come from the replay. */
 (() => {
   const TAU = Math.PI * 2;
   const STEPS = 152;
@@ -7,10 +7,10 @@
   const ease = t => t * t * (3 - 2 * t);
   const textures = new Map();
   const bodies = [
-    { phase: 2.6, tilt: -.33, turns: 2.38, size: 1.02, low: [18, 67, 123], high: [154, 206, 230] },
-    { phase: .7, tilt: .23, turns: 2.17, size: 1.10, low: [24, 85, 78], high: [174, 221, 186] },
-    { phase: 4.0, tilt: -.21, turns: 2.27, size: .99, low: [136, 78, 44], high: [249, 215, 150] },
-    { phase: 2.0, tilt: .19, turns: 2.41, size: .92, low: [74, 83, 103], high: [211, 214, 208] }
+    { size: 1.02, low: [18, 67, 123], high: [154, 206, 230] },
+    { size: 1.10, low: [24, 85, 78], high: [174, 221, 186] },
+    { size: .99, low: [136, 78, 44], high: [249, 215, 150] },
+    { size: .92, low: [74, 83, 103], high: [211, 214, 208] }
   ];
 
   function hash(x, y) {
@@ -159,18 +159,116 @@
     ctx.restore();
   }
 
-  // The open ellipse widens and advances in depth in each actor's own action order.
-  function orbitPoint(track, t) {
-    const { material, cx, cy } = track;
-    const angle = material.phase + TAU * material.turns * t;
-    const radius = lerp(39, 78, t);
-    const u = 1.15 * radius * Math.cos(angle), v = .81 * radius * Math.sin(angle);
-    const advance = t - .5;
-    return [
-      cx + u * Math.cos(material.tilt) - v * Math.sin(material.tilt) + 105 * advance,
-      cy + u * Math.sin(material.tilt) + v * Math.cos(material.tilt) + 31 * advance,
-      .47 * radius * Math.sin(angle) + 64 * advance
+  const DISK_RADIUS = 230;
+  const ATLAS_RADIUS = 278;
+  const ARM_ANGLE = TAU / 4;
+  const galaxyMaps = new Map();
+
+  function winding(radius) {
+    const r = radius / DISK_RADIUS;
+    return .32 - 5.45 * r ** .78 + .12 * Math.sin(4 * r);
+  }
+
+  function orbitPoint(track, progress) {
+    const radius = lerp(67, DISK_RADIUS, progress);
+    const angle = track.index * ARM_ANGLE + winding(radius);
+    return [radius * Math.cos(angle), radius * Math.sin(angle), 0];
+  }
+
+  // The dust, the central bulge and the action tracks are drawn in the same disk coordinates.
+  // Background stars are paint only. Hit testing uses the separate map of recorded events.
+  function galaxyMap(dark) {
+    if (galaxyMaps.has(dark)) return galaxyMaps.get(dark);
+    const map = document.createElement('canvas');
+    const size = 640;
+    map.width = map.height = size;
+    const context = map.getContext('2d');
+    const pixels = context.createImageData(size, size);
+    const unit = ATLAS_RADIUS * 2 / size;
+    const cold = dark ? [133,165,211] : [105,134,169];
+    const warm = dark ? [255,226,175] : [164,116,65];
+
+    for (let row = 0; row < size; row++) {
+      const y = (row + .5 - size / 2) * unit;
+      for (let col = 0; col < size; col++) {
+        const x = (col + .5 - size / 2) * unit;
+        const radius = Math.hypot(x,y), r = radius / DISK_RADIUS;
+        if (r > 1.19) continue;
+        const taper = 1 - ease(clamp((r - .81) / .38, 0, 1));
+        const phase = Math.atan2(y,x) - winding(radius);
+        const arm = Math.round(phase / ARM_ANGLE);
+        const width = 5.1 + 8.6 * r;
+        const cloud = terrain(x * .047 + 6, y * .047 + 13);
+        const offset = radius * Math.sin(phase - arm * ARM_ANGLE) + (cloud - .5) * width * 1.55;
+        const band = offset / width;
+        const ridge = Math.exp(-.60 * band * band);
+        const mist = Math.exp(-.08 * band * band);
+        const dustLane = Math.exp(-5.4 * (band + .50) ** 2);
+        const bulge = Math.exp(-Math.hypot(x * .82, y * 1.15) / 18.5);
+        const disk = Math.exp(-r * r * 2.6);
+        const strength = arm % 2 === 0 ? 1 : .78;
+        const clouds = (.18 + .84 * cloud * cloud) * strength * (.82 + .18 * disk);
+        const stars = taper * (.073 * disk + clouds * (.69 * ridge + .25 * mist) * (1 - .68 * dustLane));
+        const core = .98 * bulge;
+        const heat = clamp((core + .08 * disk) / (core + stars + .10), 0, 1);
+        const pixel = 4 * (row * size + col);
+        for (let c = 0; c < 3; c++) {
+          pixels.data[pixel+c] = lerp(cold[c], warm[c], heat);
+        }
+        pixels.data[pixel+3] = 255 * clamp((core + stars) * (dark ? 1 : .67), 0, 1);
+      }
+    }
+    context.putImageData(pixels, 0, 0);
+    context.setTransform(1/unit,0,0,1/unit,size/2,size/2);
+    const inks = dark ? ['#cedcf5','#a6bbd9','#dfcfb2'] : ['#576d88','#71849b','#947c61'];
+    for (let i = 0; i < 9200; i++) {
+      const seed = hash(i,61), spread = hash(i,62) + hash(i,63) + hash(i,64) - 1.5;
+      let radius, angle;
+      if (i < 6800) {
+        radius = 12 + 234 * seed;
+        angle = i % 4 * ARM_ANGLE + winding(radius) + spread * (9 + radius * .076) / radius;
+      } else if (i < 8350) {
+        radius = -Math.log(Math.max(.002,seed)) * 14.5;
+        angle = TAU * hash(i,65);
+      } else {
+        radius = 247 * Math.sqrt(seed);
+        angle = TAU * hash(i,66);
+      }
+      const shine = hash(i,67), starSize = .22 + .66 * shine ** 4;
+      const fade = 1 - ease(clamp((radius - DISK_RADIUS * .83) / 64, 0, 1));
+      context.globalAlpha = fade * (.14 + .70 * shine) * (dark ? 1 : .68);
+      context.fillStyle = inks[radius < 42 ? 2 : i % inks.length];
+      context.fillRect(Math.cos(angle)*radius,Math.sin(angle)*radius,starSize,starSize);
+    }
+    context.globalAlpha = 1;
+    galaxyMaps.set(dark,map);
+    return map;
+  }
+
+  // Orthographic projection keeps every arm and its dust aligned during rotation and drag.
+  function projectDisk({width,height,yaw,pitch}) {
+    const narrow = clamp((470 - width) / 190, 0, 1);
+    const inclination = Math.max(.10, pitch - narrow * .29);
+    const tilt = Math.cos(inclination), lift = Math.sin(inclination);
+    const roll = -.17, cr = Math.cos(roll), sr = Math.sin(roll);
+    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const roof = width < 440 ? 45 : 29, foot = width < 440 ? 15 : 13;
+    const edge = width < 440 ? 18 : 28;
+    const extentX = Math.hypot(cr, sr * tilt), extentY = Math.hypot(sr, cr * tilt);
+    const scale = Math.min(
+      (width - 2 * edge) / (2 * DISK_RADIUS * extentX),
+      (height - roof - foot) / (2 * DISK_RADIUS * extentY)
+    );
+    const matrix = [
+      scale * (cr * cy - sr * sy * tilt), scale * (sr * cy + cr * sy * tilt),
+      scale * (-cr * sy - sr * cy * tilt), scale * (-sr * sy + cr * cy * tilt),
+      width / 2, roof + (height - roof - foot) / 2
     ];
+    const project = ([x,y,z]) => [
+      matrix[4] + matrix[0]*x + matrix[2]*y + scale * sr * lift * z,
+      matrix[5] + matrix[1]*x + matrix[3]*y - scale * cr * lift * z
+    ];
+    return { matrix, scale, project };
   }
   function arc(start, end, lift, bend, exit, entry) {
     const dx = end[0] - start[0], dy = end[1] - start[1];
@@ -206,14 +304,10 @@
   window.createTrajectoryOrbitView = ({ canvas, actors, actorEvents, connections, sendIndex, fontFamily }) => {
     const ctx = canvas.getContext('2d');
     const base = document.createElement('canvas'), ground = base.getContext('2d');
-    const columns = Math.min(actors.length, 2), rows = Math.ceil(actors.length / columns);
     const tracks = actors.map((actor, i) => {
-      const col = i % columns, row = Math.floor(i / columns);
       const identity = ['A','B','C','D'].indexOf(actor.id);
       const index = identity < 0 ? i % bodies.length : identity;
       const track = { id: actor.id, index, material: bodies[index],
-        cx: (col - (columns - 1) / 2) * 280 + (row % 2 ? 10 : -8),
-        cy: (row - (rows - 1) / 2) * 162 + (col ? -12 : 12),
         events: actorEvents.get(actor.id), from: 0, to: 0, last: null };
       track.path = Array.from({ length: STEPS + 1 }, (_, j) => orbitPoint(track, j / STEPS));
       return track;
@@ -231,8 +325,6 @@
         return node;
       });
     }
-    const beacon = [0, 0, 26];
-    const sky = Array.from({ length: 82 }, (_, i) => [hash(i, 41), hash(i, 42), hash(i, 43)]);
     let moment = null, selectedAt = 0, moving = false, previousReads = [], cache = null;
 
     function progress(track, seconds) {
@@ -255,106 +347,74 @@
       }
     }
 
-    function layout(view) {
-      const cosYaw = Math.cos(view.yaw), sinYaw = Math.sin(view.yaw);
-      const cosPitch = Math.cos(view.pitch), sinPitch = Math.sin(view.pitch);
-      function rotate([x,y,z]) {
-        const depth = x * sinYaw + z * cosYaw;
-        const perspective = 1000 / (1000 - .38 * (depth * cosPitch + y * sinPitch));
-        return [(x * cosYaw - z * sinYaw) * perspective, (y * cosPitch - depth * sinPitch) * perspective];
-      }
-      let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity;
-      for (const track of tracks) for (const p of track.path) {
-        const [x,y] = rotate(p);
-        left = Math.min(left,x); right = Math.max(right,x); top = Math.min(top,y); bottom = Math.max(bottom,y);
-      }
-      const edge = view.width < 400 ? 26 : 43;
-      const head = view.width < 520 ? 60 : 47, foot = 32;
-      const sx = (view.width - 2 * edge) / Math.max(1,right-left);
-      const sy = (view.height - head - foot) / Math.max(1,bottom-top);
-      return point => {
-        const [x,y] = rotate(point);
-        return [edge + (x-left)*sx, head + (y-top)*sy];
-      };
-    }
-
-    function transfer(item, project) {
+    function transfer(item) {
       const sender = nodes.get(item.message.event), receiver = nodes.get(item.event);
       if (!sender || !receiver) return null;
-      const posted = arc(sender.point, beacon, 85, -.20, sender.tangent, null).map(project);
-      const read = item.kind === 'read' ? arc(beacon, receiver.point, 81, .22, null, receiver.tangent).map(project) : [];
-      return { posted, read, path: measuredPath(posted.concat(read.slice(1))) };
+      // One stable location per posted message, offset from its source arm and the nucleus.
+      const [x,y] = sender.point;
+      const angle = Math.atan2(y,x) - .31, radius = Math.hypot(x,y) * .57;
+      const post = [radius*Math.cos(angle),radius*Math.sin(angle),22];
+      const posted = arc(sender.point,post,38,-.16,sender.tangent,null);
+      const read = item.kind === 'read' ? arc(post,receiver.point,48,.18,null,receiver.tangent) : [];
+      return { posted, read };
     }
 
-    function prepare(view, paint) {
-      const { width, height, dpr } = view, project = layout(view);
-      base.width = canvas.width; base.height = canvas.height;
-      ground.setTransform(dpr, 0, 0, dpr, 0, 0);
+    function prepare(view, paint, scale) {
+      const side = Math.min(1536, Math.max(640, Math.ceil(2*ATLAS_RADIUS*scale*view.dpr)));
+      if (base.width !== side) base.width = base.height = side;
+      else {
+        ground.setTransform(1,0,0,1,0,0);
+        ground.clearRect(0,0,side,side);
+      }
+      const unit = side/(2*ATLAS_RADIUS), pen = 1/scale;
+      ground.setTransform(unit,0,0,unit,side/2,side/2);
+      ground.drawImage(galaxyMap(paint.dark),-ATLAS_RADIUS,-ATLAS_RADIUS,2*ATLAS_RADIUS,2*ATLAS_RADIUS);
       ground.lineCap = 'round'; ground.lineJoin = 'round';
-      // The sky is a backdrop. Only marks attached to tracks participate in hit testing.
-      for (const [u,v,k] of sky) {
-        const x = 8 + u*(width-16), y = 36 + v*(height-50);
-        const ink = paint.guide + (paint.dark ? '76' : '42');
-        if (k > .93) {
-          line(ground, [[x-2,y],[x+2,y]], ink, .7);
-          line(ground, [[x,y-2],[x,y+2]], ink, .7);
-        } else circle(ground, x, y, .4 + .58*k, ink);
-      }
-      const hits = [];
-      for (const item of previousReads) {
-        const link = transfer(item, project);
-        if (!link) continue;
-        ground.setLineDash([2, 5]);
-        line(ground, link.path.points, paint.guide + (paint.dark ? '30' : '34'), .8);
-        ground.setLineDash([]);
-      }
       for (const track of tracks) {
         const ink = paint.agents.get(track.id) || paint.muted;
         const relevant = track.id === moment.actor || track.id === moment.message?.actor || moment.kind === 'outcome';
-        const path = track.path.map(project), cut = Math.floor(track.to * STEPS);
-        const boundary = project(orbitPoint(track,track.to));
-        const past = path.slice(0,cut+1).concat([boundary]);
-        ground.setLineDash([2,3.6]);
-        line(ground,[boundary,...path.slice(cut+1)],ink+(relevant?'7c':'55'),.9);
+        const cut = Math.floor(track.to * STEPS), boundary = orbitPoint(track,track.to);
+        const past = track.path.slice(0,cut+1).concat([boundary]);
+        ground.setLineDash([2*pen,3.7*pen]);
+        line(ground,[boundary,...track.path.slice(cut+1)],ink+(relevant?'76':'48'),.95*pen);
         ground.setLineDash([]);
-        line(ground, past, ink+(paint.dark?'12':'0b'),4);
-        line(ground, past, ink+(relevant?'ac':'79'),relevant?1.35:1.05);
+        line(ground,past,ink+(paint.dark?'1a':'0c'),3.9*pen);
+        line(ground,past,ink+(relevant?'c3':'84'),(relevant?1.5:1.05)*pen);
         for (const node of track.nodes) {
-          const e = node.event, [x,y] = project(node.point), future = e.id > moment.event;
-          const mark = ink + (future ? '62' : relevant ? 'ee' : 'ab');
+          const e = node.event, [x,y] = node.point;
+          const inkHere = ink + (e.id > moment.event ? '73' : relevant ? 'ff' : 'bf');
           if (e.messages.length) {
-            ground.beginPath(); ground.moveTo(x,y-2.7); ground.lineTo(x+2.7,y);
-            ground.lineTo(x,y+2.7); ground.lineTo(x-2.7,y); ground.closePath();
-            ground.fillStyle=mark; ground.fill();
+            const r = 2.9*pen;
+            ground.beginPath(); ground.moveTo(x,y-r); ground.lineTo(x+r,y);
+            ground.lineTo(x,y+r); ground.lineTo(x-r,y); ground.closePath();
+            ground.fillStyle = inkHere; ground.fill();
           } else if (e.reads.length) {
-            circle(ground,x,y,2.35,paint.paper);
-            circle(ground,x,y,2.35,mark,true);
-          } else {
-            circle(ground,x,y,track.nodes.length>90?1.1:1.55,mark);
-          }
-          hits.push({x,y,event:e.id,r:5.5});
+            ground.beginPath(); ground.arc(x,y,2.65*pen,0,TAU);
+            ground.fillStyle = paint.paper; ground.fill();
+            ground.lineWidth = 1.1*pen; ground.strokeStyle = inkHere; ground.stroke();
+          } else circle(ground,x,y,(track.nodes.length>90?1.4:1.85)*pen,inkHere);
         }
       }
-      const link = moment.message ? transfer(moment, project) : null;
-      if (link) {
-        const sender = paint.agents.get(moment.message.actor);
-        const reader = paint.agents.get(moment.actor);
-        for (const [points,ink] of [[link.posted,sender],[link.read,reader]]) {
-          line(ground,points,ink+'0f',10); line(ground,points,ink+'29',4.3); line(ground,points,ink+'ef',1.65);
-          if (points.length) {
-            const i = Math.floor(points.length*.69), tip = points[i];
-            const angle = Math.atan2(tip[1]-points[i-1][1],tip[0]-points[i-1][0]);
-            ground.save(); ground.translate(...tip); ground.rotate(angle);
-            line(ground,[[-3.4,-2.4],[0,0],[-3.4,2.4]],ink,1.4); ground.restore();
-          }
-        }
-        const [x,y] = link.posted[0];
-        circle(ground,x,y,4,paint.paper); circle(ground,x,y,4,sender,true);
-        hits.push({x,y,event:moment.message.event,moment:sendIndex.get(moment.message.id),r:7});
-      }
-      return { ...view, paint, project, hits, link };
+      return { scale, dpr:view.dpr, paint, link:moment.message ? transfer(moment) : null, history:previousReads.map(transfer).filter(Boolean) };
     }
 
+    function drawTransfer(link, project, paint, hits) {
+      const posted = link.posted.map(project), read = link.read.map(project);
+      const sender = paint.agents.get(moment.message.actor), reader = paint.agents.get(moment.actor);
+      for (const [points,ink] of [[posted,sender],[read,reader]]) {
+        if (!points.length) continue;
+        line(ctx,points,paint.paper,3.4);
+        line(ctx,points,ink+'12',9); line(ctx,points,ink+'46',3.4); line(ctx,points,ink,1.65);
+        const i = Math.floor(points.length*.69), tip = points[i];
+        const angle = Math.atan2(tip[1]-points[i-1][1],tip[0]-points[i-1][0]);
+        ctx.save(); ctx.translate(...tip); ctx.rotate(angle);
+        line(ctx,[[-3.4,-2.6],[0,0],[-3.4,2.6]],ink,1.4); ctx.restore();
+      }
+      const [x,y] = posted[0];
+      circle(ctx,x,y,4,paint.paper); circle(ctx,x,y,4,sender,true);
+      hits.push({x,y,event:moment.message.event,moment:sendIndex.get(moment.message.id),r:7});
+      return { posted, read, path:measuredPath(posted.concat(read.slice(1))) };
+    }
     function comet(link, seconds, paint, reduced) {
       const phase = ((seconds-selectedAt) / 2.95) % 1;
       const travel = reduced ? .65 : clamp(phase/.84,0,1);
@@ -404,17 +464,31 @@
 
     function draw(view, paint, seconds, reduced, hover) {
       if (!ctx || !moment || view.width<=0 || view.height<=0) return [];
-      if (!cache || cache.paint!==paint || cache.width!==view.width || cache.height!==view.height ||
-          cache.dpr!==view.dpr || cache.yaw!==view.yaw || cache.pitch!==view.pitch) {
-        cache=prepare(view,paint);
+      const { width,height,dpr } = view;
+      const { scale,matrix,project } = projectDisk(view);
+      if (!cache || cache.paint !== paint || cache.scale !== scale || cache.dpr !== dpr) {
+        cache = prepare(view,paint,scale);
       }
-      const { width,height,dpr }=view;
-      ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
-      ctx.drawImage(base,0,0,width,height);ctx.lineCap='round';ctx.lineJoin='round';
-      const hits=cache.hits.slice(), occupied=[], labels=[];
-      const planetRadius=clamp(width*.036,11,22);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.clearRect(0,0,width,height);
+      ctx.save(); ctx.transform(...matrix);
+      ctx.drawImage(base,-ATLAS_RADIUS,-ATLAS_RADIUS,2*ATLAS_RADIUS,2*ATLAS_RADIUS);
+      ctx.restore();
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      const hits = [], occupied = [], labels = [];
+      for (const node of nodes.values()) {
+        const [x,y] = project(node.point);
+        hits.push({x,y,event:node.event.id,r:5.5});
+      }
+      ctx.setLineDash([2,5]);
+      for (const route of cache.history) {
+        line(ctx,route.posted.concat(route.read.slice(1)).map(project),paint.guide + (paint.dark?'32':'38'),.8);
+      }
+      ctx.setLineDash([]);
+      const activeLink = cache.link ? drawTransfer(cache.link,project,paint,hits) : null;
+      const planetRadius = clamp(Math.min(width,height)*.043,9.4,18.6);
       for (const track of tracks) {
-        const [x,y]=cache.project(orbitPoint(track,progress(track,seconds)));
+        const [x,y] = project(orbitPoint(track,progress(track,seconds)));
         const active = track.id===moment.actor || track.id===moment.message?.actor;
         const ink=paint.agents.get(track.id)||paint.muted, radius=planetRadius*track.material.size;
         ctx.save();ctx.globalAlpha=active||moment.kind==='outcome'?1:.84;
@@ -427,8 +501,8 @@
           hits.push(hit);
         }
       }
-      if (cache.link) {
-        const link=cache.link, [x,y]=link.posted.at(-1), ink=paint.agents.get(moment.message.actor);
+      if (activeLink) {
+        const link=activeLink, [x,y]=link.posted.at(-1), ink=paint.agents.get(moment.message.actor);
         bloom(ctx,x,y,16,ink,'4d');
         circle(ctx,x,y,8,paint.paper);circle(ctx,x,y,8,ink+'b8',true);
         ctx.strokeStyle=ink;ctx.lineWidth=1.15;ctx.strokeRect(x-4.6,y-3.1,9.2,6.2);

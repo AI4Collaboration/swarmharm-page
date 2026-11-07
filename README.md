@@ -73,10 +73,11 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The replay shows each agent as a small planet.
-`static/js/trajectory-orbits.js` places every recorded tool action on its owner's
-spiral, ordered by that agent's action sequence. At each replay position, the planet
-advances to its latest action. A selected message travels from the recorded post
+The four agents share one inclined spiral galaxy. Each planet advances along a
+colored arm around the same nucleus. `static/js/trajectory-orbits.js` uses the same
+disk coordinates for the stars, action marks, planets and communication routes.
+Only the recorded actions and messages are selectable. The disk turns during replay
+and holds its orientation while a record is inspected. A selected message travels from the recorded post
 to the discussion or shared notes, then to the selected verified read. The original
 send stays anchored to its action even after the sending planet moves on. The full
 timeline underneath orders all actors' actions together. Separate Action and Message
