@@ -255,3 +255,8 @@
  .obs-transport .obs-outcome-button { width:100%; min-height:44px; }
 }
 @media(prefers-reduced-motion:reduce) { .trajectory-observatory * { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+.case-picker [data-case-loading] { margin-inline-start:.4em; color:var(--muted); font-weight:400; }
+@media (prefers-reduced-motion:no-preference) {
+  .obs-chat-message { transition:background-color .24s ease, border-left-color .24s ease, box-shadow .24s ease, opacity .24s ease; }
+  .obs-chat-readers button,.obs-agent-strip > div { transition:background-color .2s ease, border-color .2s ease, color .2s ease; }
+}

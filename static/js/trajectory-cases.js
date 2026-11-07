@@ -5,7 +5,8 @@
   const review=root.querySelector('[data-case-review]'),full=root.querySelector('[data-case-full]');
   const details=root.querySelector('[data-case-details]');
   const cache=new Map();let version=0,dispose=null,request=null;
-  let renderedSearch;
+  const loading=root.querySelector('[data-case-loading]');
+  let renderedSearch,mountedKey;
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const models={
     'gpt-6.1-sol':{name:'Sol 6.1',logo:'openai'},
@@ -45,13 +46,7 @@
     cases.filter(c=>!c.replication&&!c.archived&&(c.earlier?'Earlier outcomes':c.mode)===mode).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain}`;group.append(option);});
     select.append(group);
   }
-  async function show(id, requestedEvent){
-    const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
-    select.querySelector('[data-archived-option]')?.remove();
-    if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
-    select.value=item.selectionKey||item.key;
-    const current=++version;request?.abort();dispose?.();dispose=null;full.replaceChildren();
-    root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
+  function renderSummary(item) {
     root.dataset.caseMode=item.full?'full':'review';full.hidden=!item.full;review.hidden=item.full;
     intro.innerHTML=`<div class="case-setup">${item.variants?'':`<p class="case-meta">${modelLabel(item.model)}</p>`}<p class="case-context">${escape(item.context)}</p>${item.settings?settingsMarkup(item):''}</div>`;
     details.innerHTML=item.composition?'':outcomeMarkup(item);
@@ -65,6 +60,14 @@
     if(!item.full){
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
+  }
+  async function show(id, requestedEvent){
+    const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
+    select.querySelector('[data-archived-option]')?.remove();
+    if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
+    select.value=item.selectionKey||item.key;
+    const current=++version;
+    request?.abort();
     // A shareable case selection, without scrolling or replaying the title.
     const focusEvent = Number(requestedEvent);
     const url=new URL(location.href);url.searchParams.set('case',item.id);url.searchParams.set('phase',String(item.phase));
@@ -72,24 +75,51 @@
     else url.searchParams.delete('event');
     history.replaceState(null,'',url);
     renderedSearch = url.search;
-    if(!item.full){root.removeAttribute('aria-busy');return;}
-    root.setAttribute('aria-busy','true');full.innerHTML='<p class="record-loading" role="status">Loading recorded events…</p>';
+    if (dispose && mountedKey===item.key) {
+      full.inert=false; loading.textContent=''; root.removeAttribute('aria-busy');
+      root.dispatchEvent(new CustomEvent('trajectory-seek',{detail:focusEvent}));
+      return;
+    }
+    const hadViewer=Boolean(dispose);
+    root.dispatchEvent(new CustomEvent('trajectory-case-change',{detail:item.id}));
+    const replace = () => {
+      dispose?.(); dispose=null; mountedKey=null; full.inert=false;
+      full.replaceChildren(); renderSummary(item);
+    };
+    if (!item.full) {
+      replace(); loading.textContent=''; root.removeAttribute('aria-busy'); return;
+    }
+    root.setAttribute('aria-busy','true');
+    if (dispose) full.inert=true;
+    else if (!full.hasChildNodes() && review.hidden) {
+      full.innerHTML='<p class="record-loading" role="status">Loading recorded events…</p>';
+    }
     try {
       let data=cache.get(item.key);
-      if(!data){
-        request=new AbortController();const response=await fetch(item.trajectory,{signal:request.signal});
-        if(!response.ok)throw new Error('Could not load recorded events');
+      if (!data) {
+        loading.textContent='Loading…';
+        request=new AbortController();
+        const response=await fetch(item.trajectory,{signal:request.signal});
+        if (!response.ok) throw new Error('Could not load recorded events');
         data=await response.json();
-        if(data.id!==item.id||!Array.isArray(data.events)||!Array.isArray(data.messages)||!data.turns)throw new Error('Invalid trajectory');
+        if (data.id!==item.id||!Array.isArray(data.events)||!Array.isArray(data.messages)||!data.turns) throw new Error('Invalid trajectory');
         cache.set(item.key,data);
       }
-      if(current!==version)return;
+      if (current!==version) return;
+      replace();
       dispose=window.mountRecordedTimeline(full,data,{...item,focusEvent});
-    }catch(error){
-      if(current!==version||error.name==='AbortError')return;
+      mountedKey=item.key;
+      if (hadViewer && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        full.querySelector('.obs-workbench')?.animate([{opacity:.72},{opacity:1}],{duration:220,easing:'ease-out'});
+      }
+    } catch (error) {
+      if (current!==version||error.name==='AbortError') return;
+      replace();
       full.innerHTML='<p class="record-loading" role="status">The trajectory could not be loaded.</p><button type="button" class="record-retry">Try again</button>';
       full.querySelector('button').addEventListener('click',()=>show(item.key,requestedEvent),{once:true});
-    }finally{if(current===version)root.removeAttribute('aria-busy');}
+    } finally {
+      if (current===version) { root.removeAttribute('aria-busy'); loading.textContent=''; }
+    }
   }
   select.addEventListener('change',()=>show(select.value));
   intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
@@ -115,7 +145,7 @@
   const initialHash = location.hash;
   const initialTarget = document.getElementById(initialHash.slice(1));
   const firstRender = showLocation();
-  // The asynchronous replay adds height above links to Setup, Resources and Contact.
+  // Loading the initial replay adds height above the lower sections.
   if (initialTarget && !root.contains(initialTarget) &&
       (root.compareDocumentPosition(initialTarget) & Node.DOCUMENT_POSITION_FOLLOWING)) {
     const landing = new AbortController();

@@ -14,7 +14,6 @@
     const controller = new AbortController();
     const on = (el,type,fn,options={}) => el.addEventListener(type,fn,{...options,signal:controller.signal});
     const actors=data.actors, events=[...data.events].sort((a,b)=>a.id-b.id);
-    const messages=[...data.messages].sort((a,b)=>a.event-b.event);
     const names=new Map(actors.map(a=>[a.id,'Agent '+a.id]));
     const contexts=new Map(actors.map(a=>{
       const account=events.some(e=>e.actor===a.id && e.result?.account===a.name);
@@ -23,6 +22,10 @@
     const actorIndex=new Map(actors.map((a,i)=>[a.id,i]));
     const eventIndex=new Map(events.map((e,i)=>[e.id,i]));
     const eventById=new Map(events.map(e=>[e.id,e]));
+    const messages=data.messages.filter(message=>{
+      const post=eventById.get(message.event);
+      return post && actorIndex.has(message.actor) && post.actor===message.actor && post.messages?.includes(message.id);
+    }).sort((a,b)=>a.event-b.event);
     const messageById=new Map(messages.map(m=>[m.id,m]));
     const messageNumberById=new Map(messages.map((m,i)=>[m.id,i+1]));
     const noMessages=!messages.length;
@@ -32,6 +35,9 @@
     messages.forEach((message,index)=>{
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
       for (const read of [...message.reads, ...(message.repeatReads || [])]) {
+        const received = eventById.get(read.event);
+        if (!received || read.actor === message.actor || read.event <= message.event || !actorIndex.has(read.actor) ||
+            received.actor !== read.actor || !received.reads?.includes(message.id)) continue;
         moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index,
           firstRead:message.reads.includes(read)});
       }
@@ -47,7 +53,6 @@
     moments.forEach((m,i)=>{m.order=i;});
     const sendIndex=new Map(moments.filter(m=>m.kind==='send').map(m=>[m.message.id,m.order]));
     moments.push({kind:'outcome',event:Infinity,time:events.at(-1)?.time||'',order:moments.length});
-    const receiptCount=moments.filter(m=>m.kind==='read').length;
     const eventTimes = new Map();
     let day = 0, lastTime = 0;
     for (const event of events) {
@@ -61,8 +66,8 @@
     const duration = lastTime - startTime;
     const eventFraction = id => id === Infinity ? 1 : duration ? (eventTimes.get(id)-startTime)/duration :
       (eventIndex.get(id)||0)/Math.max(1,events.length-1);
-    const connections = moments.filter(moment => moment.message);
-    const reads = connections.filter(step => step.kind === 'read' && step.message.actor !== step.actor);
+    const reads = moments.filter(step => step.kind === 'read');
+    const receiptCount = reads.length;
     const firstReads = reads.filter(step => step.firstRead).reverse();
 
     // Keep a small history of distinct routes, with the selected message's other readers first.
@@ -91,6 +96,7 @@
 
     let current=0,playing=false,started=false,visible=false,stageVisible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
+    let settlePaused=false, cameraReset=null, resumeAfterLoad=false;
     let signalSeconds = 0;
     let readingUntil=0,hovered=null,drag=null,transcriptScroll=null;
     let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
@@ -100,7 +106,7 @@
     const active=()=>moments[current];
     const holding=()=>readingUntil>0 || !!drag;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
-    const running=()=>isVisible() && (playing || orbitView.focusing);
+    const running=()=>isVisible() && (playing || cameraReset || (settlePaused && orbitView.transitioning));
 
     for (const moment of moments) {
       if (moment.message) {
@@ -126,9 +132,8 @@
 
     function chatMessage(message) {
       const number=messageNumberById.get(message.id),parent=replyParent(message);
-      const receipts=message.reads.map(read=>{
-        const step=connections.find(item=>item.kind==='read' && item.message===message && item.event===read.event);
-        return `<button type="button" data-obs-receipt="${step.order}" style="--reader:${actorStyle(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
+      const receipts=reads.filter(read=>read.message===message && read.firstRead).map(read=>{
+        return `<button type="button" data-obs-receipt="${read.order}" style="--reader:${actorStyle(read.actor)}" aria-label="${esc(names.get(read.actor))} reads message ${number} at turn ${read.turn}">${esc(names.get(read.actor))}</button>`;
       }).join('');
       return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${actorStyle(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
         <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,'message')||`static/images/fieldguide/finding-agents.svg?v=8#${message.actor.toLowerCase()}-speaking`)}" width="210" height="150" alt=""></span>
@@ -389,7 +394,7 @@
       }
     }
 
-    function select(index, animatePaths = false) {
+    function select(index) {
       current = clamp(index, 0, moments.length - 1);
       elapsed = 0;
       transcriptScroll = null;
@@ -399,11 +404,12 @@
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
-      const inMotion = playing && !reduced;
+      const animateView=isVisible() && !reduced;
+      settlePaused=animateView && !playing;
       orbitView.select(m, signalSeconds, history, {
-        animate: animatePaths && inMotion, easeFocus: isVisible() && !reduced, launch: inMotion
+        animate: animateView, easeFocus: animateView, launch: !reduced && (playing || !started)
       });
-      renderInspector(m, animatePaths && playing && visible);
+      renderInspector(m, animateView);
       showExchange(m, history);
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
@@ -423,16 +429,18 @@
       }));
       updateControls();draw();ensureFrame();
     }
-    function stop() {
+    function stop(settleSelection = true) {
       playing = false;
+      cameraReset=null;
       readingUntil = 0;
       documentPanel.scrollTo({top:documentPanel.scrollTop,behavior:'instant'});
       orbitView.holdFocus();
+      settlePaused=settleSelection && !reduced && orbitView.transitioning;
       lastFrame = 0;
       cancelAnimationFrame(frame);
       frame = 0;
       updateControls();
-      draw();
+      draw(); ensureFrame();
     }
     function seek(index) {
       if (!started) playing = !reduced;
@@ -442,6 +450,17 @@
       hideTooltips();
       select(index);
     }
+    on(viewer,'trajectory-case-change',()=>{
+      resumeAfterLoad=resumeAfterLoad || playing;
+      stop(false);
+    });
+    on(viewer,'trajectory-seek',event=>{
+      if (resumeAfterLoad && !reduced) playing=true;
+      resumeAfterLoad=false;
+      const index=eventMoment.get(Number(event.detail)) ?? reads[0]?.order ?? 0;
+      if (index!==current) seek(index);
+      else { orbitView.resumeFocus(!reduced); updateControls(); ensureFrame(); }
+    });
     function togglePlay() {
       started = true;
       if (playing) { stop(); return; }
@@ -462,7 +481,8 @@
     function inspectMessage(id) {
       const read = reads.findLast(step => step.message.id === id && step.order <= current)
         || reads.find(step => step.message.id === id);
-      seek(read?.order ?? sendIndex.get(id));
+      const index=read?.order ?? sendIndex.get(id);
+      if (index!==current) seek(index);
     }
     function moveMessage(direction) {
       if (noMessages) { seek(current + direction); return; }
@@ -581,12 +601,20 @@
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?clamp(now-lastFrame,0,80):0;lastFrame=now;
       if (readingUntil && now>=readingUntil) { readingUntil=0; updateControls(); }
-      const refocused = !reduced && !drag && orbitView.advanceFocus(dt);
+      const transitioning = !reduced && !drag && orbitView.advance(dt);
+      const resetting=!!cameraReset;
+      if (cameraReset) {
+        cameraReset.elapsed=Math.min(cameraReset.duration,cameraReset.elapsed+dt);
+        const t=cameraReset.elapsed/cameraReset.duration, ease=t*t*(3-2*t);
+        camera.yaw=cameraReset.yaw+cameraReset.turn*ease;
+        camera.pitch=cameraReset.pitch+(homeView.pitch-cameraReset.pitch)*ease;
+        if (t===1) cameraReset=null;
+      }
       const advancing = playing && !holding();
       if (advancing) {
         if (!reduced) {
           signalSeconds += dt * speed / 1000;
-          camera.yaw += dt * clockwiseRate;
+          if (!resetting) camera.yaw += dt * clockwiseRate;
         }
         elapsed += dt * speed;
         if (!reduced && transcriptScroll?.order===current) {
@@ -596,15 +624,19 @@
         }
         if (elapsed >= active().duration) {
           if (current === moments.length - 1) { stop(); return; }
-          select(current + 1, true);
+          select(current + 1);
           return;
         }
       }
-      if (stageVisible && (refocused || (advancing && !reduced)) && ctx) drawSpatial();
-      if (!playing && !orbitView.focusing) lastFrame=0;
+      if (stageVisible && (transitioning || resetting || (advancing && !reduced)) && ctx) drawSpatial();
+      if (!running()) lastFrame=0;
       ensureFrame();
     }
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
+    function redrawHover(surface) {
+      if (surface===flow) drawFlow();
+      else if (!playing || reduced || holding()) drawSpatial();
+    }
     function nearest(surface, x, y) {
       let best = null, distance = Infinity, bestPriority = -1;
       for (const hit of surface === scene ? sceneHits : flowHits) {
@@ -624,7 +656,7 @@
     }
     function hover(surface,event){
       const box=surface.getBoundingClientRect(),x=event.clientX-box.left,y=event.clientY-box.top,hit=nearest(surface,x,y),tip=tooltips.get(surface);
-      if(!hit){hovered=null;tip.hidden=true;updateControls();draw();return;}
+      if(!hit){hovered=null;tip.hidden=true;redrawHover(surface);return;}
       hovered={surface,hit};const e=eventById.get(hit.event);
       const moment = moments[hit.moment ?? eventMoment.get(hit.event)];
       const message = messageById.get(hit.message) || moment?.message || messageById.get(e.messages[0]);
@@ -633,7 +665,7 @@
       if (moment?.kind === 'read') label = 'Select recorded read';
       if (moment?.kind === 'action') label = 'Select action';
       tip.innerHTML=`<strong style="color:${actorStyle(e.actor)}">${esc(names.get(e.actor))}<time>${esc(e.time)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
-      tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';updateControls();draw();
+      tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';redrawHover(surface);
     }
     function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
     [scene,flow].forEach(surface=>{
@@ -649,11 +681,12 @@
         }
         if(event.pointerType==='mouse')hover(surface,event);
       });
-      on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
+      on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();redrawHover(surface);});
       on(surface,'keydown',event=>{const next={ArrowLeft:current-1,ArrowRight:current+1,Home:0,End:moments.length-1}[event.key];if(next!==undefined){event.preventDefault();seek(next);}else if(event.key===' '){event.preventDefault();togglePlay();}});
     });
     on(scene,'pointerdown',event=>{
       if (event.button!==0 || drag) return;
+      cameraReset=null;
       hovered=null; hideTooltips();
       orbitView.holdFocus();
       drag={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:camera.yaw,pitch:camera.pitch,moved:false};
@@ -686,7 +719,13 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){Object.assign(camera,homeView);orbitView.resetFocus();draw();}
+      else if(button.hasAttribute('data-reset')) {
+        const turn=Math.atan2(Math.sin(homeView.yaw-camera.yaw),Math.cos(homeView.yaw-camera.yaw));
+        if (reduced) Object.assign(camera,homeView);
+        else cameraReset={yaw:camera.yaw,pitch:camera.pitch,turn,elapsed:0,duration:420+Math.abs(turn)*260};
+        settlePaused=!playing && !reduced;
+        orbitView.resetFocus(!reduced); draw(); ensureFrame();
+      }
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
@@ -706,7 +745,6 @@
       if (!isVisible() || started || reduced) return;
       playing=true; started=true;
       const m=active();
-      orbitView.select(m,signalSeconds,earlierReadsAt(m),{animate:true,launch:true});
       if(m.message)scrollToMessage(m.message,false);
     }
     on(document,'visibilitychange',()=>{lastFrame=0;startIfVisible();updateControls();ensureFrame();});
@@ -736,11 +774,13 @@
         if (entry.isIntersecting && entry.intersectionRatio>=.15) visibleSurfaces.add(entry.target);
         else visibleSurfaces.delete(entry.target);
       }
+      const wasVisible=visible;
       visible=visibleSurfaces.size>0;
       stageVisible=visibleSurfaces.has(stage);
       if (visible) camera.seen=true;
       startIfVisible();
-      lastFrame=0; updateControls(); if(visible)draw(); ensureFrame();
+      if (wasVisible!==visible) lastFrame=0;
+      updateControls(); if(visible)draw(); ensureFrame();
     },{threshold:.15});
     visibilityObserver.observe(stage);
     visibilityObserver.observe(documentPanel);

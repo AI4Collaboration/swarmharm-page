@@ -49,6 +49,9 @@
 
   const shellSamples = Array.from({length:13},(_,row)=>
     Array.from({length:64},(_,i)=>skyPoint(TAU*i/64,row*Math.PI/24))).flat();
+  const stars = Array.from({length:220},(_,i)=>({
+    point:skyPoint(TAU*hash(i,70),Math.asin(hash(i,71))), size:.3+.58*hash(i,72), alpha:.14+.31*hash(i,73)
+  }));
 
   function projector(matrix) {
     const {m11,m12,m14,m21,m22,m24,m31,m32,m34,m41,m42,m44} = matrix;
@@ -111,8 +114,24 @@
     const dy=Math.max(0,bounds.top-Math.min(...ys))+Math.min(0,bounds.bottom-Math.max(...ys));
     if (dx || dy) shell=new DOMMatrix().translate(dx,dy).multiply(shell);
     const world=shell.rotate(0,0,yaw*DEGREES);
-    return {...projector(world),
+    return {...projector(world),outline:outline.map(([x,y])=>[x+dx,y+dy]),
       floorTransform:world.translate(-ATLAS_RADIUS,-ATLAS_RADIUS).toString()};
+  }
+  function drawDome(ctx,projection,paint) {
+    const crown=projection.project([0,0,SKY_HEIGHT]), base=projection.project([0,0,0]);
+    const light=ctx.createLinearGradient(0,crown[1]-14,0,base[1]+40);
+    light.addColorStop(0,paint.blue+(paint.dark?'24':'19'));
+    light.addColorStop(.55,paint.blue+(paint.dark?'10':'0b'));
+    light.addColorStop(1,paint.guide+'04');
+    ctx.beginPath(); ctx.moveTo(...projection.outline[0]);
+    for (let i=1;i<projection.outline.length;i++) ctx.lineTo(...projection.outline[i]);
+    ctx.closePath(); ctx.fillStyle=light; ctx.fill();
+    ctx.fillStyle=paint.guide;
+    for (const star of stars) {
+      const [x,y]=projection.project(star.point);
+      ctx.globalAlpha=star.alpha; ctx.fillRect(x,y,star.size,star.size);
+    }
+    ctx.globalAlpha=1;
   }
   function trackProgress(track, seconds) {
     if (!track.duration) return track.to;
@@ -120,7 +139,7 @@
     return lerp(track.from, track.to, t * t * (3 - 2 * t));
   }
 
-  function label(ctx, item, occupied, {width, height}, paint, fontFamily, gutter) {
+  function label(ctx, item, occupied, {width, height}, paint, fontFamily, gutter, offsets, follow) {
     const {text, at:[x, y], color, current, receipt} = item;
     ctx.font = '600 ' + (receipt || width < 440 ? 10 : 12) + 'px ' + fontFamily;
     const w = ctx.measureText(text).width + 8, h = 18;
@@ -128,17 +147,26 @@
     const choices = x >= width / 2 ? [right, left] : [left, right];
     const gap = current ? 5 : 7;
     const above = [x - w / 2, y - h - gap], below = [x - w / 2, y + gap];
-    if (receipt) choices.unshift(above,below);
+    if (receipt) choices.splice(0,choices.length,[x-w/2,y-h-13]);
     else choices.push(above,below);
+    const previous=offsets.get(text);
     let best, penalty = Infinity;
     for (const [px, py] of choices) {
       const bx = clamp(px, gutter + 3, width - w - 3), by = clamp(py, 29, height - h - 3);
       let score = Math.abs(bx - px) + Math.abs(by - py);
+      if (previous) score+=.30*Math.hypot(bx-x-previous[0],by-y-previous[1]);
       for (const other of occupied) {
         score += Math.max(0, Math.min(bx + w, other.x + other.w) - Math.max(bx, other.x)) *
           Math.max(0, Math.min(by + h, other.y + other.h) - Math.max(by, other.y));
       }
       if (score < penalty) { best = {x:bx, y:by, w, h}; penalty = score; }
+    }
+    if (!receipt) {
+      if (previous) {
+        best.x=clamp(x+lerp(previous[0],best.x-x,follow),gutter+3,width-w-3);
+        best.y=clamp(y+lerp(previous[1],best.y-y,follow),29,height-h-3);
+      }
+      offsets.set(text,[best.x-x,best.y-y]);
     }
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
@@ -275,11 +303,12 @@
     }
     return {at,focus:at(.5),path:Array.from({length:65},(_,i)=>at(i/64))};
   }
-  function drawLaunch(ctx, arc, projection, points, paint, progress, gradient) {
+  function drawLaunch(ctx, arc, projection, points, paint, progress, gradient, opacity) {
     const world = arc.at(progress), head = projection.project(world);
     const index = progress*(points.length-1);
     const flown = points.slice(0,Math.ceil(index));
     flown.push(head);
+    ctx.globalAlpha = opacity;
     line(ctx,flown,gradient,4.6);
     line(ctx,flown,paint.packet,1.8);
     if (progress >= 1) return;
@@ -287,11 +316,11 @@
     const size = clamp(projection.magnification(world),.8,1.16);
     const flame = paint.dark ? '#ffb166' : '#af4e22';
     const sender = paint.agents.get(arc.post.event.actor) || paint.muted;
-    const fade = Math.min(1,(1-progress)/.045);
+    const fade = opacity*Math.min(1,(1-progress)/.045);
     ctx.save();
     if (progress < .12) {
       const ignition = 1-progress/.12;
-      ctx.globalAlpha = ignition;
+      ctx.globalAlpha = ignition*opacity;
       bloom(ctx,...points[0],17*size,flame,'a0');
       ctx.beginPath();
       ctx.ellipse(...points[0],(6+8*(1-ignition))*size,3*size,0,0,TAU);
@@ -335,7 +364,8 @@
     line(ctx,[[-3,0],[3,0]],sender,1.2);
     ctx.restore();
   }
-  function drawRead(ctx, arc, projection, paint, hits, {state, alpha = 1, progress = 0}) {
+  function drawRead(ctx, arc, projection, paint, hits, {history,last,current}, featured, progress) {
+    if (Math.max(history,last,current)<.005) return;
     const {post,reader,receipt} = arc;
     const a = post.screenTip, b = reader.screenTip;
     const points = arc.path.map(projection.project);
@@ -344,43 +374,39 @@
     gradient.addColorStop(0,from); gradient.addColorStop(1,to);
     ctx.beginPath(); ctx.moveTo(...points[0]);
     for (let i=1; i<points.length; i++) ctx.lineTo(...points[i]);
-    const earlierRead = state === 'history';
     for (let i=1; i<points.length-1; i++) {
       const [x,y] = points[i];
-      hits.push({x,y,r:7,event:receipt.event,moment:receipt.order,message:receipt.message.id,earlierRead});
+      hits.push({x,y,r:7,event:receipt.event,moment:receipt.order,message:receipt.message.id,earlierRead:!featured});
     }
-    if (state !== 'current') {
-      ctx.save();
-      if (state === 'history') ctx.setLineDash([4,4]);
-      else {
-        ctx.strokeStyle = paint.paper; ctx.lineWidth = 4; ctx.stroke();
+    ctx.save();
+    if (history>.005) {
+      ctx.setLineDash([4,4]); ctx.globalAlpha=history;
+      ctx.strokeStyle=gradient; ctx.lineWidth=1.15; ctx.stroke(); ctx.setLineDash([]);
+    }
+    if (last>.005) {
+      ctx.globalAlpha=last; ctx.strokeStyle=paint.paper; ctx.lineWidth=4; ctx.stroke();
+      ctx.globalAlpha=last*.86; ctx.strokeStyle=gradient; ctx.lineWidth=2.4; ctx.stroke();
+    }
+    if (current>.005) {
+      if (!paint.dark) {
+        ctx.strokeStyle=paint.paper; ctx.lineWidth=8; ctx.globalAlpha=current*.98; ctx.stroke();
       }
-      ctx.globalAlpha = alpha;
-      ctx.strokeStyle = gradient; ctx.lineWidth = state === 'history' ? 1.15 : 2.4; ctx.stroke();
-      ctx.restore();
-      return;
+      ctx.strokeStyle=gradient;
+      const strokes=paint.dark ? [[12,.09],[7,.23],[3.6,1]] : [[5.8,.32],[3.6,1]];
+      for (const [width,alpha] of strokes) {
+        ctx.globalAlpha=current*alpha; ctx.lineWidth=width; ctx.stroke();
+      }
+      ctx.strokeStyle=paint.packet; ctx.lineWidth=1.3; ctx.stroke();
+      if (progress!=null) drawLaunch(ctx,arc,projection,points,paint,progress,gradient,current);
     }
-
-    if (!paint.dark) {
-      ctx.strokeStyle=paint.paper; ctx.lineWidth=8; ctx.globalAlpha=.98; ctx.stroke();
-    }
-    ctx.strokeStyle = gradient;
-    const strokes = paint.dark ? [[12,.09],[7,.23],[3.6,1]] : [[5.8,.32],[3.6,1]];
-    for (const [width, alpha] of strokes) {
-      ctx.globalAlpha = alpha; ctx.lineWidth = width; ctx.stroke();
-    }
-    ctx.strokeStyle = paint.packet; ctx.lineWidth = 1.3; ctx.stroke();
-    drawLaunch(ctx,arc,projection,points,paint,progress,gradient);
+    ctx.restore();
   }
 
   function drawCallouts(ctx, items, width, height, paint, font) {
     const left = 13, right = width - 11, row = 50;
     const top = (height - items.length*row) / 2 + 7;
     items.forEach((item,i) => {
-      const y = top + i*row, mid = y + 11;
-      ctx.globalAlpha = paint.dark ? .37 : .50;
-      line(ctx,[[right,mid],[right+10,mid],item.at],item.ink,.75);
-      ctx.globalAlpha = 1;
+      const y = top + i*row;
       line(ctx,[[left,y-1],[left,y+23]],item.ink,1.7);
       ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
       ctx.font = '600 11px '+font; ctx.fillStyle = paint.ink;
@@ -448,41 +474,87 @@
       return bestAngle;
     }
 
-    let moment,arc,featured,earlierArcs=[],selectedAt=0,initialTravel=0,camera,framing,projection,projectedFocus;
-    let focus=CENTER,focusFrom=CENTER,focusTo=CENTER,selectedFocus=CENTER,focusProgress=1;
+    let moment,arc,featured,selectedAt=0,initialTravel=0,camera,framing,projection,projectedFocus;
+    let focus=CENTER,focusTo=CENTER,selectedFocus=CENTER,velocity=[0,0,0],focusing=false;
+    let visualSeconds=0,trackUntil=0,routeMix=1,routes=new Map();
+    const off={history:0,last:0,current:0};
+    const labelOffsets=new Map();
+    let lastDraw=0;
+
+    function appearance({from,to}) {
+      if (routeMix===1) return to;
+      const t=routeMix*routeMix*(3-2*routeMix);
+      return {history:lerp(from.history,to.history,t),last:lerp(from.last,to.last,t),current:lerp(from.current,to.current,t)};
+    }
+
+    function selectRoutes(history,animate) {
+      const targets=new Map();
+      if (featured) targets.set(featured,{...off,[arc?'current':'last']:1});
+      for (const read of history) {
+        const link=readArcs.get(read);
+        if (!link || (link.post.track===featured?.post.track && link.reader.track===featured?.reader.track)) continue;
+        targets.set(link,{...off,history:read.message===moment.message ? .44 : targets.size<3 ? .33 : .25});
+        if (targets.size>=6) break;
+      }
+      // Fades belong to their own receipts. Seeking backward drops any future read immediately.
+      for (const [link,style] of routes) {
+        if (!animate || targets.size>=6 || link.receipt.order>moment.order || targets.has(link)) continue;
+        const visible=appearance(style);
+        if (Math.max(visible.history,visible.current,visible.last)>.005) targets.set(link,off);
+      }
+      const next=new Map();
+      let changed=false;
+      for (const [link,to] of targets) {
+        const old=routes.get(link);
+        const from=animate ? (old ? appearance(old) : off) : to;
+        if (from.current!==to.current || from.last!==to.last || from.history!==to.history) changed=true;
+        next.set(link,{from,to});
+      }
+      routes=next;
+      routeMix=changed ? 0 : 1;
+    }
 
     function setFocus(target,animate) {
-      if (animate && focusTo===target) return;
-      focusFrom=focus; focusTo=target; focusProgress=animate?0:1;
-      if (!animate) focus=target;
+      focusTo=target;
+      focusing=animate && focus!==target;
+      if (!focusing) { focus=target; velocity=[0,0,0]; }
     }
-    function advanceFocus(ms) {
-      if (focusProgress===1 || ms<=0) return false;
-      focusProgress=Math.min(1,focusProgress+ms/2400);
-      const t=focusProgress*focusProgress*(3-2*focusProgress);
-      focus=focusProgress===1?focusTo:focusFrom.map((n,i)=>lerp(n,focusTo[i],t));
-      return true;
+    function advance(ms) {
+      const changing=focusing || routeMix<1 || visualSeconds<trackUntil;
+      visualSeconds+=ms/1000;
+      routeMix=Math.min(1,routeMix+ms/340);
+      if (focusing && ms>0) {
+        const dt=ms/1000, rate=5.6, decay=Math.exp(-rate*dt);
+        // A critically damped camera keeps its velocity when a second reader is selected mid-pan.
+        focus=focus.map((value,i)=>{
+          const delta=value-focusTo[i], v=velocity[i], slope=v+rate*delta;
+          velocity[i]=(v-rate*slope*dt)*decay;
+          return focusTo[i]+(delta+slope*dt)*decay;
+        });
+        if (Math.hypot(...focus.map((v,i)=>v-focusTo[i]))<.08 && Math.hypot(...velocity)<.5) setFocus(focusTo,false);
+      }
+      return changing;
     }
 
     function select(next,seconds,history,{animate=false,easeFocus=false,launch=false}={}) {
       moment=next; selectedAt=seconds; initialTravel=launch?0:.50;
+      if (!animate) trackUntil=visualSeconds;
       arc=readArcs.get(next);
       featured=arc || readArcs.get(reads.findLast(read=>read.order<next.order));
       const receipt=featured?.receipt;
       const description=receipt ? (arc?'Current':'Last')+' read from Agent '+receipt.message.actor+' to Agent '+receipt.actor+'. ' : '';
       canvas.setAttribute('aria-label',description+instructions);
-      earlierArcs=history.map(receipt=>readArcs.get(receipt)).filter(link=>link && (
-        link.post.track!==featured?.post.track || link.reader.track!==featured?.reader.track
-      )).slice(0,featured ? 5 : 6);
+      selectRoutes(history,animate);
       selectedFocus=featured?.focus || CENTER;
       setFocus(selectedFocus,easeFocus);
       for (const track of tracks) {
         const last = track.nodes.findLast(node => node.event.id <= next.event);
         if (animate && last === track.last) continue;
-        track.from = trackProgress(track,seconds);
+        track.from = trackProgress(track,visualSeconds);
         track.to = last?.t ?? 0; track.last = last;
-        track.started = seconds;
-        track.duration = animate ? Math.min(.9,next.duration/1000) : 0;
+        track.started = visualSeconds;
+        track.duration = animate ? .52 : 0;
+        if (track.duration) trackUntil=Math.max(trackUntil,visualSeconds+track.duration);
       }
     }
 
@@ -548,6 +620,9 @@
       const {width,height,dpr} = view;
       const {project,magnification} = projection;
       const {gutter} = framing;
+      const now=performance.now(), dt=now-lastDraw;
+      const follow=reduced || !lastDraw || dt>250 ? 1 : 1-Math.exp(-dt/80);
+      lastDraw=now;
       const center = project([0,0,0]);
       const size = clamp(Math.ceil(width*dpr/128)*128,512,1536);
       if (platePaint!==paint || plate.width!==size) {
@@ -563,7 +638,8 @@
       const burn=clamp((flight-.05)/.95,0,1);
       const travel=burn*burn*(2-burn);
       const hits=[],labels=[],occupied=[],callouts=[];
-      drawSpirals(seconds,paint);
+      drawDome(ctx,projection,paint);
+      drawSpirals(visualSeconds,paint);
 
       for (const track of tracks) {
         if (!track.nodes.length) continue;
@@ -579,10 +655,8 @@
         labels.push({text:'Agent '+track.id,at:anchor,color:arc && !involved ? paint.muted : ink});
         occupied.push({x:anchor[0]-4,y:anchor[1]-4,w:8,h:8});
       }
-      for (const [i,earlier] of earlierArcs.entries()) {
-        const related=earlier.receipt.message===moment.message;
-        const alpha=related ? .44 : (i<2 ? .33 : .25);
-        drawRead(ctx,earlier,projection,paint,hits,{state:'history',alpha});
+      for (const [link,style] of routes) {
+        if (link!==featured) drawRead(ctx,link,projection,paint,hits,appearance(style),false,null);
       }
       for (const node of backToFront) {
         const {track,size} = node, ink = paint.agents.get(track.id) || paint.muted;
@@ -609,7 +683,8 @@
       if (featured) {
         const receipt=featured.receipt;
         const pair=receipt.message.actor+' → '+receipt.actor;
-        drawRead(ctx,featured,projection,paint,hits,arc ? {state:'current',progress:travel} : {state:'last',alpha:.86});
+        const style=appearance(routes.get(featured));
+        drawRead(ctx,featured,projection,paint,hits,style,true,arc ? travel : null);
         if (arc && travel<1) {
           const [x,y]=project(arc.at(travel));
           occupied.push({x:x-12,y:y-12,w:24,h:24});
@@ -618,15 +693,15 @@
           const [x,y]=project(featured.path[i]);
           occupied.push({x:x-4,y:y-4,w:8,h:8});
         }
-        labels.unshift({text:(arc?'Now · ':'Last read · ')+pair,at:project(featured.at(.46)),
-          color:arc?paint.paper:paint.muted,current:Boolean(arc),receipt});
+        labels.unshift({text:(arc?'Now · ':'Last read · ')+pair,at:project(featured.focus),
+          color:arc?paint.paper:paint.muted,current:Boolean(arc),receipt,opacity:Math.min(1,style.last+style.current)});
       }
       if (post) {
         const ink = paint.agents.get(post.event.actor);
         bloom(ctx,...post.screenTip,12*post.size,ink,'54');
         circle(ctx,...post.screenTip,6.2*post.size,ink,true);
         hits.push({x:post.screenTip[0],y:post.screenTip[1],r:8,event:post.event.id,moment:sendIndex.get(moment.message.id)});
-        callouts.push({name:'Agent '+post.event.actor,detail:'Shared · '+moment.message.time,ink,at:post.screenTip});
+        callouts.push({name:'Agent '+post.event.actor,detail:'Shared · '+moment.message.time,ink});
       }
       if (selected && (arc || !post)) {
         const ink = paint.agents.get(selected.event.actor);
@@ -638,26 +713,27 @@
           circle(ctx,...selected.screenTip,(6.2+13*arrival)*selected.size,ink,true);
           ctx.globalAlpha=1;
         }
-        callouts.push({name:'Agent '+selected.event.actor,detail:(arc?'Read':'Turn '+selected.event.turn)+' · '+selected.event.time,
-          ink,at:selected.screenTip});
+        callouts.push({name:'Agent '+selected.event.actor,detail:(arc?'Read':'Turn '+selected.event.turn)+' · '+selected.event.time,ink});
       }
       if (gutter) drawCallouts(ctx,callouts,gutter,height,paint,fontFamily);
       for (const item of labels) {
-        const bounds = label(ctx,item,occupied,view,paint,fontFamily,gutter);
+        ctx.globalAlpha=item.opacity ?? 1;
+        const bounds = label(ctx,item,occupied,view,paint,fontFamily,gutter,labelOffsets,follow);
         if (item.receipt) hits.push({bounds,x:item.at[0],y:item.at[1],event:item.receipt.event,
           moment:item.receipt.order,message:item.receipt.message.id});
       }
+      ctx.globalAlpha=1;
       if (hover) circle(ctx,hover.x,hover.y,6.5,paint.ink,true);
       return hits.reverse();
     }
 
 
     return {
-      select,draw,entryYaw,advanceFocus,
-      get focusing() { return focusProgress<1; },
+      select,draw,entryYaw,advance,
+      get transitioning() { return focusing || routeMix<1 || visualSeconds<trackUntil; },
       holdFocus:()=>setFocus(focus,false),
       resumeFocus:animate=>setFocus(selectedFocus,animate),
-      resetFocus:()=>setFocus(CENTER,false)
+      resetFocus:animate=>setFocus(CENTER,animate)
     };
   };
 })();

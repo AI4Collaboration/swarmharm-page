@@ -84,9 +84,10 @@ message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.
 Each agent has a colored spiral on the lower disk. Its head advances when the
 agent acts. Action times determine where the pins and dust cluster along that
 spiral. Diamonds mark posts and hollow points mark reads.
-Above the disk, the arcs of verified reads form the dome. Each arc rises from
-the original post on one spiral and lands on the reader's pin on another.
-Both layers share the same camera. The solid
+The translucent dome is shaded behind the data. Each arc requires a post and
+a later read of that same message by another agent in the recorded events.
+It rises from the author's pin and lands on the reader's pin. Both layers
+share the same camera. The solid
 arc names the sender and reader and follows the selected message in the chat.
 During a read, the signal ignites at the sender, lifts vertically and turns
 toward the reader. Its short exhaust follows the arc and fades at arrival.
@@ -95,12 +96,12 @@ Between reads, a quieter solid arc marks the last verified
 exchange. Selecting it returns to that receipt. Up to six
 sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
 open their original read when selected. Other readers of the current message
-take priority, and a reread uses the same route. Scrubbing rebuilds the routes
-from the reads reached at that point.
+take priority. Selected and historical lines fade on their own recorded paths.
+Scrubbing backward immediately removes any receipt later than the playhead.
 The sky turns clockwise once every 288 seconds of active playback. Opening a
 cited read for the first time frames both endpoints. The camera eases toward
-the next selected read, including when a visitor selects a receipt in a paused
-replay. Reduced motion frames that read immediately. Dragging sets the
+the next selected read, carrying its pan velocity through rapid reader changes.
+The route badge stays above its arc. Reduced motion frames the read immediately. Dragging sets the
 orbit angle. Theme and case changes preserve that angle, and Reset restores
 the default view. Light mode uses a dark signal on a white-edged read arc.
 The four bands below are positioned by recorded
@@ -127,7 +128,8 @@ The full turn grid and action log are available in the evidence disclosures.
 Each card's source arrow opens its own underlying record, so a read action and
 the original message link to different events. Detailed outcomes
 and Settings & evidence follow the replay. The viewer loads one case
-at a time. For example,
+at a time. Case changes hold the previous scene until the next trace is ready.
+Links within the same case reuse the existing viewer. For example,
 `?case=balanced-v2-records-knowledge-sol61&phase=2&event=96#trajectory` opens B's exact
 read of D's released note. A finding's model name, logo and View trace link
 open the same event. Earlier r199/r74/r187 Phase 2 links still open their original
