@@ -30,6 +30,7 @@
 
 
   const SKY_RADIUS = 230, SKY_HEIGHT = 197;
+  const READ_TRAVEL_SECONDS = 3;
   const ATLAS_RADIUS = 278;
   const EYE_DISTANCE = SKY_RADIUS * 4.8;
   const CENTER = [0,0,SKY_HEIGHT*.44];
@@ -103,10 +104,11 @@
     const xs=points.map(p=>p.x), ys=points.map(p=>p.y);
     const left=Math.min(...xs), right=Math.max(...xs), top=Math.min(...ys), bottom=Math.max(...ys);
     const roof=width<440?46:32, foot=14, edge=9;
-    const scale=Math.min((width-gutter-2*edge)/(right-left),(height-roof-foot)/(bottom-top))*.88;
+    const scale=Math.min((width-gutter-2*edge)/(right-left),(height-roof-foot)/(bottom-top))*.96;
     const cx=(width+gutter)/2-scale*(left+right)/2, cy=(height+roof-foot)/2-scale*(top+bottom)/2;
     const screen = new DOMMatrix().translate(cx,cy).scale(scale).multiply(lens);
-    return {tilt,screen,outline:shellOutline(points),scale,gutter};
+    return {tilt,screen,outline:shellOutline(points),scale,gutter,
+      bounds:{left:gutter+edge,right:width-edge,top:roof,bottom:height-foot}};
   }
 
   function projectDome(frame,yaw,focus) {
@@ -118,14 +120,20 @@
     // Turn the lens toward the read without changing the clockwise orbit around the sky.
     const aim=new DOMMatrix().translate(0,0,EYE_DISTANCE).rotate(-elevation*DEGREES,0,0)
       .rotate(0,heading*DEGREES,0).translate(0,0,-EYE_DISTANCE);
-    const shell=frame.screen.multiply(aim).multiply(frame.tilt);
+    let shell=frame.screen.multiply(aim).multiply(frame.tilt);
+    const outline=frame.outline.map(projector(shell).project);
+    const xs=outline.map(p=>p[0]),ys=outline.map(p=>p[1]);
+    const bounds=frame.bounds;
+    const dx=Math.max(0,bounds.left-Math.min(...xs))+Math.min(0,bounds.right-Math.max(...xs));
+    const dy=Math.max(0,bounds.top-Math.min(...ys))+Math.min(0,bounds.bottom-Math.max(...ys));
+    if (dx || dy) shell=new DOMMatrix().translate(dx,dy).multiply(shell);
     const world=shell.rotate(0,0,yaw*DEGREES);
-    return {...projector(world),shell:projector(shell).project,
+    return {...projector(world),shell:projector(shell).project,outline:outline.map(([x,y])=>[x+dx,y+dy]),
       floorTransform:world.translate(-ATLAS_RADIUS,-ATLAS_RADIUS).toString()};
   }
 
-  function drawSky(ctx,frame,projection,paint) {
-    const outline=frame.outline.map(projection.shell);
+  function drawSky(ctx,projection,paint) {
+    const outline=projection.outline;
     const crown=projection.shell([0,0,SKY_HEIGHT]), base=projection.shell([0,0,0]);
     const air=ctx.createLinearGradient(0,crown[1]-14,0,base[1]+40);
     air.addColorStop(0,paint.blue+(paint.dark?'1d':'12'));
@@ -451,7 +459,7 @@
     }
     function advanceFocus(ms) {
       if (focusProgress===1 || ms<=0) return false;
-      focusProgress=Math.min(1,focusProgress+ms/1150);
+      focusProgress=Math.min(1,focusProgress+ms/2400);
       const t=focusProgress*focusProgress*(3-2*focusProgress);
       focus=focusProgress===1?focusTo:focusFrom.map((n,i)=>lerp(n,focusTo[i],t));
       return true;
@@ -470,7 +478,7 @@
         track.from = trackProgress(track,seconds);
         track.to = last?.t ?? 0; track.last = last;
         track.started = seconds;
-        track.duration = animate ? Math.min(.43,next.duration/1000) : 0;
+        track.duration = animate ? Math.min(.9,next.duration/1000) : 0;
       }
     }
 
@@ -546,9 +554,9 @@
       ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,width,height);
       ctx.lineCap='round'; ctx.lineJoin='round';
       const selected=nodes.get(moment.event), post=moment.message && nodes.get(moment.message.event);
-      const travel=reduced ? .60 : clamp(initialTravel+(seconds-selectedAt)/1.5,0,1);
+      const travel=reduced ? .60 : clamp(initialTravel+(seconds-selectedAt)/READ_TRAVEL_SECONDS,0,1);
       const hits=[],labels=[],occupied=[],callouts=[];
-      drawSky(ctx,framing,projection,paint);
+      drawSky(ctx,projection,paint);
       drawSpirals(seconds,paint);
 
       for (const track of tracks) {
@@ -607,7 +615,7 @@
         const ink = paint.agents.get(selected.event.actor);
         bloom(ctx,...selected.screenTip,13*selected.size,ink,'65');
         circle(ctx,...selected.screenTip,6.2*selected.size,ink,true);
-        const arrival = (seconds-selectedAt-(1-initialTravel)*1.5)/.55;
+        const arrival = (seconds-selectedAt-(1-initialTravel)*READ_TRAVEL_SECONDS)/.7;
         if (arc && !reduced && arrival>0 && arrival<1) {
           ctx.globalAlpha=(1-arrival)*.65;
           circle(ctx,...selected.screenTip,(6.2+13*arrival)*selected.size,ink,true);

@@ -75,8 +75,10 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The replay starts at the first recorded action and plays every action in order.
-A finding link with an explicit event opens paused at that cited action or read.
+The replay starts on its own when the sky or transcript is visible. A finding
+link starts at the cited action or read. Other links begin with the first action.
+At normal speed, posts and reads stay on screen for 6 to 12 seconds according to
+message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.1 seconds.
 Each agent has a colored spiral on the lower disk. Its head advances when the
 agent acts. Action times determine where the pins and dust cluster along that
 spiral. Diamonds mark posts and hollow points mark reads.
@@ -89,7 +91,7 @@ sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
 open their original read when selected. Other readers of the current message
 take priority, and a reread uses the same route. Scrubbing rebuilds the routes
 from the reads reached at that point.
-The sky turns clockwise once every 192 seconds of active playback. Opening a
+The sky turns clockwise once every 288 seconds of active playback. Opening a
 cited read for the first time frames both endpoints. The camera eases toward
 the next selected read, including when a visitor selects a receipt in a paused
 replay. Reduced motion frames that read immediately. Dragging sets the
@@ -103,13 +105,14 @@ Participants are labelled Agent A through D. Original account names are availabl
 on hover, and message bodies remain verbatim. The Message card is an always-open,
 scrollable conversation with agent avatars, names, timestamps and full text.
 Earlier and later messages remain in chronological order, with the current
-message highlighted and later messages dimmed. Each message groups its author
+message highlighted and later messages dimmed. The transcript follows the current
+message and scrolls through long messages inside its own panel. Each message groups its author
 with the selected reader, or the shared channel for a post. Explicit reply links
 jump to the original parent. Selecting an author or a read receipt synchronizes
 the replay. Browsing the same message's readers preserves the chat scroll position.
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
-Inspecting a message holds its exchange on screen. Pause freezes playback. Reduced motion disables
+Manually scrolling the transcript holds the exchange for six seconds. Pause freezes playback. Reduced motion disables
 autoplay and moving lights. Offscreen views suspend animation. Cases without messages
 show recorded actions and tool arguments, with no invented communication links.
 The full turn grid and action log are available in the evidence disclosures.
@@ -149,8 +152,9 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   communication and propagation. Collective Misalignment shows shared false
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
-- Keep the institution belt above one navigation row for Findings, Trajectories,
-  Setup and Resources, with Back to top on the left. The original TLDR leads into the six findings, then the expanded
+- Keep the institution belt above one navigation row for the six findings,
+  Trajectories, Setup and Resources, with Back to top on the left. Smaller screens group
+  the six finding links under Findings. The original TLDR leads into the six findings, then the expanded
   trajectory viewer, the setup, threat models, domains and detection. Use the
   header for section navigation. EuroSafeAI leads the rolling collaborators after
   the three fixed Oxford institutions. The theme icon sits in the top right.
@@ -225,8 +229,10 @@ a method or a process assumption. The current reporting task and available
 services persist throughout each rollout.
 
 The six independent finding banners, three threat models, four task domains,
-measurement protocol, review downloads, website source, contact and updates form
-the complete page. Resource links must point to accessible public assets. Do not
+measurement protocol, review downloads, website source and contact form
+make up the page. Contact sends the required email and message to the published
+SwarmHarm contact form. Google Forms confirms the submission and stores the reply.
+Resource links must point to accessible public assets. Do not
 add a Paper or evaluation-code link before its public release can be verified.
 
 `python3 scripts/build-finding-agents.py` derives 68 expression views from the

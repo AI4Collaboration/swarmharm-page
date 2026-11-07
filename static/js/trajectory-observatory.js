@@ -7,7 +7,7 @@
   const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
   const short = (value,n=80) => value.length>n?value.slice(0,n).trimEnd()+'…':value;
   const homeView = {yaw:-.35, pitch:.99};
-  const clockwiseRate = 2*Math.PI/192_000; // radians per millisecond of visible playback
+  const clockwiseRate = 2*Math.PI/288_000; // radians per millisecond of visible playback
   const cameras = new WeakMap();
 
   window.mountTrajectoryObservatory = (host,data,meta,openRecord) => {
@@ -89,30 +89,26 @@
     const camera = cameras.get(viewer) || {...homeView};
     cameras.set(viewer,camera);
 
-    let current=0,playing=false,started=false,visible=false,disposed=false;
+    let current=0,playing=false,started=false,visible=false,stageVisible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
     let signalSeconds = 0;
-    let reading=false,focused=false,hovered=null,drag=null;
+    let readingUntil=0,hovered=null,drag=null,transcriptScroll=null;
     let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
     const active=()=>moments[current];
-    const holding=()=>reading||focused||!!hovered||!!drag;
+    const holding=()=>readingUntil>0 || !!drag;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
     const running=()=>isVisible() && (playing || orbitView.focusing);
 
-    // Compress long stretches of independent work and hold exchanges long enough to read.
-    for (let i = 0; i < moments.length;) {
-      if (moments[i].kind !== 'action') {
-        moments[i].duration = moments[i].kind === 'read' ? 2500 : 2000;
-        i++;
-        continue;
+    for (const moment of moments) {
+      if (moment.message) {
+        const words = moment.message.body.trim().split(/\s+/).length;
+        moment.duration = clamp(3600 + 150*words,6000,12000);
+      } else {
+        moment.duration = moment.action?.important ? 2100 : 1450;
       }
-      let end = i + 1;
-      while (end < moments.length && moments[end].kind === 'action') end++;
-      const dwell = noMessages ? 650 : clamp(5000 / (end - i), 64, 540);
-      for (; i < end; i++) moments[i].duration = dwell;
     }
 
     function messageSource(message) {
@@ -188,7 +184,7 @@
     const scene=host.querySelector('.obs-space-canvas'),ctx=scene.getContext('2d');
     const flow=host.querySelector('.obs-flow-canvas'),fctx=flow.getContext('2d');
     const stage=host.querySelector('.obs-stage'),flowStage=host.querySelector('.obs-flow-stage');
-    const documentPanel=host.querySelector('.obs-document'),inspector=host.querySelector('.obs-inspector');
+    const documentPanel=host.querySelector('.obs-document');
     const range=host.querySelector('input[type="range"]');
     const tooltips=new Map([[scene,host.querySelector('.obs-graph-tooltip')],[flow,host.querySelector('.obs-flow-tooltip')]]);
     const chatRows=new Map([...host.querySelectorAll('[data-chat-message]')].map(row=>[row.dataset.chatMessage,row]));
@@ -319,15 +315,18 @@
     const nav = host.querySelector('[data-inspector-nav]');
     const messageNumber = host.querySelector('[data-message-number]');
 
-    function scrollToMessage(message) {
+    function scrollToMessage(message, smooth) {
       const row=chatRows.get(message.id);
       if(!row || !documentPanel.clientHeight)return;
       const viewport=documentPanel.getBoundingClientRect(),box=row.getBoundingClientRect();
-      // Leave a little preceding conversation visible and move only the chat's scroll area.
-      documentPanel.scrollTop+=box.top-viewport.top-Math.min(100,documentPanel.clientHeight*.23);
+      const max = documentPanel.scrollHeight-documentPanel.clientHeight;
+      const top = clamp(documentPanel.scrollTop+box.top-viewport.top-Math.min(54,viewport.height*.15),0,max);
+      const bottom = clamp(documentPanel.scrollTop+box.bottom-viewport.bottom+10,0,max);
+      documentPanel.scrollTo({top,behavior:smooth && !reduced ? 'smooth' : 'instant'});
+      transcriptScroll = bottom>top+16 ? {order:current,from:top,to:bottom} : null;
     }
 
-    function renderInspector(moment) {
+    function renderInspector(moment, smooth) {
       const event = eventById.get(moment.event);
       const message = moment.message;
       actionPanel.hidden = messagePanel.hidden = !event;
@@ -386,20 +385,22 @@
       if (key !== displayedMessage) {
         displayedMessage = key;
         const anchor=message || messageById.get(event.reads[0]);
-        if(anchor)scrollToMessage(anchor);
+        if(anchor)scrollToMessage(anchor,smooth);
       }
     }
 
     function select(index, animatePaths = false) {
       current = clamp(index, 0, moments.length - 1);
       elapsed = 0;
+      transcriptScroll = null;
+      if (hovered) { hovered=null; hideTooltips(); }
       const m = active(), message = m.message;
       const history = earlierReadsAt(m);
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
       orbitView.select(m, signalSeconds, animatePaths && playing && !reduced, history, isVisible() && !reduced);
-      renderInspector(m);
+      renderInspector(m, animatePaths && playing && visible);
       showExchange(m, history);
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
@@ -421,6 +422,8 @@
     }
     function stop() {
       playing = false;
+      readingUntil = 0;
+      documentPanel.scrollTo({top:documentPanel.scrollTop,behavior:'instant'});
       orbitView.holdFocus();
       lastFrame = 0;
       cancelAnimationFrame(frame);
@@ -431,6 +434,7 @@
     function seek(index) {
       if (!started) playing = !reduced;
       started = true;
+      readingUntil = 0;
       hovered = null;
       hideTooltips();
       select(index);
@@ -563,6 +567,7 @@
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?clamp(now-lastFrame,0,80):0;lastFrame=now;
+      if (readingUntil && now>=readingUntil) { readingUntil=0; updateControls(); }
       const refocused = !reduced && !drag && orbitView.advanceFocus(dt);
       const advancing = playing && !holding();
       if (advancing) {
@@ -571,13 +576,18 @@
           camera.yaw += dt * clockwiseRate;
         }
         elapsed += dt * speed;
+        if (!reduced && transcriptScroll?.order===current) {
+          const t=clamp((elapsed/active().duration-.24)/.60,0,1);
+          if (t>0) documentPanel.scrollTop=transcriptScroll.from+(transcriptScroll.to-transcriptScroll.from)*t*t*(3-2*t);
+          if (t===1) transcriptScroll=null;
+        }
         if (elapsed >= active().duration) {
           if (current === moments.length - 1) { stop(); return; }
           select(current + 1, true);
           return;
         }
       }
-      if ((refocused || (advancing && !reduced)) && ctx) drawSpatial();
+      if (stageVisible && (refocused || (advancing && !reduced)) && ctx) drawSpatial();
       if (!playing && !orbitView.focusing) lastFrame=0;
       ensureFrame();
     }
@@ -667,14 +677,36 @@
     });
     on(range,'input',()=>seek(Number(range.value)));
     on(documentPanel,'pointerdown',()=>documentPanel.focus({preventScroll:true}));
-    for (const area of [inspector]) {
-      on(area,'pointerenter',event=>{if(event.pointerType==='mouse'){reading=true;updateControls();}});
-      on(area,'pointerleave',()=>{reading=false;updateControls();});
-      on(area,'focusin',()=>{focused=true;updateControls();});
-      on(area,'focusout',event=>{if(!area.contains(event.relatedTarget)){focused=false;updateControls();}});
+    function browseTranscript() {
+      if (!playing || documentPanel.scrollHeight<=documentPanel.clientHeight+1) return;
+      transcriptScroll=null;
+      readingUntil=performance.now()+6000;
+      updateControls();
     }
-    on(document,'visibilitychange',()=>{lastFrame=0;ensureFrame();});
-    on(motion,'change',()=>{reduced=motion.matches;if(reduced){orbitView.select(active(),signalSeconds,false,earlierReadsAt(active()));stop();}draw();});
+    on(documentPanel,'wheel',browseTranscript,{passive:true});
+    on(documentPanel,'touchmove',browseTranscript,{passive:true});
+    on(documentPanel,'keydown',event=>{
+      if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(event.key)) browseTranscript();
+    });
+    function startIfVisible() {
+      if (!isVisible() || started || reduced) return;
+      playing=true; started=true;
+      const m=active();
+      orbitView.select(m,signalSeconds,true,earlierReadsAt(m),false);
+      if(m.message)scrollToMessage(m.message,false);
+    }
+    on(document,'visibilitychange',()=>{lastFrame=0;startIfVisible();updateControls();ensureFrame();});
+    on(motion,'change',()=>{
+      reduced=motion.matches;
+      if (reduced) {
+        if (playing) started=false;
+        orbitView.select(active(),signalSeconds,false,earlierReadsAt(active()));
+        stop();
+      } else {
+        startIfVisible(); updateControls(); ensureFrame();
+      }
+      draw();
+    });
     const themeObserver = new MutationObserver(() => {
       paint = readCanvasPaint();
       if (viewWidth && ctx && fctx && !disposed) { drawSpatial(); drawFlow(); }
@@ -684,15 +716,22 @@
       attributeFilter: ['data-theme', 'data-darkreader-scheme']
     });
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resizeObserver.observe(flowStage);
+    const visibleSurfaces=new Set();
     const visibilityObserver=new IntersectionObserver(entries=>{
-      visible=entries.some(e=>e.isIntersecting);
+      for (const entry of entries) {
+        if (entry.isIntersecting && entry.intersectionRatio>=.15) visibleSurfaces.add(entry.target);
+        else visibleSurfaces.delete(entry.target);
+      }
+      visible=visibleSurfaces.size>0;
+      stageVisible=visibleSurfaces.has(stage);
       if (visible) camera.seen=true;
-      if (visible && !started && !reduced) { playing=true; started=true; }
+      startIfVisible();
       lastFrame=0; updateControls(); if(visible)draw(); ensureFrame();
-    },{threshold:.18});visibilityObserver.observe(stage);
+    },{threshold:.15});
+    visibilityObserver.observe(stage);
+    visibilityObserver.observe(documentPanel);
     const citedMoment=eventMoment.get(meta.focusEvent);
     if(citedMoment!==undefined){
-      started=true;
       if(!camera.seen)camera.yaw=orbitView.entryYaw(moments[citedMoment],camera.pitch) ?? camera.yaw;
     }
     select(citedMoment??0);resize();
