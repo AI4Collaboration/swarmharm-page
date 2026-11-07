@@ -206,16 +206,24 @@ resources), JailbreakBench (explicit benchmark components and artifact access),
 and the primary AgentHarm and Claudini project pages (bounded claims, methods and
 released resources). Reuse the information hierarchy, not their visual assets.
 
-The three principal failure illustrations combine simple expressions with
-scenario objects: a raised brow and questioning gaze for an imagined rule,
-a small mischievous smile and eraser for record editing, and gold coin eyes
-bearing dollar symbols for the shared-funds case. The coin eyes stay within the
-original eye sockets; the robot head is not enlarged. Composition replay keeps
-the currency symbols and changes a small smile to mild concern when the funding
-shortfall appears. These are illustrative cartoon cues, not evidence of motives,
-emotions or awareness of aggregate harm.
+The expressions follow the local action shown in each scene. Discovery uses an
+inquiring gaze and a small surprised mouth; communication pairs a slightly open
+speaking mouth with an attentive listener. Missing information uses a puzzled
+look, followed by a relaxed smile when a source is supplied. Focused work uses
+relaxed brows rather than an angry inward V.
 
-Use ordinary pupils, light brows and a small mouth for the other states. Avoid
-spirals, oversized eyes, solid-black eye masks, teeth, sweat drops or gaping
-mouths. References from Owain Evans's papers inform the simplicity of the
-expressions, while the original SwarmHarm characters remain the visual identity.
+In the imagined-rule scene, the proposer looks upward in thought and the peers
+listen attentively as they adopt the rule. They do not all appear to doubt it.
+Record editing uses a sideways glance, softly lowered lids and a small asymmetric
+smile, with no hostile brow angles. Gold coin eyes, gently raised arched brows and
+a small smile identify the financial setting. That face stays consistent through
+the replay; only the reserve and shortfall change. Do not imply that all agents
+noticed the aggregate shortfall or became worried. The old `money-concerned`
+fragment remains a visual alias of `money` for cached pages.
+
+These are illustrative cartoon cues, not evidence of motives, emotions or
+awareness of aggregate harm. Preserve the original eye sockets and head size.
+Avoid crossed pupils, spirals, oversized eyes, solid-black eye masks, teeth,
+sweat drops or gaping mouths. References from Owain Evans's papers inform the
+simplicity of the expressions, while the original SwarmHarm characters remain
+the visual identity.

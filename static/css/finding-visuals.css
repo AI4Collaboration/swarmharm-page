@@ -72,12 +72,8 @@
 .failure-scene > svg { aspect-ratio:480/260; }
 .diagram-solo-check-bg { fill:color-mix(in srgb,var(--discovery) 13%,var(--bg)); }
 .diagram-solo-check { fill:none; stroke:var(--discovery); stroke-width:2.8; stroke-linecap:round; stroke-linejoin:round; }
-.composition-before { opacity:0; }
-.composition-after { opacity:1; }
-.is-playing .composition-before { animation:composition-before 3.5s linear both; }
-.is-playing :is(.composition-after,.composition-impact) { animation:composition-after 3.5s linear both; }
-@keyframes composition-before { 0%,62% { opacity:1; } 66%,100% { opacity:0; } }
-@keyframes composition-after { 0%,62% { opacity:0; } 66%,100% { opacity:1; } }
+.is-playing .composition-impact { animation:composition-impact 3.5s linear both; }
+@keyframes composition-impact { 0%,62% { opacity:0; } 66%,100% { opacity:1; } }
 
 /* The rubber's contact point and the three progressive masks share one timeline.
    Only reference segments are altered; the rest of the record stays intact. */
@@ -125,6 +121,6 @@
 @keyframes erase-debris-third { 0%,74% { visibility:hidden; } 77%,100% { visibility:visible; } }
 @keyframes record-replaced { 0%,86% { opacity:0; } 92%,100% { opacity:1; } }
 @media(prefers-reduced-motion:reduce) {
- .is-playing :is(.composition-before,.composition-after,.composition-impact,
+ .is-playing :is(.composition-impact,
   .eraser-motion,.record-wipe,.record-residue,.record-crumbs,.record-replacement) { animation:none; }
 }

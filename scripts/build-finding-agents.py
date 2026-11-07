@@ -32,6 +32,10 @@ def filled(parent, tag, **attrs):
 
 def failure_face(face, mood):
     """Use familiar small cartoon cues within the original eye sockets."""
+    # Keep the old fragment usable by cached pages, without inventing a worried
+    # reaction to a group shortfall. The financial cue stays upbeat throughout.
+    if mood == 'money-concerned':
+        mood = 'money'
     ink, paper = '#303030', '#f8f6ef'
     for eye_index, (cx, cy) in enumerate(((315, 337), (358, 345))):
         coin = mood in ('money', 'money-concerned')
@@ -48,29 +52,25 @@ def failure_face(face, mood):
             }))
             face.append(mark)
         else:
-            dx, dy = (-2, -2) if mood == 'questioning' else (3, 1)
+            dx, dy = (-2, -4) if mood == 'questioning' else (4, 1)
             filled(face, 'ellipse', cx=cx+dx, cy=cy+dy, rx=4.2, ry=5.5, fill=ink)
             if mood == 'editing':
-                lid = (f'M{cx-11} {cy-6}l22 4' if eye_index == 0
-                       else f'M{cx-11} {cy-2}l22-4')
+                lid = f'M{cx-11} {cy-4}Q{cx} {cy-1} {cx+11} {cy-3}'
                 stroke(face, lid, 2.2)
         if mood == 'questioning':
             brow = (f'M{cx-12} {cy-18}Q{cx} {cy-27} {cx+12} {cy-20}'
-                    if eye_index == 0 else f'M{cx-11} {cy-16}l22 1')
+                    if eye_index == 0 else f'M{cx-11} {cy-19}Q{cx} {cy-21} {cx+11} {cy-18}')
         elif mood == 'editing':
-            brow = (f'M{cx-12} {cy-19}l24 7' if eye_index == 0
-                    else f'M{cx-12} {cy-14}l24-6')
-        elif mood == 'money-concerned':
-            brow = (f'M{cx-12} {cy-18}l24-5' if eye_index == 0
-                    else f'M{cx-12} {cy-23}l24 5')
+            brow = (f'M{cx-12} {cy-21}Q{cx} {cy-26} {cx+12} {cy-18}'
+                    if eye_index == 0 else
+                    f'M{cx-11} {cy-19}Q{cx} {cy-22} {cx+11} {cy-18}')
         else:
-            brow = f'M{cx-12} {cy-18}Q{cx} {cy-23} {cx+12} {cy-18}'
+            brow = f'M{cx-12} {cy-21}Q{cx} {cy-31} {cx+12} {cy-21}'
         stroke(face, brow, 2.6)
     mouths = {
-        'questioning': 'M319 364Q330 360 342 364',
+        'questioning': 'M320 363Q330 364 340 364',
         'editing': 'M317 363Q332 373 346 358',
-        'money': 'M318 361Q331 373 344 361',
-        'money-concerned': 'M319 366Q331 358 343 366',
+        'money': 'M318 360Q331 373 344 360',
     }
     stroke(face, mouths[mood], 2.8)
 
@@ -162,7 +162,7 @@ for index, (letter, mood) in enumerate(VIEWS):
         else:
             gaze = {'curious': (5, -2), 'surprised': (-4, 0),
                     'speaking': (5, 0), 'attentive': (-5, 0),
-                    'confused': ((-3 if eye_index == 0 else 3), -4),
+                    'confused': (4, -3),
                     'focused': (5, 3), 'worried': (1, 3), 'squinting': (6, 0)}[mood]
             face.append(element('ellipse', {
                 'cx': str(cx + gaze[0]), 'cy': str(cy + gaze[1]),
@@ -174,31 +174,33 @@ for index, (letter, mood) in enumerate(VIEWS):
                     if eye_index == 0 else
                     f'M{cx-12} {cy-25}Q{cx} {cy-19} {cx+13} {cy-16}')
         elif mood == 'confused':
-            brow = (f'M{cx-14} {cy-23}Q{cx} {cy-30} {cx+12} {cy-23}'
-                    if eye_index == 0 else f'M{cx-12} {cy-16}L{cx+14} {cy-16}')
+            brow = (f'M{cx-12} {cy-22}Q{cx} {cy-28} {cx+12} {cy-22}'
+                    if eye_index == 0 else f'M{cx-11} {cy-18}Q{cx} {cy-20} {cx+11} {cy-18}')
         elif mood in ('curious', 'surprised'):
             brow = f'M{cx-13} {cy-22}Q{cx} {cy-29} {cx+13} {cy-22}'
         elif mood == 'squinting':
-            stroke(face, f'M{cx-12} {cy-4}L{cx+12} {cy-1}', 4)
-            brow = f'M{cx-13} {cy-18}L{cx+13} {cy-22}'
+            stroke(face, f'M{cx-11} {cy-3}Q{cx} {cy-1} {cx+11} {cy-3}', 2.2)
+            brow = f'M{cx-12} {cy-19}Q{cx} {cy-23} {cx+12} {cy-20}'
         elif mood == 'focused':
-            brow = f'M{cx-13} {cy-14}L{cx+13} {cy-14}'
+            brow = f'M{cx-12} {cy-19}Q{cx} {cy-21} {cx+12} {cy-18}'
         else:
             brow = f'M{cx-12} {cy-20}Q{cx} {cy-24} {cx+12} {cy-20}'
         stroke(face, brow, 2.6)
 
     if mood in ('surprised', 'speaking'):
         face.append(element('ellipse', {
-            'cx': '330', 'cy': '362', 'rx': '5.5',
-            'ry': '7' if mood == 'surprised' else '5',
+            'cx': '330', 'cy': '362', 'rx': '5.5' if mood == 'surprised' else '8',
+            'ry': '7' if mood == 'surprised' else '3.8',
             'fill': '#252525', 'stroke': '#fffdf8', 'stroke-width': '1',
         }))
     elif mood == 'worried':
         stroke(face, 'M318 367Q329 355 341 368', 3.5)
     elif mood == 'confused':
-        stroke(face, 'M318 363l8-3 8 5 8-2', 3.2)
-    elif mood == 'focused':
+        stroke(face, 'M320 364Q330 361 341 364', 2.8)
+    elif mood in ('focused', 'squinting'):
         stroke(face, 'M319 362l22 3', 3)
+    elif mood == 'attentive':
+        stroke(face, 'M320 362Q330 367 341 363', 2.8)
     else:
         stroke(face, 'M318 358Q329 372 342 362', 3.5)
     head.append(face)
