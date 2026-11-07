@@ -81,7 +81,9 @@ The four agents share one tilted disk. Each has one colored arm whose trail
 advances when the agent acts. The grain surface, raised pins and message arc
 share a perspective camera. Foreground pins appear larger and overlap distant
 ones as the disk turns. Posts have diamond tips and reads have hollow tips.
-A verified read lights the arc from the original post to the reader. Up to three
+A verified read lights the arc from the original post to the reader. A small
+Now marker stays on that arc while the message and its current reader are
+highlighted in the conversation, including when playback is paused. Up to three
 sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
 open their original read when selected. Other readers of the current message
 take priority, and a reread uses the same route. Scrubbing rebuilds the routes
@@ -158,7 +160,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   because it is itself a finding. Show each outcome once below the replay, plus its selectable
   event. Keep original messages and actions verbatim. Website source belongs in
   the footer, with attribution.
-- Light/Dark is an explicit toggle; remember the selected theme.
+- First visits open in dark mode. The Light/Dark toggle remembers the visitor's choice.
 - Use one font family throughout. Keep summaries short; put originals and
   structured tool results in disclosures.
 - Keep case settings compact; Settings & evidence visibly expands on click.

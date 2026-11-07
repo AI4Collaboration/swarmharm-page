@@ -106,12 +106,15 @@
   }
 
   function label(ctx, item, occupied, {width, height}, paint, fontFamily) {
-    const {text, at:[x, y], color} = item;
-    ctx.font = '600 ' + (width < 440 ? 10 : 12) + 'px ' + fontFamily;
+    const {text, at:[x, y], color, current} = item;
+    ctx.font = '600 ' + (current || width < 440 ? 10 : 12) + 'px ' + fontFamily;
     const w = ctx.measureText(text).width + 8, h = 18;
     const right = [x + 6, y - h / 2], left = [x - w - 6, y - h / 2];
     const choices = x >= width / 2 ? [right, left] : [left, right];
-    choices.push([x - w / 2, y - h - 7], [x - w / 2, y + 7]);
+    const gap = current ? 5 : 7;
+    const above = [x - w / 2, y - h - gap], below = [x - w / 2, y + gap];
+    if (current) choices.unshift(above,below);
+    else choices.push(above,below);
     let best, penalty = Infinity;
     for (const [px, py] of choices) {
       const bx = clamp(px, 3, width - w - 3), by = clamp(py, 29, height - h - 3);
@@ -124,12 +127,20 @@
     }
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.lineWidth = 3.5;
-    ctx.strokeStyle = paint.paper;
-    ctx.strokeText(text, best.x + 4, best.y + h / 2);
+    if (current) {
+      const edge = [clamp(x,best.x,best.x+w),clamp(y,best.y,best.y+h)];
+      line(ctx,[[x,y],edge],paint.packet,1);
+      ctx.beginPath(); ctx.roundRect(best.x,best.y,w,h,4);
+      ctx.fillStyle = paint.packet; ctx.fill();
+    } else {
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = paint.paper;
+      ctx.strokeText(text, best.x + 4, best.y + h / 2);
+    }
     ctx.fillStyle = color;
     ctx.fillText(text, best.x + 4, best.y + h / 2);
     occupied.push(best);
+    return best;
   }
 
   function actionNodes(track, events) {
@@ -278,18 +289,19 @@
 
     const point = t => projection.project(arc.at(t));
     if (!paint.dark) {
-      ctx.strokeStyle=paint.paper; ctx.lineWidth=4.8; ctx.globalAlpha=.94; ctx.stroke();
+      ctx.strokeStyle=paint.paper; ctx.lineWidth=6; ctx.globalAlpha=.96; ctx.stroke();
     }
     ctx.strokeStyle = gradient;
-    const strokes = paint.dark ? [[8,.10],[3.6,.28],[1.65,1]] : [[3.4,.16],[1.95,1]];
+    const strokes = paint.dark ? [[10,.10],[6,.23],[3.2,1]] : [[4.4,.30],[3,1]];
     for (const [width, alpha] of strokes) {
       ctx.globalAlpha = alpha; ctx.lineWidth = width; ctx.stroke();
     }
+    ctx.strokeStyle = paint.packet; ctx.lineWidth = 1.4; ctx.stroke();
 
     const arrow = point(.78), prior = point(.76);
     ctx.save(); ctx.translate(...arrow);
     ctx.rotate(Math.atan2(arrow[1]-prior[1],arrow[0]-prior[0]));
-    line(ctx,[[-5,-3.2],[0,0],[-5,3.2]],to,1.7); ctx.restore();
+    line(ctx,[[-5.5,-3.6],[0,0],[-5.5,3.6]],paint.packet,2); ctx.restore();
 
     const start = Math.max(0,progress-Math.min(.27,32/Math.max(1,Math.hypot(b[0]-a[0],b[1]-a[1]))));
     const pulse = progress < .5 ? from : to;
@@ -300,8 +312,8 @@
     ctx.globalAlpha=1;
     const world=arc.at(progress), head=projection.project(world), size=projection.magnification(world);
     if (paint.dark) {
-      bloom(ctx,...head,12*size,pulse,'75');
-      circle(ctx,...head,3.4*size,pulse); circle(ctx,...head,1.6*size,'#fff8df');
+      bloom(ctx,...head,14*size,pulse,'90');
+      circle(ctx,...head,4*size,pulse); circle(ctx,...head,2.2*size,paint.packet);
     } else {
       circle(ctx,...head,4.2*size,paint.paper);
       circle(ctx,...head,2.9*size,paint.packet);
@@ -486,7 +498,10 @@
         if (raised) hits.push({...hit,x:node.foot[0],y:node.foot[1],r:4});
       }
       ctx.globalAlpha = 1;
-      if (arc) drawRead(ctx,arc,projection,paint,travel,hits);
+      if (arc) {
+        drawRead(ctx,arc,projection,paint,travel,hits);
+        labels.unshift({text:'Now',at:project(arc.at(.40)),color:paint.paper,current:true});
+      }
       if (post) {
         const ink = paint.agents.get(post.event.actor);
         bloom(ctx,...post.screenTip,12*post.size,ink,'54');
@@ -508,7 +523,10 @@
           ink,at:selected.screenTip});
       }
       if (gutter) drawCallouts(ctx,callouts,gutter,height,paint,fontFamily);
-      for (const item of labels) label(ctx,item,occupied,view,paint,fontFamily);
+      for (const item of labels) {
+        const bounds = label(ctx,item,occupied,view,paint,fontFamily);
+        if (item.current) hits.push({bounds,x:item.at[0],y:item.at[1],event:moment.event,moment:moment.order,message:moment.message.id});
+      }
       if (hover) circle(ctx,hover.x,hover.y,6.5,paint.ink,true);
       return hits.reverse();
     }

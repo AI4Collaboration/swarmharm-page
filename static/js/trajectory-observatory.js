@@ -178,7 +178,7 @@
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths share a tilted disk. Pins mark recorded actions.${noMessages?'':' A solid arc shows the current read. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths share a tilted disk. Pins mark recorded actions.${noMessages?'':' The solid arc marked Now shows the current read. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -377,6 +377,7 @@
         recipient.title=isRead?'Read by '+names.get(event.actor)+' at '+event.time:'Posted to '+messageSource(item);
         for(const button of row.querySelectorAll('[data-obs-receipt]')) {
           const order=Number(button.dataset.obsReceipt);
+          button.toggleAttribute('data-current-reader', selected && moment.kind==='read' && moments[order].actor===moment.actor);
           button.setAttribute('aria-current',order===current?'step':'false');
           button.classList.toggle('is-received',order<=current);
         }
@@ -579,6 +580,11 @@
     function nearest(surface, x, y) {
       let best = null, distance = Infinity, bestPriority = -1;
       for (const hit of surface === scene ? sceneHits : flowHits) {
+        if (hit.bounds) {
+          const {x:left, y:top, w, h} = hit.bounds;
+          if (x >= left && x <= left+w && y >= top && y <= top+h) return hit;
+          continue;
+        }
         const d = Math.hypot(hit.x - x, hit.y - y);
         if (d >= hit.r) continue;
         const priority = hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
