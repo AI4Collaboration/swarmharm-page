@@ -29,7 +29,7 @@
       moments.push({kind:'send',event:message.event,actor:message.actor,time:message.time,turn:message.turn,message,index});
       message.reads.forEach(read=>moments.push({kind:'read',event:read.event,actor:read.actor,time:read.time,turn:read.turn,message,index}));
     });
-    // Every action is selectable. Autoplay follows communication when the run contains it.
+    // Autoplay and manual stepping use the same complete sequence of actions, posts and reads.
     const exchangeEvents = new Set(moments.map(moment => moment.event));
     for (const event of events) {
       if (!exchangeEvents.has(event.id)) {
@@ -43,11 +43,11 @@
     const receiptCount=messages.reduce((n,m)=>n+m.reads.length,0);
     const eventFraction=id=>id===Infinity?1:(eventIndex.get(id)||0)/Math.max(1,events.length-1);
     const connections = moments.filter(moment => moment.message);
-    const homeView = { yaw: -.35, pitch: .99 };
+    const homeView = { yaw: -.35, pitch: .88 };
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
-    let signalSeconds = 0, diskRotation = 0;
+    let signalSeconds = 0;
     let reading=false,focused=false,hovered=null,drag=null;
     let yaw=homeView.yaw, pitch=homeView.pitch, viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
@@ -58,22 +58,19 @@
     const isVisible=()=>visible&&!document.hidden&&!disposed;
     const running=()=>playing && isVisible();
 
-    const firstPlayback = 0;
-    const openingActions = new Set();
-    const openingActors = new Set();
-    const firstPost = messages[0]?.event ?? Infinity;
-    for (const event of events) {
-      if (event.id >= firstPost) break;
-      if (!openingActors.has(event.actor)) {
-        openingActors.add(event.actor);
-        openingActions.add(event.id);
+    // Compress long stretches of independent work and hold exchanges long enough to read.
+    for (let i = 0; i < moments.length;) {
+      if (moments[i].kind !== 'action') {
+        moments[i].duration = moments[i].kind === 'read' ? 2500 : 2000;
+        i++;
+        continue;
       }
+      let end = i + 1;
+      while (end < moments.length && moments[end].kind === 'action') end++;
+      const dwell = noMessages ? 650 : clamp(5000 / (end - i), 64, 540);
+      for (; i < end; i++) moments[i].duration = dwell;
     }
-    function nextPlayback() {
-      let next = current + 1;
-      while (!noMessages && moments[next]?.kind === 'action' && !openingActions.has(moments[next].event)) next++;
-      return next;
-    }
+
     function messageSource(message) {
       const surface = eventById.get(message.event)?.arguments?.channel;
       if (surface === 'private') return 'Private discussion';
@@ -118,7 +115,7 @@
       <button type="button" data-next-message aria-label="Next ${noMessages?'action':'message'}">${arrow(1)}</button>
     </div>`;
     host.innerHTML=`<header class="obs-topbar"><div class="obs-title"><span class="obs-title-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h4>${noMessages?'Agent actions':'Agent communication'}</h4></div><div class="obs-top-stats"><span><b>${messages.length}</b> messages</span><span><b>${receiptCount}</b> verified reads</span></div><button class="obs-play" type="button" data-play aria-label="Play trajectory">${playIcon}<span>Play</span></button></header>
-      <div class="obs-workbench"><canvas class="obs-intake-layer" aria-hidden="true" hidden></canvas>
+      <div class="obs-workbench">
         <section class="obs-inspector" aria-label="Selected record">
           <section class="obs-action-panel" data-action-panel aria-label="Action">
             <header class="obs-panel-heading"><h5>Action</h5><small data-action-stamp></small>${noMessages?stepControls:''}<button class="obs-source-link" type="button" data-original="action" aria-label="View action record" title="View action record">↗</button></header>
@@ -137,7 +134,7 @@
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each colored path traces one agent’s actions in order.${noMessages?'':' Arcs connect posted messages to their verified reads.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-send"></i>Message</span><span><i class="obs-key-read"></i>Verified read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="One path per agent, advancing with its recorded actions.${noMessages?'':' A verified read temporarily connects the sender’s action to the reader’s.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-path"></i>Agent path</span>${noMessages?'':'<span><i class="obs-key-link"></i>Message link</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -174,7 +171,7 @@
     const routeQuote = host.querySelector('.obs-route-quote');
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
-    const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, connections, sendIndex, fontFamily, messageSource });
+    const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, sendIndex, fontFamily });
     const eventMoment=new Map();
     moments.forEach(m=>{if(!eventMoment.has(m.event))eventMoment.set(m.event,m.order);});
     const activity=actors.map(a=>{
@@ -253,10 +250,6 @@
     const outcomePanel = host.querySelector('[data-inspector-outcome]');
     const chatLog = messagePanel.querySelector('[data-chat-log]');
     const empty = messagePanel.querySelector('[data-message-empty]');
-    const workbench=host.querySelector('.obs-workbench');
-    const intakeLayer=host.querySelector('.obs-intake-layer');
-    const intakeContext=intakeLayer.getContext('2d');
-    let intakeSource=null, intakeStarted=0, intakeBounds=null, currentBar=null;
     const nav = host.querySelector('[data-inspector-nav]');
     const messageNumber = host.querySelector('[data-message-number]');
 
@@ -338,10 +331,6 @@
       host.dataset.moment = m.kind;
       orbitView.select(m, signalSeconds, animatePaths && playing && !reduced);
       renderInspector(m);
-      if (intakeSource) intakeSource.removeAttribute('data-scanning');
-      intakeSource = m.kind==='outcome' ? null : message ? chatRows.get(message.id) : actionPanel;
-      intakeStarted=signalSeconds;
-      intakeBounds=null;
       showExchange(m);
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
@@ -354,13 +343,10 @@
         const reads=moments.filter(x=>x.kind==='read'&&x.actor===a.id&&x.order<=current).length;
         host.querySelector(`[data-actor-count="${a.id}"]`).textContent=(noMessages||m.kind==='action')?`${events.filter(e=>e.actor===a.id&&e.id<=m.event).length} actions`:`${sent} sent · ${reads} read`;
       });
-      currentBar?.style.removeProperty('--intake-lift');
-      currentBar=null;
       activity.forEach(a=>a.bars.forEach((bar,i)=>{
         bar.classList.toggle('is-past',a.bins[i].some(id=>id<=m.event));
         const arriving=a.bins[i].includes(m.event);
         bar.toggleAttribute('data-current-bin',arriving);
-        if(arriving)currentBar=bar;
       }));
       updateControls();draw();ensureFrame();
     }
@@ -382,7 +368,7 @@
     function togglePlay() {
       started = true;
       if (playing) { stop(); return; }
-      if (active().kind === 'outcome') select(firstPlayback);
+      if (active().kind === 'outcome') select(0);
       playing = true;
       lastFrame = 0;
       updateControls();
@@ -407,70 +393,11 @@
     function dot(context,x,y,r,c,fill=true) {
       context.beginPath();context.arc(x,y,r,0,Math.PI*2);context.fillStyle=c;context.strokeStyle=c;context.lineWidth=1;if(fill)context.fill();else context.stroke();
     }
-    function clearIntake() {
-      intakeSource?.removeAttribute('data-scanning');
-      if (!intakeLayer.hidden) intakeLayer.hidden=true;
-      currentBar?.style.removeProperty('--intake-lift');
-    }
-    // One pass from the inspected record to its plotted action. The shared playback clock
-    // also drives the pin and count pulse, including pause, speed and reduced motion.
-    function drawIntake() {
-      const age=signalSeconds-intakeStarted;
-      if (!intakeSource || !intakeContext || reduced || !playing || age>=1.55) {
-        clearIntake();
-        return;
-      }
-      intakeSource.toggleAttribute('data-scanning',age<.66);
-      if (age<.66) intakeSource.style.setProperty('--intake-scan',Math.min(100,age/.66*100)+'%');
-      const lift=age<.95?0:Math.sin(Math.PI*Math.min(1,(age-.95)/.6));
-      currentBar?.style.setProperty('--intake-lift',String(1+.75*lift));
-      const target=sceneHits.find(hit=>hit.pin && hit.event===active().event) ||
-        sceneHits.find(hit=>hit.event===active().event);
-      if (!target || age<.33) {intakeLayer.hidden=true;return;}
-      if (!intakeBounds) {
-        const board=workbench.getBoundingClientRect(), plot=scene.getBoundingClientRect();
-        const record=intakeSource.getBoundingClientRect(), thread=documentPanel.getBoundingClientRect();
-        const message=intakeSource!==actionPanel;
-        const sy=message?clamp(record.top+24,thread.top+9,thread.bottom-9):record.top+record.height*.5;
-        intakeBounds={w:board.width,h:board.height,px:plot.left-board.left,py:plot.top-board.top,
-          sx:record.right-board.left-2,sy:sy-board.top,beside:record.right<=plot.left+1};
-      }
-      const box=intakeBounds;
-      const ex=box.px+target.x,ey=box.py+target.y;
-      const scale=Math.min(devicePixelRatio||1,2);
-      // Stacked phone panels receive the same scan and arrival pulse in their own positions.
-      if (!box.beside && age<.97) {intakeLayer.hidden=true;return;}
-      const originX=box.beside?box.sx:ex, originY=box.beside?box.sy:ey;
-      const w=Math.round(box.w*scale),h=Math.round(box.h*scale);
-      if(intakeLayer.width!==w)intakeLayer.width=w;
-      if(intakeLayer.height!==h)intakeLayer.height=h;
-      intakeLayer.hidden=false;
-      const c=intakeContext;
-      c.setTransform(scale,0,0,scale,0,0);c.clearRect(0,0,box.w,box.h);
-      const ink=color(active().actor);
-      if (box.beside && age<1.1) {
-        const t=clamp((age-.33)/.74,0,1),u=t*t*(3-2*t);
-        const path=q=>{
-          const a=1-q;
-          return [a*a*a*originX+3*a*a*q*(originX+34)+3*a*q*q*(ex-47)+q*q*q*ex,
-            a*a*a*originY+3*a*a*q*originY+3*a*q*q*(ey-12)+q*q*q*ey];
-        };
-        const points=Array.from({length:19},(_,i)=>path(u*i/18));
-        strokePoints(c,points,ink+'68',.9);
-        const tail=Array.from({length:9},(_,i)=>path(Math.max(0,u-.085*(1-i/8))));
-        strokePoints(c,tail,ink+'cc',1.8);glow(c,...path(u),9,ink,.7);dot(c,...path(u),2.3,ink);
-      }
-      if (age>.97) {
-        const t=clamp((age-.97)/.58,0,1);
-        c.globalAlpha=1-t;dot(c,ex,ey,3+16*t,ink,false);c.globalAlpha=1;
-      }
-    }
     function drawSpatial() {
       sceneHits = orbitView.draw(
-        { width:viewWidth, height:viewHeight, dpr, yaw:yaw+diskRotation, pitch },
+        { width:viewWidth, height:viewHeight, dpr, yaw, pitch },
         paint, signalSeconds, reduced, hovered?.surface === scene ? hovered.hit : null
       );
-      drawIntake();
     }
     function flowPoint(e){return [68+eventFraction(e.id)*(flowWidth-91),23+actorIndex.get(e.actor)*31];}
     function cacheFlowRidges(){
@@ -514,21 +441,17 @@
       fctx.fillStyle=paint.muted;fctx.fillText(events[0]?.time||'',68,158);fctx.textAlign='right';fctx.fillText(events.at(-1)?.time||'',flowWidth-23,158);fctx.textAlign='left';
     }
     function draw(){if(disposed||!ctx||!fctx||!viewWidth||!visible)return;drawSpatial();drawFlow();}
-    function resize(){intakeBounds=null;const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);cacheFlowRidges();draw();}
+    function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);cacheFlowRidges();draw();}
     function ensureFrame(){if(!frame&&running())frame=requestAnimationFrame(animate);}
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
-      if (!reduced && !drag) {
-        signalSeconds += dt * speed / 1000;
-        if (!holding()) diskRotation += dt * speed * .000023;
-      }
+      if (!reduced && !drag) signalSeconds += dt * speed / 1000;
       if (!holding()) {
         elapsed += dt * speed;
-        const duration = {send: 7200, read: 3100, outcome: 5500, action: 1800}[active().kind];
-        if (elapsed >= duration) {
+        if (elapsed >= active().duration) {
           if (current === moments.length - 1) { stop(); return; }
-          select(nextPlayback(), true);
+          select(current + 1, true);
           return;
         }
       }
@@ -585,11 +508,10 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;diskRotation=0;draw();}
+      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));
-    on(documentPanel,'scroll',()=>{intakeBounds=null;},{passive:true});
     on(documentPanel,'pointerdown',()=>documentPanel.focus({preventScroll:true}));
     for (const area of [inspector]) {
       on(area,'pointerenter',event=>{if(event.pointerType==='mouse'){reading=true;updateControls();}});
@@ -609,7 +531,7 @@
     });
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resizeObserver.observe(flowStage);
     const visibilityObserver=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible&&!started&&!reduced){playing=true;started=true;}lastFrame=0;updateControls();if(visible)draw();ensureFrame();},{threshold:.18});visibilityObserver.observe(stage);
-    select(firstPlayback);resize();
+    select(0);resize();
     return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
 })();

@@ -73,19 +73,12 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The replay opens with the first recorded action. It introduces each participating
-agent through its first pre-communication action, then follows posts and exact reads.
-A scan passes over the selected record and lands on its pin in a single inclined
-spiral. Each arm follows one agent's ordered actions. Gaps reflect time between
-records. Action pin heights reflect activity in the preceding ten seconds, and
-posts rise as exact reads are verified through the current step. The colored
-action paths extend as the replay advances. Agent names identify recorded action
-points. `static/js/trajectory-orbits.js` draws these paths and the communication
-arcs on the same disk.
-Only the recorded actions and messages are selectable. The disk turns during replay
-and holds its orientation while a record is inspected. A selected message travels from the recorded post
-to the discussion or shared notes, then to the selected verified read. The original
-send stays anchored to its action even after the sender takes further actions. The full
+The replay starts at the first recorded action and plays every action in order.
+Each agent has one colored path. Its trail extends only when that agent acts.
+A post marks the sender's action. A verified read briefly adds one dashed arrow
+from the original post to that reader's action. The connection clears at the next
+step. A post without a verified read stays on the sender's path.
+The camera stays still during playback and can be rotated by dragging. The full
 timeline underneath orders all actors' actions together. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 Participants are labelled Agent A through D. Original account names are available
@@ -98,8 +91,7 @@ jump to the original parent. Selecting an author or a read receipt synchronizes
 the replay. Browsing the same message's readers preserves the chat scroll position.
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
-Inspecting a message holds the current event while light moves along its recorded
-route. Pause freezes both the replay and the light. Reduced motion disables
+Inspecting a message holds its exchange on screen. Pause freezes playback. Reduced motion disables
 autoplay and moving lights. Offscreen views stop drawing. Cases without messages
 show recorded actions and tool arguments, with no invented communication links.
 The full turn grid and action log are available in the evidence disclosures.
