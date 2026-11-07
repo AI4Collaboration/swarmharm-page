@@ -107,10 +107,27 @@
   }));
   function showLocation() {
     const params = new URL(location.href).searchParams;
-    show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), params.get('event'));
+    return show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), params.get('event'));
   }
   window.addEventListener('popstate', () => {
     if (location.search !== renderedSearch) showLocation();
   });
-  showLocation();
+  const initialHash = location.hash;
+  const initialTarget = document.getElementById(initialHash.slice(1));
+  const firstRender = showLocation();
+  // The asynchronous replay adds height above links to Setup, Resources and Contact.
+  if (initialTarget && !root.contains(initialTarget) &&
+      (root.compareDocumentPosition(initialTarget) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+    const landing = new AbortController();
+    const cancel = () => landing.abort();
+    for (const type of ['pointerdown','wheel','touchstart','keydown']) {
+      window.addEventListener(type,cancel,{passive:true,once:true,signal:landing.signal});
+    }
+    firstRender.then(() => requestAnimationFrame(() => {
+      if (!landing.signal.aborted && location.hash === initialHash) {
+        initialTarget.scrollIntoView({block:'start',behavior:'instant'});
+      }
+      cancel();
+    }));
+  }
 })();
