@@ -6,7 +6,6 @@
   const arrow = direction => `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="${direction<0?'m12 5-5 5 5 5':'m8 5 5 5-5 5'}"/></svg>`;
   const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
   const short = (value,n=80) => value.length>n?value.slice(0,n).trimEnd()+'…':value;
-  const mix = (a,b,t) => a+(b-a)*t;
 
   window.mountTrajectoryObservatory = (host,data,meta,openRecord) => {
     const controller = new AbortController();
@@ -45,15 +44,28 @@
     const sendIndex=new Map(moments.filter(m=>m.kind==='send').map(m=>[m.message.id,m.order]));
     moments.push({kind:'outcome',event:Infinity,time:events.at(-1)?.time||'',order:moments.length});
     const receiptCount=moments.filter(m=>m.kind==='read').length;
-    const eventFraction=id=>id===Infinity?1:(eventIndex.get(id)||0)/Math.max(1,events.length-1);
+    const eventTimes = new Map();
+    let day = 0, lastTime = 0;
+    for (const event of events) {
+      const [h,m,s] = event.time.split(':').map(Number);
+      let at = day + h*3600 + m*60 + s;
+      if (at < lastTime - 43200) { day += 86400; at += 86400; }
+      lastTime = Math.max(at,lastTime);
+      eventTimes.set(event.id,lastTime);
+    }
+    const startTime = eventTimes.get(events[0]?.id) ?? 0;
+    const duration = lastTime - startTime;
+    const eventFraction = id => id === Infinity ? 1 : duration ? (eventTimes.get(id)-startTime)/duration :
+      (eventIndex.get(id)||0)/Math.max(1,events.length-1);
     const connections = moments.filter(moment => moment.message);
-    const homeView = { yaw: -.35, pitch: .88 };
+    const homeView = { yaw: -.35, pitch: .99 };
 
     let current=0,playing=false,started=false,visible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
     let signalSeconds = 0;
     let reading=false,focused=false,hovered=null,drag=null;
     let yaw=homeView.yaw, pitch=homeView.pitch, viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
+    let manualCamera = false;
     let sceneHits=[],flowHits=[],displayedMessage=null,flowRidges=[];
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
@@ -138,11 +150,11 @@
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="One path per agent, advancing with its recorded actions.${noMessages?'':' A verified read temporarily connects the sender’s action to the reader’s.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-path"></i>Agent path</span>${noMessages?'':'<span><i class="obs-key-link"></i>Message link</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Four agent paths share a tilted disk. Pins mark recorded actions.${noMessages?'':' A verified read temporarily connects the sender’s action to the reader’s.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
-      <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>All actions</h5><span>${events.length} actions</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Complete action timeline, one point per recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
+      <section class="obs-flow" aria-label="All recorded actions by agent"><header class="obs-panel-heading"><div><h5>All actions</h5><span>${events.length} actions</span></div><div class="obs-flow-status"><i></i><span data-status>Paused</span><time data-current-time></time></div></header><div class="obs-flow-stage"><canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Action timeline by recorded time. Each band widens where that agent acts more often. Each point is one recorded action. Click a point to inspect it. Arrow keys move through the replay."></canvas><div class="obs-flow-tooltip" role="tooltip" hidden></div></div></section>
       <footer class="obs-transport"><button type="button" data-previous aria-label="Previous event">${arrow(-1)}</button><button type="button" data-next aria-label="Next event">${arrow(1)}</button><input type="range" min="0" max="${moments.length-1}" value="0" step="1" aria-label="Replay position"><span data-position></span><button type="button" data-speed aria-label="Playback speed: 1 times">1×</button><button class="obs-outcome-button" type="button" data-outcome>Outcome ↗</button></footer>`;
 
     const scene=host.querySelector('.obs-space-canvas'),ctx=scene.getContext('2d');
@@ -222,7 +234,7 @@
 
       const number = document.createElement('span');
       number.className = 'obs-route-number';
-      number.textContent = 'Message ' + String(moment.index + 1).padStart(2, '0');
+      number.textContent = (sharedRecords ? 'Record ' : 'Message ') + String(moment.index + 1).padStart(2, '0');
       const sender = document.createElement('strong');
       sender.textContent = names.get(message.actor);
       sender.style.color = actorStyle(message.actor);
@@ -404,32 +416,68 @@
         paint, signalSeconds, reduced, hovered?.surface === scene ? hovered.hit : null
       );
     }
-    function flowPoint(e){return [68+eventFraction(e.id)*(flowWidth-91),23+actorIndex.get(e.actor)*31];}
-    function cacheFlowRidges(){
-      flowRidges=actors.map(a=>{
-        const own=actorEvents.get(a.id),x0=68,x1=flowWidth-23;
-        return Array.from({length:101},(_,j)=>{const x=mix(x0,x1,j/100);let density=0;own.forEach(e=>{const dx=flowPoint(e)[0]-x;density+=Math.exp(-dx*dx/270)*1.3;});return [x,Math.min(6,density*.65+1)];});
+    const flowPoints = new Map();
+    function cacheFlowRidges() {
+      const left = 68, span = flowWidth - 91;
+      flowRidges = actors.map((actor, row) => {
+        const own = actorEvents.get(actor.id), y = 23 + row*31;
+        // Keep the recorded time on x. Stack nearby events vertically so they can still be selected.
+        let i = 0;
+        while (i < own.length) {
+          const firstX = left + eventFraction(own[i].id)*span;
+          let end = i+1;
+          while (end < own.length && left + eventFraction(own[end].id)*span - firstX < 6) end++;
+          for (let j=i; j<end; j++) {
+            const offset = end-i === 1 ? 0 : 10*((j-i)/(end-i-1)-.5);
+            flowPoints.set(own[j].id,[left+eventFraction(own[j].id)*span,y+offset]);
+          }
+          i=end;
+        }
+        return Array.from({length:121},(_,j) => {
+          const t = j/120;
+          let density = 0;
+          for (const event of own) {
+            const dx = (eventFraction(event.id)-t)/.018;
+            if (Math.abs(dx)<3) density += Math.exp(-.5*dx*dx);
+          }
+          return [left+t*span,density];
+        });
       });
+      const peak = Math.max(1,...flowRidges.flatMap(row=>row.map(p=>p[1])));
+      for (const row of flowRidges) for (const p of row) p[1]=1+9.8*Math.sqrt(p[1]/peak);
     }
     function drawFlow() {
-      fctx.setTransform(dpr,0,0,dpr,0,0);fctx.clearRect(0,0,flowWidth,168);flowHits=[];const m=active();
-      fctx.font=`10px ${fontFamily}`;
-      for(let i=0;i<=4;i++){const x=68+i*(flowWidth-91)/4;strokePoints(fctx,[[x,7],[x,139]],paint.guide + '25',.6);}
+      fctx.setTransform(dpr,0,0,dpr,0,0); fctx.clearRect(0,0,flowWidth,168);
+      flowHits=[]; const m=active(), x=68+eventFraction(m.event)*(flowWidth-91);
+      fctx.font='10px '+fontFamily;
+      for (let i=0;i<=4;i++) {
+        const guideX=68+i*(flowWidth-91)/4;
+        strokePoints(fctx,[[guideX,7],[guideX,139]],paint.guide+'28',.65);
+      }
       actors.forEach((a,i)=>{
-        const y=23+i*31,c=color(a.id),own=actorEvents.get(a.id),x0=68,x1=flowWidth-23;
-        const ridge=flowRidges[i]||[];
-        fctx.beginPath();ridge.forEach(([x,h],i)=>i?fctx.lineTo(x,y-h):fctx.moveTo(x,y-h));[...ridge].reverse().forEach(([x,h])=>fctx.lineTo(x,y+h));fctx.closePath();fctx.fillStyle=c+'18';fctx.fill();strokePoints(fctx,[[x0,y],[x1,y]],c+'38',.7);
-        fctx.fillStyle=c;fctx.fillText(a.id,16,y+4);fctx.fillStyle=paint.muted;fctx.fillText(String(own.length),32,y+4);
+        const y=23+i*31, c=color(a.id), ridge=flowRidges[i];
+        const band=new Path2D();
+        ridge.forEach(([x,h],j)=>j ? band.lineTo(x,y-h) : band.moveTo(x,y-h));
+        for (let j=ridge.length-1;j>=0;j--) band.lineTo(ridge[j][0],y+ridge[j][1]);
+        band.closePath();
+        const wash = fctx.createLinearGradient(0,y-11,0,y+11);
+        wash.addColorStop(0,c+'25'); wash.addColorStop(.5,c); wash.addColorStop(1,c+'25');
+        fctx.fillStyle=wash; fctx.globalAlpha=.16; fctx.fill(band);
+        fctx.save(); fctx.beginPath(); fctx.rect(68,y-12,Math.max(0,x-68),24); fctx.clip();
+        fctx.globalAlpha=.20; fctx.fill(band); fctx.restore(); fctx.globalAlpha=1;
+        strokePoints(fctx,[[68,y],[flowWidth-23,y]],c+'46',.65);
+        fctx.fillStyle=c; fctx.fillText(a.id,16,y+4);
+        fctx.fillStyle=paint.muted; fctx.fillText(String(actorEvents.get(a.id).length),32,y+4);
       });
-      const x=68+eventFraction(m.event)*(flowWidth-91);strokePoints(fctx,[[x,4],[x,137]],paint.blue + '9c',1);glow(fctx,x,70,65,color(m.message?.actor||m.actor),.25);
+      strokePoints(fctx,[[x,4],[x,137]],paint.blue+'a0',1);
       for (const event of events) {
-        const point = flowPoint(event);
+        const point = flowPoints.get(event.id);
         const isEndpoint = event.id === m.event || event.id === m.message?.event;
         const participant = participantRole(event.actor, m);
         const ink = color(event.actor);
-        let dotColor = paint.guide + '61';
-        if (participant || m.kind === 'outcome') dotColor = ink + 'a0';
-        if (event.id > m.event) dotColor = paint.guide + '44';
+        let dotColor = ink + '92';
+        if (participant || m.kind === 'outcome') dotColor = ink + 'ca';
+        if (event.id > m.event) dotColor = ink + '55';
         let radius = event.messages.length ? 3 : event.reads.length ? 2.5 : 1.7;
         if (isEndpoint) {
           glow(fctx, ...point, 16, ink);
@@ -446,13 +494,26 @@
       fctx.fillStyle=paint.muted;fctx.fillText(events[0]?.time||'',68,158);fctx.textAlign='right';fctx.fillText(events.at(-1)?.time||'',flowWidth-23,158);fctx.textAlign='left';
     }
     function draw(){if(disposed||!ctx||!fctx||!viewWidth||!visible)return;drawSpatial();drawFlow();}
-    function resize(){const b=stage.getBoundingClientRect();if(!b.width)return;viewWidth=b.width;viewHeight=b.height;flowWidth=flowStage.getBoundingClientRect().width;dpr=Math.min(devicePixelRatio||1,2);scene.width=Math.round(viewWidth*dpr);scene.height=Math.round(viewHeight*dpr);flow.width=Math.round(flowWidth*dpr);flow.height=Math.round(168*dpr);cacheFlowRidges();draw();}
+    function resize() {
+      const box=stage.getBoundingClientRect(), riverWidth=flowStage.getBoundingClientRect().width;
+      const ratio=Math.min(devicePixelRatio||1,2);
+      if (!box.width || !box.height || !riverWidth || disposed || !ctx || !fctx) return;
+      if (viewWidth===box.width && viewHeight===box.height && flowWidth===riverWidth && dpr===ratio) return;
+      viewWidth=box.width; viewHeight=box.height; flowWidth=riverWidth; dpr=ratio;
+      scene.width=Math.round(viewWidth*dpr); scene.height=Math.round(viewHeight*dpr);
+      flow.width=Math.round(flowWidth*dpr); flow.height=Math.round(168*dpr);
+      cacheFlowRidges();
+      drawSpatial(); drawFlow();
+    }
     function ensureFrame(){if(!frame&&running())frame=requestAnimationFrame(animate);}
     function animate(now){
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?Math.min(80,now-lastFrame):0;lastFrame=now;
-      if (!reduced && !drag) signalSeconds += dt * speed / 1000;
       if (!holding()) {
+        if (!reduced) {
+          signalSeconds += dt * speed / 1000;
+          if (!manualCamera) yaw += dt * .000028;
+        }
         elapsed += dt * speed;
         if (elapsed >= active().duration) {
           if (current === moments.length - 1) { stop(); return; }
@@ -460,7 +521,7 @@
           return;
         }
       }
-      if (!reduced && !drag && ctx) drawSpatial();
+      if (!reduced && !holding() && ctx) drawSpatial();
       ensureFrame();
     }
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
@@ -492,7 +553,7 @@
     function pick(surface,event){const box=surface.getBoundingClientRect(),hit=nearest(surface,event.clientX-box.left,event.clientY-box.top);if(!hit)return;if(hit.moment !== undefined)seek(hit.moment);else if(hit.message)seek(sendIndex.get(hit.message));else if(eventMoment.has(hit.event))seek(eventMoment.get(hit.event));else {stop();openRecord([hit.event]);}}
     [scene,flow].forEach(surface=>{
       on(surface,'pointermove',event=>{
-        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;yaw=drag.yaw+dx*.004;pitch=clamp(drag.pitch+dy*.003,.20,1.12);hideTooltips();draw();return;}
+        if(drag&&surface===scene){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4){drag.moved=true;manualCamera=true;}yaw=drag.yaw+dx*.004;pitch=clamp(drag.pitch+dy*.003,.20,1.12);hideTooltips();draw();return;}
         if(event.pointerType==='mouse')hover(surface,event);
       });
       on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();updateControls();draw();});
@@ -513,7 +574,7 @@
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1);outcomePanel.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;draw();}
+      else if(button.hasAttribute('data-reset')){yaw=homeView.yaw;pitch=homeView.pitch;manualCamera=false;draw();}
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
     on(range,'input',()=>seek(Number(range.value)));

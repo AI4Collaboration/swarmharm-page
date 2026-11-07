@@ -77,12 +77,14 @@ case only after its new native run has matching reviewed evidence.
 `static/data/trajectories/` contains the public, case-specific viewer data.
 The replay starts at the first recorded action and plays every action in order.
 A finding link with an explicit event opens paused at that cited action or read.
-Each agent has one colored path. Its trail extends only when that agent acts.
-A post marks the sender's action. A verified read briefly adds one dashed arrow
-from the original post to that reader's action. The connection clears at the next
-step. A post without a verified read stays on the sender's path.
-The camera stays still during playback and can be rotated by dragging. The full
-timeline underneath orders all actors' actions together. Separate Action and Message
+The four agents share one tilted disk. Each has one colored arm whose trail
+advances when the agent acts. Dense runs leave clusters of grains around their
+action points. Posts have diamond tips and reads have hollow tips. A verified
+read lights one directed arc between the original post and the reader's event.
+The arc clears at the next step.
+The disk turns slowly during playback. Dragging sets the viewing angle, and
+Reset restores the default view. The four bands below are positioned by recorded
+time and widen where actions cluster. Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 The records case labels the quoted report-pack note as a Shared record.
 Participants are labelled Agent A through D. Original account names are available
@@ -96,7 +98,7 @@ the replay. Browsing the same message's readers preserves the chat scroll positi
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
 Inspecting a message holds its exchange on screen. Pause freezes playback. Reduced motion disables
-autoplay and moving lights. Offscreen views stop drawing. Cases without messages
+autoplay and moving lights. Offscreen views suspend animation. Cases without messages
 show recorded actions and tool arguments, with no invented communication links.
 The full turn grid and action log are available in the evidence disclosures.
 Each card's source arrow opens its own underlying record, so a read action and

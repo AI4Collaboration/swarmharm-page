@@ -108,8 +108,9 @@
 .obs-space-canvas:active { cursor:grabbing; }
 .obs-stage-key { display:flex; gap:15px; position:absolute; top:9px; left:18px; color:var(--scene-muted); font:9px/1.4 var(--font); pointer-events:none; }
 .obs-stage-key > span { display:flex; align-items:center; gap:6px; }
-.obs-stage-key i { width:16px; height:0; border-top:1.5px solid currentColor; }
-.obs-stage-key .obs-key-link { border-top-style:dashed; }
+.obs-stage-key i { width:5px; height:5px; box-sizing:border-box; border-radius:50%; background:currentColor; }
+.obs-stage-key .obs-key-post { border-radius:0; transform:rotate(45deg); }
+.obs-stage-key .obs-key-read { width:7px; height:7px; background:none; border:1.2px solid currentColor; }
 .obs-stage-hint { position:absolute; right:18px; top:9px; color:var(--scene-muted); font:9px/1.4 var(--font); pointer-events:none; }
 .obs-route { flex:none; min-height:54px; padding:2px 18px 8px; }
 .obs-route-heading { display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 7px; color:var(--scene-ink); font:500 12px/1.5 var(--font); }
