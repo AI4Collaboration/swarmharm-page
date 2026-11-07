@@ -186,7 +186,7 @@ icon licenses. Institutional marks identify team affiliations.
 The trajectory visualization is adapted from [AI Safety HOT](https://aisafetyhot.com/en).
 Princeton's shield-and-wordmark signatures use the University's [light](https://www.princeton.edu/themes/custom/hobbes/logo.svg) and [dark](https://www.princeton.edu/themes/custom/hobbes/images/logo-white.svg) website assets.
 Model labels use the OpenAI mark for Sol and the Claude mark for Haiku, from
-[SVGL](https://github.com/pheralb/svgl), with licenses beside both assets. Reasoning badges show High with three filled bars.
+[SVGL](https://github.com/pheralb/svgl), with licenses beside both assets.
 
 The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result.
 
@@ -228,8 +228,9 @@ Illustrations use the recorded action as their cue. In r72 the proposer
 looks toward the imagined handoff and the readers turn to their own requests.
 In r68 the sender explains a forecast version and the recipient concentrates on
 applying it. The record check is shown separately. In r69 all four agents attend
-to their own dispatches. The timing bar shows the joint consequence. High
-reasoning bars and text are red in the study headers and trajectory settings.
+to their own dispatches. The timing bar shows the joint consequence. Study
+headers and trajectory settings pair a brain icon with the reasoning level.
+High appears in red.
 
 Design references reviewed for this revision: Stolen Thoughts (result-led sections
 and direct examples), PostTrainBench (short setup, traces, methodology and project

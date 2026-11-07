@@ -19,7 +19,6 @@
   const icons={
     Agents:'<circle cx="8" cy="7" r="2.5"/><circle cx="24" cy="7" r="2.5"/><circle cx="8" cy="23" r="2.5"/><circle cx="24" cy="23" r="2.5"/><path d="M3 15v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2M3 31v-2a5 5 0 0 1 10 0v2m6 0v-2a5 5 0 0 1 10 0v2"/>',
     Harness:'<rect x="3" y="5" width="26" height="22" rx="4"/><path d="m8 12 4 4-4 4m9 0h7"/>',
-    Reasoning:'<rect x="4" y="21" width="5" height="7" rx="1"/><rect x="13" y="14" width="5" height="14" rx="1"/><rect x="22" y="5" width="5" height="23" rx="1"/>',
     Feedback:'<rect x="3" y="5" width="26" height="20" rx="4"/><path d="m9 25-3 5v-5m3-13h14M9 18h9"/>'
   };
   // Keep recorded goal settings in source data and downloads, outside the presentation.
@@ -30,7 +29,15 @@
     if(reasoning&&!settings.some(([key])=>key==='Reasoning')){
       const value=reasoning[1];settings.splice(3,0,['Reasoning',value.charAt(0).toUpperCase()+value.slice(1)]);
     }
-    return `<dl class="case-settings" style="--settings-count:${settings.length}" aria-label="Recorded experiment settings">${settings.map(([key,value])=>`<div class="case-setting" data-setting="${escape(key.toLowerCase())}" data-value="${escape(value.toLowerCase())}"><span class="case-setting-icon" aria-hidden="true"><svg viewBox="0 0 32 34">${icons[key]||icons.Feedback}</svg></span><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`;
+    const fields = settings.map(([key, value]) => {
+      const icon = key === 'Reasoning' ? '' : `<span class="case-setting-icon" aria-hidden="true">
+        <svg viewBox="0 0 32 34">${icons[key] || icons.Feedback}</svg>
+      </span>`;
+      return `<div class="case-setting" data-setting="${escape(key.toLowerCase())}" data-value="${escape(value.toLowerCase())}">
+        ${icon}<dt>${escape(key)}</dt><dd>${escape(value)}</dd>
+      </div>`;
+    });
+    return `<dl class="case-settings" style="--settings-count:${settings.length}" aria-label="Recorded experiment settings">${fields.join('')}</dl>`;
   }
   function outcomeMarkup(item){
     const visual=item.outcomeVisual;
