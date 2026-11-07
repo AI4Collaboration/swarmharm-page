@@ -21,7 +21,7 @@
   const sections = sectionLinks.map(link => ({link, element:document.getElementById(link.hash.slice(1))}))
     .filter(item => item.element);
   const findingsMenu = navigation?.querySelector('.nav-findings');
-  const compactNav = matchMedia('(max-width: 1050px)');
+  const compactNav = matchMedia('(max-width: 1199px)');
 
   function arrangeNavigation() {
     if (!findingsMenu) return;
@@ -58,11 +58,20 @@
     clearTimeout(sectionTimer);
     sectionTimer = setTimeout(() => {
       const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || headerHeight || 0;
-      const visible = sections.map(({link,element}) => {
+      const positions = sections.map(({link,element}) => {
         const {top,bottom} = element.getBoundingClientRect();
         const margin = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
         return {link,top,bottom,start:padding+margin};
-      }).filter(item => item.top <= item.start + 5 && item.bottom > padding);
+      });
+      const page = document.scrollingElement, last = positions.at(-1);
+      if (page && last?.top < page.clientHeight && page.scrollTop + page.clientHeight >= page.scrollHeight - 2) {
+        // On tall screens more than one footer link can land at the end of the page.
+        const requested = positions.find(item => item.link.hash === location.hash &&
+          item.top >= item.start - 2 && item.top < page.clientHeight);
+        selectSection((requested || last).link.hash);
+        return;
+      }
+      const visible = positions.filter(item => item.top <= item.start + 5 && item.bottom > padding);
       // Two findings can share a row. Keep the one the visitor explicitly opened.
       const active = visible.find(item => item.link.hash === location.hash) ||
         visible.sort((a,b) => b.top-a.top)[0];

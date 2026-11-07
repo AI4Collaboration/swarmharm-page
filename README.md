@@ -76,7 +76,9 @@ case only after its new native run has matching reviewed evidence.
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
 The replay starts on its own when the sky or transcript is visible. A finding
-link starts at the cited action or read. Other links begin with the first action.
+link starts at the cited event. Otherwise the viewer opens on the first verified
+cross-agent read, or the first action in a run without one. The full sequence
+is available from the start of the timeline.
 At normal speed, posts and reads stay on screen for 6 to 12 seconds according to
 message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.1 seconds.
 Each agent has a colored spiral on the lower disk. Its head advances when the
@@ -84,9 +86,11 @@ agent acts. Action times determine where the pins and dust cluster along that
 spiral. Diamonds mark posts and hollow points mark reads.
 Above the disk, faint guides trace a celestial dome. Each verified read rises
 from the original post on one spiral, crosses the vault and returns to the
-reader's pin on another spiral. Both layers share the same camera. A small
-Now marker stays on that arc while the message and its current reader are
-highlighted in the conversation, including when playback is paused. Up to six
+reader's pin on another spiral. Both layers share the same camera. The solid
+arc names the sender and reader and follows the selected message in the chat.
+During a read, a signal travels toward its reader. The highlight remains visible
+when paused. Between reads, a quieter solid arc marks the last verified
+exchange. Selecting it returns to that receipt. Up to six
 sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
 open their original read when selected. Other readers of the current message
 take priority, and a reread uses the same route. Scrubbing rebuilds the routes
@@ -108,8 +112,10 @@ Earlier and later messages remain in chronological order, with the current
 message highlighted and later messages dimmed. The transcript follows the current
 message and scrolls through long messages inside its own panel. Each message groups its author
 with the selected reader, or the shared channel for a post. Explicit reply links
-jump to the original parent. Selecting an author or a read receipt synchronizes
-the replay. Browsing the same message's readers preserves the chat scroll position.
+jump to the original parent. Selecting a message opens its latest verified read
+at the playhead, its first read if still ahead, or its post if nobody read it.
+Selecting a reader opens that receipt. Browsing the same message's readers
+preserves the chat scroll position.
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
 Manually scrolling the transcript holds the exchange for six seconds. Pause freezes playback. Reduced motion disables
@@ -153,7 +159,8 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
 - Keep the institution belt above one navigation row for the six findings,
-  Trajectories and Resources, with Back to top on the left. Smaller screens group
+  Trajectories and Resources, with Back to top on the left and Get in touch
+  linking to the contact form on the right. Smaller screens group
   the six finding links under Findings. The original TLDR leads into the six findings,
   the expanded trajectory viewer, the four domain examples and detection. Use the
   header for section navigation. EuroSafeAI leads the rolling collaborators after

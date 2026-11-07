@@ -174,7 +174,7 @@
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each agent has its own action spiral on the lower disk.${noMessages?'':' Reads arch through the dome above. The solid arc marked Now shows the current read. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each agent has its own action spiral on the lower disk.${noMessages?'':' The bright arc marked Now connects the author to the current reader. Between reads, Last read marks the most recent exchange. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
       </div>
@@ -456,7 +456,17 @@
       if(kind==='outcome')openRecord(null);
       else if(event!=null && Number.isFinite(event))openRecord([event]);
     }
-    function moveMessage(direction){const m=active();if(noMessages){seek(current+direction);return;}const at=m.message?m.index:messages.length;const next=at+direction;if(next>=messages.length)seek(moments.length-1);else seek(sendIndex.get(messages[Math.max(0,next)].id));}
+    function inspectMessage(id) {
+      const read = reads.findLast(step => step.message.id === id && step.order <= current)
+        || reads.find(step => step.message.id === id);
+      seek(read?.order ?? sendIndex.get(id));
+    }
+    function moveMessage(direction) {
+      if (noMessages) { seek(current + direction); return; }
+      const next = (active().index ?? messages.length) + direction;
+      if (next >= messages.length) seek(moments.length - 1);
+      else inspectMessage(messages[Math.max(0,next)].id);
+    }
 
     function strokePoints(context,points,stroke,width=1) {
       context.beginPath();points.forEach((p,i)=>i?context.lineTo(p[0],p[1]):context.moveTo(p[0],p[1]));context.strokeStyle=stroke;context.lineWidth=width;context.stroke();
@@ -668,6 +678,7 @@
       else if(button.hasAttribute('data-next'))seek(current+1);
       else if(button.hasAttribute('data-prev-message'))moveMessage(-1);
       else if(button.hasAttribute('data-next-message'))moveMessage(1);
+      else if(button.classList.contains('obs-chat-select'))inspectMessage(button.dataset.message);
       else if(button.hasAttribute('data-message'))seek(sendIndex.get(button.dataset.message));
       else if(button.hasAttribute('data-obs-receipt'))seek(Number(button.dataset.obsReceipt));
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original);
@@ -730,11 +741,9 @@
     },{threshold:.15});
     visibilityObserver.observe(stage);
     visibilityObserver.observe(documentPanel);
-    const citedMoment=eventMoment.get(meta.focusEvent);
-    if(citedMoment!==undefined){
-      if(!camera.seen)camera.yaw=orbitView.entryYaw(moments[citedMoment],camera.pitch) ?? camera.yaw;
-    }
-    select(citedMoment??0);resize();
+    const openingMoment = eventMoment.get(meta.focusEvent) ?? reads[0]?.order ?? 0;
+    if (!camera.seen) camera.yaw = orbitView.entryYaw(moments[openingMoment],camera.pitch) ?? camera.yaw;
+    select(openingMoment);resize();
     return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
 })();

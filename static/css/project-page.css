@@ -1,6 +1,6 @@
 /* A complete project page, using the existing type, palette and illustration system. */
 .hero .hero-layout { padding-block:0 16px; }
-.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/120; margin:-12px auto -8px; }
+.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/106; margin:-12px auto -8px; }
 .hero .hero-intro { margin:18px auto 0; scroll-margin-top:80px; }
 .findings .phase-summary { display:flex; flex-direction:column; gap:12px; margin-bottom:0; padding:18px; border-radius:0 8px 8px 0; }
 .phase-summary > p { margin:0; color:var(--text); font:14px/1.6 var(--font); }

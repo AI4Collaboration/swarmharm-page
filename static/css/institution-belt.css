@@ -4,7 +4,7 @@
   background: var(--bg);
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 24px;
-  padding: 8px 10px 8px 24px;
+  padding: 5px 10px 8px 24px;
 }
 .institution-leads,
 .institution-collaborators {
@@ -125,7 +125,7 @@
   .institution-collaborators { border-left: 0; border-top: 1px solid var(--line); padding: 10px 0 0; }
 }
 @media (max-width: 600px) {
-  .institutions.institution-band { padding: 10px 14px; }
+  .institutions.institution-band { padding: 7px 14px 10px; }
   .institution-leads { gap: 12px; }
   .institution-band .institution-lead-list { gap: 12px; }
   .institution-caption { font-size: 11px; }

@@ -30,7 +30,6 @@
 
 
   const SKY_RADIUS = 230, SKY_HEIGHT = 197;
-  const READ_TRAVEL_SECONDS = 3;
   const ATLAS_RADIUS = 278;
   const EYE_DISTANCE = SKY_RADIUS * 4.8;
   const CENTER = [0,0,SKY_HEIGHT*.44];
@@ -166,14 +165,14 @@
   }
 
   function label(ctx, item, occupied, {width, height}, paint, fontFamily, gutter) {
-    const {text, at:[x, y], color, current} = item;
-    ctx.font = '600 ' + (current || width < 440 ? 10 : 12) + 'px ' + fontFamily;
+    const {text, at:[x, y], color, current, receipt} = item;
+    ctx.font = '600 ' + (receipt || width < 440 ? 10 : 12) + 'px ' + fontFamily;
     const w = ctx.measureText(text).width + 8, h = 18;
     const right = [x + 6, y - h / 2], left = [x - w - 6, y - h / 2];
     const choices = x >= width / 2 ? [right, left] : [left, right];
     const gap = current ? 5 : 7;
     const above = [x - w / 2, y - h - gap], below = [x - w / 2, y + gap];
-    if (current) choices.unshift(above,below);
+    if (receipt) choices.unshift(above,below);
     else choices.push(above,below);
     let best, penalty = Infinity;
     for (const [px, py] of choices) {
@@ -319,7 +318,7 @@
     }
     return {at,focus:at(.5),path:Array.from({length:65},(_,i)=>at(i/64))};
   }
-  function drawRead(ctx, arc, projection, paint, progress, hits, historyAlpha) {
+  function drawRead(ctx, arc, projection, paint, hits, {state, alpha = 1, progress = 0}) {
     const {post,reader,receipt} = arc;
     const a = post.screenTip, b = reader.screenTip;
     const points = arc.path.map(projection.project);
@@ -328,35 +327,38 @@
     gradient.addColorStop(0,from); gradient.addColorStop(1,to);
     ctx.beginPath(); ctx.moveTo(...points[0]);
     for (let i=1; i<points.length; i++) ctx.lineTo(...points[i]);
-    const earlierRead = progress === null;
+    const earlierRead = state === 'history';
     for (let i=1; i<points.length-1; i++) {
       const [x,y] = points[i];
       hits.push({x,y,r:7,event:receipt.event,moment:receipt.order,message:receipt.message.id,earlierRead});
     }
-    if (earlierRead) {
+    if (state !== 'current') {
       ctx.save();
-      ctx.setLineDash([4,3]);
-      ctx.globalAlpha = historyAlpha;
-      ctx.strokeStyle = gradient; ctx.lineWidth = 1.35; ctx.stroke();
+      if (state === 'history') ctx.setLineDash([4,4]);
+      else {
+        ctx.strokeStyle = paint.paper; ctx.lineWidth = 4; ctx.stroke();
+      }
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = gradient; ctx.lineWidth = state === 'history' ? 1.15 : 2.4; ctx.stroke();
       ctx.restore();
       return;
     }
 
     const point = t => projection.project(arc.at(t));
     if (!paint.dark) {
-      ctx.strokeStyle=paint.paper; ctx.lineWidth=6; ctx.globalAlpha=.96; ctx.stroke();
+      ctx.strokeStyle=paint.paper; ctx.lineWidth=8; ctx.globalAlpha=.98; ctx.stroke();
     }
     ctx.strokeStyle = gradient;
-    const strokes = paint.dark ? [[10,.10],[6,.23],[3.2,1]] : [[4.4,.30],[3,1]];
+    const strokes = paint.dark ? [[14,.10],[8,.26],[4.6,1]] : [[6,.35],[4.6,1]];
     for (const [width, alpha] of strokes) {
       ctx.globalAlpha = alpha; ctx.lineWidth = width; ctx.stroke();
     }
-    ctx.strokeStyle = paint.packet; ctx.lineWidth = 1.4; ctx.stroke();
+    ctx.strokeStyle = paint.packet; ctx.lineWidth = 1.9; ctx.stroke();
 
     const arrow = point(.78), prior = point(.76);
     ctx.save(); ctx.translate(...arrow);
     ctx.rotate(Math.atan2(arrow[1]-prior[1],arrow[0]-prior[0]));
-    line(ctx,[[-5.5,-3.6],[0,0],[-5.5,3.6]],paint.packet,2); ctx.restore();
+    line(ctx,[[-6,-4],[0,0],[-6,4]],paint.packet,2.4); ctx.restore();
 
     const start = Math.max(0,progress-Math.min(.27,32/Math.max(1,Math.hypot(b[0]-a[0],b[1]-a[1]))));
     const pulse = progress < .5 ? from : to;
@@ -394,6 +396,7 @@
 
   window.createTrajectoryOrbitView = ({canvas, actors, actorEvents, reads, sendIndex, fontFamily}) => {
     const ctx = canvas.getContext('2d');
+    const instructions = canvas.getAttribute('aria-label');
 
     const plate = document.createElement('canvas');
     const floor = document.createElement('div');
@@ -449,7 +452,7 @@
       return bestAngle;
     }
 
-    let moment,arc,earlierArcs=[],selectedAt=0,initialTravel=0,camera,framing,projection,projectedFocus;
+    let moment,arc,featured,earlierArcs=[],selectedAt=0,initialTravel=0,camera,framing,projection,projectedFocus;
     let focus=CENTER,focusFrom=CENTER,focusTo=CENTER,selectedFocus=CENTER,focusProgress=1;
 
     function setFocus(target,animate) {
@@ -468,9 +471,14 @@
     function select(next,seconds,animate,history,easeFocus) {
       moment=next; selectedAt=seconds; initialTravel=animate?0:.54;
       arc=readArcs.get(next);
-      earlierArcs=history.map(receipt=>readArcs.get(receipt)).filter(Boolean);
-      const latest=arc || readArcs.get(reads.findLast(read=>read.order<next.order));
-      selectedFocus=latest?.focus || CENTER;
+      featured=arc || readArcs.get(reads.findLast(read=>read.order<next.order));
+      const receipt=featured?.receipt;
+      const description=receipt ? (arc?'Current':'Last')+' read from Agent '+receipt.message.actor+' to Agent '+receipt.actor+'. ' : '';
+      canvas.setAttribute('aria-label',description+instructions);
+      earlierArcs=history.map(receipt=>readArcs.get(receipt)).filter(link=>link && (
+        link.post.track!==featured?.post.track || link.reader.track!==featured?.reader.track
+      )).slice(0,featured ? 5 : 6);
+      selectedFocus=featured?.focus || CENTER;
       setFocus(selectedFocus,easeFocus);
       for (const track of tracks) {
         const last = track.nodes.findLast(node => node.event.id <= next.event);
@@ -554,7 +562,8 @@
       ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,width,height);
       ctx.lineCap='round'; ctx.lineJoin='round';
       const selected=nodes.get(moment.event), post=moment.message && nodes.get(moment.message.event);
-      const travel=reduced ? .60 : clamp(initialTravel+(seconds-selectedAt)/READ_TRAVEL_SECONDS,0,1);
+      const travelSeconds=(moment.duration/1000)*.8;
+      const travel=reduced ? .60 : clamp(initialTravel+(seconds-selectedAt)/travelSeconds,0,1);
       const hits=[],labels=[],occupied=[],callouts=[];
       drawSky(ctx,projection,paint);
       drawSpirals(seconds,paint);
@@ -570,13 +579,13 @@
         const rim = track.screen[Math.floor(STEPS*.94)];
         const dx = rim[0]-center[0], dy = rim[1]-center[1], length = Math.hypot(dx,dy) || 1;
         const anchor = [rim[0]+6*dx/length,rim[1]+6*dy/length];
-        labels.push({text:'Agent '+track.id,at:anchor,color:ink});
+        labels.push({text:'Agent '+track.id,at:anchor,color:arc && !involved ? paint.muted : ink});
         occupied.push({x:anchor[0]-4,y:anchor[1]-4,w:8,h:8});
       }
       for (const [i,earlier] of earlierArcs.entries()) {
         const related=earlier.receipt.message===moment.message;
-        const alpha=related ? .63 : (i<2 ? .46 : .32);
-        drawRead(ctx,earlier,projection,paint,null,hits,alpha);
+        const alpha=related ? .44 : (i<2 ? .33 : .25);
+        drawRead(ctx,earlier,projection,paint,hits,{state:'history',alpha});
       }
       for (const node of backToFront) {
         const {track,size} = node, ink = paint.agents.get(track.id) || paint.muted;
@@ -600,9 +609,16 @@
         if (raised) hits.push({...hit,x:node.foot[0],y:node.foot[1],r:4});
       }
       ctx.globalAlpha = 1;
-      if (arc) {
-        drawRead(ctx,arc,projection,paint,travel,hits);
-        labels.unshift({text:'Now',at:project(arc.at(.40)),color:paint.paper,current:true});
+      if (featured) {
+        const receipt=featured.receipt;
+        const pair=receipt.message.actor+' → '+receipt.actor;
+        drawRead(ctx,featured,projection,paint,hits,arc ? {state:'current',progress:travel} : {state:'last',alpha:.86});
+        for (let i=4;i<featured.path.length;i+=5) {
+          const [x,y]=project(featured.path[i]);
+          occupied.push({x:x-4,y:y-4,w:8,h:8});
+        }
+        labels.unshift({text:(arc?'Now · ':'Last read · ')+pair,at:project(featured.at(.46)),
+          color:arc?paint.paper:paint.muted,current:Boolean(arc),receipt});
       }
       if (post) {
         const ink = paint.agents.get(post.event.actor);
@@ -615,7 +631,7 @@
         const ink = paint.agents.get(selected.event.actor);
         bloom(ctx,...selected.screenTip,13*selected.size,ink,'65');
         circle(ctx,...selected.screenTip,6.2*selected.size,ink,true);
-        const arrival = (seconds-selectedAt-(1-initialTravel)*READ_TRAVEL_SECONDS)/.7;
+        const arrival = (seconds-selectedAt-(1-initialTravel)*travelSeconds)/.7;
         if (arc && !reduced && arrival>0 && arrival<1) {
           ctx.globalAlpha=(1-arrival)*.65;
           circle(ctx,...selected.screenTip,(6.2+13*arrival)*selected.size,ink,true);
@@ -627,7 +643,8 @@
       if (gutter) drawCallouts(ctx,callouts,gutter,height,paint,fontFamily);
       for (const item of labels) {
         const bounds = label(ctx,item,occupied,view,paint,fontFamily,gutter);
-        if (item.current) hits.push({bounds,x:item.at[0],y:item.at[1],event:moment.event,moment:moment.order,message:moment.message.id});
+        if (item.receipt) hits.push({bounds,x:item.at[0],y:item.at[1],event:item.receipt.event,
+          moment:item.receipt.order,message:item.receipt.message.id});
       }
       if (hover) circle(ctx,hover.x,hover.y,6.5,paint.ink,true);
       return hits.reverse();
