@@ -112,9 +112,12 @@ and shows the recorded delay. Clicking the post time returns to that note.
 The time beside the dome opens the timeline at the selected moment. A link
 ending in `#timeline` opens the chart with its original message and reader.
 The main Swarm trajectory view opens in **Spiral**. Its **Straight** toggle
-shows the same moment on parallel action tracks. A smooth arc rises from the
-original post and lands on its verified reader. Selecting the arc opens that
-message. Drag or use Shift with the arrow keys to rotate the straight layout.
+shows the same moment on parallel action tracks. A solid arc marked **Now**
+connects the original post to its current reader. Select it to open the post.
+Dashed arcs show earlier verified reads, with priority given to other readers
+of the same message. Select a dashed arc to return to that reader and time.
+The two layouts share the same limit of six distinct author-to-reader routes.
+Drag or use Shift with the arrow keys to rotate the straight layout.
 The timeline below follows the selected event in both layouts. Shared links
 can open the main graph at `#swarm-trajectory` and explicitly request
 `layout=straight`. Older `timeline=3d` links open the recorded moment in Spiral.

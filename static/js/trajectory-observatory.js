@@ -110,6 +110,7 @@
     let readingUntil=0,hovered=null,drag=null,transcriptScroll=null;
     let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null;
+    let readHistory=[];
     let scrubPointer=null;
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
@@ -193,7 +194,7 @@
               <button type="button" data-track-layout="straight" aria-pressed="false">Straight</button>
             </div></div><span class="obs-view-tools"><button class="obs-timeline-jump" type="button" data-timeline-jump title="Go to this moment on the timeline"><time></time> <span aria-hidden="true">↓</span></button><small data-share-status role="status"></small><button class="obs-share" type="button" data-share aria-label="Copy link to this moment" title="Copy link to this moment"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 12 4-4m-1.5-2.5 1.8-1.8a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0m.2 2.8-1.8 1.8a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/></svg></button><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></span></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden><button type="button" data-original="message" title="View original ${entryLabel}"><span data-excerpt></span><span aria-hidden="true">↗</span></button></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each agent has its own action spiral on the lower disk.${noMessages?'':' The bright arc marked Now connects the author to the current reader. Between reads, Last read marks the most recent exchange. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><i class="obs-arc-signal" aria-hidden="true" hidden></i><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each agent has its own action spiral on the lower disk.${noMessages?'':' The bright arc marked Now connects the author to the current reader. Between reads, Last read marks the most recent exchange. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><i class="obs-arc-signal" aria-hidden="true" hidden></i><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span><span class="obs-key-history"><i></i>Earlier reads</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
         <section class="obs-flow" id="timeline" aria-labelledby="obs-timeline-title">
@@ -505,18 +506,19 @@
       transcriptScroll = null;
       if (hovered) { hovered=null; hideTooltips(); }
       const m = active(), message = m.message;
-      const history = earlierReadsAt(m);
+      readHistory = earlierReadsAt(m);
+      spatial.toggleAttribute('data-read-history',readHistory.length>0);
       if (m.kind === 'outcome') playing = false;
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
       const animateView=isVisible() && !reduced;
       const animateSpiral=animateView && trackLayout==='spiral';
       settlePaused=animateSpiral && !playing;
-      selectOrbit(m, history, {
+      selectOrbit(m, readHistory, {
         animate: animateSpiral, easeFocus: animateSpiral, launch: !reduced && (playing || !started)
       });
       renderInspector(m, animateView);
-      showExchange(m, history);
+      showExchange(m, readHistory);
       showTimeline(m);
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
@@ -624,7 +626,9 @@
         return;
       }
       const selected=moment.kind==='read' ? 'Current read from Agent '+moment.message.actor+' to Agent '+moment.actor+'. ' : '';
-      scene.setAttribute('aria-label',selected+'Each agent has a straight track on the floor in recorded time. A curved arc connects a post to its verified read. Select the arc for the original message. Drag or use Shift and arrow keys to rotate. Arrow keys step through events.');
+      const currentRead=selected?'The bright solid arc connects the post to its current reader. Select it to open the original '+entryLabel+'. ':'';
+      const past=readHistory.length?'Dashed arcs show earlier reads. Select one to go to that read. ':'';
+      scene.setAttribute('aria-label',selected+'Each agent has a straight track on the floor in recorded time. '+currentRead+past+'Drag or use Shift and arrow keys to rotate. Arrow keys step through events.');
     }
     function updateLayoutControl() {
       spatial.dataset.layout=trackLayout;
@@ -661,8 +665,8 @@
         linear ||= window.createLinearTimeline({actors,moments:recordedMoments,eventFraction,fontFamily});
         ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,viewWidth,viewHeight);
         const m=active(), post=m.kind==='read'?moments[sendIndex.get(m.message.id)]:null;
-        sceneHits=linear.draw({ctx,width:viewWidth,height:viewHeight,angle:straightCamera,paint,active:m,post,ticks,duration,
-          mark:drawTimeMark,hovered:hovered?.surface===scene?hovered.hit:null,recordLabel:sharedRecords?'Record':'Message',clockLabel});
+        sceneHits=linear.draw({ctx,width:viewWidth,height:viewHeight,angle:straightCamera,paint,active:m,post,history:readHistory,ticks,duration,
+          mark:drawTimeMark,hovered:hovered?.surface===scene?hovered.hit:null,clockLabel});
         updateArcSignal();
         return;
       }
@@ -826,10 +830,8 @@
       else if (trackLayout==='straight' || !playing || reduced || holding()) drawSpatial();
     }
     function nearest(surface, x, y) {
-      if(surface===scene && trackLayout==='straight' && active().kind==='read') {
-        const arc=linear?.arcHit(x,y);
-        if(arc?.moment===current)return arc;
-      }
+      const arc=surface===scene && trackLayout==='straight'?linear?.arcHit(x,y):null;
+      if(arc && !arc.earlierRead && arc.moment===current)return arc;
       let best = null, distance = Infinity, bestPriority = -1;
       const sourceOrder=active().message ? sendIndex.get(active().message.id) : undefined;
       for (const hit of surface === scene ? sceneHits : flowHits) {
@@ -846,7 +848,7 @@
           best = hit; distance = d; bestPriority = priority;
         }
       }
-      return best;
+      return best || (arc?.earlierRead && readHistory.some(m=>m.order===arc.moment)?arc:null);
     }
     function hover(surface,event){
       const box=surface.getBoundingClientRect(),x=event.clientX-box.left,y=event.clientY-box.top,hit=nearest(surface,x,y),tip=tooltips.get(surface);
@@ -858,9 +860,10 @@
       if (message) label = 'Select message';
       if (moment?.kind === 'read') label = 'Select recorded read';
       if (moment?.kind === 'action') label = 'Select action';
-      if (hit.arc) label = 'View original '+entryLabel;
+      if (hit.arc) label = hit.earlierRead ? 'Go to earlier read' : 'View original '+entryLabel;
+      const participant=hit.arc ? names.get(message.actor)+' → '+names.get(e.actor) : names.get(e.actor);
       const stamp = surface === flow ? clockLabel(recordedSecond(e.id)) + ' elapsed' : e.time;
-      tip.innerHTML=`<strong style="color:${actorStyle(e.actor)}">${esc(names.get(e.actor))}<time>${esc(stamp)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
+      tip.innerHTML=`<strong style="color:${actorStyle(e.actor)}">${esc(participant)}<time>${esc(stamp)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
       tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';redrawHover(surface);
     }
     function pick(surface,event) {
@@ -869,7 +872,7 @@
         if (surface === flow && x >= axisLeft && x <= flowWidth-axisRight) {
           seek(momentAtSecond(duration*(x-axisLeft)/(flowWidth-axisLeft-axisRight)),'#timeline');
         }
-      } else if (hit.arc) openOriginal('message','#swarm-trajectory');
+      } else if (hit.arc && !hit.earlierRead) openOriginal('message','#swarm-trajectory');
       else if (hit.moment !== undefined) seek(hit.moment,surface === flow ? '#timeline' : sceneAnchor());
       else if (hit.message) seek(sendIndex.get(hit.message));
       else if (eventMoment.has(hit.event)) seek(eventMoment.get(hit.event));
@@ -1006,7 +1009,7 @@
       if (reduced) {
         arcSignal.hidden=true;
         if (playing) started=false;
-        selectOrbit(active(),earlierReadsAt(active()));
+        selectOrbit(active(),readHistory);
         stop();
       } else {
         startIfVisible(); updateControls(); ensureFrame();

@@ -1,15 +1,15 @@
-/* Floor-level action tracks and a smooth 3D arc for the selected recorded read. */
+/* Straight action tracks with elevated arcs between recorded posts and reads. */
 (() => {
   const clamp = (value,min,max) => Math.max(min,Math.min(max,value));
   function arcHeight(timeSpan,laneSpan,length,laneSpacing,ceiling) {
     const span=Math.hypot(timeSpan*length,laneSpan*laneSpacing);
-    return clamp(span*.72,ceiling*.34,ceiling);
+    return clamp(span*.9,ceiling*.38,ceiling);
   }
 
   // The camera looks at three world coordinates: elapsed time (x), agent (y), and layer (z).
   function makeFrame(width,height,yaw,pitch,actorCount,readSpans) {
     const length = Math.max(190,width-86), depth = clamp(100+width*.08,124,182);
-    const elevation = depth+9, laneSpacing=depth/Math.max(1,actorCount-1);
+    const elevation = depth*1.22+12, laneSpacing=depth/Math.max(1,actorCount-1);
     const cosY=Math.cos(yaw), sinY=Math.sin(yaw), cosP=Math.cos(pitch), sinP=Math.sin(pitch);
     const eye = Math.max(850,length*3.6);
     function view(fraction,lane,z) {
@@ -62,25 +62,75 @@
     face(ctx,[[x+4*ux,y+4*uy],[x-4*ux-3*uy,y-4*uy+3*ux],[x-4*ux+3*uy,y-4*uy-3*ux]],ink);
   }
 
+  function distanceToArc(x,y,route) {
+    // Leave the post and read pins at each end available for direct selection.
+    if ([route[0],route.at(-1)].some(p=>Math.hypot(x-p[0],y-p[1])<9)) return Infinity;
+    let distance=Infinity;
+    for(let i=1;i<route.length;i++) {
+      const a=route[i-1], b=route[i], dx=b[0]-a[0], dy=b[1]-a[1];
+      const t=clamp(((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1),0,1);
+      distance=Math.min(distance,(x-a[0]-t*dx)**2+(y-a[1]-t*dy)**2);
+    }
+    return Math.sqrt(distance);
+  }
+
+  function placeBadge(current,history,width,w,h) {
+    const {top,route}=current, arrival=route[46], departure=route[19];
+    const right=route.at(-1)[0]>=route[0][0], gap=7;
+    const outside=(point,onRight)=>point[0]+(onRight?gap:-w-gap);
+    const positions=[
+      [top,top[0]-w/2], [arrival,outside(arrival,right)], [top,outside(top,right)],
+      [departure,outside(departure,!right)], [top,top[0]-w/2,h+gap]
+    ];
+    let best, fewest=Infinity;
+    const paths=[current,...history];
+    for(const [anchor,left,lift=0] of positions) {
+      const x=clamp(left,4,width-w-4), y=Math.max(4,anchor[1]-h-gap-lift);
+      let overlap=0;
+      for(const {route} of paths) for(const [px,py] of route) {
+        if(px>x-3 && px<x+w+3 && py>y-3 && py<y+h+3)overlap++;
+      }
+      if(overlap<fewest) { best={x,y,w,h,anchor}; fewest=overlap; }
+      if(!overlap)break;
+    }
+    return best;
+  }
+
   window.createLinearTimeline = ({actors,moments,eventFraction,fontFamily}) => {
     const lanes=new Map(actors.map((actor,i)=>[actor.id,i]));
     const floorEvents=moments.map(m=>({moment:m,t:eventFraction(m.event),lane:lanes.get(m.actor)}));
-    const readSpans=floorEvents.filter(({moment})=>moment.kind==='read')
-      .map(({moment,t,lane})=>[eventFraction(moment.message.event),lanes.get(moment.message.actor),t,lane]);
-    let frame, geometryKey, points=[], arc=null;
+    const readSpans=new Map(floorEvents.filter(({moment})=>moment.kind==='read')
+      .map(({moment,t,lane})=>[moment.order,[eventFraction(moment.message.event),lanes.get(moment.message.actor),t,lane]]));
+    const curves=new Map();
+    let frame, geometryKey, points=[], currentArc=null, earlierArcs=[], badge=null;
     function layout(width,height,angle) {
       const key=[width,height,angle.yaw,angle.pitch].join('/');
       if(key===geometryKey)return;
       geometryKey=key;
-      frame=makeFrame(width,height,angle.yaw,angle.pitch,actors.length,readSpans);
+      frame=makeFrame(width,height,angle.yaw,angle.pitch,actors.length,readSpans.values());
+      curves.clear();
       points=floorEvents.map(({moment,t,lane})=>{
         const [x,y]=frame.project(t,lane);
         return {x,y,r:8,event:moment.event,moment:moment.order,message:moment.message?.id};
       });
     }
-    function draw({ctx,width,height,angle,paint,active,post,ticks,duration,mark,hovered,recordLabel,clockLabel}) {
+    function curveFor(moment) {
+      if(curves.has(moment.order))return curves.get(moment.order);
+      const [start,from,end,to]=readSpans.get(moment.order);
+      const rise=arcHeight(end-start,to-from,frame.length,frame.laneSpacing,frame.elevation);
+      // Keep both ends at the actual times, including same-second exchanges.
+      const pointAt=t=>frame.project(start+(end-start)*t,from+(to-from)*t,4*rise*t*(1-t));
+      const route=Array.from({length:65},(_,i)=>pointAt(i/64));
+      const curve={moment,pointAt,route,top:route.reduce((a,b)=>a[1]<b[1]?a:b)};
+      curves.set(moment.order,curve);
+      return curve;
+    }
+    function draw({ctx,width,height,angle,paint,active,post,history,ticks,duration,mark,hovered,clockLabel}) {
       layout(width,height,angle);
-      const {project,back,front,elevation}=frame;
+      currentArc=post?curveFor(active):null;
+      earlierArcs=history.map(curveFor);
+      badge=null;
+      const {project,back,front}=frame;
       const floor=[project(-.015,back),project(1.015,back),project(1.015,front),project(-.015,front)];
       const lowerFront=[project(1.015,front,-5),project(-.015,front,-5)];
       const ink=id=>paint.agents.get(id)||paint.muted;
@@ -106,46 +156,56 @@
       stroke(ctx,[project(now,back),project(now,front)],paint.packet+'70',1);
       actors.forEach((actor,row)=>{
         const color=ink(actor.id), origin=project(0,row);
-        stroke(ctx,[origin,project(1,row)],color+'67',1);
-        if(now>0)stroke(ctx,[origin,project(now,row)],color+'b5',1.2);
+        const involved=actor.id===active.actor || actor.id===post?.actor;
+        stroke(ctx,[origin,project(1,row)],color+'49',.9);
+        if(now>0)stroke(ctx,[origin,project(now,row)],color+(involved?'b0':'72'),involved?1.25:1);
         ctx.font='500 11px '+fontFamily; ctx.textAlign='right'; ctx.fillStyle=color;
         ctx.fillText('Agent '+actor.id,origin[0]-7,origin[1]+3);
       });
       ctx.textAlign='left';
       for(const {moment} of floorEvents) {
-        const alpha=moment.order>active.order?'57':moment.kind==='action'?'9d':'d5';
+        const alpha=moment.order>active.order?'48':moment.kind==='action'?'86':'bb';
         mark(ctx,points[moment.order],moment,ink(moment.actor)+alpha);
       }
 
-      arc=null;
-      if(post) {
-        const posted=eventFraction(post.event), authorLane=lanes.get(post.actor), readerLane=lanes.get(active.actor);
-        const rise=arcHeight(now-posted,readerLane-authorLane,frame.length,frame.laneSpacing,elevation);
-        // The curve stays within the two observed timestamps, even when they coincide.
-        const pointAt=t=>project(posted+(now-posted)*t,authorLane+(readerLane-authorLane)*t,4*rise*t*(1-t));
-        const route=Array.from({length:65},(_,i)=>pointAt(i/64));
+      // Paint the older paths underneath. Only the current read gets a solid line and a moving signal.
+      ctx.setLineDash([4,4]);
+      for(let i=earlierArcs.length-1;i>=0;i--) {
+        const {route,moment}=earlierArcs[i];
+        const hover=hovered?.earlierRead && hovered.moment===moment.order;
+        const related=moment.message===active.message;
+        const opacity=hover?'e8':related?'aa':'81';
+        stroke(ctx,route,ink(moment.actor)+opacity,hover?1.95:related?1.55:1.15);
+      }
+      ctx.setLineDash([]);
+      if(currentArc) {
+        const {route,pointAt}=currentArc;
         const sender=ink(post.actor), reader=ink(active.actor);
         const line=ctx.createLinearGradient(...route[0],...route.at(-1));
         line.addColorStop(0,sender); line.addColorStop(.52,paint.packet); line.addColorStop(1,reader);
-        stroke(ctx,route,reader+(paint.dark?'20':'16'),6);
-        stroke(ctx,route,line,2.3);
-        arrow(ctx,pointAt(.68),pointAt(.7),paint.packet);
+        stroke(ctx,route,paint.paper+(paint.dark?'df':'ee'),5.5);
+        if(paint.dark)stroke(ctx,route,reader+'34',5);
+        stroke(ctx,route,line,2.65);
+        arrow(ctx,pointAt(.73),pointAt(.75),paint.packet);
         mark(ctx,points[post.order],post,sender,true);
         ctx.font='600 11px '+fontFamily;
-        const label=recordLabel+' '+String(active.index+1).padStart(2,'0')+' ↗';
-        const w=ctx.measureText(label).width+14, h=20;
-        const top=route.reduce((highest,p)=>p[1]<highest[1]?p:highest);
-        let x=clamp(top[0]-w/2,4,width-w-4);
-        const y=Math.max(5,top[1]-h-6);
+        const label='Now · '+post.actor+' → '+active.actor;
+        const w=ctx.measureText(label).width+21, h=20;
+        badge=placeBadge(currentArc,earlierArcs,width,w,h);
+        const {x,y,anchor}=badge;
+        stroke(ctx,[[clamp(anchor[0],x+4,x+w-4),y+h],anchor],reader+'80',.9);
         ctx.fillStyle=paint.paper; ctx.strokeStyle=reader+'76'; ctx.lineWidth=.8;
         ctx.beginPath(); ctx.roundRect(x,y,w,h,5); ctx.fill(); ctx.stroke();
-        ctx.fillStyle=paint.ink; ctx.fillText(label,x+7,y+13.5);
-        arc={route,pointAt,badge:{x,y,w,h},moment:active};
+        ctx.fillStyle=reader; ctx.beginPath(); ctx.arc(x+8,y+10,2,0,2*Math.PI); ctx.fill();
+        ctx.fillStyle=paint.ink; ctx.fillText(label,x+15,y+13.5);
       }
       if(active.kind!=='outcome') {
         const point=points[active.order];
         ctx.beginPath(); ctx.arc(point.x,point.y,8,0,2*Math.PI); ctx.fillStyle=ink(active.actor)+'2d'; ctx.fill();
         mark(ctx,point,active,paint.packet,true);
+        if(currentArc) {
+          ctx.beginPath(); ctx.arc(point.x,point.y,2,0,2*Math.PI); ctx.fillStyle=ink(active.actor); ctx.fill();
+        }
       }
       if(hovered && !hovered.arc) {
         ctx.beginPath(); ctx.arc(hovered.x,hovered.y,7,0,2*Math.PI); ctx.strokeStyle=paint.ink; ctx.lineWidth=1; ctx.stroke();
@@ -155,20 +215,23 @@
     }
 
     function arcHit(x,y) {
-      if(!arc)return null;
-      const {route,badge,moment}=arc;
-      let hit=x>=badge.x-2 && x<=badge.x+badge.w+2 && y>=badge.y-2 && y<=badge.y+badge.h+2;
-      // The endpoints select the post or read. The arc opens the original message.
-      if(!hit && [route[0],route.at(-1)].some(p=>Math.hypot(x-p[0],y-p[1])<9))return null;
-      for(let i=1;!hit && i<route.length;i++) {
-        const a=route[i-1], b=route[i], dx=b[0]-a[0], dy=b[1]-a[1];
-        const t=clamp(((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1),0,1);
-        hit=Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)<7;
+      function hit({moment},earlierRead) {
+        return {x,y,arc:true,earlierRead,event:moment.event,message:moment.message.id,moment:moment.order};
       }
-      return hit ? {x,y,arc:true,event:moment.event,message:moment.message.id,moment:moment.order} : null;
+      if(badge && x>=badge.x-2 && x<=badge.x+badge.w+2 && y>=badge.y-2 && y<=badge.y+badge.h+2)
+        return hit(currentArc,false);
+      // Choose the closest stroke. The solid path wins at an actual crossing.
+      const currentDistance=currentArc?distanceToArc(x,y,currentArc.route):Infinity;
+      let closest=null, distance=6;
+      for(const arc of earlierArcs) {
+        const d=distanceToArc(x,y,arc.route);
+        if(d<distance) { closest=arc; distance=d; }
+      }
+      if(currentDistance<7 && (!closest || currentDistance<=distance+1.5))return hit(currentArc,false);
+      return closest?hit(closest,true):null;
     }
     function signalAt(progress) {
-      return arc ? arc.pointAt(clamp(progress,0,1)) : null;
+      return currentArc ? currentArc.pointAt(clamp(progress,0,1)) : null;
     }
     return {draw,arcHit,signalAt};
   };
