@@ -122,7 +122,7 @@
       if (current!==version) return;
       replace();
       dispose=window.mountRecordedTimeline(full,data,{
-        ...item, position, pinMoment:moment => updateAddress(item, moment, '#trajectory')
+        ...item, position, pinMoment:(moment,hash) => updateAddress(item, moment, hash)
       });
       mountedKey=item.key;
       if (hadViewer && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -132,7 +132,10 @@
       if (current!==version||error.name==='AbortError') return;
       replace();
       full.innerHTML='<p class="record-loading" role="status">The trajectory could not be loaded.</p><button type="button" class="record-retry">Try again</button>';
-      full.querySelector('button').addEventListener('click',()=>show(item.key,position),{once:true});
+      full.querySelector('button').addEventListener('click',()=>{
+        const retry=show(item.key,position);
+        if(location.hash==='#timeline') landAfter(retry,'#timeline');
+      },{once:true});
     } finally {
       if (current===version) { root.removeAttribute('aria-busy'); loading.textContent=''; }
     }
@@ -156,24 +159,31 @@
     return show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), positionFromUrl(url));
   }
   window.addEventListener('popstate', () => {
-    if (location.search !== renderedSearch) showLocation();
+    if (location.search === renderedSearch) return;
+    const render=showLocation();
+    if(location.hash==='#timeline') landAfter(render,'#timeline');
   });
-  const initialHash = location.hash;
-  const initialTarget = document.getElementById(initialHash.slice(1));
-  const firstRender = showLocation();
-  // Loading the initial replay adds height above the lower sections.
-  if (initialTarget && !root.contains(initialTarget) &&
-      (root.compareDocumentPosition(initialTarget) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+  function landAfter(render,hash) {
+    const landingVersion = version;
     const landing = new AbortController();
     const cancel = () => landing.abort();
     for (const type of ['pointerdown','wheel','touchstart','keydown']) {
       window.addEventListener(type,cancel,{passive:true,once:true,signal:landing.signal});
     }
-    firstRender.then(() => requestAnimationFrame(() => {
-      if (!landing.signal.aborted && location.hash === initialHash) {
-        initialTarget.scrollIntoView({block:'start',behavior:'instant'});
+    render.then(() => requestAnimationFrame(() => {
+      if (!landing.signal.aborted && version === landingVersion && location.hash === hash) {
+        const target = document.getElementById(hash.slice(1));
+        (target || root).scrollIntoView({block:'start',behavior:'instant'});
       }
       cancel();
     }));
+  }
+  const initialHash = location.hash;
+  const initialTarget = document.getElementById(initialHash.slice(1));
+  const firstRender = showLocation();
+  // The timeline is mounted with the replay, and later sections move when it loads.
+  if (initialHash === '#timeline' || (initialTarget && !root.contains(initialTarget) &&
+      (root.compareDocumentPosition(initialTarget) & Node.DOCUMENT_POSITION_FOLLOWING))) {
+    landAfter(firstRender,initialHash);
   }
 })();

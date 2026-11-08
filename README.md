@@ -105,8 +105,15 @@ the next selected read, carrying its pan velocity through rapid reader changes.
 The route badge stays above its arc. Reduced motion frames the read immediately. Dragging sets the
 orbit angle. Theme and case changes preserve that angle, and Reset restores
 the default view. Light mode uses a dark signal on a white-edged read arc.
-The four bands below are positioned by recorded
-time and widen where actions cluster. Separate Action and Message
+The timeline starts at the first recorded action. Every agent has a lane on
+the same elapsed-time axis as the playback slider. Dots show actions, diamonds
+show posts, and rings show reads. A selected read connects to its exact post
+and shows the recorded delay. Clicking the post time returns to that note.
+The time beside the dome opens the timeline at the selected moment. A link
+ending in `#timeline` opens the chart with its original message and reader.
+On phones the timeline sits directly below the dome. The arrows step through
+individual events, including distinct reads recorded in the same second.
+Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 The records case labels the quoted report-pack note as a Shared record.
 Participants are labelled Agent A through D. Original account names are available
