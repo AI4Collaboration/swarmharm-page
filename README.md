@@ -111,12 +111,13 @@ show posts, and rings show reads. A selected read connects to its exact post
 and shows the recorded delay. Clicking the post time returns to that note.
 The time beside the dome opens the timeline at the selected moment. A link
 ending in `#timeline` opens the chart with its original message and reader.
-The timeline opens in 2D by default. Select 3D, or share a link with
-`timeline=3d`, to see straight action tracks on a common floor. Time runs along
-each track, and the tracks are separated by agent. A selected read rises from
-the original post, crosses at a fixed height and descends to its recorded reader.
-The displayed timestamps give the delay. Select the raised line to open the
-original message. Drag or use Shift with the arrow keys to change the angle.
+The main Swarm trajectory view opens in **Spiral**. Its **Straight** toggle
+shows the same moment on parallel action tracks. A smooth arc rises from the
+original post and lands on its verified reader. Selecting the arc opens that
+message. Drag or use Shift with the arrow keys to rotate the straight layout.
+The timeline below follows the selected event in both layouts. Shared links
+can open the main graph at `#swarm-trajectory` and explicitly request
+`layout=straight`. Older `timeline=3d` links open the recorded moment in Spiral.
 On phones the timeline sits directly below the dome. The arrows step through
 individual events, including distinct reads recorded in the same second.
 Separate Action and Message

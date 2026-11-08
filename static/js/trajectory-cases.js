@@ -76,15 +76,15 @@
     else url.searchParams.delete('event');
     if (position.message) url.searchParams.set('message', position.message);
     else url.searchParams.delete('message');
-    if (position.timelineView === '3d') url.searchParams.set('timeline','3d');
-    else if (position.timelineView === '2d') url.searchParams.delete('timeline');
+    if (position.layout === 'straight') url.searchParams.set('layout','straight');
+    else url.searchParams.delete('layout');
     url.hash = hash;
     if (url.href !== location.href) history.replaceState(history.state, '', url);
     renderedSearch = url.search;
     return url.href;
   }
   async function show(id, position = {}, hash = location.hash){
-    position = {...position, timelineView:new URL(location.href).searchParams.get('timeline') === '3d' ? '3d' : '2d'};
+    position = {...position, layout:new URL(location.href).searchParams.get('layout') === 'straight' ? 'straight' : 'spiral'};
     const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
     select.querySelector('[data-archived-option]')?.remove();
     if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
@@ -137,7 +137,7 @@
       full.innerHTML='<p class="record-loading" role="status">The trajectory could not be loaded.</p><button type="button" class="record-retry">Try again</button>';
       full.querySelector('button').addEventListener('click',()=>{
         const retry=show(item.key,position);
-        if(location.hash==='#timeline') landAfter(retry,'#timeline');
+        if(isReplayAnchor(location.hash))landAfter(retry,location.hash);
       },{once:true});
     } finally {
       if (current===version) { root.removeAttribute('aria-busy'); loading.textContent=''; }
@@ -149,7 +149,6 @@
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     const target = new URL(link.href);
-    if (new URL(location.href).searchParams.get('timeline') === '3d' && !target.searchParams.has('timeline')) target.searchParams.set('timeline','3d');
     if (target.href !== location.href) history.pushState(null, '', target);
     const key=link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase;
     const loading=show(key,positionFromUrl(target)),clickedVersion=version;
@@ -160,12 +159,21 @@
   }));
   function showLocation() {
     const url = new URL(location.href), params = url.searchParams;
+    // The retired timeline switch never selected a layout for the main graph.
+    if (params.get('timeline') === '3d') {
+      if (url.hash==='#timeline') url.hash='#swarm-trajectory';
+      params.delete('timeline');
+      history.replaceState(history.state,'',url);
+    }
     return show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), positionFromUrl(url));
+  }
+  function isReplayAnchor(hash) {
+    return hash==='#timeline' || hash==='#swarm-trajectory';
   }
   window.addEventListener('popstate', () => {
     if (location.search === renderedSearch) return;
     const render=showLocation();
-    if(location.hash==='#timeline') landAfter(render,'#timeline');
+    if(isReplayAnchor(location.hash))landAfter(render,location.hash);
   });
   function landAfter(render,hash) {
     const landingVersion = version;
@@ -182,11 +190,11 @@
       cancel();
     }));
   }
+  const firstRender = showLocation();
   const initialHash = location.hash;
   const initialTarget = document.getElementById(initialHash.slice(1));
-  const firstRender = showLocation();
-  // The timeline is mounted with the replay, and later sections move when it loads.
-  if (initialHash === '#timeline' || (initialTarget && !root.contains(initialTarget) &&
+  // The scene and timeline are mounted with the replay, and later sections move when it loads.
+  if (isReplayAnchor(initialHash) || (initialTarget && !root.contains(initialTarget) &&
       (root.compareDocumentPosition(initialTarget) & Node.DOCUMENT_POSITION_FOLLOWING))) {
     landAfter(firstRender,initialHash);
   }

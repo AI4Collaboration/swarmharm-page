@@ -1,11 +1,15 @@
-/* Project recorded time and agent lanes on the floor. Only a verified read rises above it. */
+/* Floor-level action tracks and a smooth 3D arc for the selected recorded read. */
 (() => {
   const clamp = (value,min,max) => Math.max(min,Math.min(max,value));
+  function arcHeight(timeSpan,laneSpan,length,laneSpacing,ceiling) {
+    const span=Math.hypot(timeSpan*length,laneSpan*laneSpacing);
+    return clamp(span*.72,ceiling*.34,ceiling);
+  }
 
   // The camera looks at three world coordinates: elapsed time (x), agent (y), and layer (z).
-  function makeFrame(width,height,yaw,pitch,actorCount,hasReads) {
+  function makeFrame(width,height,yaw,pitch,actorCount,readSpans) {
     const length = Math.max(190,width-86), depth = clamp(100+width*.08,124,182);
-    const elevation = depth+9;
+    const elevation = depth+9, laneSpacing=depth/Math.max(1,actorCount-1);
     const cosY=Math.cos(yaw), sinY=Math.sin(yaw), cosP=Math.cos(pitch), sinP=Math.sin(pitch);
     const eye = Math.max(850,length*3.6);
     function view(fraction,lane,z) {
@@ -15,19 +19,30 @@
       return [across*scale,(toward*sinP-z*cosP)*scale];
     }
     const back=-.36, front=actorCount-1+.36;
-    const corners=[];
-    for(const t of [-.015,1.015]) for(const lane of [back,front]) for(const z of [-5,hasReads?elevation:0]) corners.push(view(t,lane,z));
-    const xs=corners.map(p=>p[0]), ys=corners.map(p=>p[1]);
-    const minX=Math.min(...xs), minY=Math.min(...ys);
-    const extentX=Math.max(...xs)-minX, extentY=Math.max(...ys)-minY;
-    const left=width<480?51:66, top=32, plotWidth=width-left-14, plotHeight=height-top-52;
+    let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
+    function include(t,lane,z) {
+      const [x,y]=view(t,lane,z);
+      minX=Math.min(minX,x); maxX=Math.max(maxX,x);
+      minY=Math.min(minY,y); maxY=Math.max(maxY,y);
+    }
+    for(const t of [-.015,1.015]) for(const lane of [back,front]) for(const z of [-5,0]) include(t,lane,z);
+    // Frame the same set of recorded arcs throughout the case so stepping never moves the floor.
+    for(const [start,from,end,to] of readSpans) {
+      const rise=arcHeight(end-start,to-from,length,laneSpacing,elevation);
+      for(let i=1;i<8;i++) {
+        const t=i/8;
+        include(start+(end-start)*t,from+(to-from)*t,4*rise*t*(1-t));
+      }
+    }
+    const extentX=maxX-minX, extentY=maxY-minY;
+    const left=width<480?50:60, top=width<480?62:52, plotWidth=width-left-14, plotHeight=height-top-29;
     const fit=Math.min(plotWidth/extentX,plotHeight/extentY);
     const ox=left+(plotWidth-fit*extentX)/2, oy=top+(plotHeight-fit*extentY)/2;
     function project(t,lane,z=0) {
       const p=view(t,lane,z);
       return [ox+(p[0]-minX)*fit,oy+(p[1]-minY)*fit];
     }
-    return {project,back,front,elevation,length,laneSpacing:depth/Math.max(1,actorCount-1)};
+    return {project,back,front,elevation,length,laneSpacing};
   }
 
   function path(ctx,points) {
@@ -42,21 +57,22 @@
   }
   function arrow(ctx,a,b,ink) {
     const dx=b[0]-a[0], dy=b[1]-a[1], length=Math.hypot(dx,dy);
-    if(length<9)return;
-    const ux=dx/length, uy=dy/length, x=a[0]+dx*.64, y=a[1]+dy*.64;
+    if(length<.01)return;
+    const ux=dx/length, uy=dy/length, x=a[0], y=a[1];
     face(ctx,[[x+4*ux,y+4*uy],[x-4*ux-3*uy,y-4*uy+3*ux],[x-4*ux+3*uy,y-4*uy-3*ux]],ink);
   }
 
   window.createLinearTimeline = ({actors,moments,eventFraction,fontFamily}) => {
     const lanes=new Map(actors.map((actor,i)=>[actor.id,i]));
     const floorEvents=moments.map(m=>({moment:m,t:eventFraction(m.event),lane:lanes.get(m.actor)}));
-    const hasReads=moments.some(m=>m.kind==='read');
-    let frame, geometryKey, points=[], bridge=null;
+    const readSpans=floorEvents.filter(({moment})=>moment.kind==='read')
+      .map(({moment,t,lane})=>[eventFraction(moment.message.event),lanes.get(moment.message.actor),t,lane]);
+    let frame, geometryKey, points=[], arc=null;
     function layout(width,height,angle) {
       const key=[width,height,angle.yaw,angle.pitch].join('/');
       if(key===geometryKey)return;
       geometryKey=key;
-      frame=makeFrame(width,height,angle.yaw,angle.pitch,actors.length,hasReads);
+      frame=makeFrame(width,height,angle.yaw,angle.pitch,actors.length,readSpans);
       points=floorEvents.map(({moment,t,lane})=>{
         const [x,y]=frame.project(t,lane);
         return {x,y,r:8,event:moment.event,moment:moment.order,message:moment.message?.id};
@@ -98,80 +114,62 @@
       ctx.textAlign='left';
       for(const {moment} of floorEvents) {
         const alpha=moment.order>active.order?'57':moment.kind==='action'?'9d':'d5';
-        mark(moment,ink(moment.actor)+alpha,false,points[moment.order]);
+        mark(ctx,points[moment.order],moment,ink(moment.actor)+alpha);
       }
 
-      bridge=null;
+      arc=null;
       if(post) {
-        const a=points[post.order];
         const posted=eventFraction(post.event), authorLane=lanes.get(post.actor), readerLane=lanes.get(active.actor);
-        const world=[[posted,authorLane,0],[posted,authorLane,elevation],[now,readerLane,elevation],[now,readerLane,0]];
-        const route=world.map(p=>project(...p));
-        const [start,up,across,end]=route, sender=ink(post.actor), reader=ink(active.actor);
-        const curtain=ctx.createLinearGradient(0,Math.min(up[1],across[1]),0,Math.max(start[1],end[1]));
-        curtain.addColorStop(0,reader+(paint.dark?'14':'10')); curtain.addColorStop(1,reader+'00');
-        face(ctx,route,curtain);
-        stroke(ctx,[start,up],sender,1.6);
-        stroke(ctx,[across,end],reader,1.6);
-        const line=ctx.createLinearGradient(...up,...across); line.addColorStop(0,sender); line.addColorStop(1,reader);
-        stroke(ctx,[up,across],reader+(paint.dark?'22':'18'),7);
-        stroke(ctx,[up,across],line,2.8);
-        arrow(ctx,up,across,paint.packet);
-        for(const p of [up,across]) {
-          ctx.beginPath(); ctx.arc(...p,2,0,Math.PI*2); ctx.fillStyle=paint.packet; ctx.fill();
-        }
-        mark(post,sender,true,a);
+        const rise=arcHeight(now-posted,readerLane-authorLane,frame.length,frame.laneSpacing,elevation);
+        // The curve stays within the two observed timestamps, even when they coincide.
+        const pointAt=t=>project(posted+(now-posted)*t,authorLane+(readerLane-authorLane)*t,4*rise*t*(1-t));
+        const route=Array.from({length:65},(_,i)=>pointAt(i/64));
+        const sender=ink(post.actor), reader=ink(active.actor);
+        const line=ctx.createLinearGradient(...route[0],...route.at(-1));
+        line.addColorStop(0,sender); line.addColorStop(.52,paint.packet); line.addColorStop(1,reader);
+        stroke(ctx,route,reader+(paint.dark?'20':'16'),6);
+        stroke(ctx,route,line,2.3);
+        arrow(ctx,pointAt(.68),pointAt(.7),paint.packet);
+        mark(ctx,points[post.order],post,sender,true);
         ctx.font='600 11px '+fontFamily;
         const label=recordLabel+' '+String(active.index+1).padStart(2,'0')+' ↗';
         const w=ctx.measureText(label).width+14, h=20;
-        const top=up[1]<across[1]?up:across;
+        const top=route.reduce((highest,p)=>p[1]<highest[1]?p:highest);
         let x=clamp(top[0]-w/2,4,width-w-4);
         const y=Math.max(5,top[1]-h-6);
-        if(y<31 && x+w>width-118)x=Math.max(4,width-121-w);
         ctx.fillStyle=paint.paper; ctx.strokeStyle=reader+'76'; ctx.lineWidth=.8;
         ctx.beginPath(); ctx.roundRect(x,y,w,h,5); ctx.fill(); ctx.stroke();
         ctx.fillStyle=paint.ink; ctx.fillText(label,x+7,y+13.5);
-        const span=Math.hypot((now-posted)*frame.length,(readerLane-authorLane)*frame.laneSpacing);
-        bridge={route,world,lengths:[elevation,span,elevation],total:2*elevation+span,badge:{x,y,w,h},moment:active};
+        arc={route,pointAt,badge:{x,y,w,h},moment:active};
       }
       if(active.kind!=='outcome') {
         const point=points[active.order];
         ctx.beginPath(); ctx.arc(point.x,point.y,8,0,2*Math.PI); ctx.fillStyle=ink(active.actor)+'2d'; ctx.fill();
-        mark(active,paint.packet,true,point);
+        mark(ctx,point,active,paint.packet,true);
       }
-      if(hovered && !hovered.bridge) {
+      if(hovered && !hovered.arc) {
         ctx.beginPath(); ctx.arc(hovered.x,hovered.y,7,0,2*Math.PI); ctx.strokeStyle=paint.ink; ctx.lineWidth=1; ctx.stroke();
       }
       ctx.restore();
       return points;
     }
 
-    function bridgeHit(x,y) {
-      if(!bridge)return null;
-      const {route,badge,moment}=bridge;
-      let onBridge=x>=badge.x-2 && x<=badge.x+badge.w+2 && y>=badge.y-2 && y<=badge.y+badge.h+2;
-      // A click on a floor marker selects that exact moment. The rest of the bridge opens its note.
-      if(!onBridge && [route[0],route[3]].some(p=>Math.hypot(x-p[0],y-p[1])<9))return null;
-      for(let i=1;!onBridge && i<route.length;i++) {
+    function arcHit(x,y) {
+      if(!arc)return null;
+      const {route,badge,moment}=arc;
+      let hit=x>=badge.x-2 && x<=badge.x+badge.w+2 && y>=badge.y-2 && y<=badge.y+badge.h+2;
+      // The endpoints select the post or read. The arc opens the original message.
+      if(!hit && [route[0],route.at(-1)].some(p=>Math.hypot(x-p[0],y-p[1])<9))return null;
+      for(let i=1;!hit && i<route.length;i++) {
         const a=route[i-1], b=route[i], dx=b[0]-a[0], dy=b[1]-a[1];
         const t=clamp(((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1),0,1);
-        onBridge=Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)<7;
+        hit=Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy)<7;
       }
-      return onBridge ? {x,y,bridge:true,event:moment.event,message:moment.message.id,moment:moment.order} : null;
+      return hit ? {x,y,arc:true,event:moment.event,message:moment.message.id,moment:moment.order} : null;
     }
     function signalAt(progress) {
-      if(!bridge)return null;
-      let distance=progress*bridge.total;
-      for(let i=0;i<bridge.lengths.length;i++) {
-        const length=bridge.lengths[i];
-        if(distance<=length && length>0) {
-          const a=bridge.world[i],b=bridge.world[i+1],t=distance/length;
-          return frame.project(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t);
-        }
-        distance-=length;
-      }
-      return bridge.route[3];
+      return arc ? arc.pointAt(clamp(progress,0,1)) : null;
     }
-    return {draw,bridgeHit,signalAt};
+    return {draw,arcHit,signalAt};
   };
 })();
