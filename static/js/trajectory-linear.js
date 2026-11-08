@@ -96,13 +96,28 @@
     return best;
   }
 
-  window.createLinearTimeline = ({actors,moments,eventFraction,fontFamily}) => {
+  window.createLinearTimeline = ({actors,moments,sendIndex,eventFraction,fontFamily}) => {
     const lanes=new Map(actors.map((actor,i)=>[actor.id,i]));
     const floorEvents=moments.map(m=>({moment:m,t:eventFraction(m.event),lane:lanes.get(m.actor)}));
+    const laneEvents=actors.map((_,lane)=>floorEvents.filter(event=>event.lane===lane));
     const readSpans=new Map(floorEvents.filter(({moment})=>moment.kind==='read')
       .map(({moment,t,lane})=>[moment.order,[eventFraction(moment.message.event),lanes.get(moment.message.actor),t,lane]]));
     const curves=new Map();
+    const pins=new Set();
     let frame, geometryKey, points=[], currentArc=null, earlierArcs=[], badge=null;
+    let selection, heads=[];
+    function selectPins(active,post,history) {
+      if(selection===active)return;
+      selection=active;
+      heads=laneEvents.map(events=>events.findLast(({moment})=>moment.order<=active.order));
+      pins.clear();
+      for(const head of heads) if(head)pins.add(head.moment);
+      for(const read of history) {
+        pins.add(moments[sendIndex.get(read.message.id)]);
+        pins.add(read);
+      }
+      if(post)pins.add(post);
+    }
     function layout(width,height,angle) {
       const key=[width,height,angle.yaw,angle.pitch].join('/');
       if(key===geometryKey)return;
@@ -127,6 +142,7 @@
     }
     function draw({ctx,width,height,angle,paint,active,post,history,ticks,duration,mark,hovered,clockLabel}) {
       layout(width,height,angle);
+      selectPins(active,post,history);
       currentArc=post?curveFor(active):null;
       earlierArcs=history.map(curveFor);
       badge=null;
@@ -158,14 +174,14 @@
         const color=ink(actor.id), origin=project(0,row);
         const involved=actor.id===active.actor || actor.id===post?.actor;
         stroke(ctx,[origin,project(1,row)],color+'49',.9);
-        if(now>0)stroke(ctx,[origin,project(now,row)],color+(involved?'b0':'72'),involved?1.25:1);
+        const head=heads[row];
+        if(head)stroke(ctx,[origin,project(head.t,row)],color+(involved?'b0':'72'),involved?1.25:1);
         ctx.font='500 11px '+fontFamily; ctx.textAlign='right'; ctx.fillStyle=color;
         ctx.fillText('Agent '+actor.id,origin[0]-7,origin[1]+3);
       });
       ctx.textAlign='left';
-      for(const {moment} of floorEvents) {
-        const alpha=moment.order>active.order?'48':moment.kind==='action'?'86':'bb';
-        mark(ctx,points[moment.order],moment,ink(moment.actor)+alpha);
+      for(const moment of pins) {
+        if(moment!==active && moment!==post)mark(ctx,points[moment.order],moment,ink(moment.actor)+'ad');
       }
 
       // Paint the older paths underneath. Only the current read gets a solid line and a moving signal.
@@ -208,6 +224,8 @@
         }
       }
       if(hovered && !hovered.arc) {
+        const moment=moments[hovered.moment];
+        if(!pins.has(moment))mark(ctx,points[moment.order],moment,ink(moment.actor));
         ctx.beginPath(); ctx.arc(hovered.x,hovered.y,7,0,2*Math.PI); ctx.strokeStyle=paint.ink; ctx.lineWidth=1; ctx.stroke();
       }
       ctx.restore();
@@ -233,6 +251,6 @@
     function signalAt(progress) {
       return currentArc ? currentArc.pointAt(clamp(progress,0,1)) : null;
     }
-    return {draw,arcHit,signalAt};
+    return {draw,arcHit,signalAt,hasPin:order=>pins.has(moments[order])};
   };
 })();

@@ -628,7 +628,7 @@
       const selected=moment.kind==='read' ? 'Current read from Agent '+moment.message.actor+' to Agent '+moment.actor+'. ' : '';
       const currentRead=selected?'The bright solid arc connects the post to its current reader. Select it to open the original '+entryLabel+'. ':'';
       const past=readHistory.length?'Dashed arcs show earlier reads. Select one to go to that read. ':'';
-      scene.setAttribute('aria-label',selected+'Each agent has a straight track on the floor in recorded time. '+currentRead+past+'Drag or use Shift and arrow keys to rotate. Arrow keys step through events.');
+      scene.setAttribute('aria-label',selected+'Each straight track marks its agent’s latest step. Follow a track to inspect other events. '+currentRead+past+'Drag or use Shift and arrow keys to rotate. Arrow keys step through events.');
     }
     function updateLayoutControl() {
       spatial.dataset.layout=trackLayout;
@@ -662,7 +662,7 @@
     }
     function drawSpatial() {
       if (trackLayout==='straight') {
-        linear ||= window.createLinearTimeline({actors,moments:recordedMoments,eventFraction,fontFamily});
+        linear ||= window.createLinearTimeline({actors,moments:recordedMoments,sendIndex,eventFraction,fontFamily});
         ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,viewWidth,viewHeight);
         const m=active(), post=m.kind==='read'?moments[sendIndex.get(m.message.id)]:null;
         sceneHits=linear.draw({ctx,width:viewWidth,height:viewHeight,angle:straightCamera,paint,active:m,post,history:readHistory,ticks,duration,
@@ -829,10 +829,12 @@
       if (surface===flow) drawFlow();
       else if (trackLayout==='straight' || !playing || reduced || holding()) drawSpatial();
     }
-    function nearest(surface, x, y) {
-      const arc=surface===scene && trackLayout==='straight'?linear?.arcHit(x,y):null;
+    function nearest(surface, x, y, railRadius = 4) {
+      const straight=surface===scene && trackLayout==='straight'?linear:null;
+      const arc=straight?.arcHit(x,y);
       if(arc && !arc.earlierRead && arc.moment===current)return arc;
-      let best = null, distance = Infinity, bestPriority = -1;
+      const earlierArc=arc?.earlierRead && readHistory.some(m=>m.order===arc.moment)?arc:null;
+      let best = earlierArc, distance = Infinity, bestPriority = earlierArc?1:-1;
       const sourceOrder=active().message ? sendIndex.get(active().message.id) : undefined;
       for (const hit of surface === scene ? sceneHits : flowHits) {
         if (hit.bounds) {
@@ -841,14 +843,16 @@
           continue;
         }
         const d = Math.hypot(hit.x - x, hit.y - y);
-        if (d >= hit.r) continue;
-        const priority = hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
+        // An unmarked event on the rail yields to any visible pin or arc.
+        const onRail = straight && !straight.hasPin(hit.moment);
+        if (d >= (onRail ? railRadius : hit.r)) continue;
+        const priority = onRail ? 0 : hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
         const endpoint=hit.moment===current || (sourceOrder!==undefined && hit.moment===sourceOrder && best?.moment!==current);
         if (priority > bestPriority || (priority === bestPriority && (d < distance || (d === distance && endpoint)))) {
           best = hit; distance = d; bestPriority = priority;
         }
       }
-      return best || (arc?.earlierRead && readHistory.some(m=>m.order===arc.moment)?arc:null);
+      return best;
     }
     function hover(surface,event){
       const box=surface.getBoundingClientRect(),x=event.clientX-box.left,y=event.clientY-box.top,hit=nearest(surface,x,y),tip=tooltips.get(surface);
@@ -867,7 +871,8 @@
       tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';redrawHover(surface);
     }
     function pick(surface,event) {
-      const box=surface.getBoundingClientRect(), x=event.clientX-box.left, hit=nearest(surface,x,event.clientY-box.top);
+      const box=surface.getBoundingClientRect(), x=event.clientX-box.left;
+      const hit=nearest(surface,x,event.clientY-box.top,event.pointerType==='touch'?8:4);
       if (!hit) {
         if (surface === flow && x >= axisLeft && x <= flowWidth-axisRight) {
           seek(momentAtSecond(duration*(x-axisLeft)/(flowWidth-axisLeft-axisRight)),'#timeline');
