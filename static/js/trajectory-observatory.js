@@ -138,7 +138,7 @@
       return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${actorStyle(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
         <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,'message')||`static/images/fieldguide/finding-agents.svg?v=8#${message.actor.toLowerCase()}-speaking`)}" width="210" height="150" alt=""></span>
         <div class="obs-chat-content">
-          <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}" aria-label="Select message ${number} from ${esc(names.get(message.actor))}"><span>From</span><strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong><span>to</span><strong data-chat-recipient>${esc(messageSource(message))}</strong></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
+          <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}"><span>Posted by <strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong></span><span aria-hidden="true">·</span><span><span data-read-label hidden>Read by </span><strong data-chat-recipient>${esc(messageSource(message))}</strong></span></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
           ${parent?`<button class="obs-chat-reply" type="button" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to #${messageNumberById.get(parent.id)}</button>`:''}
           <p class="obs-chat-text" data-message-body>${esc(message.body)}</p>
           ${receipts?`<div class="obs-chat-readers"><span>Read by</span>${receipts}</div>`:''}
@@ -177,8 +177,8 @@
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
         <section class="obs-spatial" aria-label="Recorded agent actions and communication">
-          <header class="obs-panel-heading"><h5>Swarm trajectory</h5><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></header>
-          <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden></blockquote></div>
+          <header class="obs-panel-heading"><h5>Swarm trajectory</h5><span class="obs-view-tools"><small data-share-status role="status"></small><button class="obs-share" type="button" data-share aria-label="Copy link to this moment" title="Copy link to this moment"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 12 4-4m-1.5-2.5 1.8-1.8a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0m.2 2.8-1.8 1.8a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/></svg></button><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></span></header>
+          <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden><button type="button" data-original="message" title="View original ${entryLabel}"><span data-excerpt></span><span aria-hidden="true">↗</span></button></blockquote></div>
           <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each agent has its own action spiral on the lower disk.${noMessages?'':' The bright arc marked Now connects the author to the current reader. Between reads, Last read marks the most recent exchange. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
@@ -230,11 +230,36 @@
     const color = id => paint.agents.get(id) || paint.muted;
     const routeHeading = host.querySelector('.obs-route-heading');
     const routeQuote = host.querySelector('.obs-route-quote');
+    const quoteText = routeQuote.querySelector('[data-excerpt]');
+    const shareStatus = host.querySelector('[data-share-status]');
+    let shareTimer;
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
     const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, reads, sendIndex, fontFamily });
     const eventMoment=new Map();
     moments.forEach(m=>{if(!eventMoment.has(m.event))eventMoment.set(m.event,m.order);});
+    function positionIndex(position) {
+      if (position.event === 'outcome') return moments.length - 1;
+      // One native event can read several notes. Keep the note as well as the event in a shared link.
+      const exact = position.message && moments.find(m => m.event === position.event && m.message?.id === position.message);
+      return exact?.order ?? eventMoment.get(position.event) ?? reads[0]?.order ?? 0;
+    }
+    function pinMoment() {
+      const moment = active();
+      return meta.pinMoment({event:moment.kind === 'outcome' ? 'outcome' : moment.event, message:moment.message?.id});
+    }
+    async function copyMomentLink() {
+      const url = pinMoment();
+      let feedback = 'Link in address bar';
+      try {
+        await navigator.clipboard.writeText(url);
+        feedback = 'Link copied';
+      } catch { /* The address bar also contains the selected moment. */ }
+      if (disposed) return;
+      shareStatus.textContent = feedback;
+      clearTimeout(shareTimer);
+      shareTimer = setTimeout(() => { shareStatus.textContent = ''; }, 2800);
+    }
     const activity=actors.map(a=>{
       const bins=Array.from({length:22},()=>[]);
       events.filter(e=>e.actor===a.id).forEach(e=>bins[Math.min(21,Math.floor(eventFraction(e.id)*22))].push(e.id));
@@ -269,7 +294,6 @@
       const message = moment.message;
       routeHeading.replaceChildren();
       routeQuote.hidden = !message;
-      routeQuote.textContent = '';
       if (!message) {
         routeHeading.textContent = moment.kind === 'action'
           ? names.get(moment.actor) + ' · ' + moment.action.label
@@ -283,20 +307,22 @@
       const sender = document.createElement('strong');
       sender.textContent = names.get(message.actor);
       sender.style.color = actorStyle(message.actor);
-      const verb = document.createElement('span');
-      verb.className = 'obs-route-verb';
+      const author = document.createElement('span');
+      author.append('Posted by ', sender);
+      const separator = document.createElement('span');
+      separator.textContent = '·';
+      separator.setAttribute('aria-hidden', 'true');
+      const destination = document.createElement('span');
       const recipient = document.createElement('strong');
       if (moment.kind === 'read') {
+        destination.append('Read by ');
         recipient.textContent = names.get(moment.actor);
         recipient.style.color = actorStyle(moment.actor);
       } else {
         recipient.textContent = messageSource(message);
       }
-      verb.textContent = '→';
-      const description = moment.kind === 'read' ? 'read by' : 'posted to';
-      verb.setAttribute('role', 'img');
-      verb.setAttribute('aria-label', description);
-      routeHeading.append(number, sender, verb, recipient);
+      destination.append(recipient);
+      routeHeading.append(number, author, separator, destination);
       const peers = history.filter(step => step.message === message).map(step => step.actor).sort();
       if (peers.length) {
         const prior = document.createElement('small');
@@ -305,10 +331,17 @@
       }
 
       const body = message.body.trim();
+      const passage = meta.messageExcerpts?.[message.id];
+      const quotedPassage = Boolean(passage && body.includes(passage));
+      routeQuote.toggleAttribute('data-passage', quotedPassage);
+      if (quotedPassage) {
+        quoteText.textContent = '“' + passage + '”';
+        return;
+      }
       const prefix = body.slice(0, 170);
       const atWord = prefix.replace(/\s+\S*$/, '').trimEnd();
       const excerpt = body.length <= prefix.length ? body : (atWord.length > 130 ? atWord : prefix) + '…';
-      routeQuote.textContent = '“' + excerpt + '”';
+      quoteText.textContent = '“' + excerpt + '”';
     }
 
     const actionPanel = host.querySelector('[data-action-panel]');
@@ -374,8 +407,12 @@
         if(selected)row.setAttribute('aria-current','step');
         else row.removeAttribute('aria-current');
         row.querySelector('[data-message-body]').toggleAttribute('data-original-text',selected);
-        row.querySelector('.obs-chat-select').setAttribute('aria-pressed',String(selected));
+        const selectMessage = row.querySelector('.obs-chat-select');
+        selectMessage.setAttribute('aria-pressed', String(selected));
+        const description = isRead ? ', read by ' + names.get(event.actor) : '';
+        selectMessage.setAttribute('aria-label', 'Select message ' + messageNumberById.get(item.id) + ' from ' + names.get(item.actor) + description);
         const recipient=row.querySelector('[data-chat-recipient]');
+        row.querySelector('[data-read-label]').hidden = !isRead;
         recipient.textContent=isRead?names.get(event.actor):messageSource(item);
         recipient.style.color=isRead?actorStyle(event.actor):'';
         recipient.title=isRead?'Read by '+names.get(event.actor)+' at '+event.time:'Posted to '+messageSource(item);
@@ -442,13 +479,14 @@
       updateControls();
       draw(); ensureFrame();
     }
-    function seek(index) {
+    function seek(index, pin = true) {
       if (!started) playing = !reduced;
       started = true;
       readingUntil = 0;
       hovered = null;
       hideTooltips();
       select(index);
+      if (pin) pinMoment();
     }
     on(viewer,'trajectory-case-change',()=>{
       resumeAfterLoad=resumeAfterLoad || playing;
@@ -457,13 +495,13 @@
     on(viewer,'trajectory-seek',event=>{
       if (resumeAfterLoad && !reduced) playing=true;
       resumeAfterLoad=false;
-      const index=eventMoment.get(Number(event.detail)) ?? reads[0]?.order ?? 0;
-      if (index!==current) seek(index);
+      const index=positionIndex(event.detail);
+      if (index!==current) seek(index, false);
       else { orbitView.resumeFocus(!reduced); updateControls(); ensureFrame(); }
     });
     function togglePlay() {
       started = true;
-      if (playing) { stop(); return; }
+      if (playing) { stop(); pinMoment(); return; }
       if (active().kind === 'outcome') select(0);
       playing = true;
       orbitView.resumeFocus(!reduced);
@@ -473,16 +511,18 @@
     }
     function openOriginal(kind){
       stop();
+      pinMoment();
       const moment=active();
       const event=kind==='message'?moment.message?.event:moment.event;
       if(kind==='outcome')openRecord(null);
-      else if(event!=null && Number.isFinite(event))openRecord([event]);
+      else if(event!=null && Number.isFinite(event))openRecord([event], kind === 'message' ? moment.message.id : undefined);
     }
     function inspectMessage(id) {
       const read = reads.findLast(step => step.message.id === id && step.order <= current)
         || reads.find(step => step.message.id === id);
       const index=read?.order ?? sendIndex.get(id);
       if (index!==current) seek(index);
+      else pinMoment();
     }
     function moveMessage(direction) {
       if (noMessages) { seek(current + direction); return; }
@@ -710,6 +750,7 @@
     on(host,'click',event=>{
       const button=event.target.closest('button');if(!button)return;
       if(button.hasAttribute('data-play'))togglePlay();
+      else if(button.hasAttribute('data-share'))copyMomentLink();
       else if(button.hasAttribute('data-previous'))seek(current-1);
       else if(button.hasAttribute('data-next'))seek(current+1);
       else if(button.hasAttribute('data-prev-message'))moveMessage(-1);
@@ -728,7 +769,8 @@
       }
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
-    on(range,'input',()=>seek(Number(range.value)));
+    on(range,'input',()=>seek(Number(range.value), false));
+    on(range,'change',pinMoment);
     on(documentPanel,'pointerdown',()=>documentPanel.focus({preventScroll:true}));
     function browseTranscript() {
       if (!playing || documentPanel.scrollHeight<=documentPanel.clientHeight+1) return;
@@ -742,7 +784,7 @@
       if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(event.key)) browseTranscript();
     });
     function startIfVisible() {
-      if (!isVisible() || started || reduced) return;
+      if (!isVisible() || started || reduced || active().kind === 'outcome') return;
       playing=true; started=true;
       const m=active();
       if(m.message)scrollToMessage(m.message,false);
@@ -784,9 +826,9 @@
     },{threshold:.15});
     visibilityObserver.observe(stage);
     visibilityObserver.observe(documentPanel);
-    const openingMoment = eventMoment.get(meta.focusEvent) ?? reads[0]?.order ?? 0;
+    const openingMoment = positionIndex(meta.position);
     if (!camera.seen) camera.yaw = orbitView.entryYaw(moments[openingMoment],camera.pitch) ?? camera.yaw;
     select(openingMoment);resize();
-    return ()=>{disposed=true;cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
+    return ()=>{disposed=true;clearTimeout(shareTimer);cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };
 })();

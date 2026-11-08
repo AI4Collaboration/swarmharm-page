@@ -16,7 +16,8 @@ The research README on `work/unified-report-inputs-20261105` at
 `98e02131ae4f3cc1372f0aeccf15be367e94a90c` reports the balanced v2
 comparisons. A current rollout follows one continuous reporting task.
 Separate frozen cases supply the evidence for each finding. The original TLDR
-stays below the wordmark and introduces the three threat models.
+stays below the wordmark. Its three threat model terms link to reviewed moments
+in the external-service, acceptance and trace-tampering cases.
 
 The formation column illustrates peer discovery (r136), communication through
 shared records (r74), and information propagation (r75). These selected examples
@@ -117,8 +118,10 @@ message and scrolls through long messages inside its own panel. Each message gro
 with the selected reader, or the shared channel for a post. Explicit reply links
 jump to the original parent. Selecting a message opens its latest verified read
 at the playhead, its first read if still ahead, or its post if nobody read it.
-Selecting a reader opens that receipt. Browsing the same message's readers
-preserves the chat scroll position.
+Selecting a reader opens that receipt. The message header identifies who posted
+the note and who read it. Browsing the same message's readers preserves the
+chat scroll position. A finding's preview can quote an exact passage from the
+current message. Selecting the quote opens the full original.
 Drag to rotate, select
 a message or reader, or scrub the sequence; all views stay synchronized.
 Manually scrolling the transcript holds the exchange for six seconds. Pause freezes playback. Reduced motion disables
@@ -129,9 +132,12 @@ Each card's source arrow opens its own underlying record, so a read action and
 the original message link to different events. Detailed outcomes
 and Settings & evidence follow the replay. The viewer loads one case
 at a time. Case changes hold the previous scene until the next trace is ready.
-Links within the same case reuse the existing viewer. For example,
-`?case=balanced-v2-records-knowledge-sol61&phase=2&event=96#trajectory` opens B's exact
-read of D's released note. A finding's model name, logo and View trace link
+Links within the same case reuse the existing viewer. Manual selection, pausing
+and the copy-link control save the current moment in the address. Autoplay
+preserves that link. For example, `?case=r75&phase=1&event=48&message=m40-0#trajectory`
+opens C's read of A's note. At the same event, `message=m41-1` opens C's read of
+B's note. Earlier event-only links still open the first moment at that event.
+A finding's model name, logo and View trace link
 open the same event. Earlier r199/r74/r187 Phase 2 links still open their original
 evidence, outside the current selections; they never redirect to a new case.
 

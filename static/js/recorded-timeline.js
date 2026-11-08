@@ -45,7 +45,8 @@
     function argumentsMarkup(args){return Object.entries(args).map(([k,v])=>`<div><dt><code>${esc(k)}</code></dt><dd>${typeof v==='string'?(k==='command'?`<pre><code>${esc(v)}</code></pre>`:source(v)):typeof v==='object'?`<pre><code>${esc(JSON.stringify(v,null,2))}</code></pre>`:`<code>${esc(v)}</code>`}</dd></div>`).join('');}
     function messageMarkup(m,read=false){return `<section class="record-original-message" data-agent="${m.actor}"><p class="record-message-meta"><strong>${esc(names.get(m.actor))}</strong><span>${esc(m.kind)}</span><time>${esc(m.time)}</time>${read?'<span class="record-read-label">Read in this event</span>':''}</p><blockquote>${source(m.body)}</blockquote>${readers(m)}</section>`;}
     function eventMarkup(e,requestedMessage){
-      const original=e.messages.map(id=>messageMarkup(messages.get(id))).join('');
+      const posted = e.messages.includes(requestedMessage) ? [requestedMessage] : e.messages;
+      const original=posted.map(id=>messageMarkup(messages.get(id))).join('');
       const read=e.reads.filter(id=>!requestedMessage||requestedMessage===id).map(id=>messageMarkup(messages.get(id),true)).join('');
       return `<section class="record-source-event" data-agent="${e.actor}"><h5><span class="record-author">${esc(names.get(e.actor))}</span> · Turn ${e.turn} · ${esc(e.label)}</h5>${original}${read}${e.resultText?`<div class="record-final">${source(e.resultText)}</div>`:''}${e.operation==='final_output'?'':selectedFields&&!Object.keys(e.arguments).length?`<p class="record-action-copy"><code>${esc(e.operation)}</code>${e.status!=null?' · status '+esc(e.status):''}</p>`:`<details class="record-tool" open${failed(e)?' data-failed="true"':''}><summary><code>${esc(e.operation)}</code><span>${selectedFields?'Recorded business fields':'Tool arguments'}${e.status!=null?` · <span class="record-status">status ${e.status}</span>`:''}</span></summary><dl>${argumentsMarkup(e.arguments)}</dl>${e.error?`<p class="record-failed">${source(typeof e.error==='string'?e.error:JSON.stringify(e.error))}</p>`:''}</details>`}${e.result?`<details class="record-tool"><summary>Original tool result</summary><pre class="record-result">${esc(JSON.stringify(e.result,null,2))}</pre></details>`:''}</section>`;
     }
@@ -120,8 +121,8 @@
     const log=document.createElement('details');log.className='record-evidence record-log';log.innerHTML=`<summary><span><b>Message and action log</b><small>${data.counts.actions} recorded actions</small></span><i aria-hidden="true"></i></summary>`;
     log.append(container.querySelector('.record-controls'),container.querySelector('.record-counts'),list);
     evidence.append(runDisclosure,log);mapSection.after(evidence);container.append(detail);
-    const disposeMap=window.mountTrajectoryObservatory(graph,data,meta,ids=>{
-      if(ids){const event=events.get(ids[0]);selectTurn(event.actor,event.turn);openEvents(ids);}
+    const disposeMap=window.mountTrajectoryObservatory(graph,data,meta,(ids,message)=>{
+      if(ids){const event=events.get(ids[0]);selectTurn(event.actor,event.turn);openEvents(ids,message);}
       else {hideTip();detail.innerHTML=`<header><h4>Outcome</h4><button type="button" data-close-record aria-label="Close original record">×</button></header><p class="case-outcome">${esc(meta.outcome)}</p><p class="case-scope">${esc(meta.scope)}</p>`;showDetail();}
     });
     on(runDisclosure,'toggle',()=>{if(runDisclosure.open)requestAnimationFrame(sizeDots);});

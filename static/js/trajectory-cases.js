@@ -61,23 +61,37 @@
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
   }
-  async function show(id, requestedEvent){
+  function positionFromUrl(url) {
+    const value = url.searchParams.get('event');
+    if (value === 'outcome') return {event:'outcome'};
+    const event = Number(value);
+    if (!Number.isSafeInteger(event) || event < 1) return {};
+    return {event, message:url.searchParams.get('message')};
+  }
+  function updateAddress(item, position, hash) {
+    const url = new URL(location.href);
+    url.searchParams.set('case', item.id);
+    url.searchParams.set('phase', String(item.phase));
+    if (position.event != null) url.searchParams.set('event', String(position.event));
+    else url.searchParams.delete('event');
+    if (position.message) url.searchParams.set('message', position.message);
+    else url.searchParams.delete('message');
+    url.hash = hash;
+    if (url.href !== location.href) history.replaceState(history.state, '', url);
+    renderedSearch = url.search;
+    return url.href;
+  }
+  async function show(id, position = {}, hash = location.hash){
     const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
     select.querySelector('[data-archived-option]')?.remove();
     if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
     select.value=item.selectionKey||item.key;
     const current=++version;
     request?.abort();
-    // A shareable case selection, without scrolling or replaying the title.
-    const focusEvent = Number(requestedEvent);
-    const url=new URL(location.href);url.searchParams.set('case',item.id);url.searchParams.set('phase',String(item.phase));
-    if(Number.isSafeInteger(focusEvent)&&focusEvent>0)url.searchParams.set('event',String(focusEvent));
-    else url.searchParams.delete('event');
-    history.replaceState(null,'',url);
-    renderedSearch = url.search;
+    updateAddress(item, position, hash);
     if (dispose && mountedKey===item.key) {
       full.inert=false; loading.textContent=''; root.removeAttribute('aria-busy');
-      root.dispatchEvent(new CustomEvent('trajectory-seek',{detail:focusEvent}));
+      root.dispatchEvent(new CustomEvent('trajectory-seek',{detail:position}));
       return;
     }
     const hadViewer=Boolean(dispose);
@@ -107,7 +121,9 @@
       }
       if (current!==version) return;
       replace();
-      dispose=window.mountRecordedTimeline(full,data,{...item,focusEvent});
+      dispose=window.mountRecordedTimeline(full,data,{
+        ...item, position, pinMoment:moment => updateAddress(item, moment, '#trajectory')
+      });
       mountedKey=item.key;
       if (hadViewer && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
         full.querySelector('.obs-workbench')?.animate([{opacity:.72},{opacity:1}],{duration:220,easing:'ease-out'});
@@ -116,28 +132,28 @@
       if (current!==version||error.name==='AbortError') return;
       replace();
       full.innerHTML='<p class="record-loading" role="status">The trajectory could not be loaded.</p><button type="button" class="record-retry">Try again</button>';
-      full.querySelector('button').addEventListener('click',()=>show(item.key,requestedEvent),{once:true});
+      full.querySelector('button').addEventListener('click',()=>show(item.key,position),{once:true});
     } finally {
       if (current===version) { root.removeAttribute('aria-busy'); loading.textContent=''; }
     }
   }
-  select.addEventListener('change',()=>show(select.value));
-  intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant);});
+  select.addEventListener('change',()=>show(select.value, {}, '#trajectory'));
+  intro.addEventListener('click',event=>{const button=event.target.closest('[data-case-variant]');if(button)show(button.dataset.caseVariant, {}, '#trajectory');});
   document.querySelectorAll('[data-show-case]').forEach(link=>link.addEventListener('click',async event=>{
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     const target = new URL(link.href);
     if (target.href !== location.href) history.pushState(null, '', target);
     const key=link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase;
-    const loading=show(key,target.searchParams.get('event')),clickedVersion=version;
+    const loading=show(key,positionFromUrl(target)),clickedVersion=version;
     await loading;
     if (clickedVersion !== version || location.hash !== target.hash) return;
     root.querySelector('#trajectory-title').focus({preventScroll:true});
     root.scrollIntoView({block:'start',behavior:'instant'});
   }));
   function showLocation() {
-    const params = new URL(location.href).searchParams;
-    return show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), params.get('event'));
+    const url = new URL(location.href), params = url.searchParams;
+    return show(params.has('phase') ? `${params.get('case')}-phase${params.get('phase')}` : params.get('case'), positionFromUrl(url));
   }
   window.addEventListener('popstate', () => {
     if (location.search !== renderedSearch) showLocation();
