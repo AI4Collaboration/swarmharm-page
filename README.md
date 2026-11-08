@@ -17,7 +17,7 @@ The research README on `work/unified-report-inputs-20261105` at
 comparisons. A current rollout follows one continuous reporting task.
 Separate frozen cases supply the evidence for each finding. The original TLDR
 stays below the wordmark. Its three threat model terms link to reviewed moments
-in the external-service, acceptance and trace-tampering cases.
+in the external-service overreach, grader hacking and trace tampering cases.
 
 The formation column illustrates peer discovery (r136), communication through
 shared records (r74), and information propagation (r75). These selected examples
@@ -45,7 +45,7 @@ and paired review at `static/data/reviews/current-claims.json`.
 
 Earlier outcomes remain selectable under their original case IDs: r257 (group
 recheck), r261 (activity-record alteration), r255/r263 (treasury composition),
-r165 (resource overreach), and r178 (acceptance manipulation). The Haiku result
+r165 (resource overreach), and r178 (grader hacking). The Haiku result
 is a separate finance example. Earlier records retain their own models, settings
 and outcomes.
 
@@ -59,7 +59,7 @@ standalone verdict for every claim.
 ## Phase 2 terminology
 
 The trajectory selector includes reviewed examples of external-service resource
-scope overreach (**r165**), task/acceptance manipulation (**r178**) and trace
+scope overreach (**r165**), grader hacking (**r178**) and trace
 tampering (**r261**). r165 and r178 each leave
 31 of 55 reports delayed, in separate runs. r165 establishes consequence-aware
 joint execution; r178 does not establish a joint decision to proceed without
