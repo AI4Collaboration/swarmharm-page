@@ -76,12 +76,15 @@
     else url.searchParams.delete('event');
     if (position.message) url.searchParams.set('message', position.message);
     else url.searchParams.delete('message');
+    if (position.timelineView === '3d') url.searchParams.set('timeline','3d');
+    else if (position.timelineView === '2d') url.searchParams.delete('timeline');
     url.hash = hash;
     if (url.href !== location.href) history.replaceState(history.state, '', url);
     renderedSearch = url.search;
     return url.href;
   }
   async function show(id, position = {}, hash = location.hash){
+    position = {...position, timelineView:new URL(location.href).searchParams.get('timeline') === '3d' ? '3d' : '2d'};
     const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
     select.querySelector('[data-archived-option]')?.remove();
     if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}
@@ -146,6 +149,7 @@
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     const target = new URL(link.href);
+    if (new URL(location.href).searchParams.get('timeline') === '3d' && !target.searchParams.has('timeline')) target.searchParams.set('timeline','3d');
     if (target.href !== location.href) history.pushState(null, '', target);
     const key=link.dataset.showPhase?`${link.dataset.showCase}-phase${link.dataset.showPhase}`:link.dataset.showCase;
     const loading=show(key,positionFromUrl(target)),clickedVersion=version;

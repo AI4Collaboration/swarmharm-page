@@ -11,6 +11,7 @@
     return minutes + ':' + String(seconds % 60).padStart(2,'0');
   }
   const homeView = {yaw:-.35, pitch:.99};
+  const linearHome = {yaw:-.17, pitch:.52};
   const clockwiseRate = 2*Math.PI/288_000; // radians per millisecond of visible playback
   const cameras = new WeakMap();
 
@@ -98,19 +99,21 @@
     const viewer = host.closest('.trajectory-viewer') || host;
     const camera = cameras.get(viewer) || {...homeView};
     cameras.set(viewer,camera);
+    const linearAngle = camera.linear || (camera.linear = {...linearHome});
+    let timelineView = meta.position.timelineView === '3d' && window.createLinearTimeline ? '3d' : '2d';
 
     let current=0,playing=false,started=false,visible=false,stageVisible=false,flowVisible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
     let settlePaused=false, cameraReset=null, resumeAfterLoad=false;
     let signalSeconds = 0;
     let readingUntil=0,hovered=null,drag=null,transcriptScroll=null;
-    let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
+    let viewWidth=0, viewHeight=0, flowWidth=0, flowHeight=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null;
-    let scrubPointer=null;
+    let scrubPointer=null, linearDrag=null, linear=null;
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     let reduced=motion.matches;
     const active=()=>moments[current];
-    const holding=()=>readingUntil>0 || !!drag || scrubPointer!==null;
+    const holding=()=>readingUntil>0 || !!drag || !!linearDrag || scrubPointer!==null;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
     const running=()=>isVisible() && (playing || cameraReset || (settlePaused && orbitView.transitioning));
 
@@ -189,11 +192,14 @@
           <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
         </section>
         <section class="obs-flow" id="timeline" aria-labelledby="obs-timeline-title">
-          <header class="obs-panel-heading"><h5 id="obs-timeline-title">Timeline</h5><div class="obs-run-clock"><span>Run time</span><time data-current-time></time><span>/ ${clockLabel(duration)}</span></div></header>
+          <header class="obs-panel-heading"><div class="obs-timeline-heading"><h5 id="obs-timeline-title">Timeline</h5><div class="obs-timeline-views" role="group" aria-label="Timeline view"><button type="button" data-timeline-view="2d" aria-label="2D timeline">2D</button><button type="button" data-timeline-view="3d" aria-label="3D timeline">3D</button></div></div><div class="obs-run-clock"><span>Run time</span><time data-current-time></time><span>/ ${clockLabel(duration)}</span></div></header>
           <div class="obs-timeline-selection" id="obs-timeline-detail" data-timeline-selection></div>
+          <blockquote class="obs-linear-quote" hidden><button type="button" data-linear-original title="View the original ${entryLabel}"><span></span> <i aria-hidden="true">↗</i></button></blockquote>
           <div class="obs-flow-stage">
             <canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Recorded timeline. Each row is one agent. Dots mark actions, diamonds mark posts, and rings mark reads. Select a point or use the arrow keys to step through events." aria-describedby="obs-timeline-detail"></canvas>
             <input class="obs-time-scrub" type="range" min="0" max="${Math.max(1,duration)}" value="0" step="1" aria-label="Seek by elapsed run time"${duration ? '' : ' disabled'}>
+            <div class="obs-linear-tools" hidden><span>Drag to rotate</span><button type="button" data-linear-reset aria-label="Reset 3D angle" title="Reset 3D angle">↺</button></div>
+            <i class="obs-linear-signal" aria-hidden="true" hidden></i>
             <div class="obs-flow-tooltip" role="tooltip" hidden></div>
           </div>
           <footer class="obs-transport"><button type="button" data-previous aria-label="Previous event">${arrow(-1)}</button><button type="button" data-timeline-play aria-label="Play timeline">${playIcon}</button><button type="button" data-next aria-label="Next event">${arrow(1)}</button><span data-position></span><span class="sr-only" data-status>Paused</span><button type="button" data-speed aria-label="Playback speed: 1 times">1×</button><button class="obs-outcome-button" type="button" data-outcome>Outcome ↗</button></footer>
@@ -208,6 +214,12 @@
     const timeline = host.querySelector('#timeline');
     const timelineJump = host.querySelector('[data-timeline-jump]');
     const timelineSelection = host.querySelector('[data-timeline-selection]');
+    const viewButtons = timeline.querySelectorAll('[data-timeline-view]');
+    const linearQuote = timeline.querySelector('.obs-linear-quote');
+    const linearExcerpt = linearQuote.querySelector('span');
+    const linearTools = timeline.querySelector('.obs-linear-tools');
+    const signal = timeline.querySelector('.obs-linear-signal');
+    const flatDescription = flow.getAttribute('aria-label');
     const playButtons = host.querySelectorAll('[data-play],[data-timeline-play]');
     const tooltips=new Map([[scene,host.querySelector('.obs-graph-tooltip')],[flow,host.querySelector('.obs-flow-tooltip')]]);
     const chatRows=new Map([...host.querySelectorAll('[data-chat-message]')].map(row=>[row.dataset.chatMessage,row]));
@@ -278,7 +290,7 @@
     }
     function pinMoment(hash = '#trajectory') {
       const moment = active();
-      return meta.pinMoment({event:moment.kind === 'outcome' ? 'outcome' : moment.event, message:moment.message?.id}, hash);
+      return meta.pinMoment({event:moment.kind === 'outcome' ? 'outcome' : moment.event, message:moment.message?.id, timelineView}, hash);
     }
     async function copyMomentLink() {
       const url = pinMoment();
@@ -332,6 +344,11 @@
       return `<span class="obs-time-mark" data-kind="${moment.kind}" style="--mark:${actorStyle(moment.actor)}"><i aria-hidden="true"></i><time datetime="PT${second}S">${clockLabel(second)}</time> ${esc(names.get(moment.actor))} ${esc(label)}</span>`;
     }
     function showTimeline(moment) {
+      linearQuote.hidden = timelineView !== '3d' || !moment.message;
+      if (!linearQuote.hidden) {
+        linearExcerpt.textContent = quoteText.textContent;
+        linearQuote.toggleAttribute('data-passage',routeQuote.hasAttribute('data-passage'));
+      }
       if (moment.kind === 'read') {
         const post = moments[sendIndex.get(moment.message.id)];
         const delay = recordedSecond(moment.event) - recordedSecond(post.event);
@@ -543,12 +560,14 @@
       if (hash) pinMoment(hash);
     }
     on(viewer,'trajectory-case-change',()=>{
+      cancelLinearDrag();
       resumeAfterLoad=resumeAfterLoad || playing;
       stop(false);
     });
     on(viewer,'trajectory-seek',event=>{
       if (resumeAfterLoad && !reduced) playing=true;
       resumeAfterLoad=false;
+      if (event.detail.timelineView) setTimelineView(event.detail.timelineView,false);
       const index=positionIndex(event.detail);
       if (index!==current) seek(index, null);
       else { orbitView.resumeFocus(!reduced); updateControls(); ensureFrame(); }
@@ -563,9 +582,9 @@
       updateControls();
       ensureFrame();
     }
-    function openOriginal(kind){
+    function openOriginal(kind,hash = '#trajectory'){
       stop();
-      pinMoment();
+      pinMoment(hash);
       const moment=active();
       const event=kind==='message'?moment.message?.event:moment.event;
       if(kind==='outcome')openRecord(null);
@@ -613,6 +632,33 @@
     const laneY = row => 16 + row * laneHeight;
     const timeX = second => axisLeft + (duration ? second / duration : 0) * (flowWidth - axisLeft - axisRight);
 
+    function updateViewControls() {
+      timeline.dataset.view=timelineView;
+      for (const button of viewButtons) {
+        button.setAttribute('aria-pressed',String(button.dataset.timelineView===timelineView));
+        button.disabled=button.dataset.timelineView==='3d' && !window.createLinearTimeline;
+      }
+      linearTools.hidden=timelineView!=='3d';
+      if(timelineView!=='3d')signal.hidden=true;
+      flow.setAttribute('aria-label', timelineView==='2d' ? flatDescription :
+        '3D timeline. Elapsed time runs along straight tracks, one per agent on the floor. A raised line joins a post to its recorded read. Select the line to read the note. Drag or use Shift and arrow keys to change the angle. Arrow keys step through events.');
+    }
+    function setTimelineView(view,remember=true) {
+      if (view===timelineView || (view==='3d' && !window.createLinearTimeline)) return;
+      cancelLinearDrag(); hovered=null; hideTooltips();
+      timelineView=view;
+      updateViewControls(); showTimeline(active()); resize();
+      if (remember) pinMoment('#timeline');
+    }
+    function updateLinearSignal() {
+      const travel=elapsed/2100;
+      if (timelineView!=='3d' || reduced || active().kind!=='read' || travel>=1 || (!playing && !elapsed)) {
+        signal.hidden=true; return;
+      }
+      const point=linear?.signalAt(travel*travel*(3-2*travel));
+      signal.hidden=!point;
+      if (point) signal.style.transform='translate('+point[0]+'px,'+point[1]+'px)';
+    }
     function layoutTimeline() {
       const span = flowWidth - axisLeft - axisRight;
       // Keep simultaneous moments on the same timestamp. Spread their markers within the lane.
@@ -640,8 +686,8 @@
       }
       if (duration) ticks.push(duration);
     }
-    function drawTimeMark(moment, ink, featured = false) {
-      const {x,y} = flowPoints[moment.order];
+    function drawTimeMark(moment, ink, featured = false, point = flowPoints[moment.order]) {
+      const {x,y} = point;
       const r = featured ? 5 : moment.kind === 'action' ? 1.6 : 2.8;
       fctx.beginPath();
       if (moment.kind === 'send') {
@@ -659,15 +705,24 @@
       const m = active(), cursor = timeX(recordedSecond(m.event));
       const post = m.kind === 'read' ? moments[sendIndex.get(m.message.id)] : null;
       fctx.setTransform(dpr,0,0,dpr,0,0);
-      fctx.clearRect(0,0,flowWidth,chartHeight);
+      fctx.clearRect(0,0,flowWidth,flowHeight);
       fctx.font = '11px ' + fontFamily;
       for (const second of ticks) {
+        if(timelineView==='3d' && second!==0 && second!==duration)continue;
         const x = timeX(second);
-        strokePoints(fctx,[[x,5],[x,lanesBottom]],paint.guide+'24',.8);
+        if(timelineView==='2d')strokePoints(fctx,[[x,5],[x,lanesBottom]],paint.guide+'24',.8);
         fctx.textAlign = second === 0 ? 'left' : second === duration ? 'right' : 'center';
-        fctx.fillStyle = paint.muted; fctx.fillText(clockLabel(second),x,chartHeight-7);
+        fctx.fillStyle = paint.muted; fctx.fillText(clockLabel(second),x,flowHeight-7);
       }
       fctx.textAlign = 'left';
+      if (timelineView==='3d') {
+        linear ||= window.createLinearTimeline({actors,moments:recordedMoments,eventFraction,fontFamily});
+        flowHits=linear.draw({ctx:fctx,width:flowWidth,height:flowHeight,angle:linearAngle,paint,active:m,post,ticks,duration,
+          mark:drawTimeMark,hovered:hovered?.surface===flow ? hovered.hit : null,recordLabel:sharedRecords?'Record':'Message',clockLabel});
+        updateLinearSignal();
+        return;
+      }
+      flowHits=flowPoints;
       actors.forEach((a,i) => {
         const y = laneY(i), ink = color(a.id);
         strokePoints(fctx,[[axisLeft,y],[flowWidth-axisRight,y]],ink+'46',.8);
@@ -702,12 +757,16 @@
     }
     function resize() {
       const box=stage.getBoundingClientRect(), timelineWidth=flowStage.getBoundingClientRect().width;
+      const spatialHeight=receiptCount ? clamp(248+timelineWidth*.145,282,405) : clamp(165+timelineWidth*.11,203,280);
+      const timelineHeight=timelineView==='3d' ? Math.round(spatialHeight) : chartHeight;
       const ratio=Math.min(devicePixelRatio||1,2);
       if (!box.width || !box.height || !timelineWidth || disposed || !ctx || !fctx) return;
-      if (viewWidth===box.width && viewHeight===box.height && flowWidth===timelineWidth && dpr===ratio) return;
-      viewWidth=box.width; viewHeight=box.height; flowWidth=timelineWidth; dpr=ratio;
+      if (viewWidth===box.width && viewHeight===box.height && flowWidth===timelineWidth && flowHeight===timelineHeight && dpr===ratio) return;
+      viewWidth=box.width; viewHeight=box.height; flowWidth=timelineWidth; flowHeight=timelineHeight; dpr=ratio;
+      flowStage.style.height=flowHeight+'px';
+      flowStage.style.setProperty('--scrub-center',(flowHeight-36)+'px');
       scene.width=Math.round(viewWidth*dpr); scene.height=Math.round(viewHeight*dpr);
-      flow.width=Math.round(flowWidth*dpr); flow.height=Math.round(chartHeight*dpr);
+      flow.width=Math.round(flowWidth*dpr); flow.height=Math.round(flowHeight*dpr);
       layoutTimeline();
       drawSpatial(); drawFlow();
     }
@@ -744,6 +803,7 @@
         }
       }
       if (stageVisible && (transitioning || resetting || (advancing && !reduced)) && ctx) drawSpatial();
+      if (flowVisible && timelineView==='3d' && advancing && (elapsed<=2100 || !signal.hidden)) updateLinearSignal();
       if (!running()) lastFrame=0;
       ensureFrame();
     }
@@ -753,7 +813,12 @@
       else if (!playing || reduced || holding()) drawSpatial();
     }
     function nearest(surface, x, y) {
+      if(surface===flow && timelineView==='3d') {
+        const bridge=linear?.bridgeHit(x,y);
+        if(bridge?.moment===current)return bridge;
+      }
       let best = null, distance = Infinity, bestPriority = -1;
+      const sourceOrder = surface===flow && active().message ? sendIndex.get(active().message.id) : undefined;
       for (const hit of surface === scene ? sceneHits : flowHits) {
         if (hit.bounds) {
           const {x:left, y:top, w, h} = hit.bounds;
@@ -763,7 +828,8 @@
         const d = Math.hypot(hit.x - x, hit.y - y);
         if (d >= hit.r) continue;
         const priority = hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
-        if (priority > bestPriority || (priority === bestPriority && (d < distance || (d === distance && hit.moment === current)))) {
+        const exactEndpoint = hit.moment === current || (sourceOrder !== undefined && hit.moment === sourceOrder && best?.moment !== current);
+        if (priority > bestPriority || (priority === bestPriority && (d < distance || (d === distance && exactEndpoint)))) {
           best = hit; distance = d; bestPriority = priority;
         }
       }
@@ -779,6 +845,7 @@
       if (message) label = 'Select message';
       if (moment?.kind === 'read') label = 'Select recorded read';
       if (moment?.kind === 'action') label = 'Select action';
+      if (hit.bridge) label = 'View original '+entryLabel;
       const stamp = surface === flow ? clockLabel(recordedSecond(e.id)) + ' elapsed' : e.time;
       tip.innerHTML=`<strong style="color:${actorStyle(e.actor)}">${esc(names.get(e.actor))}<time>${esc(stamp)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
       tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px';tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px';redrawHover(surface);
@@ -786,16 +853,23 @@
     function pick(surface,event) {
       const box=surface.getBoundingClientRect(), x=event.clientX-box.left, hit=nearest(surface,x,event.clientY-box.top);
       if (!hit) {
-        if (surface === flow && x >= axisLeft && x <= flowWidth-axisRight) {
+        if (surface === flow && (timelineView==='2d' || event.clientY-box.top>=flowHeight-45) && x >= axisLeft && x <= flowWidth-axisRight) {
           seek(momentAtSecond(duration*(x-axisLeft)/(flowWidth-axisLeft-axisRight)),'#timeline');
         }
-      } else if (hit.moment !== undefined) seek(hit.moment,surface === flow ? '#timeline' : '#trajectory');
+      } else if (hit.bridge) openOriginal('message','#timeline');
+      else if (hit.moment !== undefined) seek(hit.moment,surface === flow ? '#timeline' : '#trajectory');
       else if (hit.message) seek(sendIndex.get(hit.message));
       else if (eventMoment.has(hit.event)) seek(eventMoment.get(hit.event));
       else { stop(); openRecord([hit.event]); }
     }
     function stepKey(event) {
       const hash = event.currentTarget === scene ? '#trajectory' : '#timeline';
+      if(event.currentTarget===flow && timelineView==='3d' && event.shiftKey && ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)) {
+        event.preventDefault();
+        const yaw = event.key === 'ArrowLeft' ? -.09 : event.key === 'ArrowRight' ? .09 : 0;
+        const pitch = event.key === 'ArrowDown' ? -.08 : event.key === 'ArrowUp' ? .08 : 0;
+        turnLinear(linearAngle.yaw+yaw,linearAngle.pitch+pitch); return;
+      }
       const steps = {ArrowLeft:current-1, ArrowRight:current+1, Home:0, End:moments.length-1};
       if (event.currentTarget === range) { steps.ArrowDown = current-1; steps.ArrowUp = current+1; }
       const next = steps[event.key];
@@ -804,6 +878,13 @@
     }
     [scene,flow].forEach(surface=>{
       on(surface,'pointermove',event=>{
+        if (surface===flow && linearDrag) {
+          if(event.pointerId!==linearDrag.id)return;
+          const dx=event.clientX-linearDrag.x, dy=event.clientY-linearDrag.y;
+          if(!linearDrag.moved && Math.abs(dx)+Math.abs(dy)<=5)return;
+          linearDrag.moved=true; timeline.classList.add('is-tilting');
+          turnLinear(linearDrag.yaw+dx*.004,linearDrag.pitch-dy*.004); return;
+        }
         if (drag && surface===scene) {
           if (event.pointerId!==drag.id) return;
           const dx=event.clientX-drag.x, dy=event.clientY-drag.y;
@@ -815,7 +896,7 @@
         }
         if(event.pointerType==='mouse')hover(surface,event);
       });
-      on(surface,'pointerleave',()=>{if(drag)return;hovered=null;hideTooltips();redrawHover(surface);});
+      on(surface,'pointerleave',()=>{if(drag || linearDrag)return;hovered=null;hideTooltips();redrawHover(surface);});
       on(surface,'keydown',stepKey);
     });
     on(scene,'pointerdown',event=>{
@@ -840,11 +921,37 @@
     }
     on(scene,'pointercancel',cancelDrag);
     on(scene,'lostpointercapture',cancelDrag);
-    on(flow,'click',event=>pick(flow,event));
+    function turnLinear(yaw,pitch) {
+      linearAngle.yaw=clamp(yaw,-.60,.52); linearAngle.pitch=clamp(pitch,.35,.76);
+      hovered=null; hideTooltips(); drawFlow();
+    }
+    function cancelLinearDrag(event) {
+      if (!linearDrag || (event && event.pointerId!==undefined && event.pointerId!==linearDrag.id)) return;
+      const {id}=linearDrag; linearDrag=null;
+      if(flow.hasPointerCapture(id))flow.releasePointerCapture(id);
+      timeline.classList.remove('is-tilting'); updateControls();
+    }
+    on(flow,'pointerdown',event=>{
+      if(timelineView!=='3d' || event.button!==0 || linearDrag)return;
+      linearDrag={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:linearAngle.yaw,pitch:linearAngle.pitch,moved:false};
+      flow.setPointerCapture(event.pointerId); updateControls();
+    });
+    on(flow,'pointerup',event=>{
+      if(linearDrag?.id!==event.pointerId)return;
+      const moved=linearDrag.moved; cancelLinearDrag(event);
+      if(!moved)pick(flow,event);
+    });
+    on(flow,'pointercancel',cancelLinearDrag);
+    on(flow,'lostpointercapture',cancelLinearDrag);
+    on(window,'blur',cancelLinearDrag);
+    on(flow,'click',event=>{if(timelineView==='2d')pick(flow,event);});
     on(host,'click',event=>{
       const button=event.target.closest('button');if(!button)return;
       if(button.hasAttribute('data-play'))togglePlay();
       else if(button.hasAttribute('data-timeline-play'))togglePlay('#timeline');
+      else if(button.hasAttribute('data-timeline-view'))setTimelineView(button.dataset.timelineView);
+      else if(button.hasAttribute('data-linear-reset'))turnLinear(linearHome.yaw,linearHome.pitch);
+      else if(button.hasAttribute('data-linear-original'))openOriginal('message','#timeline');
       else if(button.hasAttribute('data-share'))copyMomentLink();
       else if(button.hasAttribute('data-timeline-jump')){
         pinMoment('#timeline'); timeline.scrollIntoView({block:'start',behavior:'instant'}); flow.focus({preventScroll:true});
@@ -904,6 +1011,7 @@
     on(motion,'change',()=>{
       reduced=motion.matches;
       if (reduced) {
+        signal.hidden=true;
         if (playing) started=false;
         orbitView.select(active(),signalSeconds,earlierReadsAt(active()));
         stop();
@@ -939,6 +1047,7 @@
     visibilityObserver.observe(stage);
     visibilityObserver.observe(documentPanel);
     visibilityObserver.observe(flowStage);
+    updateViewControls();
     const openingMoment = positionIndex(meta.position);
     if (!camera.seen) camera.yaw = orbitView.entryYaw(moments[openingMoment],camera.pitch) ?? camera.yaw;
     select(openingMoment);resize();
