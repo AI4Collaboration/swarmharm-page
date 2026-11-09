@@ -1,3 +1,12 @@
+/* Dark logos sit on the same surface, without luminous white tiles. */
+:root[data-theme="dark"] .institutions.institution-band { background:var(--bg); }
+:root[data-theme="dark"] .institution-band .institution-list a { background:transparent; }
+:root[data-theme="dark"] .institution-band .institution-list img { filter:grayscale(1) invert(1); mix-blend-mode:screen; opacity:.85; }
+:root[data-theme="dark"] .institution-band .institution-eurosafe span { color:var(--text); }
+:root[data-theme="dark"] .institution-band .institution-list a:is(:hover,:focus-visible) img { opacity:1; }
+/* Reverse marks already have light lettering on a solid field. */
+:root[data-theme="dark"] .institution-band :is(.institution-oxford,.institution-cmu) img { filter:grayscale(1) contrast(3); }
+
 /* The lead institutions stay still; collaborators retain the continuous belt. */
 .institutions.institution-band {
   display: grid;

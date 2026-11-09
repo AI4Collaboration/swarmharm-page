@@ -24,7 +24,8 @@ shared records (r74), and information propagation (r75). These selected examples
 use Sol 6.1 with high reasoning and retain their original direct-API conditions.
 In r75 A writes a lookup clue at event 40. D, B and C read it at 44, 45 and 48.
 B uses it to search, fetch and submit at 52, 56 and 60. The Engineering example
-r65 remains available from the domain overview.
+r65 remains available in the trajectory case selector. Case labels include their
+task domain; no separate domain navigation is needed.
 
 The outcome column uses the positive Knowledge Work cases from the
 `balanced-headline-v2-20261107` release. The public matrix, including the matched
