@@ -834,7 +834,7 @@
       const arc=straight?.arcHit(x,y);
       if(arc && !arc.earlierRead && arc.moment===current)return arc;
       const earlierArc=arc?.earlierRead && readHistory.some(m=>m.order===arc.moment)?arc:null;
-      let best = earlierArc, distance = Infinity, bestPriority = earlierArc?1:-1;
+      let best = earlierArc, distance = Infinity, bestPriority = earlierArc?1:-Infinity;
       const sourceOrder=active().message ? sendIndex.get(active().message.id) : undefined;
       for (const hit of surface === scene ? sceneHits : flowHits) {
         if (hit.bounds) {
@@ -844,9 +844,9 @@
         }
         const d = Math.hypot(hit.x - x, hit.y - y);
         // An unmarked event on the rail yields to any visible pin or arc.
-        const onRail = straight && !straight.hasPin(hit.moment);
+        const onRail = hit.unmarked || (straight && !straight.hasPin(hit.moment));
         if (d >= (onRail ? railRadius : hit.r)) continue;
-        const priority = onRail ? 0 : hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
+        const priority = onRail ? -2 : hit.earlierRead ? -1 : hit.moment !== undefined ? 2 : Number(Boolean(hit.latest));
         const endpoint=hit.moment===current || (sourceOrder!==undefined && hit.moment===sourceOrder && best?.moment!==current);
         if (priority > bestPriority || (priority === bestPriority && (d < distance || (d === distance && endpoint)))) {
           best = hit; distance = d; bestPriority = priority;

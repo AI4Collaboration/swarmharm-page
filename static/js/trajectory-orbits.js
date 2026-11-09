@@ -49,8 +49,8 @@
 
   const shellSamples = Array.from({length:13},(_,row)=>
     Array.from({length:64},(_,i)=>skyPoint(TAU*i/64,row*Math.PI/24))).flat();
-  const stars = Array.from({length:220},(_,i)=>({
-    point:skyPoint(TAU*hash(i,70),Math.asin(hash(i,71))), size:.3+.58*hash(i,72), alpha:.14+.31*hash(i,73)
+  const stars = Array.from({length:40},(_,i)=>({
+    point:skyPoint(TAU*hash(i,70),Math.asin(hash(i,71))), size:.3+.58*hash(i,72), alpha:.10+.18*hash(i,73)
   }));
 
   function projector(matrix) {
@@ -196,7 +196,6 @@
       times.push(at);
     }
     const duration = times.at(-1) - times[0];
-    const stride = Math.max(1, Math.ceil(events.length / 32));
     let first = 0;
     return events.map((event, i) => {
       const rank = (i + 1) / events.length;
@@ -204,45 +203,24 @@
       while (times[first] < times[i] - 10) first++;
       const density = i - first + 1;
       const point = orbitPoint(track, t);
-      const ahead = orbitPoint(track, t + .001);
-      const angle = Math.atan2(ahead[1] - point[1], ahead[0] - point[0]);
       const type = event.messages.length ? 'post' : event.reads.length ? 'read' : 'action';
       const baseHeight = type === 'post' ? 38 : type === 'read' ? 27 : event.important ? 16 : 8;
       const height = baseHeight + Math.min(26, (density - 1) * 3.8);
-      return {track, event, t, point, tip:[point[0], point[1], height], type, density,
-        tx:Math.cos(angle), ty:Math.sin(angle), raised:type !== 'action' || i % stride === 0};
+      return {track, event, t, point, tip:[point[0], point[1], height], type};
     });
   }
 
-  function actionGrain(node, i) {
-    const seed = node.event.id, spread = 5+Math.min(node.density,5);
-    const along = (hash(seed,i+3)-.5)*25;
-    const across = (hash(seed,i+103)+hash(seed,i+189)-1)*spread;
-    return {
-      x:node.point[0]+along*node.tx-across*node.ty,
-      y:node.point[1]+along*node.ty+across*node.tx,
-      size:.44+hash(seed,i+263)*1.15,
-      alpha:(.30+.53*hash(seed,i+349))*(1-.45*Math.abs(across/spread))
-    };
-  }
-
-  // A compact stellar core leaves the silhouette of the disk to the recorded nodes.
+  // A soft core keeps the center legible behind the action tracks.
   function drawNucleus(context, dark) {
     const glow = context.createRadialGradient(0,0,0,0,0,62);
     glow.addColorStop(0,dark?'#f3d8ad99':'#ae825343');
     glow.addColorStop(.20,dark?'#c7a48249':'#bc9a7427');
     glow.addColorStop(1,'#a58e7100');
     context.fillStyle=glow;context.fillRect(-62,-62,124,124);
-    context.fillStyle=dark?'#f5d9b189':'#805d3776';
-    for (let i=0; i<1200; i++) {
-      const r=-Math.log(Math.max(.003,hash(i,68)))*15.4, a=TAU*hash(i,67);
-      const size=.25+.74*hash(i,65);
-      context.fillRect(r*Math.cos(a),r*Math.sin(a),size,size);
-    }
   }
 
-  // The static grains stay on one cached plane while action heads and pins are projected above it.
-  function paintDisk(surface, tracks, size, paint, liftedPerAction) {
+  // Cache the smooth paths below the moving heads and communication endpoints.
+  function paintDisk(surface, tracks, size, paint) {
     surface.width = surface.height = size;
     const g = surface.getContext('2d');
     const unit = size / (2*ATLAS_RADIUS);
@@ -256,15 +234,6 @@
       line(g, track.path, ink, 4);
       g.globalAlpha = paint.dark ? .29 : .33;
       line(g, track.path, ink, .8);
-      g.fillStyle = ink;
-      for (const node of track.nodes) {
-        const grains = 48 + Math.min(24, node.density * 3);
-        for (let i=liftedPerAction; i<grains; i++) {
-          const grain = actionGrain(node,i);
-          g.globalAlpha = Math.min(1,grain.alpha*(paint.dark ? 1 : 1.2));
-          g.fillRect(grain.x,grain.y,grain.size,grain.size);
-        }
-      }
     }
     g.globalAlpha = 1;
   }
@@ -429,26 +398,17 @@
     canvas.before(floor);
     let platePaint;
 
-    const eventCount = actors.reduce((sum,actor)=>sum+actorEvents.get(actor.id).length,0);
-    const liftedPerAction = clamp(Math.floor(900/Math.max(1,eventCount)),1,6);
     const longest = Math.max(1,...actors.map(actor=>actorEvents.get(actor.id).length));
     const nodes = new Map();
     const tracks = actors.map((actor,index) => {
       const events = actorEvents.get(actor.id);
       const track = {
         id:actor.id,index,phase:index*TAU/actors.length,extent:SKY_RADIUS*(.72+.28*events.length/longest),
-        from:0,to:0,duration:0,last:null,grains:[]
+        from:0,to:0,duration:0,last:null
       };
       track.path = Array.from({length:STEPS+1},(_,j)=>orbitPoint(track,j/STEPS));
       track.nodes = actionNodes(track,events);
-      for (const node of track.nodes) {
-        nodes.set(node.event.id,node);
-        for (let j=0;j<liftedPerAction;j++) {
-          const grain = actionGrain(node,j);
-          const height = (3+12*(1-node.t))*hash(node.event.id,j+431);
-          track.grains.push({point:[grain.x,grain.y,height],size:grain.size,alpha:grain.alpha});
-        }
-      }
+      for (const node of track.nodes) nodes.set(node.event.id,node);
       return track;
     });
     const backToFront = Array.from(nodes.values());
@@ -568,10 +528,6 @@
       const {project,magnification}=projection;
       for (const track of tracks) {
         track.screen=track.path.map(project);
-        for (const grain of track.grains) {
-          grain.screen=project(grain.point);
-          grain.diameter=Math.max(.52,grain.size*framing.scale*magnification(grain.point));
-        }
         for (const node of track.nodes) {
           node.foot=project(node.point); node.screenTip=project(node.tip); node.size=magnification(node.tip);
         }
@@ -592,12 +548,6 @@
         track.ink = ink;
         track.involved = involved;
 
-        ctx.fillStyle = ink;
-        for (const grain of track.grains) {
-          ctx.globalAlpha = grain.alpha*(quiet ? .50 : .75);
-          ctx.fillRect(...grain.screen,grain.diameter,grain.diameter);
-        }
-        ctx.globalAlpha = 1;
         if (!track.last) continue;
         const past = track.screen.slice(0,Math.floor(reached*STEPS)+1);
         past.push(head);
@@ -626,7 +576,7 @@
       const center = project([0,0,0]);
       const size = clamp(Math.ceil(width*dpr/128)*128,512,1536);
       if (platePaint!==paint || plate.width!==size) {
-        paintDisk(plate,tracks,size,paint,liftedPerAction);
+        paintDisk(plate,tracks,size,paint);
         platePaint=paint;
       }
 
@@ -638,6 +588,14 @@
       const burn=clamp((flight-.05)/.95,0,1);
       const travel=burn*burn*(2-burn);
       const hits=[],labels=[],occupied=[],callouts=[];
+      const pins=new Map();
+      if(selected)pins.set(selected,1);
+      if(post)pins.set(post,1);
+      for (const [link,style] of routes) {
+        const {history,last,current}=appearance(style), strength=Math.max(history,last,current);
+        if(strength<.005)continue;
+        for(const node of [link.post,link.reader])pins.set(node,Math.max(pins.get(node)||0,strength));
+      }
       drawDome(ctx,projection,paint);
       drawSpirals(visualSeconds,paint);
 
@@ -648,6 +606,9 @@
           const size=magnification(orbitPoint(track,track.reached));
           circle(ctx,...track.head,(involved?3.1:2.1)*size,ink);
           if (involved) circle(ctx,...track.head,1.25*size,paint.paper);
+          const hit={x:track.head[0],y:track.head[1],r:8,event:track.last.event.id,latest:true};
+          if(track.last===selected)hit.moment=moment.order;
+          hits.push(hit);
         }
         const rim = track.screen[Math.floor(STEPS*.94)];
         const dx = rim[0]-center[0], dy = rim[1]-center[1], length = Math.hypot(dx,dy) || 1;
@@ -661,23 +622,23 @@
       for (const node of backToFront) {
         const {track,size} = node, ink = paint.agents.get(track.id) || paint.muted;
         const active = node === selected || node === post, latest = node === track.last;
-        const quiet = arc && track.id !== moment.actor && track.id !== post.event.actor;
-        const past = node.t <= track.reached, raised = node.raised || active || latest;
-        const at = raised ? node.screenTip : node.foot;
-        const distanceFade = clamp((size-.76)*1.2+.57,.62,1.13);
-        const strength = (past ? (quiet ? .48 : .85) : (quiet ? .18 : .36))*distanceFade;
-        const alpha = paint.dark ? strength : Math.min(.98,strength*1.13+.045);
+        const alpha=pins.get(node);
+        if(alpha===undefined) {
+          if(!latest)hits.push({x:node.foot[0],y:node.foot[1],event:node.event.id,r:4,unmarked:true});
+          continue;
+        }
+        const at=node.screenTip;
         ctx.globalAlpha = active ? .95 : alpha*.78;
-        if (raised) line(ctx,[node.foot,at],ink,(active ? 1.35 : .75)*size);
+        line(ctx,[node.foot,at],ink,(active ? 1.35 : .75)*size);
         ctx.globalAlpha = active ? 1 : Math.min(1,alpha);
-        circle(ctx,...node.foot,(raised ? 1.15 : 1.6)*size,ink);
+        circle(ctx,...node.foot,1.15*size,ink);
         const type = node === selected && arc ? 'read' : node.type;
         const radius = type === 'action' ? (node.event.important ? 2 : 1.6) : 2.6;
-        if (raised) pinCap(ctx,type,at,(active ? 3.7 : radius)*size,ink,paint.paper);
+        pinCap(ctx,type,at,(active ? 3.7 : radius)*size,ink,paint.paper);
         const hit = {x:at[0],y:at[1],event:node.event.id,latest,r:active || latest ? 8 : 5};
         if (node === selected) hit.moment = moment.order;
         hits.push(hit);
-        if (raised) hits.push({...hit,x:node.foot[0],y:node.foot[1],r:4});
+        hits.push({...hit,x:node.foot[0],y:node.foot[1],r:4});
       }
       ctx.globalAlpha = 1;
       if (featured) {
