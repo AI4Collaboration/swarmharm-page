@@ -82,10 +82,13 @@ cross-agent read, or the first action in a run without one. The full sequence
 is available from the start of the timeline.
 At normal speed, posts and reads stay on screen for 6 to 12 seconds according to
 message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.1 seconds.
-Each agent has a smooth colored spiral on the lower disk, with one head that
-advances when the agent acts. Only the selected event and the endpoints of
-visible exchanges have raised pins. Hover or tap along the spiral to inspect
-other events. Diamonds mark posts and hollow points mark reads.
+Each agent has a colored spiral on the lower disk, with one head that advances
+when the agent acts. A light dust texture follows the recorded action density.
+Up to fourteen small checkpoints per track appear as those events are reached,
+with posts, reads and important actions preferred when events are crowded.
+The selected event and visible exchanges have brighter, taller pins. Hover or
+tap along the spiral to inspect other events. Diamonds mark posts and hollow
+points mark reads.
 The translucent dome is shaded behind the data. Each arc requires a post and
 a later read of that same message by another agent in the recorded events.
 It rises from the author's pin and lands on the reader's pin. Both layers

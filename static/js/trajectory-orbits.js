@@ -49,7 +49,7 @@
 
   const shellSamples = Array.from({length:13},(_,row)=>
     Array.from({length:64},(_,i)=>skyPoint(TAU*i/64,row*Math.PI/24))).flat();
-  const stars = Array.from({length:40},(_,i)=>({
+  const stars = Array.from({length:64},(_,i)=>({
     point:skyPoint(TAU*hash(i,70),Math.asin(hash(i,71))), size:.3+.58*hash(i,72), alpha:.10+.18*hash(i,73)
   }));
 
@@ -203,11 +203,26 @@
       while (times[first] < times[i] - 10) first++;
       const density = i - first + 1;
       const point = orbitPoint(track, t);
+      const ahead = orbitPoint(track, t + .001);
+      const angle = Math.atan2(ahead[1]-point[1],ahead[0]-point[0]);
       const type = event.messages.length ? 'post' : event.reads.length ? 'read' : 'action';
       const baseHeight = type === 'post' ? 38 : type === 'read' ? 27 : event.important ? 16 : 8;
       const height = baseHeight + Math.min(26, (density - 1) * 3.8);
-      return {track, event, t, point, tip:[point[0], point[1], height], type};
+      return {track, event, t, point, tip:[point[0], point[1], height], type, density,
+        tx:Math.cos(angle),ty:Math.sin(angle)};
     });
+  }
+
+  function actionGrain(node,i) {
+    const seed=node.event.id, spread=3+Math.min(node.density,3);
+    const along=(hash(seed,i+3)-.5)*16;
+    const across=(hash(seed,i+103)+hash(seed,i+189)-1)*spread;
+    return {
+      x:node.point[0]+along*node.tx-across*node.ty,
+      y:node.point[1]+along*node.ty+across*node.tx,
+      size:.40+.90*hash(seed,i+263),
+      alpha:(.28+.45*hash(seed,i+349))*(1-.45*Math.abs(across/spread))
+    };
   }
 
   // A soft core keeps the center legible behind the action tracks.
@@ -217,9 +232,15 @@
     glow.addColorStop(.20,dark?'#c7a48249':'#bc9a7427');
     glow.addColorStop(1,'#a58e7100');
     context.fillStyle=glow;context.fillRect(-62,-62,124,124);
+    context.fillStyle=dark?'#f5d9b166':'#805d3758';
+    for(let i=0;i<160;i++) {
+      const radius=-Math.log(Math.max(.003,hash(i,68)))*13, angle=TAU*hash(i,67);
+      const size=.25+.65*hash(i,65);
+      context.fillRect(radius*Math.cos(angle),radius*Math.sin(angle),size,size);
+    }
   }
 
-  // Cache the smooth paths below the moving heads and communication endpoints.
+  // A light, cached dust texture follows the distribution of actual actions.
   function paintDisk(surface, tracks, size, paint) {
     surface.width = surface.height = size;
     const g = surface.getContext('2d');
@@ -234,6 +255,15 @@
       line(g, track.path, ink, 4);
       g.globalAlpha = paint.dark ? .29 : .33;
       line(g, track.path, ink, .8);
+      g.fillStyle=ink;
+      for(const node of track.nodes) {
+        const count=6+Math.min(4,node.density);
+        for(let i=0;i<count;i++) {
+          const grain=actionGrain(node,i);
+          g.globalAlpha=grain.alpha*(paint.dark?1:.82);
+          g.fillRect(grain.x,grain.y,grain.size,grain.size);
+        }
+      }
     }
     g.globalAlpha = 1;
   }
@@ -408,7 +438,17 @@
       };
       track.path = Array.from({length:STEPS+1},(_,j)=>orbitPoint(track,j/STEPS));
       track.nodes = actionNodes(track,events);
-      for (const node of track.nodes) nodes.set(node.event.id,node);
+      const checkpoints=new Map();
+      for (const node of track.nodes) {
+        nodes.set(node.event.id,node);
+        const bin=Math.min(13,Math.floor(node.t*14));
+        const weight=node.type==='post'?3:node.type==='read'?2:Number(Boolean(node.event.important));
+        if(!checkpoints.has(bin) || weight>checkpoints.get(bin).weight)checkpoints.set(bin,{node,weight});
+      }
+      for(const [bin,{node}] of checkpoints) {
+        node.checkpoint=bin%3===0 || node.type==='post'
+          ? [node.point[0],node.point[1],Math.min(12,node.tip[2])] : node.point;
+      }
       return track;
     });
     const backToFront = Array.from(nodes.values());
@@ -530,6 +570,7 @@
         track.screen=track.path.map(project);
         for (const node of track.nodes) {
           node.foot=project(node.point); node.screenTip=project(node.tip); node.size=magnification(node.tip);
+          if(node.checkpoint)node.screenCheckpoint=project(node.checkpoint);
         }
       }
       backToFront.sort((a,b)=>a.size-b.size);
@@ -624,7 +665,16 @@
         const active = node === selected || node === post, latest = node === track.last;
         const alpha=pins.get(node);
         if(alpha===undefined) {
-          if(!latest)hits.push({x:node.foot[0],y:node.foot[1],event:node.event.id,r:4,unmarked:true});
+          if(latest)continue;
+          const shown=node.checkpoint && node.event.id<=moment.event && node.t<=track.reached;
+          const point=shown?node.screenCheckpoint:node.foot;
+          if(shown) {
+            ctx.globalAlpha=track.involved ? .78 : .48;
+            line(ctx,[node.foot,point],ink,.7*size);
+            pinCap(ctx,node.type,point,(node.type==='action'?1.5:2.15)*size,ink,paint.paper);
+            ctx.globalAlpha=1;
+          }
+          hits.push({x:point[0],y:point[1],event:node.event.id,r:shown?5:4,unmarked:!shown});
           continue;
         }
         const at=node.screenTip;
