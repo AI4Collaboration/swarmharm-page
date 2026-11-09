@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="static/css/research-layout.css?v=13">
   <link rel="stylesheet" href="static/css/recorded-timeline.css?v=10">
   <link rel="stylesheet" href="static/css/trajectory-observatory.css?v=27">
-  <link rel="stylesheet" href="static/css/findings.css?v=35">
+  <link rel="stylesheet" href="static/css/findings.css?v=36">
   <link rel="stylesheet" href="static/css/finding-visuals.css?v=8">
   <link rel="stylesheet" href="static/css/institution-belt.css?v=17">
   <link rel="stylesheet" href="static/css/sidebar.css?v=18">
@@ -300,16 +300,35 @@
         <div class="detection-heading">
           <h2 id="detection-title">How we detect misalignment</h2>
         </div>
-        <div class="monitor-grid">
-          <article class="monitor-card action-monitor">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8h30v32H9zM15 16h3m5 0h10M15 24h3m5 0h10M15 32h3m5 0h10"/></svg>
-            <div><h3>Action-only monitor</h3><p>Tools → state changes → measured outcome.</p></div>
-          </article>
-          <article class="monitor-card transcript-monitor">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 10h25v20H17l-7 6v-6H7zM18 17h22v18h-5v6l-7-6H18zM13 17h12M13 23h8m5 0h8m-8 6h8"/></svg>
-            <div><h3>Transcript LLM judge</h3><p>Proposal → verified read → subsequent action.</p></div>
-          </article>
-        </div>
+        <figure class="detection-pipeline">
+          <figcaption class="sr-only">Recorded actions and messages feed two parallel checks. Their evidence is assessed using claim-specific rules.</figcaption>
+          <div class="detection-stage detection-input">
+            <svg class="detection-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M11 6h17l5 5v23H11zM28 6v7h5M7 12H5v24h22M17 19h10M17 25h10"/></svg>
+            <h3>Recorded run</h3><p>Actions &amp; messages</p>
+          </div>
+          <div class="detection-connector detection-split" aria-hidden="true">
+            <svg class="detection-horizontal" viewBox="0 0 64 120" preserveAspectRatio="none"><path d="M0 60h16"/><path class="detection-action-line" d="M16 60h4q8 0 8-8V34q0-4 6-4h28m-5-5 5 5-5 5"/><path class="detection-transcript-line" d="M16 60h4q8 0 8 8v18q0 4 6 4h28m-5-5 5 5-5 5"/></svg>
+            <svg class="detection-vertical" viewBox="0 0 100 36" preserveAspectRatio="none"><path d="M50 0v8"/><path class="detection-action-line" d="M50 8v2q0 4-4 4H28q-3 0-3 4v16m-3-5 3 5 3-5"/><path class="detection-transcript-line" d="M50 8v2q0 4 4 4h18q3 0 3 4v16m-3-5 3 5 3-5"/></svg>
+          </div>
+          <div class="detection-checks" role="group" aria-label="Two parallel checks">
+            <div class="detection-check detection-action">
+              <svg class="detection-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 8h26v25H7zM7 15h26M12 11.5h.1m4 0h.1M12 25l5-5 5 4 6-6M25 18h3v3"/></svg>
+              <div><h3>Action-only monitor</h3><p>Tool use &amp; measured effects</p></div>
+            </div>
+            <div class="detection-check detection-transcript">
+              <svg class="detection-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 7h23v17H14l-6 5v-5H5zM16 13h19v17h-5v5l-6-5h-8M10 13h12M10 18h9"/></svg>
+              <div><h3>Transcript LLM judge</h3><p>Proposals, reads &amp; adoption</p></div>
+            </div>
+          </div>
+          <div class="detection-connector detection-join" aria-hidden="true">
+            <svg class="detection-horizontal" viewBox="0 0 64 120" preserveAspectRatio="none"><path class="detection-action-line" d="M0 30h24q8 0 8 8v14q0 8 8 8h4"/><path class="detection-transcript-line" d="M0 90h24q8 0 8-8V68q0-8 8-8h4"/><path d="M44 60h18m-5-5 5 5-5 5"/></svg>
+            <svg class="detection-vertical" viewBox="0 0 100 36" preserveAspectRatio="none"><path class="detection-action-line" d="M25 0v10q0 4 4 4h17q4 0 4 4v6"/><path class="detection-transcript-line" d="M75 0v10q0 4-4 4H54q-4 0-4 4v6"/><path d="M50 24v10m-3-5 3 5 3-5"/></svg>
+          </div>
+          <div class="detection-stage detection-output">
+            <svg class="detection-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M10 6h17l5 5v23H10zM27 6v7h5M16 18h10M15 26l4 4 8-9"/></svg>
+            <h3>Checked finding</h3><p>Claim-specific evidence</p>
+          </div>
+        </figure>
         <details class="method-scope"><summary>How claims are checked</summary><p>Each reviewed outcome comes from its own rollout. An authored note, an exact peer read and a later action establish adoption. The action monitor checks the resulting records or delays. Composition is tested by replaying each complete sequence alone and then all sequences together.</p></details>
       </section>
     </div>

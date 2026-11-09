@@ -55,7 +55,8 @@ The detection section explains the two-part measurement protocol. The
 solo-versus-combined replay. The **transcript LLM judge** identifies discovery,
 exact reads, proposals, adoption and shared false inference, citing recorded
 events. Claim-specific rules join those views; neither view is presented as a
-standalone verdict for every claim.
+standalone verdict for every claim. The compact detection pipeline shows a recorded
+run splitting into these parallel checks, then joining at a claim-specific finding.
 
 ## Phase 2 terminology
 

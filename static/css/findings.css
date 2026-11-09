@@ -237,26 +237,42 @@
 #sample-steps { scroll-margin-top:80px; }
 #trajectory-title, #setup-title { margin:0 0 20px; color:var(--text); font:500 clamp(24px,3vw,32px)/1.2 var(--font); letter-spacing:-.025em; }
 
-/* The detection pair separates observable effects from transcript interpretation. */
-.detection-section { margin:48px 0 8px; padding:clamp(24px,4vw,40px); border-radius:16px; background:color-mix(in srgb,var(--discovery) 6%,var(--surface)); scroll-margin-top:100px; }
-.detection-heading { display:grid; grid-template-columns:minmax(0,1fr); max-width:720px; margin-bottom:24px; }
+/* One recorded run feeds independent action and transcript checks. */
+.detection-section { margin:48px 0 8px; padding:clamp(24px,3vw,32px); border-radius:12px; background:var(--scene-panel,var(--surface)); scroll-margin-top:100px; }
+.detection-heading { display:grid; grid-template-columns:minmax(0,1fr); max-width:720px; margin-bottom:22px; }
 .detection-heading > p:first-child { margin:0 0 6px; color:var(--discovery); font:650 12px/1.4 var(--font); letter-spacing:.1em; text-transform:uppercase; }
 .detection-heading h2 { margin:0; font:500 clamp(24px,3vw,34px)/1.2 var(--display); letter-spacing:-.025em; }
 .detection-heading > p:last-child { margin:8px 0 0; color:var(--muted); font:15px/1.6 var(--font); }
-.monitor-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
-.monitor-card { display:grid; grid-template-columns:52px minmax(0,1fr); gap:16px; min-width:0; padding:22px; border:1px solid var(--line); border-radius:12px; background:var(--bg); }
-.monitor-card > svg { width:48px; height:48px; padding:9px; box-sizing:border-box; border-radius:10px; color:var(--discovery); background:color-mix(in srgb,var(--discovery) 10%,var(--bg)); fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
-.transcript-monitor > svg { color:var(--risk); background:color-mix(in srgb,var(--risk) 10%,var(--bg)); }
-.monitor-card h3 { margin:0 0 6px; color:var(--text); font:600 18px/1.35 var(--font); }
-.monitor-card p { margin:0; color:var(--muted); font:14px/1.65 var(--font); }
+.detection-pipeline { display:grid; grid-template-columns:minmax(0,1fr) 48px minmax(0,1.7fr) 48px minmax(0,1fr); align-items:center; gap:10px; margin:0; }
+.detection-pipeline h3 { margin:0; color:var(--scene-ink,var(--text)); font:600 15px/1.4 var(--font); }
+.detection-pipeline p { margin:3px 0 0; color:var(--scene-muted,var(--muted)); font:12px/1.5 var(--font); }
+.detection-stage { min-width:0; text-align:center; }
+.detection-icon { width:36px; height:36px; color:var(--scene-guide,var(--muted)); fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.detection-stage > .detection-icon { display:block; margin:0 auto 8px; }
+.detection-checks { display:grid; grid-template-rows:1fr 1fr; gap:12px; min-width:0; }
+.detection-check { display:grid; grid-template-columns:36px minmax(0,1fr); align-items:center; gap:12px; padding:12px 14px; min-width:0; border-radius:8px; background:var(--scene-bg,var(--bg)); }
+.detection-action .detection-icon { color:var(--scene-blue,var(--discovery)); }
+.detection-transcript .detection-icon { color:var(--scene-red,var(--risk)); }
+.detection-connector { align-self:stretch; min-width:0; }
+.detection-connector svg { display:block; width:100%; height:100%; overflow:visible; fill:none; stroke:var(--scene-guide,var(--muted)); stroke-width:1.25; stroke-linecap:round; stroke-linejoin:round; }
+.detection-connector path { vector-effect:non-scaling-stroke; }
+.detection-connector .detection-vertical { display:none; }
+.detection-action-line { stroke:var(--scene-blue,var(--discovery)); }
+.detection-transcript-line { stroke:var(--scene-red,var(--risk)); }
 .claim-verdict { display:grid; grid-template-columns:auto repeat(3,minmax(0,1fr)); align-items:center; gap:12px; margin-top:16px; padding:15px 18px; border-radius:10px; background:var(--discovery); color:var(--bg); }
 .claim-verdict strong { font:650 13px/1.4 var(--font); white-space:nowrap; }
 .claim-verdict span { padding-left:12px; border-left:1px solid color-mix(in srgb,var(--bg) 25%,transparent); font:12px/1.45 var(--font); }
 @media(max-width:760px) {
   .detection-section { margin-top:36px; padding:24px 18px; border-radius:12px; }
-  .monitor-grid { grid-template-columns:1fr; }
-  .monitor-card { grid-template-columns:44px minmax(0,1fr); padding:18px; }
-  .monitor-card > svg { width:42px; height:42px; }
+  .detection-pipeline { grid-template-columns:minmax(0,1fr); gap:8px; }
+  .detection-checks { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:auto; gap:12px; }
+  .detection-check { display:flex; flex-direction:column; justify-content:flex-start; gap:7px; padding:12px 8px; text-align:center; }
+  .detection-pipeline h3 { font-size:14px; }
+  .detection-pipeline p { font-size:12px; }
+  .detection-stage > .detection-icon { margin-bottom:5px; }
+  .detection-connector { height:28px; }
+  .detection-connector .detection-horizontal { display:none; }
+  .detection-connector .detection-vertical { display:block; }
   .claim-verdict { grid-template-columns:1fr; gap:8px; }
   .claim-verdict span { padding:8px 0 0; border-left:0; border-top:1px solid color-mix(in srgb,var(--bg) 25%,transparent); }
 }
