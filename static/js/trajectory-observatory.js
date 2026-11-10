@@ -10,9 +10,7 @@
     const minutes = Math.floor(seconds / 60);
     return minutes + ':' + String(seconds % 60).padStart(2,'0');
   }
-  const homeView = {yaw:-.35, pitch:.99};
-  const straightHome = {yaw:-.38, pitch:.56};
-  const clockwiseRate = 2*Math.PI/288_000; // radians per millisecond of visible playback
+  const straightHome = {yaw:-.22, pitch:.72};
   const cameras = new WeakMap();
 
   window.mountTrajectoryObservatory = (host,data,meta,openRecord) => {
@@ -97,16 +95,16 @@
     }
 
     const viewer = host.closest('.trajectory-viewer') || host;
-    const camera = cameras.get(viewer) || {...homeView};
+    const camera = cameras.get(viewer) || {};
     cameras.set(viewer,camera);
     const straightCamera = camera.straight || (camera.straight = {...straightHome});
-    let trackLayout = meta.position.layout === 'straight' && window.createLinearTimeline ? 'straight' : 'spiral';
+    let trackLayout = meta.position.layout === 'straight' && window.createLinearTimeline ? 'straight' : 'graph';
     let linear = null;
 
     let current=0,playing=false,started=false,visible=false,stageVisible=false,flowVisible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
-    let settlePaused=false, cameraReset=null, resumeAfterLoad=false;
-    let signalSeconds = 0;
+    let cameraReset=null;
+    let focusedActor=null, timeConnections=[];
     let readingUntil=0,hovered=null,drag=null,transcriptScroll=null;
     let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
     let sceneHits=[],flowHits=[],displayedMessage=null;
@@ -117,7 +115,7 @@
     const active=()=>moments[current];
     const holding=()=>readingUntil>0 || !!drag || scrubPointer!==null;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
-    const running=()=>isVisible() && (playing || cameraReset || (trackLayout==='spiral' && settlePaused && orbitView.transitioning));
+    const running=()=>isVisible() && (playing || cameraReset);
 
     for (const moment of moments) {
       if (moment.message) {
@@ -187,19 +185,21 @@
           </section>
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
-        <section class="obs-spatial" id="swarm-trajectory" data-layout="spiral" aria-label="Recorded agent actions and communication">
-          <header class="obs-panel-heading"><div class="obs-scene-heading"><h5>Swarm trajectory</h5>
+        <section class="obs-spatial" id="swarm-trajectory" data-layout="graph" aria-label="Recorded agent actions and communication">
+          <header class="obs-panel-heading"><div class="obs-scene-heading"><h5>Agents</h5>
             <div class="obs-layout-switch" role="group" aria-label="Trajectory layout">
-              <button type="button" data-track-layout="spiral" aria-pressed="true">Spiral</button>
+              <button type="button" data-track-layout="graph" aria-pressed="true">Graph</button>
               <button type="button" data-track-layout="straight" aria-pressed="false">Straight</button>
             </div></div><span class="obs-view-tools"><button class="obs-timeline-jump" type="button" data-timeline-jump title="Go to this moment on the timeline"><time></time> <span aria-hidden="true">↓</span></button><small data-share-status role="status"></small><button class="obs-share" type="button" data-share aria-label="Copy link to this moment" title="Copy link to this moment"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 12 4-4m-1.5-2.5 1.8-1.8a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0m.2 2.8-1.8 1.8a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/></svg></button><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></span></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden><button type="button" data-original="message" title="View original ${entryLabel}"><span data-excerpt></span><span aria-hidden="true">↗</span></button></blockquote></div>
-          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Each agent has its own action spiral on the lower disk.${noMessages?'':' The bright arc marked Now connects the author to the current reader. Between reads, Last read marks the most recent exchange. Dashed arcs show earlier reads. Select an arc to inspect its message.'} Drag to rotate, select an action, or use the arrow keys to step through events." aria-describedby="obs-current-route"></canvas><i class="obs-arc-signal" aria-hidden="true" hidden></i><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span><span class="obs-key-history"><i></i>Earlier reads</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Drag to rotate · Select to inspect</div></div>
-          <div class="obs-agent-strip">${actors.map(a=>`<div data-strip-actor="${a.id}" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span aria-hidden="true">${a.id}</span><div><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></div><div class="obs-mini-bars" data-activity="${a.id}" aria-hidden="true"></div></div>`).join('')}</div>
+          <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Agents and their recorded message exchanges. Select an agent to highlight its actions and messages. Arrow keys step through events." aria-describedby="obs-current-route"></canvas><i class="obs-arc-signal" aria-hidden="true" hidden></i><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span><span class="obs-key-history"><i></i>Other reads</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Select an agent or message</div></div>
+          <div class="obs-focus-status" hidden><span data-focus-label></span><button type="button" data-clear-focus>Show all agents</button></div>
+          <div class="obs-agent-strip" role="group" aria-label="Highlight an agent">${actors.map(a=>`<button type="button" data-strip-actor="${a.id}" aria-pressed="false" aria-label="Highlight Agent ${a.id} actions and messages" style="--agent:${actorStyle(a.id)}" title="${esc(contexts.get(a.id))}"><span class="obs-agent-letter" aria-hidden="true"></span><span><strong>${esc(names.get(a.id))}</strong><small><b data-actor-role hidden></b><span data-actor-count="${a.id}"></span></small></span></button>`).join('')}</div>
         </section>
         <section class="obs-flow" id="timeline" aria-labelledby="obs-timeline-title">
           <header class="obs-panel-heading"><h5 id="obs-timeline-title">Timeline</h5><div class="obs-run-clock"><span>Run time</span><time data-current-time></time><span>/ ${clockLabel(duration)}</span></div></header>
           <div class="obs-timeline-selection" id="obs-timeline-detail" data-timeline-selection></div>
+          <div class="obs-time-connections" data-time-connections></div>
           <div class="obs-flow-stage">
             <canvas class="obs-flow-canvas" tabindex="0" role="img" aria-label="Recorded timeline. Each row is one agent. Dots mark actions, diamonds mark posts, and rings mark reads. Select a point or use the arrow keys to step through events." aria-describedby="obs-timeline-detail"></canvas>
             <input class="obs-time-scrub" type="range" min="0" max="${Math.max(1,duration)}" value="0" step="1" aria-label="Seek by elapsed run time"${duration ? '' : ' disabled'}>
@@ -218,7 +218,6 @@
     const spatial = host.querySelector('#swarm-trajectory');
     const layoutButtons = spatial.querySelectorAll('[data-track-layout]');
     const arcSignal = spatial.querySelector('.obs-arc-signal');
-    let spiralLabel = scene.getAttribute('aria-label');
     const timelineJump = host.querySelector('[data-timeline-jump]');
     const timelineSelection = host.querySelector('[data-timeline-selection]');
     const playButtons = host.querySelectorAll('[data-play],[data-timeline-play]');
@@ -266,13 +265,15 @@
     let shareTimer;
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
-    const orbitView = window.createTrajectoryOrbitView({ canvas:scene, actors, actorEvents, reads, sendIndex, fontFamily });
+    const graph = window.createMessageGraph({actors, actorEvents, fontFamily});
+    const connectionsPanel=host.querySelector('[data-time-connections]');
+    const related=window.swarmTrajectorySelection.related;
     const eventMoment=new Map();
     moments.forEach(m=>{if(!eventMoment.has(m.event))eventMoment.set(m.event,m.order);});
     function momentAtSecond(second) {
       if (second === recordedSecond(active().event)) return current;
       if (second <= 0) return 0;
-      if (second >= duration) return moments.length - 1;
+      if (second >= duration) return recordedMoments.length - 1;
       let lo = 0, hi = recordedMoments.length - 1;
       while (lo < hi) {
         const mid = Math.floor((lo + hi) / 2);
@@ -308,13 +309,6 @@
       clearTimeout(shareTimer);
       shareTimer = setTimeout(() => { shareStatus.textContent = ''; }, 2800);
     }
-    const activity=actors.map(a=>{
-      const bins=Array.from({length:22},()=>[]);
-      events.filter(e=>e.actor===a.id).forEach(e=>bins[Math.min(21,Math.floor(eventFraction(e.id)*22))].push(e.id));
-      const max=Math.max(1,...bins.map(b=>b.length));
-      host.querySelector(`[data-activity="${a.id}"]`).innerHTML=bins.map(bin=>`<i style="--height:${Math.max(2,bin.length/max*24)}px"></i>`).join('');
-      return {id:a.id,bins,bars:[...host.querySelectorAll(`[data-activity="${a.id}"] i`)]};
-    });
 
     function updateControls() {
       const m=active();
@@ -330,8 +324,8 @@
         button.setAttribute('aria-label', label);
       }
       host.querySelector('[data-status]').textContent=playing?(holding()?'Inspecting':'Replaying'):'Paused';
-      host.querySelector('[data-previous]').disabled=current===0;
-      host.querySelector('[data-next]').disabled=current===moments.length-1;
+      host.querySelector('[data-previous]').disabled=stepIndex(-1)===current;
+      host.querySelector('[data-next]').disabled=stepIndex(1)===current;
       const second = recordedSecond(m.event);
       const runTime = clockLabel(second);
       host.querySelector('[data-current-time]').textContent = runTime;
@@ -358,6 +352,13 @@
       } else {
         timelineSelection.innerHTML = timelineStamp(moment, moment.kind === 'send' ? 'posted' : '· ' + moment.action.label);
       }
+      renderConnections(moment);
+    }
+    function renderConnections(moment) {
+      timeConnections=window.swarmTrajectorySelection.connectionsAtTime(reads,moment,recordedSecond,focusedActor);
+      connectionsPanel.hidden=!timeConnections.length;
+      const later=timeConnections.some(read=>recordedSecond(read.event)>recordedSecond(moment.event));
+      connectionsPanel.innerHTML=timeConnections.length ? `<span>Messages to/from this time${later?' · Dashed: later reads':''}</span><div class="obs-connection-list" role="group" aria-label="All message reads connected to the selected time">${timeConnections.map(read=>`<button type="button" data-time-read="${read.order}" aria-pressed="${read===moment}" title="${esc(short(read.message.body,160))}"><strong>${esc(read.message.actor)} → ${esc(read.actor)}</strong><span>#${messageNumberById.get(read.message.id)}</span><time>${clockLabel(recordedSecond(read.message.event))} → ${clockLabel(recordedSecond(read.event))}</time></button>`).join('')}</div>` : '';
     }
     function showExchange(moment, history) {
       const message = moment.message;
@@ -462,7 +463,7 @@
       messageNumber.textContent = message
         ? String(moment.index + 1).padStart(2, '0') + ' / ' + messages.length
         : (eventIndex.get(event.id) + 1) + ' / ' + events.length;
-      const observed=new Set(message?[]:event.reads);
+      const observed=new Set(reads.filter(read=>read.event===event.id).map(read=>read.message.id));
       chatLog.hidden=noMessages;
       empty.hidden=!chatLog.hidden;
       if(!empty.hidden)empty.textContent='No messages in this run.';
@@ -489,7 +490,7 @@
           const order=Number(button.dataset.obsReceipt);
           button.toggleAttribute('data-current-reader', selected && moment.kind==='read' && moments[order].actor===moment.actor);
           button.setAttribute('aria-current',order===current?'step':'false');
-          button.classList.toggle('is-received',order<=current);
+          button.classList.toggle('is-received',moments[order].event<=event.id);
         }
       }
       const key = message?.id ?? event.id;
@@ -512,11 +513,7 @@
       host.style.setProperty('--signal', actorStyle(message?.actor || m.actor));
       host.dataset.moment = m.kind;
       const animateView=isVisible() && !reduced;
-      const animateSpiral=animateView && trackLayout==='spiral';
-      settlePaused=animateSpiral && !playing;
-      selectOrbit(m, readHistory, {
-        animate: animateSpiral, easeFocus: animateSpiral, launch: !reduced && (playing || !started)
-      });
+      describeScene(m);
       renderInspector(m, animateView);
       showExchange(m, readHistory);
       showTimeline(m);
@@ -528,23 +525,16 @@
         roleLabel.textContent = role;
         roleLabel.hidden = !role;
         const sent=messages.filter(x=>x.actor===a.id&&x.event<=m.event).length;
-        const reads=moments.filter(x=>x.kind==='read'&&x.actor===a.id&&x.order<=current).length;
+        const reads=moments.filter(x=>x.kind==='read'&&x.actor===a.id&&x.event<=m.event).length;
         host.querySelector(`[data-actor-count="${a.id}"]`).textContent=(noMessages||m.kind==='action')?`${events.filter(e=>e.actor===a.id&&e.id<=m.event).length} actions`:`${sent} sent · ${reads} read`;
       });
-      activity.forEach(a=>a.bars.forEach((bar,i)=>{
-        bar.classList.toggle('is-past',a.bins[i].some(id=>id<=m.event));
-        const arriving=a.bins[i].includes(m.event);
-        bar.toggleAttribute('data-current-bin',arriving);
-      }));
       updateControls();draw();ensureFrame();
     }
-    function stop(settleSelection = true) {
+    function stop() {
       playing = false;
       cameraReset=null;
       readingUntil = 0;
       documentPanel.scrollTo({top:documentPanel.scrollTop,behavior:'instant'});
-      orbitView.holdFocus();
-      settlePaused=trackLayout==='spiral' && settleSelection && !reduced && orbitView.transitioning;
       lastFrame = 0;
       cancelAnimationFrame(frame);
       frame = 0;
@@ -552,7 +542,7 @@
       draw(); ensureFrame();
     }
     function seek(index, hash = '#trajectory') {
-      if (!started) playing = !reduced;
+      stop();
       started = true;
       readingUntil = 0;
       hovered = null;
@@ -562,23 +552,19 @@
     }
     on(viewer,'trajectory-case-change',()=>{
       cancelDrag();
-      resumeAfterLoad=resumeAfterLoad || playing;
-      stop(false);
+      stop();
     });
     on(viewer,'trajectory-seek',event=>{
-      if (resumeAfterLoad && !reduced) playing=true;
-      resumeAfterLoad=false;
       if (event.detail.layout) setTrackLayout(event.detail.layout,false);
       const index=positionIndex(event.detail);
       if (index!==current) seek(index, null);
-      else { orbitView.resumeFocus(!reduced); updateControls(); ensureFrame(); }
+      else { updateControls(); ensureFrame(); }
     });
     function togglePlay(hash = '#trajectory') {
       started = true;
       if (playing) { stop(); pinMoment(hash); return; }
       if (active().kind === 'outcome') select(0);
       playing = true;
-      orbitView.resumeFocus(!reduced);
       lastFrame = 0;
       updateControls();
       ensureFrame();
@@ -605,6 +591,25 @@
       else inspectMessage(messages[Math.max(0,next)].id);
     }
 
+    function focusAgent(actor) {
+      stop(); started=true;
+      focusedActor=actor===focusedActor?null:actor;
+      for(const [id,row] of stripRows)row.setAttribute('aria-pressed',String(id===focusedActor));
+      const status=host.querySelector('.obs-focus-status');
+      status.hidden=!focusedActor;
+      status.querySelector('[data-focus-label]').textContent=focusedActor?'Agent '+focusedActor+' highlighted':'';
+      for(const message of messages)chatRows.get(message.id).classList.toggle('is-unrelated',
+        Boolean(focusedActor && message.actor!==focusedActor && !reads.some(read=>read.message===message&&read.actor===focusedActor)));
+      renderConnections(active()); updateControls(); draw();
+    }
+    function stepIndex(direction) {
+      if(!focusedActor)return clamp(current+direction,0,moments.length-1);
+      for(let i=current+direction;i>=0&&i<moments.length;i+=direction) {
+        const moment=moments[i];
+        if(moment.actor===focusedActor||moment.message?.actor===focusedActor)return i;
+      }
+      return current;
+    }
     function strokePoints(context,points,stroke,width=1) {
       context.beginPath();points.forEach((p,i)=>i?context.lineTo(p[0],p[1]):context.moveTo(p[0],p[1]));context.strokeStyle=stroke;context.lineWidth=width;context.stroke();
     }
@@ -615,39 +620,28 @@
     function dot(context,x,y,r,c,fill=true) {
       context.beginPath();context.arc(x,y,r,0,Math.PI*2);context.fillStyle=c;context.strokeStyle=c;context.lineWidth=1;if(fill)context.fill();else context.stroke();
     }
-    function selectOrbit(moment,history,options) {
-      orbitView.select(moment,signalSeconds,history,options);
-      spiralLabel=scene.getAttribute('aria-label');
-      describeScene(moment);
-    }
     function describeScene(moment) {
-      if (trackLayout==='spiral') {
-        scene.setAttribute('aria-label',spiralLabel);
-        return;
-      }
-      const selected=moment.kind==='read' ? 'Current read from Agent '+moment.message.actor+' to Agent '+moment.actor+'. ' : '';
-      const currentRead=selected?'The bright solid arc connects the post to its current reader. Select it to open the original '+entryLabel+'. ':'';
-      const past=readHistory.length?'Dashed arcs show earlier reads. Select one to go to that read. ':'';
-      scene.setAttribute('aria-label',selected+'Each straight track marks its agent’s latest step. Follow a track to inspect other events. '+currentRead+past+'Drag or use Shift and arrow keys to rotate. Arrow keys step through events.');
+      const selected=moment.kind==='read' ? 'Read from Agent '+moment.message.actor+' to Agent '+moment.actor+'. ' : '';
+      scene.setAttribute('aria-label',selected+(trackLayout==='graph'
+        ? 'Nodes are agents. Arrows show recorded message reads. Select an agent to highlight its actions and messages. '
+        : 'Each straight track is one agent’s actions over time. Arcs connect recorded posts to reads. Drag or use Shift and arrow keys to rotate. ')+
+        'All exchanges to or from the selected time are highlighted. Dashed links end at later reads. Arrow keys step through events.');
     }
     function updateLayoutControl() {
       spatial.dataset.layout=trackLayout;
+      spatial.querySelector('.obs-stage-hint').textContent=trackLayout==='graph'?'Select an agent or message':'Drag to rotate · Select to inspect';
+      spatial.querySelector('[data-reset]').hidden=trackLayout==='graph';
       for (const button of layoutButtons) {
         button.setAttribute('aria-pressed',String(button.dataset.trackLayout===trackLayout));
         button.disabled=button.dataset.trackLayout==='straight' && !window.createLinearTimeline;
       }
     }
     function setTrackLayout(next,remember=true) {
-      if(next===trackLayout || (next!=='spiral' && (next!=='straight' || !window.createLinearTimeline)))return;
+      if(next===trackLayout || (next!=='graph' && (next!=='straight' || !window.createLinearTimeline)))return;
       cancelDrag();
       trackLayout=next;
-      cameraReset=null; settlePaused=false; hovered=null; hideTooltips();
+      cameraReset=null; hovered=null; hideTooltips();
       arcSignal.hidden=true;
-      if(next==='spiral' && !camera.seen) {
-        camera.yaw=orbitView.entryYaw(active(),camera.pitch) ?? camera.yaw;
-        camera.seen=stageVisible;
-      }
-      settlePaused=next==='spiral' && !playing && !reduced && orbitView.transitioning;
       updateLayoutControl(); describeScene(active());
       if(viewWidth && !disposed)drawSpatial();
       if(remember)pinMoment('#swarm-trajectory');
@@ -665,15 +659,16 @@
         linear ||= window.createLinearTimeline({actors,moments:recordedMoments,sendIndex,eventFraction,fontFamily});
         ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,viewWidth,viewHeight);
         const m=active(), post=m.kind==='read'?moments[sendIndex.get(m.message.id)]:null;
-        sceneHits=linear.draw({ctx,width:viewWidth,height:viewHeight,angle:straightCamera,paint,active:m,post,history:readHistory,ticks,duration,
+        sceneHits=linear.draw({ctx,width:viewWidth,height:viewHeight,angle:straightCamera,paint,active:m,post,history:[...timeConnections.filter(read=>read!==m),...readHistory.filter(read=>!timeConnections.includes(read))],connections:timeConnections,focus:focusedActor,ticks,duration,
           mark:drawTimeMark,hovered:hovered?.surface===scene?hovered.hit:null,clockLabel});
         updateArcSignal();
         return;
       }
-      sceneHits = orbitView.draw(
-        {width:viewWidth, height:viewHeight, dpr, yaw:camera.yaw, pitch:camera.pitch},
-        paint, signalSeconds, reduced, hovered?.surface === scene ? hovered.hit : null
-      );
+      ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,viewWidth,viewHeight);
+      const progress=clamp(elapsed/2100,0,1);
+      sceneHits=graph.draw({ctx,width:viewWidth,height:viewHeight,paint,active:active(),
+        connections:timeConnections,history:readHistory,focus:focusedActor,
+        second:recordedSecond,progress:progress*progress*(3-2*progress),animate:playing&&!reduced});
     }
     const axisLeft = 64, axisRight = 16, laneHeight = 26;
     const lanesBottom = actors.length * laneHeight + 4, chartHeight = lanesBottom + 45;
@@ -731,7 +726,6 @@
     }
     function drawFlow() {
       const m = active(), cursor = timeX(recordedSecond(m.event));
-      const post = m.kind === 'read' ? moments[sendIndex.get(m.message.id)] : null;
       fctx.setTransform(dpr,0,0,dpr,0,0);
       fctx.clearRect(0,0,flowWidth,chartHeight);
       fctx.font = '11px ' + fontFamily;
@@ -744,22 +738,30 @@
       fctx.textAlign = 'left';
       actors.forEach((a,i) => {
         const y = laneY(i), ink = color(a.id);
+        fctx.globalAlpha=focusedActor&&focusedActor!==a.id ? .3 : 1;
         strokePoints(fctx,[[axisLeft,y],[flowWidth-axisRight,y]],ink+'46',.8);
         fctx.fillStyle = ink; fctx.fillText(names.get(a.id),7,y+4);
       });
+      fctx.globalAlpha=1;
       strokePoints(fctx,[[cursor,3],[cursor,lanesBottom+7]],paint.packet+'86',1);
       for (const step of recordedMoments) {
-        const alpha = step.order > current ? '4e' : step.kind === 'action' ? '83' : 'c6';
+        const alpha = focusedActor && step.actor!==focusedActor ? '24' : step.order > current ? '4e' : step.kind === 'action' ? '83' : 'c6';
         drawTimeMark(fctx,flowPoints[step.order],step,color(step.actor) + alpha);
       }
-      if (post) {
-        const a = flowPoints[post.order], b = flowPoints[m.order];
-        const mid = (a.x + b.x) / 2;
-        const line = fctx.createLinearGradient(a.x,a.y,b.x,b.y);
-        line.addColorStop(0,color(post.actor)); line.addColorStop(1,color(m.actor));
-        fctx.beginPath(); fctx.moveTo(a.x,a.y); fctx.bezierCurveTo(mid,a.y,mid,b.y,b.x,b.y);
-        fctx.strokeStyle = line; fctx.lineWidth = 2; fctx.stroke();
+      for(const read of timeConnections) {
+        const post=moments[sendIndex.get(read.message.id)];
+        const a=flowPoints[post.order], b=flowPoints[read.order];
+        // Vertical curves remain visible when a post and read share a second.
+        const mid=(a.x+b.x)/2, sameSecond=Math.abs(a.x-b.x)<2;
+        const line=fctx.createLinearGradient(a.x,a.y,b.x,b.y);
+        line.addColorStop(0,color(post.actor)); line.addColorStop(1,color(read.actor));
+        fctx.setLineDash(recordedSecond(read.event)>recordedSecond(m.event)?[4,3]:[]);
+        fctx.beginPath(); fctx.moveTo(a.x,a.y);
+        fctx.bezierCurveTo(mid+(sameSecond?12:0),a.y,mid+(sameSecond?12:0),b.y,b.x,b.y);
+        fctx.strokeStyle=line; fctx.lineWidth=read===m?2.4:1.5; fctx.stroke();
+        fctx.setLineDash([]);
         drawTimeMark(fctx,a,post,color(post.actor),true);
+        drawTimeMark(fctx,b,read,color(read.actor),true);
       }
       if (m.kind !== 'outcome') {
         const {x,y} = flowPoints[m.order];
@@ -790,7 +792,6 @@
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?clamp(now-lastFrame,0,80):0;lastFrame=now;
       if (readingUntil && now>=readingUntil) { readingUntil=0; updateControls(); }
-      const transitioning = trackLayout==='spiral' && !reduced && !drag && orbitView.advance(dt);
       const resetting=!!cameraReset;
       if (cameraReset) {
         cameraReset.elapsed=Math.min(cameraReset.duration,cameraReset.elapsed+dt);
@@ -801,10 +802,6 @@
       }
       const advancing = playing && !holding();
       if (advancing) {
-        if (!reduced) {
-          signalSeconds += dt * speed / 1000;
-          if (trackLayout==='spiral' && !resetting) camera.yaw += dt * clockwiseRate;
-        }
         elapsed += dt * speed;
         if (!reduced && transcriptScroll?.order===current) {
           const t=clamp((elapsed/active().duration-.24)/.60,0,1);
@@ -818,7 +815,7 @@
         }
       }
       if (stageVisible && ctx) {
-        if (resetting || transitioning || (trackLayout==='spiral' && advancing && !reduced)) drawSpatial();
+        if (resetting || (trackLayout==='graph' && advancing && !reduced && elapsed<=2200)) drawSpatial();
         else if (trackLayout==='straight' && advancing && (elapsed<=2100 || !arcSignal.hidden)) updateArcSignal();
       }
       if (!running()) lastFrame=0;
@@ -831,9 +828,13 @@
     }
     function nearest(surface, x, y, railRadius = 4) {
       const straight=surface===scene && trackLayout==='straight'?linear:null;
+      if(surface===scene && trackLayout==='graph') {
+        const node=sceneHits.find(hit=>hit.bounds && x>=hit.bounds.x && x<=hit.bounds.x+hit.bounds.w && y>=hit.bounds.y && y<=hit.bounds.y+hit.bounds.h);
+        return node||graph.edgeHit(x,y);
+      }
       const arc=straight?.arcHit(x,y);
       if(arc && !arc.earlierRead && arc.moment===current)return arc;
-      const earlierArc=arc?.earlierRead && readHistory.some(m=>m.order===arc.moment)?arc:null;
+      const earlierArc=arc?.earlierRead && [...readHistory,...timeConnections].some(m=>m.order===arc.moment)?arc:null;
       let best = earlierArc, distance = Infinity, bestPriority = earlierArc?1:-Infinity;
       const sourceOrder=active().message ? sendIndex.get(active().message.id) : undefined;
       for (const hit of surface === scene ? sceneHits : flowHits) {
@@ -857,14 +858,19 @@
     function hover(surface,event){
       const box=surface.getBoundingClientRect(),x=event.clientX-box.left,y=event.clientY-box.top,hit=nearest(surface,x,y),tip=tooltips.get(surface);
       if(!hit){hovered=null;tip.hidden=true;redrawHover(surface);return;}
-      hovered={surface,hit};const e=eventById.get(hit.event);
+      hovered={surface,hit};
+      if(hit.actor) {
+        tip.innerHTML=`<strong>${esc(names.get(hit.actor))}</strong><span>Select to highlight this agent’s actions and messages.</span>`;
+        tip.hidden=false; tip.style.left=clamp(x-60,10,box.width-tip.offsetWidth-10)+'px'; tip.style.top=Math.max(7,y-tip.offsetHeight-14)+'px'; redrawHover(surface); return;
+      }
+      const e=eventById.get(hit.event);
       const moment = moments[hit.moment ?? eventMoment.get(hit.event)];
       const message = messageById.get(hit.message) || moment?.message || messageById.get(e.messages[0]);
       let label = 'Open original action';
       if (message) label = 'Select message';
       if (moment?.kind === 'read') label = 'Select recorded read';
       if (moment?.kind === 'action') label = 'Select action';
-      if (hit.arc) label = hit.earlierRead ? 'Go to earlier read' : 'View original '+entryLabel;
+      if (hit.arc) label = hit.earlierRead ? 'Select recorded read' : 'View original '+entryLabel;
       const participant=hit.arc ? names.get(message.actor)+' → '+names.get(e.actor) : names.get(e.actor);
       const stamp = surface === flow ? clockLabel(recordedSecond(e.id)) + ' elapsed' : e.time;
       tip.innerHTML=`<strong style="color:${actorStyle(e.actor)}">${esc(participant)}<time>${esc(stamp)}</time></strong><span>${esc(message?short(message.body,170):e.label)}</span><small>Turn ${e.turn} · ${label}</small>`;tip.hidden=false;
@@ -877,7 +883,8 @@
         if (surface === flow && x >= axisLeft && x <= flowWidth-axisRight) {
           seek(momentAtSecond(duration*(x-axisLeft)/(flowWidth-axisLeft-axisRight)),'#timeline');
         }
-      } else if (hit.arc && !hit.earlierRead) openOriginal('message','#swarm-trajectory');
+      } else if (hit.actor) focusAgent(hit.actor);
+      else if (hit.arc && !hit.earlierRead) openOriginal('message','#swarm-trajectory');
       else if (hit.moment !== undefined) seek(hit.moment,surface === flow ? '#timeline' : sceneAnchor());
       else if (hit.message) seek(sendIndex.get(hit.message));
       else if (eventMoment.has(hit.event)) seek(eventMoment.get(hit.event));
@@ -891,8 +898,8 @@
         const pitch = event.key==='ArrowDown' ? -.08 : event.key==='ArrowUp' ? .08 : 0;
         turnScene(straightCamera.yaw+yaw,straightCamera.pitch+pitch); return;
       }
-      const steps = {ArrowLeft:current-1, ArrowRight:current+1, Home:0, End:moments.length-1};
-      if (event.currentTarget === range) { steps.ArrowDown = current-1; steps.ArrowUp = current+1; }
+      const steps = {ArrowLeft:stepIndex(-1), ArrowRight:stepIndex(1), Home:0, End:moments.length-1};
+      if (event.currentTarget === range) { steps.ArrowDown = stepIndex(-1); steps.ArrowUp = stepIndex(1); }
       const next = steps[event.key];
       if (next !== undefined) { event.preventDefault(); seek(next,hash); }
       else if (event.key === ' ') { event.preventDefault(); togglePlay(hash); }
@@ -904,7 +911,7 @@
           const dx=event.clientX-drag.x, dy=event.clientY-drag.y;
           if (!drag.moved && Math.abs(dx)+Math.abs(dy)<=4) return;
           drag.moved=true;
-          turnScene(drag.yaw+dx*.004,drag.pitch+dy*(trackLayout==='straight' ? -.004 : .003)); return;
+          if(trackLayout==='straight')turnScene(drag.yaw+dx*.004,drag.pitch-dy*.004); return;
         }
         if(event.pointerType==='mouse')hover(surface,event);
       });
@@ -912,19 +919,14 @@
       on(surface,'keydown',stepKey);
     });
     function turnScene(yaw,pitch) {
-      if(trackLayout==='straight') {
-        straightCamera.yaw=clamp(yaw,-.68,.52); straightCamera.pitch=clamp(pitch,.35,.82);
-      } else {
-        camera.yaw=yaw; camera.pitch=clamp(pitch,.22,1.29);
-      }
+      straightCamera.yaw=clamp(yaw,-.68,.52); straightCamera.pitch=clamp(pitch,.35,.82);
       hovered=null; hideTooltips(); drawSpatial();
     }
     on(scene,'pointerdown',event=>{
       if (event.button!==0 || drag) return;
       cameraReset=null;
       hovered=null; hideTooltips();
-      if(trackLayout==='spiral')orbitView.holdFocus();
-      const angle=trackLayout==='straight' ? straightCamera : camera;
+      const angle=straightCamera;
       drag={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:angle.yaw,pitch:angle.pitch,moved:false};
       scene.setPointerCapture(event.pointerId);
     });
@@ -948,7 +950,10 @@
     on(flow,'click',event=>pick(flow,event));
     on(host,'click',event=>{
       const button=event.target.closest('button');if(!button)return;
-      if(button.hasAttribute('data-play'))togglePlay();
+      if(button.hasAttribute('data-strip-actor'))focusAgent(button.dataset.stripActor);
+      else if(button.hasAttribute('data-clear-focus'))focusAgent(null);
+      else if(button.hasAttribute('data-time-read'))seek(Number(button.dataset.timeRead),'#timeline');
+      else if(button.hasAttribute('data-play'))togglePlay();
       else if(button.hasAttribute('data-track-layout'))setTrackLayout(button.dataset.trackLayout);
       else if(button.hasAttribute('data-timeline-play'))togglePlay('#timeline');
       else if(button.hasAttribute('data-share'))copyMomentLink();
@@ -956,8 +961,8 @@
         pinMoment('#timeline'); timeline.scrollIntoView({block:'start',behavior:'instant'}); flow.focus({preventScroll:true});
       }
       else if(button.hasAttribute('data-timeline-post')){seek(Number(button.dataset.timelinePost),'#timeline'); flow.focus({preventScroll:true});}
-      else if(button.hasAttribute('data-previous'))seek(current-1,'#timeline');
-      else if(button.hasAttribute('data-next'))seek(current+1,'#timeline');
+      else if(button.hasAttribute('data-previous'))seek(stepIndex(-1),'#timeline');
+      else if(button.hasAttribute('data-next'))seek(stepIndex(1),'#timeline');
       else if(button.hasAttribute('data-prev-message'))moveMessage(-1);
       else if(button.hasAttribute('data-next-message'))moveMessage(1);
       else if(button.classList.contains('obs-chat-select'))inspectMessage(button.dataset.message);
@@ -966,17 +971,15 @@
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original,button.closest('.obs-spatial') ? sceneAnchor() : '#trajectory');
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1,'#timeline');outcomePanel.focus({preventScroll:true});}
       else if(button.hasAttribute('data-reset')) {
-        const angle=trackLayout==='straight'?straightCamera:camera, home=trackLayout==='straight'?straightHome:homeView;
+        const angle=straightCamera, home=straightHome;
         const turn=Math.atan2(Math.sin(home.yaw-angle.yaw),Math.cos(home.yaw-angle.yaw));
         if (reduced) Object.assign(angle,home);
         else cameraReset={angle,yaw:angle.yaw,pitch:angle.pitch,targetPitch:home.pitch,turn,elapsed:0,duration:420+Math.abs(turn)*260};
-        settlePaused=!playing && !reduced;
-        if(trackLayout==='spiral')orbitView.resetFocus(!reduced);
         draw(); ensureFrame();
       }
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
     });
-    on(range,'pointerdown',event=>{if(event.button===0) {scrubPointer=event.pointerId; updateControls();}});
+    on(range,'pointerdown',event=>{if(event.button===0) {stop(); started=true; scrubPointer=event.pointerId; updateControls();}});
     function endScrub(event) {
       if (scrubPointer===null || (event.type!=='blur' && event.pointerId!==scrubPointer)) return;
       scrubPointer=null; updateControls(); ensureFrame();
@@ -1014,7 +1017,6 @@
       if (reduced) {
         arcSignal.hidden=true;
         if (playing) started=false;
-        selectOrbit(active(),readHistory);
         stop();
       } else {
         startIfVisible(); updateControls(); ensureFrame();
@@ -1040,7 +1042,6 @@
       visible=visibleSurfaces.size>0;
       stageVisible=visibleSurfaces.has(stage);
       flowVisible=visibleSurfaces.has(flowStage);
-      if (stageVisible && trackLayout==='spiral') camera.seen=true;
       startIfVisible();
       if (wasVisible!==visible) lastFrame=0;
       updateControls(); if(visible)draw(); ensureFrame();
@@ -1050,7 +1051,6 @@
     visibilityObserver.observe(flowStage);
     updateLayoutControl();
     const openingMoment = positionIndex(meta.position);
-    if (!camera.seen) camera.yaw = orbitView.entryYaw(moments[openingMoment],camera.pitch) ?? camera.yaw;
     select(openingMoment);resize();
     return ()=>{disposed=true;clearTimeout(shareTimer);cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };

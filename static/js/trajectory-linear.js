@@ -105,10 +105,8 @@
     const curves=new Map();
     const pins=new Set();
     let frame, geometryKey, points=[], currentArc=null, earlierArcs=[], badge=null;
-    let selection, heads=[];
+    let heads=[];
     function selectPins(active,post,history) {
-      if(selection===active)return;
-      selection=active;
       heads=laneEvents.map(events=>events.findLast(({moment})=>moment.order<=active.order));
       pins.clear();
       for(const head of heads) if(head)pins.add(head.moment);
@@ -140,7 +138,7 @@
       curves.set(moment.order,curve);
       return curve;
     }
-    function draw({ctx,width,height,angle,paint,active,post,history,ticks,duration,mark,hovered,clockLabel}) {
+    function draw({ctx,width,height,angle,paint,active,post,history,connections=[],focus=null,ticks,duration,mark,hovered,clockLabel}) {
       layout(width,height,angle);
       selectPins(active,post,history);
       currentArc=post?curveFor(active):null;
@@ -173,28 +171,33 @@
       actors.forEach((actor,row)=>{
         const color=ink(actor.id), origin=project(0,row);
         const involved=actor.id===active.actor || actor.id===post?.actor;
-        stroke(ctx,[origin,project(1,row)],color+'49',.9);
+        ctx.globalAlpha=focus&&focus!==actor.id ? .25 : 1;
+        stroke(ctx,[origin,project(1,row)],color+'72',1.4);
         const head=heads[row];
-        if(head)stroke(ctx,[origin,project(head.t,row)],color+(involved?'b0':'72'),involved?1.25:1);
+        if(head)stroke(ctx,[origin,project(head.t,row)],color+(involved?'ef':'b5'),involved?2.1:1.6);
         ctx.font='500 11px '+fontFamily; ctx.textAlign='right'; ctx.fillStyle=color;
         ctx.fillText('Agent '+actor.id,origin[0]-7,origin[1]+3);
+        ctx.globalAlpha=1;
       });
       ctx.textAlign='left';
       for(const moment of pins) {
         if(moment!==active && moment!==post)mark(ctx,points[moment.order],moment,ink(moment.actor)+'ad');
       }
 
-      // Paint the older paths underneath. Only the current read gets a solid line and a moving signal.
-      ctx.setLineDash([4,4]);
+      // All exchanges connected to the selected time remain visible. Future reads are dashed.
       for(let i=earlierArcs.length-1;i>=0;i--) {
         const {route,moment}=earlierArcs[i];
         const hover=hovered?.earlierRead && hovered.moment===moment.order;
-        const related=moment.message===active.message;
-        const opacity=hover?'e8':related?'aa':'81';
-        stroke(ctx,route,ink(moment.actor)+opacity,hover?1.95:related?1.55:1.15);
+        const selected=connections.includes(moment), related=moment.message===active.message;
+        ctx.globalAlpha=focus && moment.actor!==focus && moment.message.actor!==focus ? .15 : 1;
+        ctx.setLineDash(!selected||eventFraction(moment.event)>eventFraction(active.event)?[4,4]:[]);
+        const opacity=hover?'ef':selected?'d5':related?'8c':'60';
+        stroke(ctx,route,ink(moment.actor)+opacity,hover?2.2:selected?1.8:1.1);
+        ctx.globalAlpha=1;
       }
       ctx.setLineDash([]);
       if(currentArc) {
+        ctx.globalAlpha=focus && active.actor!==focus && post.actor!==focus ? .25 : 1;
         const {route,pointAt}=currentArc;
         const sender=ink(post.actor), reader=ink(active.actor);
         const line=ctx.createLinearGradient(...route[0],...route.at(-1));
@@ -215,6 +218,7 @@
         ctx.fillStyle=reader; ctx.beginPath(); ctx.arc(x+8,y+10,2,0,2*Math.PI); ctx.fill();
         ctx.fillStyle=paint.ink; ctx.fillText(label,x+15,y+13.5);
       }
+      ctx.globalAlpha=1;
       if(active.kind!=='outcome') {
         const point=points[active.order];
         ctx.beginPath(); ctx.arc(point.x,point.y,8,0,2*Math.PI); ctx.fillStyle=ink(active.actor)+'2d'; ctx.fill();

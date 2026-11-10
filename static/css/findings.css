@@ -293,3 +293,14 @@
 .model-tag { display:inline-flex; align-items:center; gap:5px; vertical-align:baseline; white-space:nowrap; }
 .model-logo { display:block; flex:none; width:15px; height:15px; object-fit:contain; }
 :is(:root[data-theme="dark"],:root[data-darkreader-scheme="dark"]) .model-logo-openai { filter:invert(1); }
+
+/* Separate experiments, with shared rows for scanning the findings. */
+.findings-primary .life-half { padding:18px 16px 14px; border-radius:12px; background:color-mix(in srgb,var(--finding-ink) 4%,var(--bg)); }
+.findings-primary .life-phase { gap:5px; padding:0 4px 6px; font-size:19px; line-height:1.35; }
+.experiment-label { color:var(--muted); font:550 11px/1.4 var(--font); letter-spacing:.02em; }
+.case-downloads { display:flex; flex-wrap:wrap; gap:8px 20px; margin:14px 0; }
+.case-evidence .case-technical { margin-top:18px; padding-top:12px; border-top:1px solid var(--line); }
+.case-evidence .case-technical > summary { padding:4px 0; font-size:12px; color:var(--muted); cursor:pointer; }
+.case-evidence .case-technical > p { margin-top:10px; }
+@media(min-width:761px) { .findings-primary .life-halves { column-gap:24px; } }
+@media(max-width:600px) { .findings-primary .life-half { padding:15px 10px 10px; } }

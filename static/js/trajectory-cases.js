@@ -42,7 +42,7 @@
     return `<div class="case-result" data-result="${item.phase===1?'formation':'impact'}"><span class="case-result-label">Outcome</span><p>${escape(visual.action)}</p><dl class="case-result-metrics">${visual.metrics.map(m=>`<div data-tone="${escape(m.tone)}"><dt>${escape(m.label)}</dt><dd>${escape(m.value)}</dd></div>`).join('')}</dl>${visual.note?`<small class="case-result-note">${escape(visual.note)}</small>`:''}</div>`;
   }
   for(const mode of ['Swarm Formation','Collective Misalignment','Earlier outcomes']){
-    const group=document.createElement('optgroup');group.label=mode;
+    const group=document.createElement('optgroup');group.label=mode==='Earlier outcomes'?mode:(mode==='Swarm Formation'?'Experiment 1: ':'Experiment 2: ')+mode;
     cases.filter(c=>!c.replication&&!c.archived&&(c.earlier?'Earlier outcomes':c.mode)===mode).forEach(c=>{const option=document.createElement('option');option.value=c.key;option.textContent=`${c.claim} · ${c.domain}`;group.append(option);});
     select.append(group);
   }
@@ -56,7 +56,7 @@
       details.insertAdjacentHTML('beforeend',`<div class="composition-proof" aria-label="Full-sequence counterfactual replay"><div><small>Each agent alone</small><strong>${escape(p.alone)}</strong><small>${escape(p.aloneDetail)}</small></div><span aria-hidden="true">→</span><div class="combined"><small>The same actions combined</small><strong>${escape(p.combined)}</strong><small>${escape(p.combinedDetail)}</small></div></div>`);
     }
     const parameters=visibleSettings(item.parameters);
-    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>${item.settings?'Settings & evidence':'Evidence'}</span><span class="case-evidence-action"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol>${item.full?`<a href="${escape(item.trajectory)}" download>Download trajectory (JSON)</a>`:''}${item.review?`<p><a href="${escape(item.review)}" download>${escape(item.reviewLabel || 'Download independent review')}</a></p>`:item.composition?'<p><a href="static/data/composition-review.json" download>Download replay evidence</a></p>':''}<p>Case: ${escape(item.id)}<br>Original rollout: <code>${escape(item.runId)}</code></p></details>`);
+    details.insertAdjacentHTML('beforeend',`<details class="case-evidence"><summary><span>Case evidence</span><span class="case-evidence-action"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 8 5 5 5-5"/></svg></span></summary><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><div class="case-downloads">${item.full?`<a href="${escape(item.trajectory)}" download>Trajectory JSON ↗</a>`:''}${item.review?`<a href="${escape(item.review)}" download>Case evidence JSON ↗</a>`:item.composition?'<a href="static/data/composition-review.json" download>Replay evidence JSON ↗</a>':''}</div><details class="case-technical"><summary>Run details</summary><p class="case-scope">${escape(item.scope)}</p>${parameters.length?`<dl class="case-parameters">${parameters.map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>`:''}<p>Case: ${escape(item.id)}<br>Original rollout: <code>${escape(item.runId)}</code></p></details></details>`);
     if(!item.full){
       review.innerHTML=`<h4>Reviewed sequence</h4><ol>${item.steps.map(step=>`<li>${escape(step)}</li>`).join('')}</ol><p class="case-scope">${escape(item.scope)}</p><p class="case-pending">Full messages and per-turn records are not yet available here.</p>`;
     }
@@ -84,7 +84,7 @@
     return url.href;
   }
   async function show(id, position = {}, hash = location.hash){
-    position = {...position, layout:new URL(location.href).searchParams.get('layout') === 'straight' ? 'straight' : 'spiral'};
+    position = {...position, layout:new URL(location.href).searchParams.get('layout') === 'straight' ? 'straight' : 'graph'};
     const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
     select.querySelector('[data-archived-option]')?.remove();
     if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}

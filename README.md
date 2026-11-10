@@ -8,7 +8,7 @@ Research code is maintained separately in AI4Collaboration/SwarmHarm.
 
 ## Content and evidence
 
-Use **Swarm Formation** and **Collective Misalignment** without phase numbers in headings, findings, case navigation and presentation copy. Internal query parameters, evidence keys and provenance may retain numeric phase identifiers. Avoid meta headings or
+Use **Experiment 1: Swarm Formation** and **Experiment 2: Collective Misalignment** to distinguish the two experiments. Use their short names elsewhere and avoid Phase 1/2 labels. Internal query parameters, evidence keys and provenance may retain numeric phase identifiers. Avoid meta headings or
 repetitive study-design disclaimers on the page; keep evidence scope in the
 case disclosure and provenance.
 
@@ -69,7 +69,7 @@ finance approval. External-service scope overreach is business resource misuse,
 not host escape. Keep these mechanisms distinct from the three observed findings.
 
 Harness badges use only **Codex**, **CC** (Claude Code), or **Pi**. Version
-numbers and collection details belong in Settings & evidence. Never infer a
+numbers and collection details belong in Run details. Never infer a
 harness from the model name or relabel a direct-API trajectory as native.
 Fresh runs use native model-family harnesses through AxonHub; replace a displayed
 case only after its new native run has matching reviewed evidence.
@@ -78,60 +78,37 @@ case only after its new native run has matching reviewed evidence.
 
 `static/js/trajectory-cases-data.js` supplies case summaries and evidence links.
 `static/data/trajectories/` contains the public, case-specific viewer data.
-The replay starts on its own when the sky or transcript is visible. A finding
+The replay starts on its own when the graph or transcript is visible. A finding
 link starts at the cited event. Otherwise the viewer opens on the first verified
 cross-agent read, or the first action in a run without one. The full sequence
 is available from the start of the timeline.
 At normal speed, posts and reads stay on screen for 6 to 12 seconds according to
 message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.1 seconds.
-Each agent has a colored spiral on the lower disk, with one head that advances
-when the agent acts. A light dust texture follows the recorded action density.
-Up to fourteen small checkpoints per track appear as those events are reached,
-with posts, reads and important actions preferred when events are crowded.
-The selected event and visible exchanges have brighter, taller pins. Hover or
-tap along the spiral to inspect other events. Diamonds mark posts and hollow
-points mark reads.
-The translucent dome is shaded behind the data. Each arc requires a post and
-a later read of that same message by another agent in the recorded events.
-It rises from the author's pin and lands on the reader's pin. Both layers
-share the same camera. The solid
-arc names the sender and reader and follows the selected message in the chat.
-During a read, the signal ignites at the sender, lifts vertically and turns
-toward the reader. Its short exhaust follows the arc and fades at arrival.
-Pause holds the flight in place. Reduced motion shows a still view of the ascent.
-Between reads, a quieter solid arc marks the last verified
-exchange. Selecting it returns to that receipt. Up to six
-sender-to-reader routes appear at once. Earlier reads use faint dashed arcs that
-open their original read when selected. Other readers of the current message
-take priority. Selected and historical lines fade on their own recorded paths.
-Scrubbing backward immediately removes any receipt later than the playhead.
-The sky turns clockwise once every 288 seconds of active playback. Opening a
-cited read for the first time frames both endpoints. The camera eases toward
-the next selected read, carrying its pan velocity through rapid reader changes.
-The route badge stays above its arc. Reduced motion frames the read immediately. Dragging sets the
-orbit angle. Theme and case changes preserve that angle, and Reset restores
-the default view. Light mode uses a dark signal on a white-edged read arc.
-The timeline starts at the first recorded action. Every agent has a lane on
-the same elapsed-time axis as the playback slider. Dots show actions, diamonds
-show posts, and rings show reads. A selected read connects to its exact post
-and shows the recorded delay. Clicking the post time returns to that note.
-The time beside the dome opens the timeline at the selected moment. A link
-ending in `#timeline` opens the chart with its original message and reader.
-The main Swarm trajectory view opens in **Spiral**. Its **Straight** toggle
-shows the same moment on parallel action tracks. Each track marks its agent's
-latest recorded step and the endpoints of visible exchanges. Hover or tap along
-a track to inspect an event, or select it in the full timeline below.
-A solid arc marked **Now** connects the original post to its current reader.
-Select it to open the post.
-Dashed arcs show earlier verified reads, with priority given to other readers
-of the same message. Select a dashed arc to return to that reader and time.
-The two layouts share the same limit of six distinct author-to-reader routes.
-Drag or use Shift with the arrow keys to rotate the straight layout.
-The timeline below follows the selected event in both layouts. Shared links
-can open the main graph at `#swarm-trajectory` and explicitly request
-`layout=straight`. Older `timeline=3d` links open the recorded moment in Spiral.
-On phones the timeline sits directly below the dome. The arrows step through
-individual events, including distinct reads recorded in the same second.
+The default **Graph** view keeps agents in fixed positions. Directed links
+represent verified reads of messages posted by another agent. Selected-time
+links are highlighted, while earlier routes provide faint context. Multiple
+messages on one route are bundled visually and listed separately below the
+Timeline. During playback, a short pulse follows the selected recorded read.
+There is no camera rotation or decorative motion. No-message cases have no edges.
+The **Straight** toggle shows the same event on parallel action tracks, with
+arcs connecting each post to its reader at their actual recorded times. Drag
+or use Shift with the arrow keys to rotate this view. Tracks remain legible
+in both themes. Both layouts keep the selected event, message and agent focus.
+The Timeline uses a shared elapsed-time axis. Dots mark actions, diamonds mark
+posts, and rings mark reads. Selecting a time shows every incoming or outgoing
+message connection at that second, including multiple messages read in one
+action. Future receipts of a selected post are explicitly dashed and labelled
+as later reads. Reads in the same second are simultaneous, even when their
+internal event indices differ. The connection buttons select individual reads
+without ambiguity when paths overlap. Manual selection pauses playback.
+Native Agent A/B/C/D buttons highlight that agent's actions and incoming and
+outgoing messages in both views and the Timeline. Clicking the agent again or
+Show all agents clears focus. Arrow keys and previous/next controls step
+through the focused agent's events. Graph nodes provide the same pointer action;
+the buttons remain keyboard-accessible and visible on phones.
+The time next to the layout controls opens the Timeline. Shared links preserve
+the exact event and message, and can request `layout=straight`. Old Spiral and
+`timeline=3d` links fall back to Graph. Reset restores the Straight camera.
 Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 The records case labels the quoted report-pack note as a Shared record.
@@ -156,14 +133,14 @@ show recorded actions and tool arguments, with no invented communication links.
 The full turn grid and action log are available in the evidence disclosures.
 Each card's source arrow opens its own underlying record, so a read action and
 the original message link to different events. Detailed outcomes
-and Settings & evidence follow the replay. The viewer loads one case
-at a time. Case changes hold the previous scene until the next trace is ready.
+and Case evidence follow the replay. The viewer loads one case
+at a time. Case changes hold the previous scene until the next trajectory is ready.
 Links within the same case reuse the existing viewer. Manual selection, pausing
 and the copy-link control save the current moment in the address. Autoplay
 preserves that link. For example, `?case=r75&phase=1&event=48&message=m40-0#trajectory`
 opens C's read of A's note. At the same event, `message=m41-1` opens C's read of
 B's note. Earlier event-only links still open the first moment at that event.
-A finding's model name, logo and View trace link
+A finding's model name, logo and View trajectory link
 open the same event. Earlier r199/r74/r187 Phase 2 links still open their original
 evidence, outside the current selections; they never redirect to a new case.
 
@@ -190,7 +167,12 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 
 ## Presentation and checks
 
-- The two columns keep their compact paired banners. Formation shows discovery,
+Run `node --test tests/trajectory-selection.test.cjs` after changing time or
+agent selection. It covers simultaneous reads, outgoing receipts, focus,
+backward scrubbing and graph geometry on narrow screens.
+
+- The two shaded columns are labelled Experiment 1: Swarm Formation and
+  Experiment 2: Collective Misalignment. They keep their compact paired banners. Formation shows discovery,
   communication and propagation. Collective Misalignment shows shared false
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
@@ -198,7 +180,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
   Trajectories, Resources and Get in touch. Space the labels evenly and link
   Get in touch to the contact form. Smaller screens group
   the six finding links under Findings. The original TLDR leads into the six findings,
-  the expanded trajectory viewer, the four domain examples and detection. Use the
+  the expanded trajectory viewer and detection. Use the
   header for section navigation. EuroSafeAI leads the rolling collaborators after
   the three fixed Oxford institutions. The theme icon sits in the top right.
 - Play the bee title animation once per load, then hold the final title. Theme
@@ -213,7 +195,7 @@ Older imports retain their existing provenance. Keep credentials out of assets.
 - First visits open in dark mode. The Light/Dark toggle remembers the visitor's choice.
 - Use one font family throughout. Keep summaries short; put originals and
   structured tool results in disclosures.
-- Keep case settings compact; Settings & evidence visibly expands on click.
+- Keep case settings compact; Run details visibly expands on click.
   Icons accompany recorded values. Outcome panels explain
   the action and separate completed work from its measured consequence. Keep
   backed-up originals distinct from changed live records.
