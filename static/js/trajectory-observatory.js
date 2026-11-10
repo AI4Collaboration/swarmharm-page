@@ -10,6 +10,8 @@
     const minutes = Math.floor(seconds / 60);
     return minutes + ':' + String(seconds % 60).padStart(2,'0');
   }
+  const homeView = {yaw:-.35,pitch:.99};
+  const clockwiseRate=2*Math.PI/288_000;
   const straightHome = {yaw:-.22, pitch:.72};
   const cameras = new WeakMap();
 
@@ -95,15 +97,15 @@
     }
 
     const viewer = host.closest('.trajectory-viewer') || host;
-    const camera = cameras.get(viewer) || {};
+    const camera = cameras.get(viewer) || {...homeView};
     cameras.set(viewer,camera);
     const straightCamera = camera.straight || (camera.straight = {...straightHome});
-    let trackLayout = meta.position.layout === 'straight' && window.createLinearTimeline ? 'straight' : 'graph';
+    let trackLayout=['straight','graph'].includes(meta.position.layout)?meta.position.layout:'spiral';
     let linear = null;
 
     let current=0,playing=false,started=false,visible=false,stageVisible=false,flowVisible=false,disposed=false;
     let elapsed=0,lastFrame=0,frame=0,speed=1;
-    let cameraReset=null;
+    let cameraReset=null, signalSeconds=0;
     let focusedActor=null, timeConnections=[];
     let readingUntil=0,hovered=null,drag=null,transcriptScroll=null;
     let viewWidth=0, viewHeight=0, flowWidth=0, dpr=1;
@@ -115,7 +117,7 @@
     const active=()=>moments[current];
     const holding=()=>readingUntil>0 || !!drag || scrubPointer!==null;
     const isVisible=()=>visible&&!document.hidden&&!disposed;
-    const running=()=>isVisible() && (playing || cameraReset);
+    const running=()=>isVisible() && (playing || cameraReset || (!reduced && (trackLayout==='spiral'?orbitView.transitioning:trackLayout==='graph'&&graph.transitioning)));
 
     for (const moment of moments) {
       if (moment.message) {
@@ -185,11 +187,12 @@
           </section>
           <section class="obs-outcome-panel" data-inspector-outcome hidden tabindex="-1"><header class="obs-panel-heading"><h5>Outcome</h5><button class="obs-source-link" type="button" data-original="outcome" aria-label="View outcome record" title="View outcome record">↗</button></header><p>${esc(meta.outcome)}</p></section>
         </section>
-        <section class="obs-spatial" id="swarm-trajectory" data-layout="graph" aria-label="Recorded agent actions and communication">
+        <section class="obs-spatial" id="swarm-trajectory" data-layout="spiral" aria-label="Recorded agent actions and communication">
           <header class="obs-panel-heading"><div class="obs-scene-heading"><h5>Agents</h5>
             <div class="obs-layout-switch" role="group" aria-label="Trajectory layout">
-              <button type="button" data-track-layout="graph" aria-pressed="true">Graph</button>
+              <button type="button" data-track-layout="spiral" aria-pressed="true">3D</button>
               <button type="button" data-track-layout="straight" aria-pressed="false">Straight</button>
+              <button type="button" data-track-layout="graph" aria-pressed="false">Graph</button>
             </div></div><span class="obs-view-tools"><button class="obs-timeline-jump" type="button" data-timeline-jump title="Go to this moment on the timeline"><time></time> <span aria-hidden="true">↓</span></button><small data-share-status role="status"></small><button class="obs-share" type="button" data-share aria-label="Copy link to this moment" title="Copy link to this moment"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 12 4-4m-1.5-2.5 1.8-1.8a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0m.2 2.8-1.8 1.8a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"/></svg></button><button class="obs-reset" type="button" data-reset aria-label="Reset spatial view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4"/></svg></button></span></header>
           <div class="obs-route" id="obs-current-route" data-route><div class="obs-route-heading"></div><blockquote class="obs-route-quote" hidden><button type="button" data-original="message" title="View original ${entryLabel}"><span data-excerpt></span><span aria-hidden="true">↗</span></button></blockquote></div>
           <div class="obs-stage"><canvas class="obs-space-canvas" tabindex="0" role="img" aria-label="Agents and their recorded message exchanges. Select an agent to highlight its actions and messages. Arrow keys step through events." aria-describedby="obs-current-route"></canvas><i class="obs-arc-signal" aria-hidden="true" hidden></i><div class="obs-stage-key"><span><i class="obs-key-action"></i>Action</span>${noMessages?'':'<span><i class="obs-key-post"></i>Shared</span><span><i class="obs-key-read"></i>Read</span><span class="obs-key-history"><i></i>Other reads</span>'}</div><div class="obs-graph-tooltip" role="tooltip" hidden></div><div class="obs-stage-hint">Select an agent or message</div></div>
@@ -266,6 +269,7 @@
     const stripRows = new Map([...host.querySelectorAll('[data-strip-actor]')].map(row => [row.dataset.stripActor, row]));
     const actorEvents=new Map(actors.map(a=>[a.id,events.filter(e=>e.actor===a.id)]));
     const graph = window.createMessageGraph({actors, actorEvents, fontFamily});
+    const orbitView=window.createTrajectoryOrbitView({canvas:scene,actors,actorEvents,reads,sendIndex,fontFamily,recordedSecond});
     const connectionsPanel=host.querySelector('[data-time-connections]');
     const related=window.swarmTrajectorySelection.related;
     const eventMoment=new Map();
@@ -517,6 +521,7 @@
       renderInspector(m, animateView);
       showExchange(m, readHistory);
       showTimeline(m);
+      selectOrbit(m,animateView && trackLayout==='spiral');
       actors.forEach(a=>{
         const row = stripRows.get(a.id);
         const role = participantRole(a.id, m);
@@ -600,7 +605,9 @@
       status.querySelector('[data-focus-label]').textContent=focusedActor?'Agent '+focusedActor+' highlighted':'';
       for(const message of messages)chatRows.get(message.id).classList.toggle('is-unrelated',
         Boolean(focusedActor && message.actor!==focusedActor && !reads.some(read=>read.message===message&&read.actor===focusedActor)));
-      renderConnections(active()); updateControls(); draw();
+      renderConnections(active());
+      selectOrbit(active(),!reduced && trackLayout==='spiral');
+      updateControls(); draw(); ensureFrame();
     }
     function stepIndex(direction) {
       if(!focusedActor)return clamp(current+direction,0,moments.length-1);
@@ -620,12 +627,19 @@
     function dot(context,x,y,r,c,fill=true) {
       context.beginPath();context.arc(x,y,r,0,Math.PI*2);context.fillStyle=c;context.strokeStyle=c;context.lineWidth=1;if(fill)context.fill();else context.stroke();
     }
+    function selectOrbit(moment,animate=false) {
+      orbitView.select(moment,signalSeconds,readHistory,{animate,easeFocus:animate,
+        launch:!reduced && (playing || !started),connections:timeConnections,actorFocus:focusedActor});
+      describeScene(moment);
+    }
     function describeScene(moment) {
-      const selected=moment.kind==='read' ? 'Read from Agent '+moment.message.actor+' to Agent '+moment.actor+'. ' : '';
-      scene.setAttribute('aria-label',selected+(trackLayout==='graph'
+      const selected=moment.kind==='read' ? 'Selected message from Agent '+moment.message.actor+' to Agent '+moment.actor+'. ' : '';
+      const description=trackLayout==='spiral'
+        ? 'Each agent keeps its own action spiral below the communication dome. The selected message and its sender and reader are bright; other exchanges stay faint. Drag to rotate. '
+        : trackLayout==='graph'
         ? 'Nodes are agents. Arrows show recorded message reads. Select an agent to highlight its actions and messages. '
-        : 'Each straight track is one agent’s actions over time. Arcs connect recorded posts to reads. Drag or use Shift and arrow keys to rotate. ')+
-        'All exchanges to or from the selected time are highlighted. Dashed links end at later reads. Arrow keys step through events.');
+        : 'Each straight track is one agent’s actions over time. Arcs connect recorded posts to reads. Drag or use Shift and arrow keys to rotate. ';
+      scene.setAttribute('aria-label',selected+description+'The timeline shows all exchanges to or from the selected time. Arrow keys step through events.');
     }
     function updateLayoutControl() {
       spatial.dataset.layout=trackLayout;
@@ -637,11 +651,13 @@
       }
     }
     function setTrackLayout(next,remember=true) {
-      if(next===trackLayout || (next!=='graph' && (next!=='straight' || !window.createLinearTimeline)))return;
+      if(next===trackLayout || !['spiral','straight','graph'].includes(next))return;
       cancelDrag();
       trackLayout=next;
       cameraReset=null; hovered=null; hideTooltips();
       arcSignal.hidden=true;
+      if(next==='spiral'&&!camera.seen) {camera.yaw=orbitView.entryYaw(active(),camera.pitch)??camera.yaw; camera.seen=stageVisible;}
+      selectOrbit(active(),!reduced&&next==='spiral');
       updateLayoutControl(); describeScene(active());
       if(viewWidth && !disposed)drawSpatial();
       if(remember)pinMoment('#swarm-trajectory');
@@ -655,6 +671,10 @@
       if(point)arcSignal.style.transform='translate('+point[0]+'px,'+point[1]+'px)';
     }
     function drawSpatial() {
+      if(trackLayout==='spiral') {
+        sceneHits=orbitView.draw({width:viewWidth,height:viewHeight,dpr,yaw:camera.yaw,pitch:camera.pitch},paint,signalSeconds,reduced,hovered?.surface===scene?hovered.hit:null);
+        return;
+      }
       if (trackLayout==='straight') {
         linear ||= window.createLinearTimeline({actors,moments:recordedMoments,sendIndex,eventFraction,fontFamily});
         ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,viewWidth,viewHeight);
@@ -668,7 +688,7 @@
       const progress=clamp(elapsed/2100,0,1);
       sceneHits=graph.draw({ctx,width:viewWidth,height:viewHeight,paint,active:active(),
         connections:timeConnections,history:readHistory,focus:focusedActor,
-        second:recordedSecond,progress:progress*progress*(3-2*progress),animate:playing&&!reduced});
+        second:recordedSecond,progress:progress*progress*(3-2*progress),animate:playing&&!reduced,reduced});
     }
     const axisLeft = 64, axisRight = 16, laneHeight = 26;
     const lanesBottom = actors.length * laneHeight + 4, chartHeight = lanesBottom + 45;
@@ -755,6 +775,7 @@
         const mid=(a.x+b.x)/2, sameSecond=Math.abs(a.x-b.x)<2;
         const line=fctx.createLinearGradient(a.x,a.y,b.x,b.y);
         line.addColorStop(0,color(post.actor)); line.addColorStop(1,color(read.actor));
+        fctx.globalAlpha=m.kind==='read'&&read!==m ? .28 : 1;
         fctx.setLineDash(recordedSecond(read.event)>recordedSecond(m.event)?[4,3]:[]);
         fctx.beginPath(); fctx.moveTo(a.x,a.y);
         fctx.bezierCurveTo(mid+(sameSecond?12:0),a.y,mid+(sameSecond?12:0),b.y,b.x,b.y);
@@ -762,6 +783,7 @@
         fctx.setLineDash([]);
         drawTimeMark(fctx,a,post,color(post.actor),true);
         drawTimeMark(fctx,b,read,color(read.actor),true);
+        fctx.globalAlpha=1;
       }
       if (m.kind !== 'outcome') {
         const {x,y} = flowPoints[m.order];
@@ -792,6 +814,7 @@
       frame=0;if(!running()){lastFrame=0;return;}
       const dt=lastFrame?clamp(now-lastFrame,0,80):0;lastFrame=now;
       if (readingUntil && now>=readingUntil) { readingUntil=0; updateControls(); }
+      const transitioning=trackLayout==='spiral' && !reduced && !drag && orbitView.advance(dt);
       const resetting=!!cameraReset;
       if (cameraReset) {
         cameraReset.elapsed=Math.min(cameraReset.duration,cameraReset.elapsed+dt);
@@ -802,6 +825,10 @@
       }
       const advancing = playing && !holding();
       if (advancing) {
+        if(!reduced) {
+          signalSeconds+=dt*speed/1000;
+          if(trackLayout==='spiral'&&!resetting)camera.yaw+=dt*clockwiseRate;
+        }
         elapsed += dt * speed;
         if (!reduced && transcriptScroll?.order===current) {
           const t=clamp((elapsed/active().duration-.24)/.60,0,1);
@@ -815,7 +842,7 @@
         }
       }
       if (stageVisible && ctx) {
-        if (resetting || (trackLayout==='graph' && advancing && !reduced && elapsed<=2200)) drawSpatial();
+        if (resetting || transitioning || (trackLayout==='spiral'&&advancing&&!reduced) || (trackLayout==='graph'&&!reduced&&(graph.transitioning || (advancing&&elapsed<=2200)))) drawSpatial();
         else if (trackLayout==='straight' && advancing && (elapsed<=2100 || !arcSignal.hidden)) updateArcSignal();
       }
       if (!running()) lastFrame=0;
@@ -824,7 +851,7 @@
     function hideTooltips(){tooltips.forEach(t=>{t.hidden=true;});}
     function redrawHover(surface) {
       if (surface===flow) drawFlow();
-      else if (trackLayout==='straight' || !playing || reduced || holding()) drawSpatial();
+      else drawSpatial();
     }
     function nearest(surface, x, y, railRadius = 4) {
       const straight=surface===scene && trackLayout==='straight'?linear:null;
@@ -911,7 +938,7 @@
           const dx=event.clientX-drag.x, dy=event.clientY-drag.y;
           if (!drag.moved && Math.abs(dx)+Math.abs(dy)<=4) return;
           drag.moved=true;
-          if(trackLayout==='straight')turnScene(drag.yaw+dx*.004,drag.pitch-dy*.004); return;
+          if(trackLayout!=='graph')turnScene(drag.yaw+dx*.004,drag.pitch+dy*(trackLayout==='straight'?-.004:.003)); return;
         }
         if(event.pointerType==='mouse')hover(surface,event);
       });
@@ -919,14 +946,16 @@
       on(surface,'keydown',stepKey);
     });
     function turnScene(yaw,pitch) {
-      straightCamera.yaw=clamp(yaw,-.68,.52); straightCamera.pitch=clamp(pitch,.35,.82);
+      if(trackLayout==='straight') {straightCamera.yaw=clamp(yaw,-.68,.52); straightCamera.pitch=clamp(pitch,.35,.82);}
+      else {camera.yaw=yaw;camera.pitch=clamp(pitch,.22,1.29);}
       hovered=null; hideTooltips(); drawSpatial();
     }
     on(scene,'pointerdown',event=>{
       if (event.button!==0 || drag) return;
       cameraReset=null;
       hovered=null; hideTooltips();
-      const angle=straightCamera;
+      if(trackLayout==='spiral')orbitView.holdFocus();
+      const angle=trackLayout==='spiral'?camera:straightCamera;
       drag={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:angle.yaw,pitch:angle.pitch,moved:false};
       scene.setPointerCapture(event.pointerId);
     });
@@ -971,10 +1000,11 @@
       else if(button.hasAttribute('data-original'))openOriginal(button.dataset.original,button.closest('.obs-spatial') ? sceneAnchor() : '#trajectory');
       else if(button.hasAttribute('data-outcome')){seek(moments.length-1,'#timeline');outcomePanel.focus({preventScroll:true});}
       else if(button.hasAttribute('data-reset')) {
-        const angle=straightCamera, home=straightHome;
+        const angle=trackLayout==='spiral'?camera:straightCamera, home=trackLayout==='spiral'?homeView:straightHome;
         const turn=Math.atan2(Math.sin(home.yaw-angle.yaw),Math.cos(home.yaw-angle.yaw));
         if (reduced) Object.assign(angle,home);
         else cameraReset={angle,yaw:angle.yaw,pitch:angle.pitch,targetPitch:home.pitch,turn,elapsed:0,duration:420+Math.abs(turn)*260};
+        if(trackLayout==='spiral')orbitView.resetFocus(!reduced);
         draw(); ensureFrame();
       }
       else if(button.hasAttribute('data-speed')){speed=speed===1?2:speed===2?.5:1;button.textContent=speed+'×';button.setAttribute('aria-label',`Playback speed: ${speed} times`);}
@@ -1017,6 +1047,7 @@
       if (reduced) {
         arcSignal.hidden=true;
         if (playing) started=false;
+        selectOrbit(active(),false);
         stop();
       } else {
         startIfVisible(); updateControls(); ensureFrame();
@@ -1041,6 +1072,7 @@
       const wasVisible=visible;
       visible=visibleSurfaces.size>0;
       stageVisible=visibleSurfaces.has(stage);
+      if(stageVisible&&trackLayout==='spiral')camera.seen=true;
       flowVisible=visibleSurfaces.has(flowStage);
       startIfVisible();
       if (wasVisible!==visible) lastFrame=0;
@@ -1051,6 +1083,7 @@
     visibilityObserver.observe(flowStage);
     updateLayoutControl();
     const openingMoment = positionIndex(meta.position);
+    if(!camera.seen)camera.yaw=orbitView.entryYaw(moments[openingMoment],camera.pitch)??camera.yaw;
     select(openingMoment);resize();
     return ()=>{disposed=true;clearTimeout(shareTimer);cancelAnimationFrame(frame);controller.abort();themeObserver.disconnect();resizeObserver.disconnect();visibilityObserver.disconnect();host.classList.remove('trajectory-observatory');host.replaceChildren();};
   };

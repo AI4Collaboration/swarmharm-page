@@ -76,7 +76,7 @@
     else url.searchParams.delete('event');
     if (position.message) url.searchParams.set('message', position.message);
     else url.searchParams.delete('message');
-    if (position.layout === 'straight') url.searchParams.set('layout','straight');
+    if (['straight','graph'].includes(position.layout)) url.searchParams.set('layout',position.layout);
     else url.searchParams.delete('layout');
     url.hash = hash;
     if (url.href !== location.href) history.replaceState(history.state, '', url);
@@ -84,7 +84,8 @@
     return url.href;
   }
   async function show(id, position = {}, hash = location.hash){
-    position = {...position, layout:new URL(location.href).searchParams.get('layout') === 'straight' ? 'straight' : 'graph'};
+    const layout=new URL(location.href).searchParams.get('layout');
+    position={...position,layout:['straight','graph'].includes(layout)?layout:'spiral'};
     const item=cases.find(c=>c.key===id)||cases.find(c=>c.id===id&&c.phase===2)||cases.find(c=>c.id===id)||cases[0];
     select.querySelector('[data-archived-option]')?.remove();
     if(item.archived){const option=document.createElement('option');option.dataset.archivedOption='';option.value=item.key;option.textContent=`Earlier case · ${item.domain} · ${item.id}`;select.append(option);}

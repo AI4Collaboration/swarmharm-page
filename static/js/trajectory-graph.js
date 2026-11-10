@@ -10,7 +10,21 @@
   window.swarmTrajectorySelection = {connectionsAtTime, related};
 
   window.createMessageGraph = ({actors, actorEvents, fontFamily}) => {
-    let paths = [];
+    let paths = [], transitioning=false, hasDrawn=false;
+    const emphasis=new Map();
+    function emphasisAt(key,target,now,reduced) {
+      const old=emphasis.get(key);
+      const sample=state=>{const t=Math.min(1,(now-state.started)/420);return state.from+(state.to-state.from)*t*t*(3-2*t);};
+      let state=old;
+      if(!old || old.to!==target) {
+        state={from:old?sample(old):hasDrawn?0:target,to:target,started:now};
+        emphasis.set(key,state);
+      }
+      if(reduced) {state.from=state.to;return target;}
+      const value=sample(state);
+      if(now-state.started<420 && Math.abs(value-target)>.001)transitioning=true;
+      return value;
+    }
     const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
     function pointOn(path, t) {
       const s=1-t;
@@ -23,7 +37,9 @@
       ctx.beginPath(); ctx.moveTo(5,0); ctx.lineTo(-3,-3.5); ctx.lineTo(-3,3.5);
       ctx.closePath(); ctx.fillStyle=ink; ctx.fill(); ctx.restore();
     }
-    function draw({ctx,width,height,paint,active,connections,history,focus,second,progress,animate}) {
+    function draw({ctx,width,height,paint,active,connections,history,focus,second,progress,animate,reduced=false}) {
+      const now=typeof performance==='undefined'?0:performance.now();
+      transitioning=false;
       const compact=width<420, cardWidth=compact?96:114, cardHeight=54;
       const cx=width/2, cy=height/2+9;
       const rx=Math.max(42,(width-cardWidth-44)/2), ry=Math.max(45,(height-cardHeight-110)/2);
@@ -36,18 +52,20 @@
           bounds:{x:x-cardWidth/2,y:y-cardHeight/2,w:cardWidth,h:cardHeight}}];
       }));
       const bundles=new Map();
-      for(const read of [...history,...connections]) {
+      const visibleReads=new Set([...history,...connections]);
+      if(active.kind==='read')visibleReads.add(active);
+      for(const read of visibleReads) {
         const key=read.message.actor+':'+read.actor;
         let bundle=bundles.get(key);
         if(!bundle) { bundle={read,selected:[],past:false}; bundles.set(key,bundle); }
-        if(connections.includes(read)) {
+        if(connections.includes(read)||read===active) {
           bundle.selected.push(read);
           if(read===active || bundle.selected.length===1)bundle.read=read;
         } else bundle.past=true;
       }
       ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
       paths=[];
-      for(const bundle of [...bundles.values()].sort((a,b)=>a.selected.length-b.selected.length)) {
+      for(const bundle of [...bundles.values()].sort((a,b)=>Number(a.selected.includes(active))-Number(b.selected.includes(active))||a.selected.length-b.selected.length)) {
         const read=bundle.read, from=nodes.get(read.message.actor), to=nodes.get(read.actor);
         if(!from||!to)continue;
         const dx=to.x-from.x, dy=to.y-from.y, length=Math.hypot(dx,dy)||1;
@@ -57,19 +75,20 @@
         const b={x:to.x-ux*edgeDistance,y:to.y-uy*edgeDistance};
         const bend=clamp(length*.13,14,38);
         const c={x:(a.x+b.x)/2-uy*bend,y:(a.y+b.y)/2+ux*bend};
-        const path={a,b,c,read,selected:bundle.selected.length>0};
+        const path={a,b,c,read,selected:bundle.selected.length>0,current:bundle.selected.includes(active)};
         paths.push(path);
         const isCurrent=bundle.selected.includes(active), inFocus=related(read,focus);
         const ink=paint.agents.get(read.actor)||paint.muted;
         const future=second(read.event)>second(active.event);
-        ctx.globalAlpha=!inFocus ? .12 : path.selected?1:.22;
+        const strength=emphasisAt('edge:'+read.message.actor+':'+read.actor,isCurrent?1:!inFocus ? .08 : path.selected ? .28 : .12,now,reduced);
+        ctx.globalAlpha=strength;
         ctx.strokeStyle=path.selected?ink:paint.guide;
-        ctx.lineWidth=isCurrent?2.5:path.selected?1.7:1.1;
+        ctx.lineWidth=1.1+2.0*strength;
         ctx.setLineDash(path.selected&&future?[5,4]:[]);
         ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo(c.x,c.y,b.x,b.y); ctx.stroke();
         ctx.setLineDash([]); arrow(ctx,path,path.selected?ink:paint.guide);
         if(path.selected) {
-          const p=pointOn(path,.48), label=bundle.selected.length>1?bundle.selected.length+' reads':future?'Later read':'Read';
+          const p=pointOn(path,.48), label=isCurrent?'Message '+((active.index??0)+1):bundle.selected.length>1?bundle.selected.length+' reads':future?'Later read':'Read';
           ctx.font='10px '+fontFamily; ctx.textAlign='center';
           const w=ctx.measureText(label).width+10;
           ctx.fillStyle=paint.paper; ctx.fillRect(p.x-w/2,p.y-7,w,14);
@@ -85,17 +104,18 @@
         const ink=paint.agents.get(id)||paint.muted;
         const involved=id===active.actor||id===active.message?.actor;
         const selected=focus===id;
-        ctx.globalAlpha=focus&&focus!==id ? .4 : 1;
+        const strength=emphasisAt('agent:'+id,involved?1:focus ? (selected ? .85 : .25) : active.kind==='read' ? .32 : .7,now,reduced);
+        ctx.globalAlpha=.15+.85*strength;
         const {x,y,w,h}=node.bounds;
         ctx.beginPath(); ctx.roundRect(x,y,w,h,9); ctx.fillStyle=paint.paper; ctx.fill();
-        ctx.fillStyle=ink+(involved?'16':'08'); ctx.fill();
-        ctx.strokeStyle=ink+(selected?'ff':involved?'ba':'60'); ctx.lineWidth=selected?2:1; ctx.stroke();
+        ctx.fillStyle=ink+Math.round(8+30*strength).toString(16).padStart(2,'0'); ctx.fill();
+        ctx.strokeStyle=ink+(selected?'ff':involved?'ba':'60'); ctx.lineWidth=1+strength; ctx.stroke();
         ctx.fillStyle=ink; ctx.beginPath(); ctx.arc(x+13,y+17,3,0,Math.PI*2); ctx.fill();
         ctx.textAlign='left'; ctx.font='600 12px '+fontFamily; ctx.fillStyle=paint.ink;
         ctx.fillText('Agent '+id,x+23,y+21);
         const latest=actorEvents.get(id).findLast(event=>event.id<=active.event);
-        const status=active.kind==='outcome'?'Complete':active.actor===id?
-          active.kind==='read'?'Reading':active.kind==='send'?'Sharing':'Acting':latest?'Working':'Not started';
+        const status=active.kind==='outcome'?'Complete':active.kind==='read'&&active.message.actor===id?'Sender':active.actor===id?
+          active.kind==='read'?'Reader':active.kind==='send'?'Sharing':'Acting':latest?'Working':'Not started';
         ctx.font='10px '+fontFamily; ctx.fillStyle=paint.muted; ctx.fillText(status,x+13,y+40);
       }
       ctx.globalAlpha=1;
@@ -104,6 +124,7 @@
         ctx.fillText(active.kind==='send'?'Posted, not yet read':'No recorded exchanges yet',cx,cy+4);
       }
       ctx.restore();
+      hasDrawn=true;
       return [...nodes.values()];
     }
     function edgeHit(x,y) {
@@ -111,12 +132,12 @@
       for(const path of paths) {
         for(let t=.06;t<.96;t+=.025) {
           const p=pointOn(path,t), distance=Math.hypot(x-p.x,y-p.y);
-          if(distance<closest) { best=path; closest=distance; }
+          if(distance<closest || (distance<7 && path.current && !best?.current && distance<closest+1)) { best=path; closest=distance; }
         }
       }
       return best?{x,y,r:7,arc:true,earlierRead:true,event:best.read.event,
         message:best.read.message.id,moment:best.read.order}:null;
     }
-    return {draw,edgeHit};
+    return {draw,edgeHit,get transitioning(){return transitioning;}};
   };
 })();

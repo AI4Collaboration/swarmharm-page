@@ -84,16 +84,20 @@ cross-agent read, or the first action in a run without one. The full sequence
 is available from the start of the timeline.
 At normal speed, posts and reads stay on screen for 6 to 12 seconds according to
 message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.1 seconds.
-The default **Graph** view keeps agents in fixed positions. Directed links
-represent verified reads of messages posted by another agent. Selected-time
-links are highlighted, while earlier routes provide faint context. Multiple
-messages on one route are bundled visually and listed separately below the
-Timeline. During playback, a short pulse follows the selected recorded read.
-There is no camera rotation or decorative motion. No-message cases have no edges.
+The default **3D** view retains the original communication dome, one action
+spiral per agent, slow clockwise rotation, and the flight along the selected
+recorded read. Its geometry is unchanged. The current message has a bright
+numbered arc and illuminated sender and reader; simultaneous exchanges stay
+faint. Selection changes crossfade along each recorded path over 520 ms, with
+a damped camera and smoothly changing agent emphasis. Backward seeks remove
+future receipts immediately. Agent buttons still focus actions and messages.
+**Graph** remains an optional stationary node/link layout. Its selected message
+and two participants are bright, with other connections dimmed. Labels and
+selection are shared with the 3D view, straight tracks and timeline.
 The **Straight** toggle shows the same event on parallel action tracks, with
 arcs connecting each post to its reader at their actual recorded times. Drag
 or use Shift with the arrow keys to rotate this view. Tracks remain legible
-in both themes. Both layouts keep the selected event, message and agent focus.
+in both themes. All three layouts keep the selected event, message and agent focus.
 The Timeline uses a shared elapsed-time axis. Dots mark actions, diamonds mark
 posts, and rings mark reads. Selecting a time shows every incoming or outgoing
 message connection at that second, including multiple messages read in one
@@ -102,13 +106,13 @@ as later reads. Reads in the same second are simultaneous, even when their
 internal event indices differ. The connection buttons select individual reads
 without ambiguity when paths overlap. Manual selection pauses playback.
 Native Agent A/B/C/D buttons highlight that agent's actions and incoming and
-outgoing messages in both views and the Timeline. Clicking the agent again or
+outgoing messages in every view and the Timeline. Clicking the agent again or
 Show all agents clears focus. Arrow keys and previous/next controls step
 through the focused agent's events. Graph nodes provide the same pointer action;
 the buttons remain keyboard-accessible and visible on phones.
 The time next to the layout controls opens the Timeline. Shared links preserve
-the exact event and message, and can request `layout=straight`. Old Spiral and
-`timeline=3d` links fall back to Graph. Reset restores the Straight camera.
+the exact event and message, and can request `layout=straight` or `layout=graph`.
+The default and old Spiral links open 3D. Reset restores the current 3D camera.
 Separate Action and Message
 cards distinguish the actor performing an action from the author of a message.
 The records case labels the quoted report-pack note as a Shared record.

@@ -191,7 +191,7 @@
         const selected=connections.includes(moment), related=moment.message===active.message;
         ctx.globalAlpha=focus && moment.actor!==focus && moment.message.actor!==focus ? .15 : 1;
         ctx.setLineDash(!selected||eventFraction(moment.event)>eventFraction(active.event)?[4,4]:[]);
-        const opacity=hover?'ef':selected?'d5':related?'8c':'60';
+        const opacity=hover?'ef':selected?(post?'55':'a5'):related?'40':'29';
         stroke(ctx,route,ink(moment.actor)+opacity,hover?2.2:selected?1.8:1.1);
         ctx.globalAlpha=1;
       }

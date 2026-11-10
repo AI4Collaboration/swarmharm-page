@@ -10,8 +10,8 @@ const {connectionsAtTime}=api.window.swarmTrajectorySelection;
 const data=JSON.parse(fs.readFileSync(path.join(root,'static/data/trajectories/r136.json'),'utf8'));
 const events=new Map(data.events.map(event=>[event.id,event]));
 const second=id=>events.get(id).time.split(':').reduce((total,n)=>total*60+Number(n),0);
-const reads=data.messages.flatMap(message=>[...message.reads,...(message.repeatReads||[])].map(receipt=>
-  ({...receipt,kind:'read',message}))).sort((a,b)=>a.event-b.event);
+const reads=data.messages.flatMap((message,index)=>[...message.reads,...(message.repeatReads||[])].map(receipt=>
+  ({...receipt,kind:'read',message,index}))).sort((a,b)=>a.event-b.event);
 reads.forEach((read,order)=>{read.order=order;});
 const multiple=reads.find(read=>read.event===51);
 const ids=items=>Array.from(items,item=>item.message.id+':'+item.actor);
@@ -68,7 +68,7 @@ test('graph bundles the two B-to-C notes without losing the four selectable rece
   const connections=connectionsAtTime(reads,multiple,second);
   const nodes=graph.draw({ctx,width:700,height:380,paint,active:multiple,connections,history:[],focus:null,second,progress:0,animate:false});
   assert.equal(log.curves,3);
-  assert.ok(log.text.includes('2 reads'));
+  assert.ok(log.text.includes('Message 2'));
   assert.equal(log.dashes.length,0,'same-event receipts must not be labelled as later reads');
   assert.equal(connections.length,4);
   assert.equal(nodes.length,4);
@@ -83,4 +83,45 @@ test('graph shows future receipts as dashed and never creates edges in a no-mess
   assert.equal(empty.log.curves,0);
   assert.equal(graph.edgeHit(156,155),null);
   assert.ok(nodes.every(node=>node.bounds.x>=0&&node.bounds.x+node.bounds.w<=312&&node.bounds.y>=0&&node.bounds.y+node.bounds.h<=310));
+});
+
+function orbitFixture() {
+  const surface=()=>({style:{},setAttribute(){},append(){},getContext(){return {};}});
+  const context={window:{},document:{createElement:surface}};
+  vm.runInNewContext(fs.readFileSync(path.join(root,'static/js/trajectory-orbits.js'),'utf8'),context);
+  const canvas={...surface(),getAttribute:()=>'',before(){}};
+  return context.window.createTrajectoryOrbitView({canvas,actors:data.actors,actorEvents,reads,sendIndex:new Map(),fontFamily:'sans-serif',recordedSecond:second});
+}
+test('3D selection finishes its transition even when playback is paused or selection changes mid-fade',()=>{
+  const orbit=orbitFixture();
+  orbit.select(reads[0],0,[],{});
+  assert.equal(orbit.transitioning,false);
+  orbit.select(multiple,.1,[],{animate:true,easeFocus:true,connections:connectionsAtTime(reads,multiple,second)});
+  orbit.advance(100);
+  assert.equal(orbit.transitioning,true);
+  orbit.select(reads.find(read=>read.event===52),.2,[],{animate:true,easeFocus:true});
+  let frames=0;
+  while(orbit.transitioning&&frames<360) {orbit.advance(16);frames++;}
+  assert.ok(frames>1&&frames<360,'camera, agent emphasis and edge fades must settle without autoplay');
+  assert.equal(orbit.transitioning,false);
+});
+test('reduced-motion 3D selection snaps to the correct read without leaving a running transition',()=>{
+  const orbit=orbitFixture();
+  orbit.select(multiple,0,[],{animate:true,easeFocus:true});
+  orbit.advance(100);
+  orbit.select(reads[0],.1,[],{animate:false,easeFocus:false});
+  assert.equal(orbit.transitioning,false);
+});
+
+
+test('simultaneous reads present in the history are not counted twice in Graph',()=>{
+  const graph=api.window.createMessageGraph({actors:data.actors,actorEvents,fontFamily:'sans-serif'});
+  const {ctx,log}=canvasStub();
+  const active=reads.find(read=>read.event===51&&read.message.id==='m49-4');
+  const connections=connectionsAtTime(reads,active,second);
+  graph.draw({ctx,width:700,height:380,paint,active,connections,history:connections.slice(0,3),focus:null,second,progress:0,animate:false});
+  assert.equal(log.curves,3);
+  assert.ok(log.text.includes('2 reads'));
+  assert.ok(log.text.includes('Message 5'));
+  assert.ok(!log.text.includes('3 reads'));
 });

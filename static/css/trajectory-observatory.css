@@ -334,3 +334,21 @@
 .obs-agent-strip .obs-agent-letter { flex:none; width:6px; height:6px; margin-top:4px; border-radius:50%; background:var(--agent); }
 .obs-agent-strip strong { font-size:11px; }
 .obs-agent-strip small { font-size:10px; margin-top:4px; }
+
+/* Restore the original projected floor only in the 3D dome view. */
+.obs-disk-floor { position:absolute; inset:0; overflow:hidden; pointer-events:none; mask-image:linear-gradient(to bottom,rgb(0 0 0 / .78),#000 78%); }
+.obs-disk-floor canvas { position:absolute; top:0; left:0; transform-origin:0 0; }
+.obs-spatial:not([data-layout="spiral"]) .obs-disk-floor { display:none; }
+.obs-route-heading,.obs-route-quote,.obs-agent-strip > [data-strip-actor] { transition:color .35s ease, background-color .35s ease, opacity .35s ease; }
+.obs-agent-strip [data-participant] { background:color-mix(in srgb,var(--agent) 13%,var(--scene-bg)); box-shadow:inset 0 3px var(--agent); }
+.trajectory-observatory[data-moment="read"] .obs-agent-strip > [data-strip-actor]:not([data-participant]):not([aria-pressed="true"]) { opacity:.42; }
+.trajectory-observatory[data-moment="read"] .obs-route-quote { border-left-width:3px; }
+@media(prefers-reduced-motion:reduce) { .obs-route-heading,.obs-route-quote,.obs-agent-strip > [data-strip-actor] { transition:none; } }
+
+.obs-connection-list button { transition:opacity .35s ease, background-color .35s ease, border-color .35s ease; }
+.obs-connection-list:has([aria-pressed="true"]) button:not([aria-pressed="true"]) { opacity:.55; }
+.obs-connection-list button[aria-pressed="true"] { border-color:var(--signal); background:color-mix(in srgb,var(--signal) 13%,var(--scene-bg)); }
+.obs-connection-list button:hover,.obs-connection-list button:focus-visible { opacity:1!important; }
+@media(prefers-reduced-motion:reduce) { .obs-connection-list button { transition:none; } }
+
+.trajectory-observatory[data-moment="read"] .obs-agent-strip > [data-participant] { opacity:1; }
