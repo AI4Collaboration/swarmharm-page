@@ -149,7 +149,7 @@
       return `<article class="obs-chat-message" data-chat-message="${esc(message.id)}" style="--agent:${actorStyle(message.actor)}" aria-label="Message ${number} from ${esc(names.get(message.actor))}">
         <span class="obs-chat-avatar" aria-hidden="true"><img src="${esc(window.swarmAgentImage?.(message.actor,'message')||`static/images/fieldguide/finding-agents.svg?v=8#${message.actor.toLowerCase()}-speaking`)}" width="210" height="150" alt=""></span>
         <div class="obs-chat-content">
-          <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}"><span>Posted by <strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong></span><span aria-hidden="true">·</span><span><span data-read-label hidden>Read by </span><strong data-chat-recipient>${esc(messageSource(message))}</strong></span></button><span class="obs-chat-stamp"><span>#${number}</span><time>${esc(message.time)}</time></span></header>
+          <header class="obs-chat-heading"><button class="obs-chat-select" type="button" data-message="${esc(message.id)}"><span>Posted by <strong title="${esc(contexts.get(message.actor))}">${esc(names.get(message.actor))}</strong></span><span aria-hidden="true">·</span><span><span data-read-label hidden>Read by </span><strong data-chat-recipient>${esc(messageSource(message))}</strong></span></button><span class="obs-chat-stamp"><span data-chat-number>#${number}</span><time>${esc(message.time)}</time></span></header>
           ${parent?`<button class="obs-chat-reply" type="button" data-message="${esc(parent.id)}" aria-label="Reply to Message ${messageNumberById.get(parent.id)} from ${esc(names.get(parent.actor))}">↳ Reply to #${messageNumberById.get(parent.id)}</button>`:''}
           <p class="obs-chat-text" data-message-body>${esc(message.body)}</p>
           ${receipts?`<div class="obs-chat-readers"><span>Read by</span>${receipts}</div>`:''}
@@ -364,7 +364,7 @@
       const later=timeConnections.some(read=>recordedSecond(read.event)>recordedSecond(moment.event));
       connectionsPanel.innerHTML=timeConnections.length ? `<span>Messages to/from this time${later?' · Dashed: later reads':''}</span><div class="obs-connection-list" role="group" aria-label="All message reads connected to the selected time">${timeConnections.map(read=>`<button type="button" data-time-read="${read.order}" aria-pressed="${read===moment}" title="${esc(short(read.message.body,160))}"><strong>${esc(read.message.actor)} → ${esc(read.actor)}</strong><span>#${messageNumberById.get(read.message.id)}</span><time>${clockLabel(recordedSecond(read.message.event))} → ${clockLabel(recordedSecond(read.event))}</time></button>`).join('')}</div>` : '';
     }
-    function showExchange(moment, history) {
+    function showExchange(moment) {
       const message = moment.message;
       routeHeading.replaceChildren();
       routeQuote.hidden = !message;
@@ -384,7 +384,7 @@
       const author = document.createElement('span');
       author.append('Posted by ', sender);
       const separator = document.createElement('span');
-      separator.textContent = '·';
+      separator.textContent = moment.kind === 'read' ? '→' : '·';
       separator.setAttribute('aria-hidden', 'true');
       const destination = document.createElement('span');
       const recipient = document.createElement('strong');
@@ -397,12 +397,6 @@
       }
       destination.append(recipient);
       routeHeading.append(number, author, separator, destination);
-      const peers = history.filter(step => step.message === message).map(step => step.actor).sort();
-      if (peers.length) {
-        const prior = document.createElement('small');
-        prior.textContent = 'Also read by ' + peers.join(' and ');
-        routeHeading.append(prior);
-      }
 
       const body = message.body.trim();
       const passage = meta.messageExcerpts?.[message.id];
@@ -481,6 +475,9 @@
         if(selected)row.setAttribute('aria-current','step');
         else row.removeAttribute('aria-current');
         row.querySelector('[data-message-body]').toggleAttribute('data-original-text',selected);
+        row.querySelector('[data-chat-number]').textContent=selected
+          ? (sharedRecords?'Record ':'Message ')+String(messageNumberById.get(item.id)).padStart(2,'0')
+          : '#'+messageNumberById.get(item.id);
         const selectMessage = row.querySelector('.obs-chat-select');
         selectMessage.setAttribute('aria-pressed', String(selected));
         const description = isRead ? ', read by ' + names.get(event.actor) : '';
@@ -519,7 +516,7 @@
       const animateView=isVisible() && !reduced;
       describeScene(m);
       renderInspector(m, animateView);
-      showExchange(m, readHistory);
+      showExchange(m);
       showTimeline(m);
       selectOrbit(m,animateView && trackLayout==='spiral');
       actors.forEach(a=>{

@@ -87,8 +87,10 @@ message length. Ordinary actions stay for 1.45 seconds and marked actions for 2.
 The default **3D** view retains the original communication dome, one action
 spiral per agent, slow clockwise rotation, and the flight along the selected
 recorded read. Its geometry is unchanged. The current message has a bright
-numbered arc and illuminated sender and reader; simultaneous exchanges stay
-faint. Selection changes crossfade along each recorded path over 520 ms, with
+numbered arc and letter badges on the exact sender and reader pins, with their
+roles labelled beside those pins. The same message number highlights the original
+message in the conversation; simultaneous exchanges stay faint. Selection changes
+crossfade along each recorded path over 520 ms, with
 a damped camera and smoothly changing agent emphasis. Backward seeks remove
 future receipts immediately. Agent buttons still focus actions and messages.
 **Graph** remains an optional stationary node/link layout. Its selected message

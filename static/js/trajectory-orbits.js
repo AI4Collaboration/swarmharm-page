@@ -140,16 +140,20 @@
   }
 
   function label(ctx, item, occupied, {width, height}, paint, fontFamily, gutter, offsets, follow) {
-    const {text, at:[x, y], color, current, receipt, emphasis} = item;
-    ctx.font = (current || emphasis?'650 ':'500 ') + (receipt || width < 440 ? 10 : emphasis?13:12) + 'px ' + fontFamily;
-    const w = ctx.measureText(text).width + 8, h = 18;
-    const right = [x + 6, y - h / 2], left = [x - w - 6, y - h / 2];
+    const {text, at:[x, y], color, current, receipt, emphasis, endpoint} = item;
+    const key=item.key || text, compact=width<440;
+    const fontSize=current ? (compact?11:12) : endpoint ? (compact?10:12) : receipt || compact ? 10 : emphasis?13:12;
+    ctx.font = (current || emphasis || endpoint?'650 ':'500 ') + fontSize + 'px ' + fontFamily;
+    const padding=current || endpoint?12:8;
+    const w = ctx.measureText(text).width + padding, h = current || endpoint?24:18;
+    const clearance=endpoint?18:6;
+    const right = [x + clearance, y - h / 2], left = [x - w - clearance, y - h / 2];
     const choices = x >= width / 2 ? [right, left] : [left, right];
-    const gap = current ? 5 : 7;
+    const gap = endpoint ? 18 : current ? 5 : 7;
     const above = [x - w / 2, y - h - gap], below = [x - w / 2, y + gap];
     if (receipt) choices.splice(0,choices.length,[x-w/2,y-h-13]);
     else choices.push(above,below);
-    const previous=offsets.get(text);
+    const previous=offsets.get(key);
     let best, penalty = Infinity;
     for (const [px, py] of choices) {
       const bx = clamp(px, gutter + 3, width - w - 3), by = clamp(py, 29, height - h - 3);
@@ -166,24 +170,42 @@
         best.x=clamp(x+lerp(previous[0],best.x-x,follow),gutter+3,width-w-3);
         best.y=clamp(y+lerp(previous[1],best.y-y,follow),29,height-h-3);
       }
-      offsets.set(text,[best.x-x,best.y-y]);
+      offsets.set(key,[best.x-x,best.y-y]);
     }
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    if (current) {
+    if (current || endpoint) {
       const edge = [clamp(x,best.x,best.x+w),clamp(y,best.y,best.y+h)];
-      line(ctx,[[x,y],edge],paint.packet,1);
+      const distance=Math.hypot(edge[0]-x,edge[1]-y) || 1;
+      const start=endpoint?[x+(edge[0]-x)*13/distance,y+(edge[1]-y)*13/distance]:[x,y];
+      if(!endpoint || distance>13)line(ctx,[start,edge],endpoint?color:paint.packet,1);
       ctx.beginPath(); ctx.roundRect(best.x,best.y,w,h,4);
-      ctx.fillStyle = paint.packet; ctx.fill();
+      ctx.fillStyle = endpoint?paint.paper:paint.packet; ctx.fill();
+      if(endpoint) {ctx.strokeStyle=color;ctx.lineWidth=1;ctx.stroke();}
     } else {
       ctx.lineWidth = 3.5;
       ctx.strokeStyle = paint.paper;
       ctx.strokeText(text, best.x + 4, best.y + h / 2);
     }
     ctx.fillStyle = color;
-    ctx.fillText(text, best.x + 4, best.y + h / 2);
+    ctx.fillText(text, best.x + padding/2, best.y + h / 2);
     occupied.push(best);
     return best;
+  }
+
+  // These badges sit on the exact post/read pins, not at the ends of the tracks.
+  function drawParticipant(ctx,node,ink,paint,font,width,alpha) {
+    const [x,y]=node.screenTip, radius=width<440?10:12;
+    ctx.save(); ctx.globalAlpha=alpha;
+    bloom(ctx,x,y,radius*2.5,ink,paint.dark?'75':'35');
+    circle(ctx,x,y,radius+3,paint.paper);
+    circle(ctx,x,y,radius+3,ink,true);
+    circle(ctx,x,y,radius,ink);
+    ctx.fillStyle=paint.paper; ctx.font='750 '+(width<440?11:13)+'px '+font;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(node.event.actor,x,y+.5);
+    ctx.restore();
+    return radius+4;
   }
 
   function actionNodes(track, events) {
@@ -646,7 +668,7 @@
       const flight=reduced ? .50 : clamp(initialTravel+(seconds-selectedAt)/travelSeconds,0,1);
       const burn=clamp((flight-.05)/.95,0,1);
       const travel=burn*burn*(2-burn);
-      const hits=[],labels=[],occupied=[],callouts=[];
+      const hits=[],labels=[],occupied=[],callouts=[],participants=new Map();
       const pins=new Map();
       if(selected)pins.set(selected,1);
       if(post)pins.set(post,1);
@@ -654,6 +676,17 @@
         const {history,last,current}=appearance(style), strength=Math.max(history,last,current);
         if(strength<.005)continue;
         for(const node of [link.post,link.reader])pins.set(node,Math.max(pins.get(node)||0,strength));
+        if(current>.005) {
+          for(const [node,role] of [[link.post,'Sender'],[link.reader,'Reader']]) {
+            const previous=participants.get(node);
+            if(!previous)participants.set(node,{alpha:current,role,receipt:link.receipt});
+            else {
+              // A shared endpoint stays lit when switching between simultaneous reads.
+              previous.alpha=Math.min(1,previous.alpha+current);
+              if(link===arc) {previous.role=role;previous.receipt=link.receipt;}
+            }
+          }
+        }
       }
       drawDome(ctx,projection,paint);
       drawSpirals(visualSeconds,paint);
@@ -674,7 +707,8 @@
         const rim = track.screen[Math.floor(STEPS*.94)];
         const dx = rim[0]-center[0], dy = rim[1]-center[1], length = Math.hypot(dx,dy) || 1;
         const anchor = [rim[0]+6*dx/length,rim[1]+6*dy/length];
-        labels.push({text:'Agent '+track.id,at:anchor,color:ink,emphasis:involved,opacity:.25+.75*strength});
+        const marked=Math.max(0,...Array.from(participants,([node,item])=>node.track===track?item.alpha:0));
+        labels.push({text:'Agent '+track.id,at:anchor,color:ink,emphasis:involved,opacity:(.25+.75*strength)*(1-marked)});
         occupied.push({x:anchor[0]-4,y:anchor[1]-4,w:8,h:8});
       }
       for (const [link,style] of routes) {
@@ -745,11 +779,23 @@
         callouts.push({name:'Agent '+selected.event.actor,detail:(arc?'Reader':'Turn '+selected.event.turn)+' · '+selected.event.time,ink});
       }
       if (gutter) drawCallouts(ctx,callouts,gutter,height,paint,fontFamily);
+      const endpointLabels=[];
+      for(const [node,{alpha,role,receipt}] of participants) {
+        const ink=paint.agents.get(node.event.actor), at=node.screenTip;
+        const radius=drawParticipant(ctx,node,ink,paint,fontFamily,width,alpha);
+        occupied.push({x:at[0]-radius,y:at[1]-radius,w:radius*2,h:radius*2});
+        endpointLabels.push({text:'Agent '+node.event.actor+' · '+role,key:'pin-'+node.event.id+'-'+role,
+          at,color:ink,endpoint:true,opacity:alpha,receiptTarget:receipt});
+        hits.push({x:at[0],y:at[1],r:radius,event:receipt.event,moment:receipt.order,message:receipt.message.id});
+      }
+      labels.unshift(...endpointLabels);
       for (const item of labels) {
+        if(item.opacity<.005)continue;
         ctx.globalAlpha=item.opacity ?? 1;
         const bounds = label(ctx,item,occupied,view,paint,fontFamily,gutter,labelOffsets,follow);
-        if (item.receipt) hits.push({bounds,x:item.at[0],y:item.at[1],event:item.receipt.event,
-          moment:item.receipt.order,message:item.receipt.message.id});
+        const receipt=item.receiptTarget || item.receipt;
+        if (receipt) hits.push({bounds,x:item.at[0],y:item.at[1],event:receipt.event,
+          moment:receipt.order,message:receipt.message.id});
       }
       ctx.globalAlpha=1;
       if (hover) circle(ctx,hover.x,hover.y,6.5,paint.ink,true);
