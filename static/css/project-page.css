@@ -1,6 +1,6 @@
 /* A complete project page, using the existing type, palette and illustration system. */
 .hero .hero-layout { padding-block:0 16px; }
-.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/106; margin:2px auto 0; }
+.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/106; margin:2px auto 0; transform:translateY(clamp(-16px,-1.3vw,-7px)); }
 .hero .hero-intro { margin:26px auto 0; scroll-margin-top:80px; }
 .hero-intro a { color:inherit; text-decoration:underline; text-decoration-color:color-mix(in srgb,currentColor 45%,transparent); text-underline-offset:.18em; }
 .hero-intro a:is(:hover,:focus-visible) { color:var(--scene-red); text-decoration-color:currentColor; }
