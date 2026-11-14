@@ -56,9 +56,60 @@ solo-versus-combined replay. The **transcript LLM judge** identifies discovery,
 exact reads, proposals, adoption and shared false inference, citing recorded
 events. Claim-specific rules join those views; neither view is presented as a
 standalone verdict for every claim. The compact detection pipeline shows a recorded
-run splitting into these parallel checks, then joining at a claim-specific finding.
+run splitting into these parallel checks, then joining at **Human-checked finding**,
+with the caption **We read the flagged events.**
 
-## Phase 2 terminology
+## Threat taxonomy
+
+The local preview places a compact 3×3 taxonomy between the findings and the
+trajectory viewer. Rows identify the target interface; columns identify the
+information flow between agents. The nine cells are schematic examples, not
+nine additional experimentally established findings. Failure modes can occur
+across more than one information-flow pattern.
+
+The rows are:
+
+- **System Scope:** Permission Violations, Sandbox Escape, External-Service Misuse.
+- **Shared Infrastructure:** Resource Exhaustion, Shared-State Corruption, Service Disruption.
+- **Grader & Trace:** Specification Gaming, Grader Hacking, Trace Tampering.
+
+The columns are **No Information Flow** (independent actions, no messages),
+**One-Way Information Flow** (cascade and herding), and **Two-Way Information
+Flow** (collective coordination). In left-to-right order, the examples are:
+
+- **System Scope:** Parallel scope overload; Exploit propagation; Coordinated external action.
+- **Shared Infrastructure:** Compositional failure; Resource-use cascade; Joint resource overreach.
+- **Grader & Trace:** Independent gaming & edits; Imagined grader cascade; Grader & trace manipulation.
+
+**Row 1, column 3 includes joint networking and self-organized division of work.**
+Agents exchange a plan, agree on the pieces and divide the work without a manager.
+The visual shows peer-to-peer planning and separate Part A / Part B routes into
+an external network. Its caption is **Agents agree on roles and divide the work.**
+Coordinated intrusion is one possible instance, rather than the whole category.
+The harmful case is a combined plan that reaches systems or data outside permitted scope.
+
+**Benign individual actions can still cause collective harm.** In parallel scope
+overload, separate requests collectively trigger a shared-IP block and every agent
+loses access. In the shared-infrastructure composition example, individually safe
+sequences together exceed a shared capacity limit. Compositional failure can also
+combine harmful individual actions; it is not restricted to benign ones. Keep
+these collective mechanisms intact when making the diagrams visually distinct.
+
+Use the existing robot heads at a legible size, with gaze directed toward the
+peer or object involved. Preserve identity colors and match expressions to the
+action. Small horns mark the exploit-propagation example only; benign composition
+does not use malicious expressions. The grader uses a judge-like figure; the
+imagined grader is visibly absent or uncertain. Keep the nine diagrams aligned
+and consistent across light and dark themes. Taxonomy edits must not change the
+trajectory viewer's geometry or recorded messages.
+
+The matrix markup is in `index.html`, its styling in
+`static/css/harm-taxonomy.css`, and its selectable explanations in
+`static/js/harm-taxonomy.js`. Robot gaze variants are in
+`static/images/fieldguide/taxonomy-agent-gaze.svg`. Update the cell title, caption,
+accessible label and selectable explanation together.
+
+## Collective Misalignment terminology
 
 The trajectory selector includes reviewed examples of external-service resource
 scope overreach (**r165**), evaluation gaming/hacking (**r178**) and trace
@@ -182,12 +233,10 @@ backward scrubbing and graph geometry on narrow screens.
   communication and propagation. Collective Misalignment shows shared false
   inference, coordinated record errors and composition, with the exact positive
   model linked beside each finding title.
-- Keep the institution belt above one centered navigation row for the six findings,
-  Trajectories, Resources and Get in touch. Space the labels evenly and link
-  Get in touch to the contact form. Smaller screens group
-  the six finding links under Findings. The original TLDR leads into the six findings,
-  the expanded trajectory viewer and detection. Use the
-  header for section navigation. EuroSafeAI leads the rolling collaborators after
+- The main navigation links to Findings, Threat taxonomy, Trajectories, Data & evidence,
+  Team and Get involved on every page. Findings opens the individual results.
+  Team and Get involved open dedicated pages.
+  The institution belt sits above the homepage navigation. EuroSafeAI leads the rolling collaborators after
   the three fixed Oxford institutions. The theme icon sits in the top right.
 - Play the bee title animation once per load, then hold the final title. Theme
   and case changes do not restart it. Preserve institution assets.
@@ -199,7 +248,9 @@ backward scrubbing and graph geometry on narrow screens.
   event. Keep original messages and actions verbatim. Website source belongs in
   the footer, with attribution.
 - First visits open in dark mode. The Light/Dark toggle remembers the visitor's choice.
-- Use one font family throughout. Keep summaries short; put originals and
+- Use self-hosted ET Book for headings and reading text, with a humanist sans serif
+  for navigation and diagram labels. The ET Book license is in `static/fonts`.
+  Keep summaries short; put originals and
   structured tool results in disclosures.
 - Keep case settings compact; Run details visibly expands on click.
   Icons accompany recorded values. Outcome panels explain
@@ -232,6 +283,10 @@ backward scrubbing and graph geometry on narrow screens.
   Opening an original record starts at its heading; turn-grid scrolling stays local.
 - Check case switching, message reads, downloads, 320px and desktop layouts,
   both themes, keyboard controls and failed-load handling before publication.
+- Browser acceptance targets Edge and Chrome; Firefox is not a release blocker.
+  Edge was manually checked on 2026-11-10: all four agent buttons, same-time
+  message selection and 3D / Straight / Graph switching worked. Chrome has not
+  been separately tested on this computer.
 - Bump query versions for changed assets. Verify the Pages deployment.
 
 Run a local preview with `python3 -m http.server 8765 --bind 127.0.0.1`.
@@ -246,7 +301,10 @@ Princeton's shield-and-wordmark signatures use the University's [light](https://
 Model labels use the OpenAI mark for Sol and the Claude mark for Haiku, from
 [SVGL](https://github.com/pheralb/svgl), with licenses beside both assets.
 
-The four-domain overview links to Phase 1 examples in Knowledge Work, Data Analysis, Financial Analysis and Engineering. Engineering uses the manifest-verified r65 excerpt before continuation event 63; it is a historical formation example, not a new Phase 2 result.
+The case selector includes Knowledge Work, Data Analysis, Financial Analysis and
+Engineering; there is no separate four-domain overview. Engineering uses the
+manifest-verified r65 excerpt before continuation event 63; it is a historical
+formation example, not a new Collective Misalignment result.
 
 Individual findings keep the illustration, evidence disclosure and trace link together.
 
@@ -260,7 +318,7 @@ workstations without a peer roster. Business notes can carry a lookup clue,
 a method or a process assumption. The current reporting task and available
 services persist throughout each rollout.
 
-The six independent finding banners, four task domains,
+The six independent finding banners, threat taxonomy, trajectory viewer,
 measurement protocol, review downloads, website source and contact form
 make up the page. Contact sends the required email and message to the published
 SwarmHarm contact form. Google Forms confirms the submission and stores the reply.

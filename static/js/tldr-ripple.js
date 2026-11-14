@@ -1,5 +1,5 @@
 (() => {
-  const p = document.querySelector('.hero #tldr');
+  const p = document.querySelector('.hero #tldr p:first-child');
 
   const label = [...(p?.children || [])].find(el =>
     el.tagName === 'STRONG' &&

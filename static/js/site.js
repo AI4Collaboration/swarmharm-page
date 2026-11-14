@@ -20,30 +20,25 @@
   const sectionLinks = [...(navigation?.querySelectorAll('a[href^="#"]') || [])];
   const sections = sectionLinks.map(link => ({link, element:document.getElementById(link.hash.slice(1))}))
     .filter(item => item.element);
-  const findingsMenu = navigation?.querySelector('.nav-findings');
-  const compactNav = matchMedia('(max-width: 1050px)');
-
-  function arrangeNavigation() {
-    if (!findingsMenu) return;
-    findingsMenu.open = !compactNav.matches;
-    findingsMenu.classList.toggle('is-inline', !compactNav.matches);
-  }
-  arrangeNavigation();
-  compactNav.addEventListener('change', arrangeNavigation);
-  document.addEventListener('click', event => {
-    if (compactNav.matches && findingsMenu?.open &&
-        (event.target.closest('a') || !findingsMenu.contains(event.target))) findingsMenu.open = false;
-  });
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && compactNav.matches && findingsMenu?.open) {
+  for (const findingsMenu of navigation?.querySelectorAll('.nav-findings') || []) {
+    const closeMenu = () => {
       findingsMenu.open = false;
-      findingsMenu.querySelector('summary').focus();
-    }
-  });
+    };
+    document.addEventListener('click', event => {
+      if (findingsMenu.open && (event.target.closest('a') || !findingsMenu.contains(event.target))) closeMenu();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && findingsMenu.open) {
+        closeMenu();
+        findingsMenu.querySelector('summary').focus();
+      }
+    });
+  }
 
   function selectSection(hash) {
     const target = document.getElementById((hash || '').slice(1));
-    const selected = target && (sections.find(item => item.element.contains(target)) ||
+    const selected = target && (sections.find(item => item.element === target) ||
+      sections.findLast(item => item.element.contains(target)) ||
       sections.find(item => target.contains(item.element)));
     sectionLinks.forEach(link => {
       if (link === selected?.link) link.setAttribute('aria-current', 'location');
@@ -90,7 +85,10 @@
     try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
     // Preserve shared links when sections are renamed or consolidated.
     const original = id;
-    if (id === 'stay-updated' || id === 'updates-title') id = 'contact';
+    if (id === 'team') return location.replace('team/');
+    if (['contact', 'contact-title', 'stay-updated', 'updates-title'].includes(id)) {
+      return location.replace('call-to-action/');
+    }
     if (["research", "rq1", "rq2", "rq3"].includes(id)) id = "tldr";
     if (formerReplayAnchors.includes(id) || id.startsWith('setup-') || id.startsWith('case-')) id = 'trajectory';
     const target = document.getElementById(id);

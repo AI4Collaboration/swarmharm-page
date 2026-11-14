@@ -1,5 +1,5 @@
 /* SwarmHarm: dark artwork-led opening, warm editorial research sections.
-   One font family; no animated effects or product-dashboard styling. */
+   Base typography is refined by typography.css. */
 :root {
   color-scheme: light;
   --bg: #f8f4eb;

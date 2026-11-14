@@ -1,7 +1,7 @@
 /* A complete project page, using the existing type, palette and illustration system. */
 .hero .hero-layout { padding-block:0 16px; }
-.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/106; margin:-12px auto -8px; }
-.hero .hero-intro { margin:18px auto 0; scroll-margin-top:80px; }
+.hero-copy .emergence-title { width:min(100%,540px); aspect-ratio:470/106; margin:2px auto 0; }
+.hero .hero-intro { margin:26px auto 0; scroll-margin-top:80px; }
 .hero-intro a { color:inherit; text-decoration:underline; text-decoration-color:color-mix(in srgb,currentColor 45%,transparent); text-underline-offset:.18em; }
 .hero-intro a:is(:hover,:focus-visible) { color:var(--scene-red); text-decoration-color:currentColor; }
 .findings .phase-summary { display:flex; flex-direction:column; gap:12px; margin-bottom:0; padding:18px; border-radius:0 8px 8px 0; }
@@ -40,6 +40,8 @@
 .review-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 20px; padding:0 0 18px; }
 .review-links a { display:flex; justify-content:space-between; align-items:center; gap:16px; min-height:44px; padding:10px 12px; border-radius:5px; background:var(--surface); color:var(--text); text-decoration:none; font-size:12px; }
 .review-links small { flex:none; color:var(--muted); font-size:10px; }
+.contact-invitation { max-width:50ch; margin:0; color:var(--muted); font:400 16px/1.55 var(--font); }
+.contact-invitation { margin-top:12px; }
 .section.contact-section { padding-block:clamp(36px,5vw,72px); scroll-margin-top:70px; }
 .contact-inner { display:grid; grid-template-columns:minmax(160px,.7fr) minmax(0,1fr); align-items:start; gap:clamp(24px,6vw,88px); }
 .contact-inner h2 { margin:0; color:var(--text); font:500 clamp(26px,3vw,36px)/1.2 var(--font); letter-spacing:-.025em; }
@@ -53,7 +55,7 @@
 .contact-form :is(input,textarea,button):focus-visible { outline:2px solid var(--scene-blue); outline-offset:3px; }
 @media(max-width:760px) {
  .hero .hero-layout { padding-top:0; padding-bottom:12px; }
- .hero-copy .emergence-title { width:min(100%,420px); margin:-8px auto -4px; }
+ .hero-copy .emergence-title { width:min(100%,420px); margin:2px auto 0; }
  .phase-summary > p { font-size:13px; }
  .setup-flow { font-size:10px; gap:6px 10px; }
  .setup-flow li:not(:last-child)::after { margin-left:6px; }
